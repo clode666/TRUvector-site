@@ -52,6 +52,7 @@ Tout le comportement éditable (statut, date d'ouverture, accès, droits, galeri
 ### Pôle légal & conformité
 Quatre pages complètes, renseignées avec l'identité réelle et reliées entre elles (et depuis le pied de page) :
 - `mentions-legales/` — éditeur, directeur de publication, hébergeur, propriété intellectuelle.
+- `cgv/` — conditions générales de vente / d'utilisation (vente = licence d'œuvre, pas prestation de service).
 - `confidentialite/` — politique de confidentialité (RGPD).
 - `cookies/` — politique de cookies (strictement nécessaires uniquement).
 - `securite/` — politique de sécurité (SSI) + divulgation responsable, avec `/.well-known/security.txt`.
@@ -74,6 +75,8 @@ truvector.dev/
 │   └── assets/                # créas : .webp (affichage) + .png HD (download)
 ├── mentions-legales/
 │   └── index.html             # mentions légales (identité, hébergeur, PI)
+├── cgv/
+│   └── index.html             # conditions générales de vente / d'utilisation
 ├── confidentialite/
 │   └── index.html             # politique de confidentialité (RGPD)
 ├── cookies/
@@ -92,6 +95,7 @@ truvector.dev/
 ├── roadmap.html               # feuille de route (bonus)
 ├── _headers                   # sécurité + cache (Cloudflare Pages)
 ├── _redirects                 # redirections optionnelles
+├── wrangler.toml              # déploiement Cloudflare statique (sans build)
 ├── .well-known/security.txt   # contact sécurité (RFC 9116)
 ├── robots.txt · sitemap.xml
 └── README.md
@@ -141,8 +145,12 @@ git push -u origin main
 ### Étape 2 — Cloudflare Pages
 1. **Workers & Pages → Create → Pages → Connect to Git**.
 2. Sélectionne `truvector-dev`.
-3. **Framework preset :** `None` · **Build command :** *(vide)* · **Output directory :** `/`.
+3. **Framework preset :** `None` · **Build command :** *(VIDE)* · **Output directory :** `/`.
 4. **Save and Deploy**.
+
+> ⚠️ **Le site n'a AUCUN build.** Si Cloudflare essaie de lancer `npx hugo` (ou tout autre build) et échoue, c'est une auto-détection erronée. Deux correctifs :
+> - **Voie Pages (recommandée)** : preset `None` + **Build command vide** → Cloudflare se contente de servir les fichiers.
+> - **Voie Workers (`npx wrangler deploy`)** : le fichier **`wrangler.toml`** fourni (à la racine du dépôt) désactive l'auto-détection et sert le dossier tel quel. Assure-toi juste que le **contenu** de `truvector.dev/` est bien à la **racine** du dépôt (le `index.html` et le `wrangler.toml` tout en haut), pas dans un sous-dossier.
 
 ### Étape 3 — Domaine
 1. Projet Pages → **Custom domains → Set up a custom domain**.
@@ -241,7 +249,9 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 - **Siège** : 18 E rue des Ovides, 42100 Saint-Étienne.
 - **SIREN** 108 978 180 · **SIRET** 108 978 180 00017 · **APE** 9003B · RNE 21/08/2026.
 - **Hébergeur** : Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA.
-- **Pages** : mentions légales, confidentialité (RGPD), cookies, sécurité (SSI) + `security.txt`.
+- **Pages** : mentions légales, **CGV/CGU**, confidentialité (RGPD), cookies, sécurité (SSI) + `security.txt`.
+- **TVA** : *TVA non applicable, art. 293 B du CGI* (conforme à ta documentation).
+- **Vente** = concession de **licence d'œuvre** (pas une prestation de service) — cadrage cohérent avec ton statut d'agent public.
 
 > ⚠️ **À finaliser :** active `contact@truvector.dev` et `security@truvector.dev` sur ton domaine, confirme ton régime de TVA. Les points « à confirmer » sont surlignés dans les pages. Modèles à faire relire — je ne suis pas juriste.
 
@@ -258,6 +268,7 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 | `config.json` ignoré en local (file://) | Le `fetch` échoue sur `file://` : teste via un serveur local ou sur Cloudflare Pages. Les défauts de `config.js` prennent le relais. |
 | Le compte à rebours reste figé | JS bloqué ou date mal formée. Garde le format `2026-09-21T00:00:00+02:00`. |
 | Le bouton « Entrer » n'apparaît pas | Normal avant le jour J en statut `auto` ; force-le avec `status: "open"`. |
+| Build échoue sur `npx hugo` / *could not determine executable* | Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une **Build command vide** (Pages) ou committe le **`wrangler.toml`** fourni à la racine (Workers). |
 | Cloudflare sert une vieille version | Cache. Nouveau commit ou purge du cache. |
 
 ---
@@ -277,6 +288,7 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 | Sécurité / cache | `_headers` |
 | Déployer une mise à jour | `git push` (redéploiement auto) |
 | Vraie authentification / droits | Cloudflare Zero Trust → Access → `/galerie`, `/admin` |
+| Corriger un build qui lance Hugo | `wrangler.toml` (racine) + Build command vide |
 
 ---
 

@@ -183,6 +183,7 @@
     <p>Quatre pages complètes, renseignées avec l'identité réelle de l'entreprise et reliées entre elles (et depuis le pied de page)&nbsp;:</p>
     <ul>
       <li><code>mentions-legales/</code> — éditeur, directeur de publication, hébergeur, propriété intellectuelle.</li>
+      <li><code>cgv/</code> — conditions générales de vente / d'utilisation (vente = licence d'œuvre, pas prestation de service).</li>
       <li><code>confidentialite/</code> — politique de confidentialité (RGPD).</li>
       <li><code>cookies/</code> — politique de cookies (strictement nécessaires uniquement).</li>
       <li><code>securite/</code> — politique de sécurité (SSI) + divulgation responsable, avec <code>/.well-known/security.txt</code>.</li>
@@ -202,6 +203,8 @@
 │   └── assets/                <span class="c"># créas : .webp (affichage) + .png HD (download)</span>
 ├── mentions-legales/
 │   └── index.html             <span class="c"># mentions légales (identité, hébergeur, PI)</span>
+├── cgv/
+│   └── index.html             <span class="c"># conditions générales de vente / d'utilisation</span>
 ├── confidentialite/
 │   └── index.html             <span class="c"># politique de confidentialité (RGPD)</span>
 ├── cookies/
@@ -220,6 +223,7 @@
 ├── roadmap.html               <span class="c"># feuille de route (bonus)</span>
 ├── _headers                   <span class="c"># sécurité + cache (Cloudflare Pages)</span>
 ├── _redirects                 <span class="c"># redirections optionnelles</span>
+├── wrangler.toml              <span class="p"># déploiement Cloudflare statique (sans build)</span>
 ├── .well-known/security.txt   <span class="c"># contact sécurité (RFC 9116)</span>
 ├── robots.txt · sitemap.xml
 └── README.md</pre></div>
@@ -275,6 +279,7 @@ git push -u origin main</pre></div>
       <li>Clique <strong>Save and Deploy</strong>.</li>
     </ol>
 
+    <div class="note warn"><b>Le site n'a AUCUN build.</b> Si Cloudflare tente <code>npx hugo</code> (ou un autre build) et échoue, c'est une auto-détection erronée. Correctifs&nbsp;: <b>Pages</b> → preset <code>None</code> + <b>Build command vide</b> ; ou <b>Workers</b> (<code>npx wrangler deploy</code>) → le fichier <code>wrangler.toml</code> fourni (à la racine du dépôt) désactive l'auto-détection et sert le dossier tel quel. Vérifie que le <b>contenu</b> de <code>truvector.dev/</code> est à la <b>racine</b> du dépôt (index.html et wrangler.toml tout en haut).</div>
     <h3>Étape 3 — Brancher le domaine</h3>
     <ol class="steps">
       <li>Ton projet Pages → <strong>Custom domains → Set up a custom domain</strong>.</li>
@@ -377,7 +382,9 @@ git push</pre></div>
       <li><strong>Siège</strong> : 18 E rue des Ovides, 42100 Saint-Étienne.</li>
       <li><strong>SIREN</strong> 108 978 180 · <strong>SIRET</strong> 108 978 180 00017 · <strong>APE</strong> 9003B · RNE 21/08/2026.</li>
       <li><strong>Hébergeur</strong> : Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA.</li>
-      <li><strong>Pages</strong> : mentions légales, confidentialité (RGPD), cookies, sécurité (SSI) + <code>security.txt</code>.</li>
+      <li><strong>Pages</strong> : mentions légales, <strong>CGV/CGU</strong>, confidentialité (RGPD), cookies, sécurité (SSI) + <code>security.txt</code>.</li>
+      <li><strong>TVA</strong> : <em>TVA non applicable, art. 293 B du CGI</em> (conforme à ta documentation).</li>
+      <li><strong>Vente</strong> = concession de <strong>licence d'œuvre</strong> (pas une prestation de service) — cohérent avec ton statut d'agent public.</li>
     </ul>
     <div class="note warn"><b>Deux choses à finaliser.</b> Active les adresses <code>contact@truvector.dev</code> et <code>security@truvector.dev</code> sur ton domaine, et confirme ton régime de TVA. Les points « à confirmer » sont surlignés en ambre dans les pages. Ces textes restent des modèles à faire relire — je ne suis pas juriste.</div>
   </section>
@@ -396,6 +403,7 @@ git push</pre></div>
         <tr><td>Le compte à rebours reste figé</td><td>JavaScript bloqué, ou date mal formée. Garde le format <code>2026-09-21T00:00:00+02:00</code> dans <code>countdown.js</code>.</td></tr>
         <tr><td>Le bouton « Entrer » n'apparaît pas</td><td>Normal avant le 21/09 : il ne se révèle qu'à échéance du décompte.</td></tr>
         <tr><td>Un script est bloqué en prod</td><td>La CSP de <code>_headers</code> autorise <code>'self'</code> et l'inline. Si tu ajoutes un outil externe, ajoute son domaine à la directive concernée.</td></tr>
+        <tr><td>Build échoue sur <code>npx hugo</code> / « could not determine executable »</td><td>Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une <b>Build command vide</b> (Pages), ou committe le <code>wrangler.toml</code> fourni à la racine (Workers).</td></tr>
         <tr><td>Cloudflare Pages sert une vieille version</td><td>Cache. Force un nouveau déploiement (nouveau commit) ou purge le cache dans le dashboard.</td></tr>
       </tbody>
     </table></div>
