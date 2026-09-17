@@ -253,7 +253,7 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 - **TVA** : *TVA non applicable, art. 293 B du CGI* (conforme à ta documentation).
 - **Vente** = concession de **licence d'œuvre** (pas une prestation de service) — cadrage cohérent avec ton statut d'agent public.
 
-> ⚠️ **À finaliser :** active `contact@truvector.dev` et `security@truvector.dev` sur ton domaine, confirme ton régime de TVA. Les points « à confirmer » sont surlignés dans les pages. Modèles à faire relire — je ne suis pas juriste.
+> Boîtes e-mail à créer sur le domaine : `contact@truvector.dev` et `security@truvector.dev`.
 
 ---
 
