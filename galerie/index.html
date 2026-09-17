@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galerie — TRUvector.dev</title>
+<meta name="description" content="Galerie de créations graphiques romantico·geek en libre téléchargement.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<style>
+  .head{position:relative;padding:56px 0 30px;text-align:center;overflow:hidden}
+  .head .triskele{width:66px;height:66px;margin:0 auto 14px}
+  .head h1{font-size:clamp(26px,5.5vw,38px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .head h1 .tru{color:var(--menthe)} .head h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .head p{color:var(--texte-2);max-width:52ch;margin:12px auto 0;font-size:15.5px}
+
+  .gallery{padding:14px 0 30px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;grid-auto-flow:dense}
+  .art{margin:0;background:var(--panneau-2);border:1px solid var(--bord);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+  .art.wide{grid-column:span 2}
+  @media (max-width:640px){.art.wide{grid-column:span 1}}
+  .art-view{border:0;padding:0;margin:0;background:#060a0f;cursor:zoom-in;display:block;width:100%}
+  .art-view img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10;transition:transform .4s ease}
+  .art.square .art-view img{aspect-ratio:1/1}
+  .art-view:hover img{transform:scale(1.04)}
+  figcaption{display:flex;align-items:center;gap:10px;padding:12px 14px}
+  .art-title{font-weight:600;font-size:14.5px}
+  .dl{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--menthe-soft);border:1px solid var(--bord-fort);border-radius:999px;padding:5px 12px;white-space:nowrap}
+  .dl:hover{border-color:var(--menthe);color:var(--menthe);text-decoration:none}
+
+  .licence{margin:6px 0 60px;font-size:13.5px;color:var(--texte-2)}
+  .licence .card{border-left:3px solid var(--aurore-v)}
+  .licence b{color:var(--texte)}
+
+  /* Lightbox */
+  .lb{position:fixed;inset:0;z-index:80;background:rgba(4,7,11,.92);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px}
+  .lb.on{display:flex}
+  .lb figure{margin:0;max-width:min(1100px,94vw);max-height:88vh;display:flex;flex-direction:column;gap:12px}
+  .lb img{max-width:100%;max-height:76vh;object-fit:contain;border-radius:12px;border:1px solid var(--bord)}
+  .lb .bar{display:flex;align-items:center;gap:14px}
+  .lb .bar span{font-weight:600}
+  .lb .bar .dl{margin-left:auto}
+  .lb .x{position:absolute;top:16px;right:18px;font-family:var(--mono);font-size:22px;color:var(--texte-2);background:none;border:1px solid var(--bord);border-radius:10px;width:42px;height:42px;cursor:pointer}
+  .lb .x:hover{color:var(--menthe);border-color:var(--menthe)}
+
+  /* Porte d'accès (soft gate) */
+  .gate{position:fixed;inset:0;z-index:100;background:var(--nuit);display:flex;align-items:center;justify-content:center;padding:24px}
+  .gate.hidden{display:none}
+  .gate .box{max-width:400px;width:100%;text-align:center}
+  .gate .triskele{width:80px;height:80px;margin:0 auto 18px}
+  .gate h2{font-size:22px;margin:0 0 6px}
+  .gate p{color:var(--texte-2);font-size:14px;margin:0 0 20px}
+  .gate input{width:100%;font-family:var(--mono);font-size:16px;text-align:center;letter-spacing:2px;color:var(--texte);
+    background:var(--panneau);border:1px solid var(--bord-fort);border-radius:12px;padding:14px;margin-bottom:12px}
+  .gate .err{color:#ff8b8b;font-family:var(--mono);font-size:12.5px;min-height:18px;margin:2px 0 10px}
+  .gate .btn{width:100%;justify-content:center}
+  .gate small{display:block;color:var(--texte-3);font-family:var(--mono);font-size:11px;margin-top:16px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- ============ PORTE D'ACCÈS (soft gate) ============ -->
+<div class="gate" id="gate">
+  <div class="box">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h2>Accès à la galerie</h2>
+    <p>Entre le code d'accès pour découvrir les créations.</p>
+    <input id="gate-code" type="password" inputmode="text" autocomplete="off" placeholder="code d'accès" aria-label="Code d'accès">
+    <div class="err" id="gate-err" role="alert"></div>
+    <button class="btn" id="gate-go">Entrer →</button>
+    <small>Porte d'accès légère. Pour une vraie protection,<br>active Cloudflare Access (voir le README).</small>
+  </div>
+</div>
+
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Accueil</a>
+    <a href="./" aria-current="page">Galerie</a>
+    <a href="../mentions-legales/">Mentions</a>
+  </div>
+</div></nav>
+
+<header class="head">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1><span class="tru">Galerie</span> — créations <span class="dev">romantico·geek</span></h1>
+    <p>Chaque œuvre est en libre téléchargement en haute définition. Clique sur une image pour l'agrandir, ou télécharge directement le PNG.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="gallery" id="gallery">
+
+    <figure class="art wide" data-full="assets/banner-grand-opening.webp" data-dl="assets/banner-grand-opening.png" data-title="Grand Opening">
+      <button class="art-view" aria-label="Agrandir « Grand Opening »"><img src="assets/banner-grand-opening.webp" width="1584" height="672" loading="lazy" alt="Bannière festive : bureau de développeur, couple entouré de ballons et confettis, aurore boréale en forme de cœur, logo néon TRUvector."></button>
+      <figcaption><span class="art-title">Grand Opening</span><a class="dl" href="assets/banner-grand-opening.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+    <figure class="art wide" data-full="assets/arbre-monde.webp" data-dl="assets/arbre-monde.png" data-title="Sous l'arbre-monde">
+      <button class="art-view" aria-label="Agrandir « Sous l'arbre-monde »"><img src="assets/arbre-monde.webp" width="1408" height="768" loading="lazy" alt="Un lapin et une elfe verte enlacés sous un grand arbre, face à une mer étoilée, aurore en forme de cœur et vaisseaux spatiaux dans le ciel."></button>
+      <figcaption><span class="art-title">Sous l'arbre-monde</span><a class="dl" href="assets/arbre-monde.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+    <figure class="art wide" data-full="assets/deux-tasses.webp" data-dl="assets/deux-tasses.png" data-title="Deux tasses sous l'aurore">
+      <button class="art-view" aria-label="Agrandir « Deux tasses sous l'aurore »"><img src="assets/deux-tasses.webp" width="1408" height="768" loading="lazy" alt="Un lapin et une elfe verte partagent des chopes en bois dans une cabane chaleureuse, aurore boréale au-dessus de la fenêtre étoilée."></button>
+      <figcaption><span class="art-title">Deux tasses sous l'aurore</span><a class="dl" href="assets/deux-tasses.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+    <figure class="art square" data-full="assets/coeur-aurore.webp" data-dl="assets/coeur-aurore.png" data-title="Cœur d'aurore">
+      <button class="art-view" aria-label="Agrandir « Cœur d'aurore »"><img src="assets/coeur-aurore.webp" width="1024" height="1024" loading="lazy" alt="Un couple enlacé dans une chambre face à une skyline nocturne, aurore boréale en forme de cœur au-dessus de la ville."></button>
+      <figcaption><span class="art-title">Cœur d'aurore</span><a class="dl" href="assets/coeur-aurore.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+    <figure class="art square" data-full="assets/atelier-etoiles.webp" data-dl="assets/atelier-etoiles.png" data-title="L'atelier des étoiles">
+      <button class="art-view" aria-label="Agrandir « L'atelier des étoiles »"><img src="assets/atelier-etoiles.webp" width="1024" height="1024" loading="lazy" alt="Un couple d'artistes devant une toile aux teintes violettes, entourés de posters de science-fiction et d'un terrarium, aurore en cœur par la fenêtre."></button>
+      <figcaption><span class="art-title">L'atelier des étoiles</span><a class="dl" href="assets/atelier-etoiles.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+    <figure class="art square" data-full="assets/portrait-matriciel.webp" data-dl="assets/portrait-matriciel.png" data-title="Portrait matriciel">
+      <button class="art-view" aria-label="Agrandir « Portrait matriciel »"><img src="assets/portrait-matriciel.webp" width="1315" height="1252" loading="lazy" alt="Portrait d'un couple rendu entièrement en points verts sur fond noir, façon pluie de code Matrix."></button>
+      <figcaption><span class="art-title">Portrait matriciel</span><a class="dl" href="assets/portrait-matriciel.png" download>↓ PNG HD</a></figcaption>
+    </figure>
+
+  </section>
+
+  <section class="licence">
+    <div class="card">
+      <b>Licence des créations.</b> <span id="licence-text">Ces œuvres sont proposées en téléchargement libre pour un usage personnel et non commercial, avec mention de TRUvector.dev.</span>
+      Pour tout autre usage (commercial, revente, redistribution), <a href="../mentions-legales/">contacte l'auteur</a>.
+      <span style="color:var(--texte-3)">— géré depuis le panneau d'admin.</span>
+    </div>
+  </section>
+</main>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Aperçu de l'œuvre">
+  <button class="x" id="lb-x" aria-label="Fermer">✕</button>
+  <figure>
+    <img id="lb-img" src="" alt="">
+    <div class="bar"><span id="lb-title"></span><a class="dl" id="lb-dl" href="" download>↓ Télécharger le PNG HD</a></div>
+  </figure>
+</div>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:28px"></div>
+    <p class="fm">$ truvector gallery --download free --license personal</p>
+    <p>© 2026 TRUvector.dev · <a href="../index.html">Accueil</a></p>
+    <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
+  </div>
+</footer>
+
+<script src="../assets/js/config.js"></script>
+<script>
+/* Galerie pilotée par la config (config.json + panneau /admin).
+   ⚠️ La porte JS ci-dessous est un verrou LÉGER (code visible dans la source).
+   Vraie protection = Cloudflare Access sur /galerie (voir le manuel). */
+var ACCESS_CODE = "truvector2026";   // repli avant chargement de la config
+(function(){
+  // ---------- PORTE D'ACCÈS ----------
+  var gate=document.getElementById('gate'), inp=document.getElementById('gate-code'),
+      go=document.getElementById('gate-go'), err=document.getElementById('gate-err');
+  function unlock(){ try{sessionStorage.setItem('tv_access','1');}catch(e){} gate.classList.add('hidden'); }
+  try{ if(sessionStorage.getItem('tv_access')==='1'){ gate.classList.add('hidden'); } }catch(e){}
+  function attempt(){
+    if(inp.value.trim()===ACCESS_CODE){ err.textContent=''; unlock(); }
+    else { err.textContent='Code incorrect — réessaie.'; inp.select(); }
+  }
+  go.addEventListener('click',attempt);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') attempt(); });
+  inp.focus();
+
+  // ---------- LIGHTBOX (délégation, robuste au réordonnancement) ----------
+  var lb=document.getElementById('lb'), img=document.getElementById('lb-img'),
+      title=document.getElementById('lb-title'), dl=document.getElementById('lb-dl'),
+      x=document.getElementById('lb-x'), gallery=document.getElementById('gallery');
+  gallery.addEventListener('click',function(e){
+    var btn=e.target.closest('.art-view'); if(!btn) return;
+    var fig=btn.closest('.art');
+    img.src=fig.dataset.full; img.alt=fig.querySelector('img').alt;
+    title.textContent=fig.dataset.title;
+    if(fig.dataset.nodl==='1'){ dl.style.display='none'; } else { dl.style.display=''; dl.href=fig.dataset.dl; }
+    lb.classList.add('on');
+  });
+  function close(){ lb.classList.remove('on'); img.src=''; }
+  x.addEventListener('click',close);
+  lb.addEventListener('click',function(e){ if(e.target===lb) close(); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+
+  // ---------- APPLIQUER LA CONFIG ----------
+  function applyConfig(cfg){
+    if(cfg.access && cfg.access.code){ ACCESS_CODE = cfg.access.code; }
+    if(cfg.theme && cfg.theme.accent){ document.documentElement.style.setProperty('--menthe', cfg.theme.accent); }
+    if(cfg.license){ var lt=document.getElementById('licence-text'); if(lt) lt.textContent=cfg.license; }
+    if(cfg.gallery && cfg.gallery.length){
+      var byslug={};
+      document.querySelectorAll('.art').forEach(function(fig){
+        var slug=fig.dataset.full.replace('assets/','').replace('.webp',''); fig.dataset.slug=slug; byslug[slug]=fig;
+      });
+      cfg.gallery.forEach(function(item){
+        var fig=byslug[item.slug]; if(!fig) return;
+        fig.style.display = item.visible===false ? 'none' : '';
+        if(item.title){ fig.dataset.title=item.title; var t=fig.querySelector('.art-title'); if(t) t.textContent=item.title; }
+        fig.classList.remove('wide','square'); if(item.format) fig.classList.add(item.format);
+        var dlLink=fig.querySelector('figcaption .dl');
+        if(item.download===false){ fig.dataset.nodl='1'; if(dlLink) dlLink.style.display='none'; }
+        else { fig.dataset.nodl=''; if(dlLink) dlLink.style.display=''; }
+        fig.parentNode.appendChild(fig);   // réordonne selon la config
+      });
+    }
+  }
+  if(window.TV){ TV.load('../').then(applyConfig); }
+})();
+</script>
+</body>
+</html>

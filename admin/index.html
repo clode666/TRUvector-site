@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administration — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+<style>
+  .head{position:relative;padding:44px 0 20px;overflow:hidden}
+  .head .triskele{width:54px;height:54px;margin-bottom:12px}
+  .head h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .head h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .head p{color:var(--texte-2);margin:8px 0 0;font-size:15px;max-width:60ch}
+
+  .panel{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:20px;margin:0 0 16px}
+  .panel > h2{font-size:16px;margin:0 0 4px;font-weight:600;display:flex;gap:10px;align-items:baseline}
+  .panel > h2 .n{font-family:var(--mono);font-size:12.5px;color:var(--menthe);font-weight:700}
+  .panel > .hint{color:var(--texte-3);font-size:13px;margin:0 0 16px}
+
+  label.f{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.5px;color:var(--texte-2);margin:14px 0 6px;text-transform:uppercase}
+  input[type=text],input[type=email],textarea,select{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--texte);
+    background:var(--panneau);border:1px solid var(--bord-fort);border-radius:10px;padding:11px 12px}
+  input[type=text]:focus,input[type=email]:focus,textarea:focus,select:focus{outline:none;border-color:var(--menthe);box-shadow:0 0 0 3px rgba(52,245,197,.12)}
+  textarea{min-height:84px;resize:vertical;line-height:1.6}
+  .mono{font-family:var(--mono);font-size:13px}
+
+  .radios{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .radios label{flex:1;min-width:120px;display:flex;gap:8px;align-items:center;font-size:14px;background:var(--panneau);border:1px solid var(--bord);border-radius:10px;padding:11px 13px;cursor:pointer}
+  .radios label:has(input:checked){border-color:var(--menthe);box-shadow:0 0 0 2px rgba(52,245,197,.14)}
+  .radios small{display:block;color:var(--texte-3);font-family:var(--mono);font-size:10.5px}
+
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .accent-row{display:flex;gap:12px;align-items:center}
+  input[type=color]{width:52px;height:44px;padding:2px;border:1px solid var(--bord-fort);border-radius:10px;background:var(--panneau);cursor:pointer}
+
+  /* tables droits + galerie */
+  .rowline{display:grid;gap:10px;align-items:center;padding:11px;border:1px solid var(--bord);border-radius:12px;margin-bottom:10px;background:var(--panneau)}
+  .rowline.users{grid-template-columns:1fr 130px 40px}
+  .rowline.gal{grid-template-columns:1fr 110px auto auto auto}
+  .rowline .chk{display:flex;flex-direction:column;align-items:center;gap:3px;font-family:var(--mono);font-size:10px;color:var(--texte-3)}
+  .rowline .slug{grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--texte-3);margin-top:-4px}
+  .iconbtn{background:var(--panneau);border:1px solid var(--bord-fort);color:var(--texte-2);border-radius:9px;width:38px;height:38px;font-family:var(--mono);font-size:15px;cursor:pointer}
+  .iconbtn:hover{border-color:var(--menthe);color:var(--menthe)}
+  .iconbtn.del:hover{border-color:#ff8b8b;color:#ff8b8b}
+  @media(max-width:560px){.rowline.users{grid-template-columns:1fr 110px 38px}.rowline.gal{grid-template-columns:1fr 1fr}.rowline.gal .slug{order:5}}
+
+  .addbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .addbar input{flex:1;min-width:140px}
+
+  .note{border-left:3px solid var(--aurore-v);background:rgba(177,74,237,.06);border-radius:10px;padding:12px 15px;margin:0 0 16px;font-size:13.5px;color:var(--texte-2)}
+  .note.warn{border-left-color:var(--ambre);background:rgba(244,197,107,.06)}
+  .note b{color:var(--texte)}
+
+  /* barre d'actions */
+  .actions{position:sticky;bottom:0;z-index:30;background:rgba(7,11,17,.9);backdrop-filter:blur(12px);border-top:1px solid var(--bord);padding:12px 0;margin-top:6px}
+  .actions .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  .toast{position:fixed;left:50%;bottom:82px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
+    background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:10px 18px;border-radius:999px;transition:.25s;box-shadow:0 0 24px rgba(52,245,197,.4)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* gate admin */
+  .gate{position:fixed;inset:0;z-index:100;background:var(--nuit);display:flex;align-items:center;justify-content:center;padding:24px}
+  .gate.hidden{display:none}
+  .gate .box{max-width:400px;width:100%;text-align:center}
+  .gate .triskele{width:74px;height:74px;margin:0 auto 16px}
+  .gate h2{font-size:21px;margin:0 0 6px} .gate p{color:var(--texte-2);font-size:14px;margin:0 0 18px}
+  .gate input{text-align:center;letter-spacing:2px;font-family:var(--mono);margin-bottom:12px}
+  .gate .err{color:#ff8b8b;font-family:var(--mono);font-size:12.5px;min-height:18px}
+  .gate .btn{width:100%;justify-content:center;margin-top:6px}
+  .gate small{display:block;color:var(--texte-3);font-family:var(--mono);font-size:11px;margin-top:16px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<!-- ===== PORTE ADMIN (soft) ===== -->
+<div class="gate" id="agate">
+  <div class="box">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h2>Espace administration</h2>
+    <p>Entre le code administrateur.</p>
+    <input id="agate-code" type="password" autocomplete="off" placeholder="code admin" aria-label="Code administrateur">
+    <div class="err" id="agate-err" role="alert"></div>
+    <button class="btn" id="agate-go">Déverrouiller →</button>
+    <small>Verrou léger. Protège <b>/admin</b> avec Cloudflare Access<br>pour une vraie sécurité (voir le manuel).</small>
+  </div>
+</div>
+
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Accueil</a>
+    <a href="../galerie/">Galerie</a>
+    <a href="./" aria-current="page">Admin</a>
+  </div>
+</div></nav>
+
+<header class="head">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap" style="position:relative;z-index:2">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Panneau d'<span class="dev">administration</span></h1>
+    <p>Édite les paramètres du site et les droits. Enregistre un aperçu (ton navigateur), puis exporte <span class="mono">config.json</span> et committe-le pour appliquer à tout le monde.</p>
+  </div>
+</header>
+
+<main class="wrap" id="app" hidden>
+
+  <div class="note warn"><b>Comment ça marche.</b> Ce panneau pilote <span class="mono">config.json</span>. « Aperçu » enregistre dans <b>ton navigateur seulement</b>. Pour un changement réel et public, clique <b>Exporter config.json</b> puis committe le fichier. La <b>vraie sécurité</b> (qui peut ouvrir /admin et /galerie) se règle dans <b>Cloudflare Access</b> — ce panneau prépare la liste, Access l'applique.</div>
+
+  <!-- 01 Paramètres généraux -->
+  <section class="panel">
+    <h2><span class="n">01</span> Paramètres généraux</h2>
+    <p class="hint">Statut d'affichage, date d'ouverture et couleur d'accent.</p>
+
+    <label class="f">Statut du site</label>
+    <div class="radios" id="f-status">
+      <label><input type="radio" name="status" value="auto"><span>Auto (par date)<small>ouvre au jour J</small></span></label>
+      <label><input type="radio" name="status" value="soon"><span>Bientôt<small>décompte figé</small></span></label>
+      <label><input type="radio" name="status" value="open"><span>Ouvert<small>accès immédiat</small></span></label>
+    </div>
+
+    <div class="row2">
+      <div>
+        <label class="f">Date d'ouverture (ISO + fuseau)</label>
+        <input type="text" id="f-date" class="mono" placeholder="2026-09-21T00:00:00+02:00">
+      </div>
+      <div>
+        <label class="f">Couleur d'accent</label>
+        <div class="accent-row">
+          <input type="color" id="f-accent-color">
+          <input type="text" id="f-accent-hex" class="mono" placeholder="#34F5C5">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Accès -->
+  <section class="panel">
+    <h2><span class="n">02</span> Accès</h2>
+    <p class="hint">Méthode de protection et codes des portes légères.</p>
+
+    <label class="f">Méthode</label>
+    <div class="radios" id="f-method">
+      <label><input type="radio" name="method" value="cloudflare-access"><span>Cloudflare Access<small>recommandé · réel</small></span></label>
+      <label><input type="radio" name="method" value="soft"><span>Porte JS<small>légère · code visible</small></span></label>
+    </div>
+    <div class="note" id="method-note" style="margin-top:14px"></div>
+
+    <div class="row2">
+      <div><label class="f">Code d'accès — galerie</label><input type="text" id="f-code" class="mono"></div>
+      <div><label class="f">Code d'accès — admin</label><input type="text" id="f-admincode" class="mono"></div>
+    </div>
+  </section>
+
+  <!-- 03 Droits -->
+  <section class="panel">
+    <h2><span class="n">03</span> Droits &amp; utilisateurs</h2>
+    <p class="hint">Qui a accès, et avec quel rôle. L'application réelle se fait par Cloudflare Access (bouton d'export ci-dessous).</p>
+    <div id="users"></div>
+    <div class="addbar">
+      <input type="email" id="u-email" placeholder="email@exemple.com">
+      <select id="u-role" style="max-width:150px"><option value="admin">admin</option><option value="editor">éditeur</option><option value="reader">lecteur</option></select>
+      <button class="btn btn-ghost" id="u-add">+ Ajouter</button>
+    </div>
+    <div class="note" style="margin-top:16px"><b>Rôles.</b> <b>admin</b> = tout · <b>éditeur</b> = contenu/galerie · <b>lecteur</b> = consultation. Access applique l'entrée à la porte ; des règles plus fines par rôle demanderaient un Worker.</div>
+  </section>
+
+  <!-- 04 Galerie -->
+  <section class="panel">
+    <h2><span class="n">04</span> Galerie</h2>
+    <p class="hint">Titre, format, visibilité, téléchargement et ordre des créas. Les fichiers image doivent exister dans <span class="mono">galerie/assets/</span>.</p>
+    <div id="gallery-rows"></div>
+    <div class="addbar">
+      <input type="text" id="g-slug" class="mono" placeholder="slug-du-fichier (sans extension)">
+      <input type="text" id="g-title" placeholder="Titre affiché">
+      <button class="btn btn-ghost" id="g-add">+ Ajouter</button>
+    </div>
+  </section>
+
+  <!-- 05 Licence -->
+  <section class="panel">
+    <h2><span class="n">05</span> Licence des créations</h2>
+    <p class="hint">Texte affiché sous la galerie.</p>
+    <textarea id="f-license"></textarea>
+  </section>
+
+</main>
+
+<div class="actions" id="actionbar" hidden><div class="wrap row">
+  <button class="btn" id="a-save">💾 Aperçu (local)</button>
+  <button class="btn btn-ghost" id="a-export">⬇ Exporter config.json</button>
+  <button class="btn btn-ghost" id="a-emails">⬇ Emails (Access)</button>
+  <button class="btn btn-ghost" id="a-reset">↺ Réinitialiser l'aperçu</button>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../assets/js/config.js"></script>
+<script>
+var ADMIN_CODE = "truvector-admin"; // repli avant config
+var STATE = null;
+
+/* ---------- toast ---------- */
+function toast(msg){ var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},1900); }
+
+/* ---------- rendu du formulaire ---------- */
+function fill(cfg){
+  STATE = cfg;
+  // 01
+  document.querySelector('input[name=status][value="'+(cfg.status||'auto')+'"]').checked=true;
+  document.getElementById('f-date').value = cfg.launchDate||'';
+  var acc=(cfg.theme&&cfg.theme.accent)||'#34f5c5';
+  document.getElementById('f-accent-color').value=acc; document.getElementById('f-accent-hex').value=acc;
+  document.documentElement.style.setProperty('--menthe',acc);
+  // 02
+  var method=(cfg.access&&cfg.access.method)||'soft';
+  document.querySelector('input[name=method][value="'+method+'"]').checked=true;
+  document.getElementById('f-code').value=(cfg.access&&cfg.access.code)||'';
+  document.getElementById('f-admincode').value=(cfg.access&&cfg.access.adminCode)||'';
+  methodNote();
+  // 03
+  renderUsers((cfg.access&&cfg.access.users)||[]);
+  // 04
+  renderGallery(cfg.gallery||[]);
+  // 05
+  document.getElementById('f-license').value=cfg.license||'';
+}
+
+function methodNote(){
+  var m=document.querySelector('input[name=method]:checked').value;
+  var el=document.getElementById('method-note');
+  if(m==='cloudflare-access'){ el.className='note ok'; el.innerHTML='<b>Cloudflare Access sélectionné.</b> Configure l\'application dans Zero Trust → Access sur <span class="mono">/galerie</span> et <span class="mono">/admin</span>, puis tu peux retirer les portes JS.'; }
+  else { el.className='note warn'; el.innerHTML='<b>Porte JS.</b> Simple mais le code est visible dans la source. À réserver à un usage non sensible.'; }
+}
+
+/* ---------- utilisateurs ---------- */
+function userRow(u){
+  var d=document.createElement('div'); d.className='rowline users';
+  d.innerHTML='<input type="email" class="u-email" value="'+(u.email||'').replace(/"/g,'&quot;')+'" placeholder="email@exemple.com">'+
+    '<select class="u-role"><option value="admin">admin</option><option value="editor">éditeur</option><option value="reader">lecteur</option></select>'+
+    '<button class="iconbtn del" title="Supprimer">✕</button>';
+  d.querySelector('.u-role').value=u.role||'reader';
+  d.querySelector('.del').onclick=function(){ d.remove(); };
+  return d;
+}
+function renderUsers(list){ var c=document.getElementById('users'); c.innerHTML=''; list.forEach(function(u){ c.appendChild(userRow(u)); }); }
+
+/* ---------- galerie ---------- */
+function galRow(item){
+  var d=document.createElement('div'); d.className='rowline gal';
+  d.dataset.slug=item.slug||'';
+  d.innerHTML=
+    '<input type="text" class="g-title" value="'+(item.title||'').replace(/"/g,'&quot;')+'" placeholder="Titre">'+
+    '<select class="g-format"><option value="square">carré</option><option value="wide">large</option></select>'+
+    '<label class="chk">vis.<input type="checkbox" class="g-vis"></label>'+
+    '<label class="chk">DL<input type="checkbox" class="g-dl"></label>'+
+    '<span style="display:flex;gap:4px"><button class="iconbtn up" title="Monter">↑</button><button class="iconbtn down" title="Descendre">↓</button></span>'+
+    '<span class="slug">'+ (item.slug||'') +'</span>';
+  d.querySelector('.g-format').value=item.format||'square';
+  d.querySelector('.g-vis').checked=item.visible!==false;
+  d.querySelector('.g-dl').checked=item.download!==false;
+  d.querySelector('.up').onclick=function(){ var p=d.previousElementSibling; if(p) d.parentNode.insertBefore(d,p); };
+  d.querySelector('.down').onclick=function(){ var n=d.nextElementSibling; if(n) d.parentNode.insertBefore(n,d); };
+  return d;
+}
+function renderGallery(list){ var c=document.getElementById('gallery-rows'); c.innerHTML=''; list.forEach(function(it){ c.appendChild(galRow(it)); }); }
+
+/* ---------- collecte du formulaire → config ---------- */
+function collect(){
+  var cfg = TV.clone(STATE);
+  cfg.status = document.querySelector('input[name=status]:checked').value;
+  cfg.launchDate = document.getElementById('f-date').value.trim();
+  cfg.theme = cfg.theme||{}; cfg.theme.accent = document.getElementById('f-accent-hex').value.trim()||'#34f5c5';
+  cfg.access = cfg.access||{};
+  cfg.access.method = document.querySelector('input[name=method]:checked').value;
+  cfg.access.code = document.getElementById('f-code').value.trim();
+  cfg.access.adminCode = document.getElementById('f-admincode').value.trim();
+  cfg.access.users = [].map.call(document.querySelectorAll('#users .rowline'),function(r){
+    return { email:r.querySelector('.u-email').value.trim(), role:r.querySelector('.u-role').value };
+  }).filter(function(u){return u.email;});
+  cfg.gallery = [].map.call(document.querySelectorAll('#gallery-rows .rowline'),function(r){
+    return { slug:r.dataset.slug, title:r.querySelector('.g-title').value.trim(),
+             format:r.querySelector('.g-format').value,
+             visible:r.querySelector('.g-vis').checked, download:r.querySelector('.g-dl').checked };
+  });
+  cfg.license = document.getElementById('f-license').value.trim();
+  return cfg;
+}
+
+/* ---------- actions ---------- */
+function download(name, text, type){
+  var b=new Blob([text],{type:type||'application/json'}), u=URL.createObjectURL(b);
+  var a=document.createElement('a'); a.href=u; a.download=name; a.click(); URL.revokeObjectURL(u);
+}
+function bindActions(){
+  document.getElementById('a-save').onclick=function(){ var c=collect(); TV.saveLocal(c); STATE=c; document.documentElement.style.setProperty('--menthe',c.theme.accent); toast('Aperçu enregistré (local)'); };
+  document.getElementById('a-export').onclick=function(){ download('config.json', JSON.stringify(collect(),null,2)); toast('config.json exporté'); };
+  document.getElementById('a-emails').onclick=function(){
+    var emails=collect().access.users.map(function(u){return u.email;}).join('\n');
+    download('cloudflare-access-emails.txt', emails||'', 'text/plain'); toast('Liste d\'emails exportée');
+  };
+  document.getElementById('a-reset').onclick=function(){ TV.clearLocal(); toast('Aperçu réinitialisé'); TV.load('../').then(fill); };
+  document.getElementById('u-add').onclick=function(){
+    var e=document.getElementById('u-email').value.trim(); if(!e){ toast('Email requis'); return; }
+    document.getElementById('users').appendChild(userRow({email:e, role:document.getElementById('u-role').value}));
+    document.getElementById('u-email').value='';
+  };
+  document.getElementById('g-add').onclick=function(){
+    var slug=document.getElementById('g-slug').value.trim(), title=document.getElementById('g-title').value.trim();
+    if(!slug){ toast('Slug requis'); return; }
+    document.getElementById('gallery-rows').appendChild(galRow({slug:slug, title:title||slug, format:'square', visible:true, download:true}));
+    document.getElementById('g-slug').value=''; document.getElementById('g-title').value='';
+  };
+  document.querySelectorAll('input[name=method]').forEach(function(r){ r.addEventListener('change',methodNote); });
+  var col=document.getElementById('f-accent-color'), hex=document.getElementById('f-accent-hex');
+  col.addEventListener('input',function(){ hex.value=col.value; document.documentElement.style.setProperty('--menthe',col.value); });
+  hex.addEventListener('input',function(){ if(/^#[0-9a-fA-F]{6}$/.test(hex.value)){ col.value=hex.value; document.documentElement.style.setProperty('--menthe',hex.value); } });
+}
+
+/* ---------- porte admin + démarrage ---------- */
+(function(){
+  var g=document.getElementById('agate'), inp=document.getElementById('agate-code'),
+      go=document.getElementById('agate-go'), err=document.getElementById('agate-err');
+  function open(){ try{sessionStorage.setItem('tv_admin','1');}catch(e){} g.classList.add('hidden');
+    document.getElementById('app').hidden=false; document.getElementById('actionbar').hidden=false; }
+  function attempt(){ if(inp.value.trim()===ADMIN_CODE){ open(); } else { err.textContent='Code incorrect.'; inp.select(); } }
+  go.addEventListener('click',attempt);
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') attempt(); });
+
+  TV.load('../').then(function(cfg){
+    ADMIN_CODE=(cfg.access&&cfg.access.adminCode)||ADMIN_CODE;
+    fill(cfg); bindActions();
+    try{ if(sessionStorage.getItem('tv_admin')==='1'){ open(); } else { inp.focus(); } }catch(e){ inp.focus(); }
+  });
+})();
+</script>
+</body>
+</html>
