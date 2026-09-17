@@ -1,0 +1,23 @@
+{
+  "version": 4,
+  "status": "auto",
+  "launchDate": "2026-09-21T00:00:00+02:00",
+  "access": {
+    "method": "soft",
+    "code": "truvector2026",
+    "adminCode": "truvector-admin",
+    "users": [
+      { "email": "tristan@truvector.dev", "role": "admin" }
+    ]
+  },
+  "theme": { "accent": "#34f5c5" },
+  "license": "Usage personnel et non commercial, avec mention de TRUvector.dev. Tout autre usage nécessite l'accord de l'auteur.",
+  "gallery": [
+    { "slug": "banner-grand-opening", "title": "Grand Opening", "format": "wide", "visible": true, "download": true },
+    { "slug": "arbre-monde", "title": "Sous l'arbre-monde", "format": "wide", "visible": true, "download": true },
+    { "slug": "deux-tasses", "title": "Deux tasses sous l'aurore", "format": "wide", "visible": true, "download": true },
+    { "slug": "coeur-aurore", "title": "Cœur d'aurore", "format": "square", "visible": true, "download": true },
+    { "slug": "atelier-etoiles", "title": "L'atelier des étoiles", "format": "square", "visible": true, "download": true },
+    { "slug": "portrait-matriciel", "title": "Portrait matriciel", "format": "square", "visible": true, "download": true }
+  ]
+}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRUvector.dev — Where Code Meets Creativity</title>
+<meta name="description" content="TRUvector.dev — créations graphiques romantico·geek en libre téléchargement. Ouverture le 21 septembre 2026.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="TRUvector.dev — Grand Opening">
+<meta property="og:description" content="Where Code Meets Creativity. Ouverture le 21 septembre 2026.">
+<meta property="og:image" content="assets/img/og-banner.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<style>
+  header.hero{position:relative;padding:86px 0 60px;text-align:center;overflow:hidden}
+  .hero-inner{position:relative;z-index:2}
+  .hero .triskele{width:104px;height:104px;margin:0 auto 22px;animation:spin 42s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .hero .wordmark{font-size:clamp(34px,8vw,60px)}
+  .hero .kicker{margin:8px 0 0}
+  .lede{max-width:52ch;margin:20px auto 0;color:var(--texte-2);font-size:16.5px}
+  .lede b{color:var(--texte);font-weight:600}
+
+  .countdown{margin:34px auto 0;max-width:540px}
+  .cd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--texte-3);text-transform:uppercase;margin-bottom:12px}
+  #cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .cd-cell{background:var(--panneau);border:1px solid var(--bord);border-radius:14px;padding:18px 6px 12px;backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 26px rgba(52,245,197,.06)}
+  .cd-num{font-family:var(--mono);font-weight:700;font-size:clamp(28px,7vw,42px);color:var(--menthe);text-shadow:0 0 16px rgba(52,245,197,.35);line-height:1}
+  .cd-unit{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--texte-3);text-transform:uppercase;margin-top:8px}
+  .cd-open{font-family:var(--mono);color:var(--aurore-g);font-size:18px;padding:16px;border:1px solid rgba(89,227,154,.4);border-radius:14px;background:rgba(89,227,154,.08);grid-column:1/-1}
+
+  .launch-gate{margin-top:26px;min-height:52px}
+  .launch-gate .enter-btn{display:none}
+  .launch-gate[data-open="1"] .enter-btn{display:inline-flex}
+  .launch-gate[data-open="1"] .soon-note{display:none}
+  .soon-note{font-family:var(--mono);font-size:12.5px;color:var(--texte-3)}
+
+  .teaser{padding:26px 0 46px}
+  .teaser-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+  .teaser-grid .card .ic{font-size:22px}
+  .teaser-grid .card h3{margin:10px 0 6px;font-size:16px;font-weight:600}
+  .teaser-grid .card p{margin:0;color:var(--texte-2);font-size:14px}
+
+  .maker{padding:20px 0 60px}
+  .maker-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  .maker-card img{width:88px;height:88px;border-radius:16px;border:1px solid var(--bord-fort);box-shadow:0 0 22px rgba(52,245,197,.15)}
+  .maker-card .txt{flex:1;min-width:220px}
+  .maker-card h3{margin:0 0 4px;font-size:17px}
+  .maker-card p{margin:0;color:var(--texte-2);font-size:14.5px}
+  .maker-card .links{margin-top:10px;font-family:var(--mono);font-size:13px;display:flex;gap:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" aria-current="page">Accueil</a>
+    <a href="galerie/">Galerie</a>
+    <a href="mentions-legales/">Mentions</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-inner wrap">
+    <svg class="triskele" viewBox="0 0 200 200" role="img" aria-label="Triskèle TRUvector"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1 class="wordmark"><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></h1>
+    <p class="kicker">WHERE CODE MEETS CREATIVITY</p>
+    <p class="lede">Un atelier <b>romantico·geek</b> où le code rencontre l'art. Créations graphiques en libre téléchargement, aurores et univers fantastiques. <b>Ouverture le 21 septembre 2026.</b></p>
+
+    <div class="countdown">
+      <div class="cd-label">Ouverture du site — 21 septembre 2026</div>
+      <div id="cd-grid">
+        <div class="cd-cell"><div class="cd-num" id="cd-d">--</div><div class="cd-unit">Jours</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cd-h">--</div><div class="cd-unit">Heures</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cd-m">--</div><div class="cd-unit">Min</div></div>
+        <div class="cd-cell"><div class="cd-num" id="cd-s">--</div><div class="cd-unit">Sec</div></div>
+      </div>
+    </div>
+
+    <div class="launch-gate" id="launch-gate">
+      <a class="btn enter-btn" href="galerie/">Entrer dans la galerie →</a>
+      <p class="soon-note">La galerie ouvre le jour J. Reviens le 21/09 🌌</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="teaser wrap">
+    <div class="eyebrow">// ce qui t'attend</div>
+    <h2>Un lieu, trois promesses</h2>
+    <p class="sub">Simple, beau, à toi.</p>
+    <div class="teaser-grid">
+      <div class="card"><div class="ic">🎨</div><h3>Créations en libre accès</h3><p>Une galerie d'œuvres romantico·geek à télécharger en haute définition.</p></div>
+      <div class="card"><div class="ic">🔑</div><h3>Accès simple</h3><p>Une porte d'entrée légère : tu entres, tu profites, rien de compliqué.</p></div>
+      <div class="card"><div class="ic">🌌</div><h3>Un univers qui grandit</h3><p>De nouvelles créas, régulièrement, dans le même esprit d'aurores et d'étoiles.</p></div>
+    </div>
+  </section>
+
+  <section class="maker wrap">
+    <div class="eyebrow">// le créateur</div>
+    <div class="card maker-card" style="margin-top:12px">
+      <img src="assets/img/createur.webp" alt="Portrait stylisé du créateur de TRUvector" width="88" height="88" loading="lazy">
+      <div class="txt">
+        <h3>TRUvector</h3>
+        <p>Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e-books et créations graphiques.</p>
+        <div class="links">
+          <a href="https://github.com/clode666" rel="me noopener" target="_blank">↗ github.com/clode666</a>
+          <a href="mentions-legales/">↗ Mentions légales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:28px"></div>
+    <p class="fm">$ truvector open --date 2026-09-21 --style romantico-geek</p>
+    <p>© 2026 TRUvector.dev · Where Code Meets Creativity</p>
+    <p class="foot-legal"><a href="mentions-legales/">Mentions légales</a> · <a href="confidentialite/">Confidentialité</a> · <a href="cookies/">Cookies</a> · <a href="securite/">Sécurité</a></p>
+  </div>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/countdown.js"></script>
+</body>
+</html>

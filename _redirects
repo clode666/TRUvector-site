@@ -1,0 +1,3 @@
+# Redirections Cloudflare Pages (optionnel)
+# Avant le lancement, pour renvoyer toute la galerie vers l'accueil, décommente :
+# /galerie/*   /   302

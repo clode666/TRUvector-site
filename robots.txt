@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /galerie/
+Disallow: /admin/
+
+Sitemap: https://truvector.dev/sitemap.xml
