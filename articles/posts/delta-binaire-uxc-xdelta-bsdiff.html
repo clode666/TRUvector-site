@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compression delta binaire : UXC v3 vs xdelta3 vs bsdiff4 — TRUvector</title>
+<meta name="description" content="Ratio de patch, vitesse de génération, tolérance aux corruptions, mémoire requise — comparatif complet des algorithmes de delta binaire pour les mises à jour logicielles.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/delta-binaire-uxc-xdelta-bsdiff.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Compression delta binaire : UXC v3 vs xdelta3 vs bsdiff4">
+<meta property="og:description" content="Ratio de patch, vitesse de génération, tolérance aux corruptions, mémoire requise — comparatif complet des algorithmes de delta binaire pour les mises à jour logicielles.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Compression delta binaire : UXC v3 vs xdelta3 vs bsdiff4</h1>
+    <div class="art-tags"><span class="tg">Déploiement</span><span class="tg">Comparatif</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Qu'est-ce qu'un patch delta binaire ?</h2>
+<p>Un patch delta binaire encode uniquement la <em>différence</em> entre deux versions d'un fichier binaire. Mettre à jour une application de 80 MB qui n'a changé qu'à 5% ne devrait pas nécessiter de retélécharger 80 MB. Un bon algorithme delta réduit cette mise à jour à 3–5 MB.</p>
+<p>Trois algorithmes dominent en 2026 : <strong>bsdiff4</strong> (référence académique), <strong>xdelta3</strong> (standard de l'industrie du jeu vidéo) et <strong>UXC v3</strong> (format propriétaire de Universal Installer avec delta intégré).</p>
+
+<blockquote><p>Le choix d'un algorithme delta n'est pas qu'une question de ratio : la mémoire requise, la tolérance aux corruptions partielles et la vitesse d'application sur la machine cliente sont souvent plus critiques.</p></blockquote>
+
+<h2 id="bsdiff">bsdiff / bsdiff4</h2>
+<p>bsdiff est l'algorithme de référence académique créé par Colin Percival. Il utilise un suffix array pour comparer les deux fichiers et produit des patches très compacts, particulièrement efficaces sur les fichiers compilés (EXE, DLL, SO).</p>
+<ul>
+  <li><strong>Points forts</strong> : excellent ratio de compression, patches très compacts sur les binaires compilés, implémentation Python via <code>bsdiff4</code>.</li>
+  <li><strong>Limites</strong> : consommation mémoire élevée (9× la taille du fichier source pendant la génération), lent à générer sur les gros fichiers, pas de résumption en cas d'interruption.</li>
+</ul>
+<pre><code><span style="color:var(--acc5)">import</span> bsdiff4
+
+<span style="color:var(--textd)"># Générer le patch</span>
+patch = bsdiff4.diff(open(<span style="color:var(--acc4)">'app_v1.exe'</span>, <span style="color:var(--acc4)">'rb'</span>).read(),
+                     open(<span style="color:var(--acc4)">'app_v2.exe'</span>, <span style="color:var(--acc4)">'rb'</span>).read())
+open(<span style="color:var(--acc4)">'patch_v1_v2.bsdiff'</span>, <span style="color:var(--acc4)">'wb'</span>).write(patch)
+
+<span style="color:var(--textd)"># Appliquer le patch</span>
+v2 = bsdiff4.patch(open(<span style="color:var(--acc4)">'app_v1.exe'</span>, <span style="color:var(--acc4)">'rb'</span>).read(), patch)
+open(<span style="color:var(--acc4)">'app_v2.exe'</span>, <span style="color:var(--acc4)">'wb'</span>).write(v2)</code></pre>
+
+<h2 id="xdelta">xdelta3</h2>
+<p>xdelta3 est l'algorithme utilisé par l'industrie du jeu vidéo (Steam, GOG) et de nombreux gestionnaires de paquets Linux. Il utilise un algorithme de fenêtre glissante (VCDIFF standard RFC 3284) qui consomme beaucoup moins de mémoire que bsdiff.</p>
+<ul>
+  <li><strong>Points forts</strong> : faible consommation mémoire, streaming possible (pas besoin de charger le fichier entier), standard VCDIFF interopérable, très rapide à appliquer.</li>
+  <li><strong>Limites</strong> : ratio légèrement inférieur à bsdiff sur les petits fichiers, binaire C requis (pas de pure Python), pas de support natif des archives multi-fichiers.</li>
+</ul>
+
+<h2 id="uxc">UXC v3 — format .uxcd</h2>
+<p>UXC v3 introduit le format <code>.uxcd</code> (UXC Delta). Il combine bsdiff4 pour les blocs modifiés avec une optimisation clé : les blocs identiques entre deux versions sont référencés sans être re-encodés (taille 0 dans le patch).</p>
+<pre><code><span style="color:var(--textd)"># Format .uxcd — structure</span>
+[8B]  magic    : 55 58 43 44 00 03 00 00  ("UXCD" v3)
+[4B]  n_blocks : nombre de blocs (64 KB chacun)
+[N×] block_entries :
+  [4B] block_id   : index du bloc dans le fichier cible
+  [1B] block_type : IDENTICAL(0) | BSDIFF(1) | FULL(2)
+  [4B] patch_size : taille du patch pour ce bloc
+  [?B] patch_data : vide si IDENTICAL, bsdiff sinon
+[32B] hmac_sha256 : intégrité du patch complet</code></pre>
+
+<p>Le bloc <code>IDENTICAL</code> permet d'ignorer complètement les parties inchangées — pour un EXE Python où seules les ressources ont changé, 80% des blocs sont IDENTICAL et occupent 0 byte dans le patch.</p>
+
+<h2 id="comparatif">Comparatif sur un EXE Python 80 MB (5% modifié)</h2>
+<table class="cmp-table">
+  <thead>
+    <tr>
+      <th>Critère</th>
+      <th style="color:var(--acc5)">UXC v3 (.uxcd)</th>
+      <th style="color:var(--textd)">bsdiff4</th>
+      <th style="color:var(--textd)">xdelta3</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Taille du patch</td><td class="v-good">~3.2 MB</td><td class="v-good">~2.8 MB</td><td class="v-warn">~4.1 MB</td></tr>
+    <tr><td>Mémoire génération</td><td class="v-good">~200 MB</td><td class="v-bad">~720 MB</td><td class="v-good">~80 MB</td></tr>
+    <tr><td>Temps génération</td><td class="v-warn">~18s</td><td class="v-warn">~22s</td><td class="v-good">~8s</td></tr>
+    <tr><td>Temps application</td><td class="v-good">~2s</td><td class="v-warn">~4s</td><td class="v-good">~1.5s</td></tr>
+    <tr><td>Résumption partielle</td><td class="v-good">✓ par bloc</td><td class="v-bad">✗</td><td class="v-warn">Partielle</td></tr>
+    <tr><td>Vérification intégrité</td><td class="v-good">HMAC-SHA256</td><td class="v-warn">CRC32</td><td class="v-warn">Adler32</td></tr>
+    <tr><td>Multi-fichiers natif</td><td class="v-good">✓</td><td class="v-bad">✗</td><td class="v-bad">✗</td></tr>
+    <tr><td>Pure Python</td><td class="v-good">✓</td><td class="v-good">✓</td><td class="v-bad">✗ (binaire C)</td></tr>
+  </tbody>
+</table>
+
+<h2 id="impl">Implémentation Python avec Universal Installer</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.delta <span style="color:var(--acc5)">import</span> UXCDelta
+
+delta = UXCDelta()
+
+<span style="color:var(--textd)"># Générer un patch .uxcd</span>
+stats = delta.create_patch(
+    source=<span style="color:var(--acc4)">"app_v1.0.uxc"</span>,
+    target=<span style="color:var(--acc4)">"app_v1.1.uxc"</span>,
+    output=<span style="color:var(--acc4)">"patch_v1.0_to_v1.1.uxcd"</span>,
+    block_size=<span style="color:var(--acc4)">65536</span>  <span style="color:var(--textd)"># 64 KB par bloc</span>
+)
+print(stats)
+<span style="color:var(--textd)"># {'identical_blocks': 1024, 'patched_blocks': 51,</span>
+<span style="color:var(--textd)">#  'full_blocks': 5, 'patch_size_mb': 3.2, 'ratio': 0.04}</span>
+
+<span style="color:var(--textd)"># Appliquer le patch</span>
+delta.apply_patch(
+    source=<span style="color:var(--acc4)">"app_v1.0.uxc"</span>,
+    patch=<span style="color:var(--acc4)">"patch_v1.0_to_v1.1.uxcd"</span>,
+    output=<span style="color:var(--acc4)">"app_v1.1.uxc"</span>,
+    verify_hmac=<span style="color:var(--acc5)">True</span>
+)</code></pre>
+
+<h2 id="cas-usage">Cas d'usage pratiques</h2>
+<ul>
+  <li><strong>Mises à jour logicielles classiques</strong> (EXE, DLL, SO) → UXC v3 ou bsdiff4. Ratio optimal, intégrité HMAC.</li>
+  <li><strong>Gros fichiers (&gt; 500 MB), mémoire contrainte</strong> → xdelta3. Streaming sans chargement complet.</li>
+  <li><strong>Archives multi-fichiers (packages Python)</strong> → UXC v3 obligatoirement. Le seul à gérer nativement les archives complètes.</li>
+  <li><strong>Environnement sans binaire C installable</strong> → UXC v3 ou bsdiff4 (pure Python).</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>UXC v3 est le meilleur choix pour les mises à jour de packages Python et d'archives multi-fichiers. bsdiff4 reste supérieur sur le ratio brut pour les fichiers uniques. xdelta3 domine en mémoire et en vitesse de génération. Universal Installer V2 implémente UXC v3 nativement avec génération automatique de patches lors des uploads cloud.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">📦</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc5);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="universal-installer-v2-guide.html" class="btn btn-ghost">← Guide V2</a>
+  <a href="generer-msi-python-2026.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

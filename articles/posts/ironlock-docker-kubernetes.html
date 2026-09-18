@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cas réel : IronLock dans un environnement Docker / Kubernetes — TRUvector</title>
+<meta name="description" content="Fingerprint éphémère sur containers, licence par pod, sidecar de vérification, gestion des secrets Kubernetes — retour d&#x27;expérience sur l&#x27;adaptation d&#x27;IronLock à un environnement conteneurisé.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/ironlock-docker-kubernetes.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Cas réel : IronLock dans un environnement Docker / Kubernetes">
+<meta property="og:description" content="Fingerprint éphémère sur containers, licence par pod, sidecar de vérification, gestion des secrets Kubernetes — retour d&#x27;expérience sur l&#x27;adaptation d&#x27;IronLock à un environnement conteneurisé.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Cas réel : IronLock dans un environnement Docker / Kubernetes</h1>
+    <div class="art-tags"><span class="tg">Cas d&#x27;usage</span><span class="tg">Licensing</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Le défi des containers</h2>
+<p>IronLock v2 est conçu pour lier un programme à une machine physique. Docker et Kubernetes brisent cette hypothèse : les containers sont éphémères, leur "hardware" est virtualisé, et le même container peut tourner sur 50 nœuds différents. Adapter IronLock à Kubernetes nécessite de repenser le modèle de fingerprint.</p>
+
+<blockquote><p>Dans Kubernetes, l'unité de déploiement n'est plus la machine — c'est le pod. Le licensing doit s'adapter : on lie la licence au cluster ou au namespace, pas au nœud physique.</p></blockquote>
+
+<h2 id="fingerprint">Fingerprint dans Docker</h2>
+<p>Les sources de fingerprint classiques sont inutilisables dans un container :</p>
+<table class="cmp-table">
+  <thead><tr><th>Source</th><th>Machine physique</th><th>Container Docker</th></tr></thead>
+  <tbody>
+    <tr><td>UUID carte mère</td><td class="v-good">✓ Stable</td><td class="v-bad">Non accessible</td></tr>
+    <tr><td>Disk serial</td><td class="v-good">✓ Stable</td><td class="v-bad">Non accessible</td></tr>
+    <tr><td>CPU ID</td><td class="v-good">✓ Stable</td><td class="v-warn">Visible mais partagé</td></tr>
+    <tr><td>MAC address</td><td class="v-good">✓ Stable</td><td class="v-warn">Assignée par Docker (aléatoire)</td></tr>
+    <tr><td>Namespace K8s UUID</td><td class="v-bad">N/A</td><td class="v-good">✓ Stable par cluster</td></tr>
+    <tr><td>Service Account JWT</td><td class="v-bad">N/A</td><td class="v-good">✓ Cryptographiquement vérifiable</td></tr>
+  </tbody>
+</table>
+
+<p>La stratégie : remplacer le fingerprint hardware par un <strong>fingerprint de cluster</strong> basé sur des identifiants Kubernetes stables :</p>
+<pre><code><span style="color:var(--acc5)">from</span> kubernetes <span style="color:var(--acc5)">import</span> client, config
+<span style="color:var(--acc5)">import</span> hashlib
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">get_k8s_fingerprint</span>() -> str:
+    config.load_incluster_config()
+    v1 = client.CoreV1Api()
+
+    <span style="color:var(--textd)"># UUID du namespace (stable)</span>
+    ns = v1.read_namespace(
+        name=os.environ.get(<span style="color:var(--acc4)">"POD_NAMESPACE"</span>, <span style="color:var(--acc4)">"default"</span>)
+    )
+    ns_uid = ns.metadata.uid
+
+    <span style="color:var(--textd)"># UUID du kube-system namespace (identifiant unique du cluster)</span>
+    ks = v1.read_namespace(name=<span style="color:var(--acc4)">"kube-system"</span>)
+    cluster_uid = ks.metadata.uid
+
+    raw = f<span style="color:var(--acc4)">"{cluster_uid}|{ns_uid}"</span>.encode()
+    <span style="color:var(--acc5)">return</span> hashlib.sha256(raw).hexdigest()</code></pre>
+
+<h2 id="modeles">Modèles de licensing K8s</h2>
+<p>Trois modèles selon le niveau de granularité requis :</p>
+<ul>
+  <li><strong>Licence par cluster</strong> — une seule licence pour tous les pods du cluster. Simple, peu restrictif. UUID du namespace <code>kube-system</code> comme fingerprint.</li>
+  <li><strong>Licence par namespace</strong> — une licence par environment (prod, staging, dev). UUID du namespace comme fingerprint.</li>
+  <li><strong>Licence par réplica (flottant)</strong> — N licences flottantes, chaque pod checke out une licence au démarrage. Utile pour limiter le nombre de replicas autorisés.</li>
+</ul>
+
+<h2 id="sidecar">Sidecar de vérification</h2>
+<p>Le pattern sidecar isole la logique de vérification de licence dans un container séparé du pod :</p>
+<pre><code><span style="color:var(--textd)"># deployment.yaml</span>
+spec:
+  template:
+    spec:
+      containers:
+      - name: app
+        image: monapp:1.1.0
+        env:
+        - name: LICENCE_CHECK_URL
+          value: "http://localhost:8421/check"
+
+      - name: ironlock-sidecar
+        image: truvector/ironlock-sidecar:2.0
+        ports:
+        - containerPort: 8421
+        env:
+        - name: LICENCE_FILE
+          valueFrom:
+            secretKeyRef:
+              name: ironlock-licence
+              key: licence.lic
+        - name: PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ironlock-licence
+              key: public.pem</code></pre>
+<pre><code><span style="color:var(--textd)"># L'application vérifie sa licence via le sidecar (localhost)</span>
+<span style="color:var(--acc5)">import</span> requests
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_licence_sidecar</span>() -> bool:
+    <span style="color:var(--acc5)">try</span>:
+        r = requests.get(<span style="color:var(--acc4)">"http://localhost:8421/check"</span>, timeout=<span style="color:var(--acc4)">2</span>)
+        <span style="color:var(--acc5)">return</span> r.json()[<span style="color:var(--acc4)">"valid"</span>]
+    <span style="color:var(--acc5)">except</span>:
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span>  <span style="color:var(--textd)"># sidecar indisponible → bloquer</span></code></pre>
+
+<h2 id="secrets">Gestion des secrets K8s</h2>
+<pre><code><span style="color:var(--textd)"># Créer le secret K8s avec la licence et la clé publique</span>
+kubectl create secret generic ironlock-licence   --from-file=licence.lic=./licences/prod-cluster.lic   --from-file=public.pem=./keys/public.pem   --namespace=production
+
+<span style="color:var(--textd)"># Chiffrer le secret avec Sealed Secrets (recommandé)</span>
+kubeseal --cert=./sealed-secrets-cert.pem   < ironlock-secret.yaml > ironlock-sealed-secret.yaml</code></pre>
+
+<h2 id="operateur">Opérateur K8s custom (optionnel)</h2>
+<p>Pour les déploiements avancés, un opérateur Kubernetes peut gérer le cycle de vie des licences IronLock automatiquement : renouvellement 30 jours avant expiration, rotation des secrets, alertes Prometheus sur l'état des licences.</p>
+
+<h2 id="chiffres">Chiffres et performances</h2>
+<ul>
+  <li><strong>Latence sidecar</strong> : < 2ms par vérification (HTTP localhost).</li>
+  <li><strong>Fréquence de vérification</strong> : toutes les 5 minutes (configurable).</li>
+  <li><strong>Overhead CPU</strong> : < 0.1% sur un pod standard.</li>
+  <li><strong>Temps de démarrage supplémentaire</strong> : < 500ms (init du sidecar).</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>IronLock v2 dans Kubernetes nécessite d'adapter le fingerprint au modèle conteneurisé (UUID namespace/cluster plutôt que hardware). Le pattern sidecar est la solution la plus propre : isolation de la logique de licensing, mise à jour indépendante du sidecar, et secrets K8s chiffrés. La performance est négligeable (< 2ms de latence, < 0.1% CPU).</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc4);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="licences-expiration-renouvellement.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="../../" class="btn btn-outline">Retour au blog →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

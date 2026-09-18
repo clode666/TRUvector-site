@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cas réel : automatiser un SI hospitalier avec AutomationSequence V8 — TRUvector</title>
+<meta name="description" content="HDS, Oracle MAGH2/HOSPILOG, Cortex XDR, Chronotime — retour d&#x27;expérience complet sur l&#x27;automatisation d&#x27;un SI hospitalier avec AutomationSequence V8 dans un CHU.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/cas-reel-chu-automation.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Cas réel : automatiser un SI hospitalier avec AutomationSequence V8">
+<meta property="og:description" content="HDS, Oracle MAGH2/HOSPILOG, Cortex XDR, Chronotime — retour d&#x27;expérience complet sur l&#x27;automatisation d&#x27;un SI hospitalier avec AutomationSequence V8 dans un CHU.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Cas réel : automatiser un SI hospitalier avec AutomationSequence V8</h1>
+    <div class="art-tags"><span class="tg">Cas d&#x27;usage</span><span class="tg">Automatisation</span><span class="tg">HDS</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="context">Contexte et contraintes</h2>
+<p>Un CHU (Centre Hospitalier Universitaire) cumule toutes les contraintes d'un environnement IT sécurisé : EDR Cortex XDR actif sur tous les postes, réseau cloisonné, données de santé soumises à HDS (Hébergement de Données de Santé), systèmes applicatifs propriétaires (MAGH2, HOSPILOG, PASTEL, Chronotime), et bases Oracle sans accès direct depuis les postes standard.</p>
+<p>AutomationSequence V8 a été déployé à la DSN (Direction des Systèmes Numériques) pour automatiser trois processus mensuels précédemment réalisés manuellement par les techniciens : export PMSI, rapprochement comptable MAGH2/Oracle, et audit des présences Chronotime.</p>
+
+<blockquote><p>En milieu hospitalier, une automatisation non auditée est une automatisation refusée. Le journal HMAC d'AutomationSequence V8 a été l'argument décisif pour l'accord de la RSSI.</p></blockquote>
+
+<h2 id="si">Systèmes d'information concernés</h2>
+<ul>
+  <li><strong>MAGH2</strong> — système de gestion administrative et financière. Base Oracle propriétaire, connexion via tnsnames.ora spécifique.</li>
+  <li><strong>HOSPILOG</strong> — logistique hospitalière. Exports via répertoire réseau partagé (fichiers CSV horodatés).</li>
+  <li><strong>PASTEL</strong> — gestion des ressources humaines. API REST interne avec authentification Basic sur HTTPS.</li>
+  <li><strong>Chronotime Workplace</strong> — gestion des temps de présence. Export via SQL Server et interface web scraping.</li>
+  <li><strong>Oracle DWH</strong> — entrepôt de données hospitalier. Requêtes PL/SQL complexes avec vues PMSI.</li>
+</ul>
+
+<h2 id="seq1">Séquence 1 : export PMSI mensuel</h2>
+<p>Le PMSI (Programme de Médicalisation des Systèmes d'Information) requiert un export mensuel formaté. Auparavant : 3h de travail manuel, risque d'erreur de calcul.</p>
+<pre><code><span style="color:var(--textd)"># export_pmsi_mensuel.asenc (séquence chiffrée)</span>
+[
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"oracle_connect"</span>,
+    <span style="color:var(--acc2)">"dsn_vault_key"</span>: <span style="color:var(--acc4)">"ORACLE_DWH_DSN"</span>,
+    <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"conn_dwh"</span>
+  },
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"oracle_query"</span>,
+    <span style="color:var(--acc2)">"connection"</span>: <span style="color:var(--acc4)">"{{conn_dwh}}"</span>,
+    <span style="color:var(--acc2)">"query"</span>: <span style="color:var(--acc4)">"SELECT * FROM V_PMSI_RSA WHERE mois_sort = :mois"</span>,
+    <span style="color:var(--acc2)">"bind"</span>: {<span style="color:var(--acc2)">"mois"</span>: <span style="color:var(--acc4)">"{{date_YYYYMM}}"</span>},
+    <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"rsa_data"</span>
+  },
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"llm_analyze"</span>,
+    <span style="color:var(--acc2)">"model"</span>: <span style="color:var(--acc4)">"llama3:8b"</span>,
+    <span style="color:var(--acc2)">"prompt"</span>: <span style="color:var(--acc4)">"Vérifie la cohérence de ces données PMSI. Signale les anomalies (GHM manquant, durée séjour aberrante, DP invalide). Données : {{rsa_data|sample:50}}"</span>,
+    <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"pmsi_anomalies"</span>
+  },
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"file_write_csv"</span>,
+    <span style="color:var(--acc2)">"data"</span>: <span style="color:var(--acc4)">"{{rsa_data}}"</span>,
+    <span style="color:var(--acc2)">"path"</span>: <span style="color:var(--acc4)">"\\srv-pmsi\exports\RSA_{{date_YYYYMM}}.csv"</span>
+  },
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"smtp_send"</span>,
+    <span style="color:var(--acc2)">"to"</span>: <span style="color:var(--acc4)">"drg@chu-exemple.fr"</span>,
+    <span style="color:var(--acc2)">"subject"</span>: <span style="color:var(--acc4)">"Export PMSI {{date_YYYYMM}} — {{rsa_data|length}} RSA"</span>,
+    <span style="color:var(--acc2)">"body"</span>: <span style="color:var(--acc4)">"Export disponible sur \\srv-pmsi\exports\. Anomalies détectées : {{pmsi_anomalies}}"</span>
+  }
+]</code></pre>
+<p>Résultat : <strong>3h → 8 minutes</strong>, zéro erreur de calcul, rapport d'anomalies IA automatique.</p>
+
+<h2 id="seq2">Séquence 2 : rapprochement MAGH2/Oracle</h2>
+<p>Le rapprochement mensuel entre les dépenses MAGH2 et les engagements Oracle DWH nécessitait deux exports manuels et un tableur Excel complexe. La séquence V8 :</p>
+<ol>
+  <li>Connecte MAGH2 via Oracle (tnsnames spécifique DSN_MAGH2).</li>
+  <li>Connecte le DWH Oracle (DSN_DWH).</li>
+  <li>Exécute les deux requêtes en parallèle (<code>oracle_query_async</code>).</li>
+  <li>Joint les deux datasets en mémoire Python.</li>
+  <li>Identifie les écarts supérieurs à un seuil configurable.</li>
+  <li>Génère un rapport Excel formaté avec couleurs et totaux.</li>
+  <li>Envoie le rapport par SMTP avec pièce jointe.</li>
+</ol>
+<p>Résultat : <strong>4h → 12 minutes</strong>, détection automatique des écarts, historique conservé 7 ans dans SQLite (conformité comptable).</p>
+
+<h2 id="seq3">Séquence 3 : audit Chronotime</h2>
+<p>Chronotime expose les données de présence via SQL Server. La séquence consolide les présences mensuelles par service et détecte les anomalies :</p>
+<pre><code>{
+  <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"sqlserver_query"</span>,
+  <span style="color:var(--acc2)">"dsn_vault_key"</span>: <span style="color:var(--acc4)">"CHRONOTIME_DSN"</span>,
+  <span style="color:var(--acc2)">"query"</span>: <span style="color:var(--acc4)">"SELECT agent_id, service, SUM(duree_min)/60.0 as heures FROM presences WHERE mois = :mois GROUP BY agent_id, service"</span>,
+  <span style="color:var(--acc2)">"bind"</span>: {<span style="color:var(--acc2)">"mois"</span>: <span style="color:var(--acc4)">"{{date_YYYYMM}}"</span>},
+  <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"presences"</span>
+}</code></pre>
+
+<h2 id="hds">Conformité HDS</h2>
+<p>Trois exigences HDS couvertes nativement par AutomationSequence V8 :</p>
+<ul>
+  <li><strong>Traçabilité des accès aux données</strong> — chaque action Oracle/SQL Server est enregistrée dans le journal HMAC immuable avec timestamp, utilisateur, requête hashée et résultat.</li>
+  <li><strong>Chiffrement des données au repos</strong> — les séquences <code>.asenc</code> chiffrent les credentials et la logique de traitement. Aucune donnée patient en clair dans les fichiers de configuration.</li>
+  <li><strong>Cloisonnement des accès</strong> — le vault utilise des comptes Oracle dédiés par séquence, avec uniquement les droits SELECT nécessaires. Pas de compte DBA dans les séquences automatisées.</li>
+</ul>
+
+<h2 id="chiffres">Chiffres clés après 8 mois</h2>
+<ul>
+  <li><strong>Temps économisé</strong> : ~7h/mois pour 3 techniciens → 40 minutes/mois total.</li>
+  <li><strong>Erreurs de traitement</strong> : 0 depuis la mise en production (vs 2-3/mois avec le processus manuel).</li>
+  <li><strong>Alertes Cortex XDR</strong> : 2 faux positifs au démarrage (résolus par whitelisting sur hash SHA-256), 0 depuis.</li>
+  <li><strong>Anomalies détectées par IA</strong> : 14 en 8 mois (dont 9 erreurs de saisie et 5 anomalies réelles signalées au DIM).</li>
+  <li><strong>Audit RSSI</strong> : journal HMAC accepté comme preuve de traçabilité conforme HDS.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Le SI hospitalier est l'un des environnements les plus exigeants pour l'automatisation : EDR actif, données sensibles, systèmes propriétaires, conformité HDS obligatoire. AutomationSequence V8 répond à ces contraintes par conception — pas par contournement. Le journal HMAC, le chiffrement des séquences, la compatibilité EDR et les connecteurs Oracle/SQL Server natifs en font l'outil adapté à ce contexte. Le retour sur investissement est mesurable dès le premier mois.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">⚙️</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc4);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">AutomationSequence V8.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V8 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="dashboard-web-sequences.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="../../" class="btn btn-outline">Retour au blog →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

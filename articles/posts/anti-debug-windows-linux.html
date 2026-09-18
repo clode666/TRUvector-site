@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anti-debug : 12 techniques sur Windows et Linux — TRUvector</title>
+<meta name="description" content="IsDebuggerPresent, ptrace, timing attacks, exception handlers, parent PID check — 12 techniques anti-debug documentées avec implémentation Python complète pour protéger un programme en production.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/anti-debug-windows-linux.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Anti-debug : 12 techniques sur Windows et Linux">
+<meta property="og:description" content="IsDebuggerPresent, ptrace, timing attacks, exception handlers, parent PID check — 12 techniques anti-debug documentées avec implémentation Python complète pour protéger un programme en production.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Anti-debug : 12 techniques sur Windows et Linux</h1>
+    <div class="art-tags"><span class="tg">Sécurité</span><span class="tg">Python</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Pourquoi l'anti-debug ?</h2>
+<p>Un debugger permet à un attaquant de stopper l'exécution d'un programme, inspecter sa mémoire, modifier ses variables et contourner les vérifications de licence en temps réel. Un programme qui s'exécute normalement sous debugger est un programme dont on peut extraire les secrets.</p>
+<p>L'anti-debug ne vise pas à rendre le reverse engineering impossible — c'est un objectif inatteignable. L'objectif est de <strong>rendre l'analyse dynamique coûteuse en temps</strong> : chaque technique qu'un attaquant doit contourner lui prend des heures.</p>
+
+<blockquote><p>Un bon anti-debug force l'attaquant à travailler hors ligne, sur une copie statique du binaire, sans pouvoir observer l'exécution. C'est là que le chiffrement du payload entre en jeu.</p></blockquote>
+
+<h2 id="vue-ensemble">Vue d'ensemble des 12 techniques</h2>
+<div class="tech-grid">
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 01</div>
+    <div class="tech-name">IsDebuggerPresent</div>
+    <div class="tech-desc">API Win32 qui consulte le flag DebuggerPresent dans le PEB. Simple, triviale à patcher, mais toujours utile comme première couche.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 02</div>
+    <div class="tech-name">CheckRemoteDebuggerPresent</div>
+    <div class="tech-desc">Vérifie si un debugger est attaché depuis un autre processus. Détecte les debuggers kernel-mode que IsDebuggerPresent rate.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 03</div>
+    <div class="tech-name">NtQueryInformationProcess</div>
+    <div class="tech-desc">API NT non documentée. DebugPort ≠ 0 indique un debugger. Plus difficile à patcher que IsDebuggerPresent.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 04</div>
+    <div class="tech-name">ptrace (Linux)</div>
+    <div class="tech-desc">Un processus ne peut être tracé que par un seul autre. S'auto-tracer (ptrace PTRACE_TRACEME) empêche un debugger de s'attacher.</div>
+    <div class="tech-os"><span class="os-lin">Linux</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 05</div>
+    <div class="tech-name">TracerPid (/proc/self/status)</div>
+    <div class="tech-desc">Lecture du pseudo-fichier : TracerPid non nul = processus tracé. Fonctionne sans droits particuliers, cross-distrib.</div>
+    <div class="tech-os"><span class="os-lin">Linux</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 06</div>
+    <div class="tech-name">Timing attack (RDTSC)</div>
+    <div class="tech-desc">Un debugger ralentit l'exécution. Mesurer le temps d'une boucle CPU-intensive : si > seuil, debugger probable.</div>
+    <div class="tech-os"><span class="os-win">Windows</span><span class="os-lin">Linux</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 07</div>
+    <div class="tech-name">Parent PID check</div>
+    <div class="tech-desc">Le parent d'un processus lancé normalement est explorer.exe ou bash. Si le parent est un IDE ou debugger connu, alert.</div>
+    <div class="tech-os"><span class="os-win">Windows</span><span class="os-lin">Linux</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 08</div>
+    <div class="tech-name">Exception handler trick</div>
+    <div class="tech-desc">Générer une exception : si un debugger est présent, il l'intercepte avant le handler. Comportement différent détectable.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 09</div>
+    <div class="tech-name">Heap flags (PEB)</div>
+    <div class="tech-desc">Le PEB.NtGlobalFlag vaut 0x70 sous debugger (ForceFlags activés). Lecture via ctypes sans appel API visible.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 10</div>
+    <div class="tech-name">CloseHandle invalid</div>
+    <div class="tech-desc">Appeler CloseHandle avec un handle invalide lève une exception uniquement sous debugger. Heuristique simple et efficace.</div>
+    <div class="tech-os"><span class="os-win">Windows</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 11</div>
+    <div class="tech-name">Processus suspects (liste noire)</div>
+    <div class="tech-desc">Scanner les processus actifs : x64dbg, ollydbg, windbg, ida, ghidra, frida-server, gdb, lldb. Présence = alerte.</div>
+    <div class="tech-os"><span class="os-win">Windows</span><span class="os-lin">Linux</span></div>
+  </div>
+  <div class="tech-card">
+    <div class="tech-num">TECHNIQUE 12</div>
+    <div class="tech-name">Code checksum</div>
+    <div class="tech-desc">Calculer le hash SHA-256 de ses propres sections de code. Un breakpoint posé par un debugger modifie un octet (0xCC) → hash différent.</div>
+    <div class="tech-os"><span class="os-win">Windows</span><span class="os-lin">Linux</span></div>
+  </div>
+</div>
+
+<h2 id="impl-windows">Implémentation Windows</h2>
+<pre><code><span style="color:var(--acc5)">import</span> ctypes, ctypes.wintypes, time, os, sys
+
+kernel32 = ctypes.windll.kernel32
+ntdll    = ctypes.windll.ntdll
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_isdebuggerpresent</span>() -> bool:
+    <span style="color:var(--acc5)">return</span> bool(kernel32.IsDebuggerPresent())
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_remote_debugger</span>() -> bool:
+    is_debugged = ctypes.wintypes.BOOL(<span style="color:var(--acc5)">False</span>)
+    kernel32.CheckRemoteDebuggerPresent(
+        kernel32.GetCurrentProcess(),
+        ctypes.byref(is_debugged)
+    )
+    <span style="color:var(--acc5)">return</span> bool(is_debugged)
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_nt_query</span>() -> bool:
+    <span style="color:var(--textd)"># ProcessDebugPort = 7</span>
+    debug_port = ctypes.c_ulong(<span style="color:var(--acc4)">0</span>)
+    status = ntdll.NtQueryInformationProcess(
+        kernel32.GetCurrentProcess(),
+        <span style="color:var(--acc4)">7</span>,  <span style="color:var(--textd)"># ProcessDebugPort</span>
+        ctypes.byref(debug_port),
+        ctypes.sizeof(debug_port),
+        <span style="color:var(--acc5)">None</span>
+    )
+    <span style="color:var(--acc5)">return</span> debug_port.value != <span style="color:var(--acc4)">0</span>
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_timing</span>(threshold_ms: float = <span style="color:var(--acc4)">500</span>) -> bool:
+    t0 = time.perf_counter()
+    _ = sum(x*x <span style="color:var(--acc5)">for</span> x <span style="color:var(--acc5)">in</span> range(<span style="color:var(--acc4)">200_000</span>))
+    elapsed = (time.perf_counter() - t0) * <span style="color:var(--acc4)">1000</span>
+    <span style="color:var(--acc5)">return</span> elapsed > threshold_ms
+
+DEBUGGER_PROCESSES = {
+    <span style="color:var(--acc4)">'x32dbg'</span>, <span style="color:var(--acc4)">'x64dbg'</span>, <span style="color:var(--acc4)">'ollydbg'</span>, <span style="color:var(--acc4)">'windbg'</span>,
+    <span style="color:var(--acc4)">'ida'</span>, <span style="color:var(--acc4)">'ida64'</span>, <span style="color:var(--acc4)">'ghidra'</span>, <span style="color:var(--acc4)">'frida-server'</span>,
+    <span style="color:var(--acc4)">'processhacker'</span>, <span style="color:var(--acc4)">'pestudio'</span>, <span style="color:var(--acc4)">'dnspy'</span>
+}
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_suspicious_processes</span>() -> bool:
+    <span style="color:var(--acc5)">import</span> subprocess
+    r = subprocess.run([<span style="color:var(--acc4)">'tasklist'</span>, <span style="color:var(--acc4)">'/fo'</span>, <span style="color:var(--acc4)">'csv'</span>, <span style="color:var(--acc4)">'/nh'</span>],
+                       capture_output=<span style="color:var(--acc5)">True</span>, text=<span style="color:var(--acc5)">True</span>, timeout=<span style="color:var(--acc4)">5</span>)
+    running = {l.split(<span style="color:var(--acc4)">','</span>)[<span style="color:var(--acc4)">0</span>].strip(<span style="color:var(--acc4)">'"'</span>).lower() <span style="color:var(--acc5)">for</span> l <span style="color:var(--acc5)">in</span> r.stdout.splitlines()}
+    <span style="color:var(--acc5)">return</span> bool(running & DEBUGGER_PROCESSES)</code></pre>
+
+<h2 id="impl-linux">Implémentation Linux</h2>
+<pre><code><span style="color:var(--acc5)">import</span> ctypes, ctypes.util, time, os
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_tracerpid</span>() -> bool:
+    <span style="color:var(--acc5)">try</span>:
+        status = open(<span style="color:var(--acc4)">'/proc/self/status'</span>).read()
+        <span style="color:var(--acc5)">for</span> line <span style="color:var(--acc5)">in</span> status.splitlines():
+            <span style="color:var(--acc5)">if</span> line.startswith(<span style="color:var(--acc4)">'TracerPid'</span>):
+                <span style="color:var(--acc5)">return</span> int(line.split()[<span style="color:var(--acc4)">1</span>]) != <span style="color:var(--acc4)">0</span>
+    <span style="color:var(--acc5)">except</span>: <span style="color:var(--acc5)">pass</span>
+    <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span>
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_ptrace_self</span>() -> bool:
+    <span style="color:var(--textd)"># PTRACE_TRACEME = 0 — si échec, déjà tracé</span>
+    libc = ctypes.CDLL(ctypes.util.find_library(<span style="color:var(--acc4)">'c'</span>))
+    result = libc.ptrace(<span style="color:var(--acc4)">0</span>, <span style="color:var(--acc4)">0</span>, <span style="color:var(--acc4)">0</span>, <span style="color:var(--acc4)">0</span>)
+    <span style="color:var(--acc5)">if</span> result == -<span style="color:var(--acc4)">1</span>:
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">True</span>  <span style="color:var(--textd)"># ptrace refusé = déjà tracé</span>
+    <span style="color:var(--textd)"># Détacher pour ne pas bloquer un debugger légitime en dev</span>
+    libc.ptrace(<span style="color:var(--acc4)">17</span>, <span style="color:var(--acc4)">0</span>, <span style="color:var(--acc4)">0</span>, <span style="color:var(--acc4)">0</span>)  <span style="color:var(--textd)"># PTRACE_DETACH</span>
+    <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span></code></pre>
+
+<h2 id="agregation">Agrégation et décision</h2>
+<p>IronLock agrège toutes les vérifications avec un système de score. Une seule détection positive peut être un faux positif (machine lente pour le timing, antivirus qui inspecte les processus). Le seuil de déclenchement est configurable :</p>
+<pre><code>CHECKS = [
+    (check_isdebuggerpresent,  <span style="color:var(--acc4)">3</span>),  <span style="color:var(--textd)"># poids fort</span>
+    (check_remote_debugger,    <span style="color:var(--acc4)">3</span>),
+    (check_nt_query,           <span style="color:var(--acc4)">3</span>),
+    (check_tracerpid,          <span style="color:var(--acc4)">3</span>),
+    (check_timing,             <span style="color:var(--acc4)">1</span>),  <span style="color:var(--textd)"># poids faible (faux positifs possibles)</span>
+    (check_suspicious_processes,<span style="color:var(--acc4)">2</span>),
+]
+THRESHOLD = <span style="color:var(--acc4)">3</span>  <span style="color:var(--textd)"># déclenche si score ≥ 3</span>
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">is_debugger_present</span>() -> bool:
+    score = <span style="color:var(--acc4)">0</span>
+    <span style="color:var(--acc5)">for</span> fn, weight <span style="color:var(--acc5)">in</span> CHECKS:
+        <span style="color:var(--acc5)">try</span>:
+            <span style="color:var(--acc5)">if</span> fn(): score += weight
+        <span style="color:var(--acc5)">except</span>: <span style="color:var(--acc5)">pass</span>
+    <span style="color:var(--acc5)">return</span> score >= THRESHOLD
+
+<span style="color:var(--acc5)">if</span> is_debugger_present():
+    sys.exit(<span style="color:var(--acc4)">0</span>)  <span style="color:var(--textd)"># Sortie silencieuse — pas de message d'erreur</span></code></pre>
+
+<h2 id="strategies">Stratégies de sortie : crash vs silencieux</h2>
+<p>Quand un debugger est détecté, trois comportements possibles :</p>
+<ul>
+  <li><strong>Sortie silencieuse</strong> (<code>sys.exit(0)</code>) — le programme se ferme normalement. L'attaquant ne sait pas pourquoi. Recommandé.</li>
+  <li><strong>Crash volontaire</strong> — lever une exception non catchée, corrompre délibérément la mémoire. Plus bruyant, peut déclencher des crash reporters.</li>
+  <li><strong>Mode leurre</strong> — continuer à s'exécuter mais avec des données falsifiées. L'attaquant croit avoir contourné la protection mais extrait de fausses clés. Technique avancée.</li>
+</ul>
+
+<h2 id="ironlock">Implémentation dans IronLock v2</h2>
+<p>IronLock v2 intègre 12 checks anti-debug activés avant tout déchiffrement du payload. La configuration se fait dans le manifest de packaging :</p>
+<pre><code><span style="color:var(--textd)"># Activer les checks anti-debug lors du packaging</span>
+ironlock encrypt app.py \
+  --antidebug-level high \     <span style="color:var(--textd)"># low / medium / high</span>
+  --antidebug-score 3 \        <span style="color:var(--textd)"># seuil de déclenchement</span>
+  --antidebug-action silent    <span style="color:var(--textd)"># silent / crash / decoy</span></code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>L'anti-debug efficace repose sur la combinaison et le score — aucune technique seule n'est fiable. Les techniques Windows API (IsDebuggerPresent, NtQueryInformationProcess) doivent être complétées par une timing attack et un scan des processus. Sur Linux, TracerPid + ptrace self-trace constituent une base solide. IronLock v2 automatise cette combinaison avec un score configurable selon le niveau de risque accepté.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc3);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0 — Anti-Debug × 12 checks</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="aes-gcm-vs-chacha20.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="ironlock-vs-pyarmor-vs-themida.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

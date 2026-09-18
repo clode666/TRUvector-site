@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fingerprint hardware : 8 sources d&#x27;entropie expliquées — TRUvector</title>
+<meta name="description" content="UUID carte mère, BIOS serial, CPU ID, MAC address, Disk serial, RAM config, OS install GUID, Hostname hash — comment combiner ces 8 sources en un identifiant machine SHA-256 irréversible.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/fingerprint-hardware-8-sources.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Fingerprint hardware : 8 sources d&#x27;entropie expliquées">
+<meta property="og:description" content="UUID carte mère, BIOS serial, CPU ID, MAC address, Disk serial, RAM config, OS install GUID, Hostname hash — comment combiner ces 8 sources en un identifiant machine SHA-256 irréversible.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Fingerprint hardware : 8 sources d&#x27;entropie expliquées</h1>
+    <div class="art-tags"><span class="tg">Cryptographie</span><span class="tg">Licensing</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Pourquoi un fingerprint hardware ?</h2>
+<p>Un système de licensing basé uniquement sur une clé de licence est insuffisant : la clé peut être copiée et partagée. La solution est de <strong>lier cryptographiquement la licence à une machine précise</strong> via son empreinte matérielle.</p>
+<p>L'empreinte hardware est un hash calculé à partir de plusieurs caractéristiques physiques de la machine. Sur la même machine, le hash doit être reproductible. Sur une machine différente, il doit être différent. Et si l'utilisateur change un composant (une RAM, une carte réseau), le système doit être <em>tolérant</em> à un certain degré de changement sans casser la licence.</p>
+
+<blockquote><p>Un bon fingerprint hardware résiste à trois attaques : la copie de la licence sur une autre machine, la virtualisation (VM), et le clonage disque.</p></blockquote>
+
+<h2 id="sources">Les 8 sources d'entropie</h2>
+<p>IronLock v2.0 combine 8 sources indépendantes. Chaque source est collectée, normalisée, puis intégrée dans un hash SHA-256 final.</p>
+
+<div class="source-grid">
+  <div class="source-card">
+    <div class="source-num">SOURCE 01</div>
+    <div class="source-name">UUID Carte mère</div>
+    <div class="source-desc">Identifiant unique gravé dans le firmware UEFI/BIOS. Persiste à travers les réinstallations OS. Quasiment immuable sauf remplacement de la carte mère.</div>
+    <span class="source-stability s-high">● Stabilité très haute</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 02</div>
+    <div class="source-name">BIOS Serial Number</div>
+    <div class="source-desc">Numéro de série du BIOS, distinct de l'UUID. Fourni par le fabricant OEM. Stable et identifiant pour les machines de marque (Dell, HP, Lenovo).</div>
+    <span class="source-stability s-high">● Stabilité très haute</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 03</div>
+    <div class="source-name">CPU ID</div>
+    <div class="source-desc">Identifiant du processeur via CPUID instruction. Inclut le stepping, le modèle et le fabricant. Stable mais identique sur machines configurées pareil.</div>
+    <span class="source-stability s-high">● Stabilité haute</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 04</div>
+    <div class="source-name">MAC Address</div>
+    <div class="source-desc">Adresse physique de la première interface réseau. Unique par carte. Peut être spoofée logiciellement — d'où l'intérêt des 7 autres sources.</div>
+    <span class="source-stability s-med">● Stabilité moyenne</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 05</div>
+    <div class="source-name">Disk Serial Number</div>
+    <div class="source-desc">Numéro de série du disque de démarrage (HDD/SSD/NVMe). Très stable, résiste aux réinstallations OS. Changer de disque = changement de source critique.</div>
+    <span class="source-stability s-high">● Stabilité haute</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 06</div>
+    <div class="source-name">RAM Configuration</div>
+    <div class="source-desc">Taille totale + nombre de slots + vitesse des barrettes. Granularité suffisante pour différencier des machines similaires. Changement RAM = source différente.</div>
+    <span class="source-stability s-med">● Stabilité moyenne</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 07</div>
+    <div class="source-name">OS Install GUID</div>
+    <div class="source-desc">Identifiant unique généré à l'installation de Windows (MachineGuid) ou Linux (machine-id). Réinitialisé à chaque réinstallation — volontaire ou clone.</div>
+    <span class="source-stability s-med">● Stabilité moyenne</span>
+  </div>
+  <div class="source-card">
+    <div class="source-num">SOURCE 08</div>
+    <div class="source-name">Hostname Hash</div>
+    <div class="source-desc">Hash SHA-256 du nom de machine. Faible entropie seul, mais contribue à différencier des machines identiques en parc. Configurable ou exclu selon l'usage.</div>
+    <span class="source-stability s-low">● Stabilité basse</span>
+  </div>
+</div>
+
+<h2 id="collecte">Collecte cross-platform</h2>
+<p>La collecte doit fonctionner sur Windows et Linux sans droits administrateur. IronLock utilise des APIs système disponibles en userland :</p>
+<pre><code><span style="color:var(--acc5)">import</span> platform, hashlib, subprocess, uuid
+<span style="color:var(--acc5)">from</span> typing <span style="color:var(--acc5)">import</span> Optional
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">_get_windows_wmic</span>(wmic_path: str) -> Optional[str]:
+    <span style="color:var(--acc5)">try</span>:
+        r = subprocess.run(
+            [<span style="color:var(--acc4)">'wmic'</span>] + wmic_path.split() + [<span style="color:var(--acc4)">'get'</span>, <span style="color:var(--acc4)">'Value'</span>, <span style="color:var(--acc4)">'--format:list'</span>],
+            capture_output=<span style="color:var(--acc5)">True</span>, text=<span style="color:var(--acc5)">True</span>, timeout=<span style="color:var(--acc4)">5</span>
+        )
+        lines = [l.split(<span style="color:var(--acc4)">'='</span>)[<span style="color:var(--acc4)">1</span>].strip() <span style="color:var(--acc5)">for</span> l <span style="color:var(--acc5)">in</span> r.stdout.splitlines()
+                 <span style="color:var(--acc5)">if</span> <span style="color:var(--acc4)">'='</span> <span style="color:var(--acc5)">in</span> l <span style="color:var(--acc5)">and</span> l.split(<span style="color:var(--acc4)">'='</span>)[<span style="color:var(--acc4)">1</span>].strip()]
+        <span style="color:var(--acc5)">return</span> lines[<span style="color:var(--acc4)">0</span>] <span style="color:var(--acc5)">if</span> lines <span style="color:var(--acc5)">else</span> <span style="color:var(--acc5)">None</span>
+    <span style="color:var(--acc5)">except</span>: <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">None</span>
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">collect_sources</span>() -> dict:
+    win = platform.system() == <span style="color:var(--acc4)">'Windows'</span>
+    sources = {}
+
+    <span style="color:var(--textd)"># Source 1 : UUID carte mère</span>
+    <span style="color:var(--acc5)">if</span> win:
+        sources[<span style="color:var(--acc4)">'mb_uuid'</span>] = _get_windows_wmic(<span style="color:var(--acc4)">'csproduct UUID'</span>)
+    <span style="color:var(--acc5)">else</span>:
+        <span style="color:var(--acc5)">try</span>:
+            sources[<span style="color:var(--acc4)">'mb_uuid'</span>] = open(<span style="color:var(--acc4)">'/sys/class/dmi/id/product_uuid'</span>).read().strip()
+        <span style="color:var(--acc5)">except</span>: sources[<span style="color:var(--acc4)">'mb_uuid'</span>] = <span style="color:var(--acc5)">None</span>
+
+    <span style="color:var(--textd)"># Source 2 : BIOS serial</span>
+    <span style="color:var(--acc5)">if</span> win:
+        sources[<span style="color:var(--acc4)">'bios_serial'</span>] = _get_windows_wmic(<span style="color:var(--acc4)">'bios serialnumber'</span>)
+    <span style="color:var(--acc5)">else</span>:
+        <span style="color:var(--acc5)">try</span>:
+            sources[<span style="color:var(--acc4)">'bios_serial'</span>] = open(<span style="color:var(--acc4)">'/sys/class/dmi/id/product_serial'</span>).read().strip()
+        <span style="color:var(--acc5)">except</span>: sources[<span style="color:var(--acc4)">'bios_serial'</span>] = <span style="color:var(--acc5)">None</span>
+
+    <span style="color:var(--textd)"># Source 4 : MAC address</span>
+    sources[<span style="color:var(--acc4)">'mac'</span>] = <span style="color:var(--acc4)">':'</span>.join(
+        [<span style="color:var(--acc4)">'{:02x}'</span>.format((uuid.getnode() >> <span style="color:var(--acc4)">8</span>*i) & <span style="color:var(--acc4)">0xff</span>) <span style="color:var(--acc5)">for</span> i <span style="color:var(--acc5)">in</span> reversed(range(<span style="color:var(--acc4)">6</span>))]
+    )
+
+    <span style="color:var(--textd)"># Source 7 : OS install GUID</span>
+    <span style="color:var(--acc5)">if</span> win:
+        <span style="color:var(--acc5)">import</span> winreg
+        k = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,
+                           <span style="color:var(--acc4)">r'SOFTWARE\Microsoft\Cryptography'</span>)
+        sources[<span style="color:var(--acc4)">'os_guid'</span>] = winreg.QueryValueEx(k, <span style="color:var(--acc4)">'MachineGuid'</span>)[<span style="color:var(--acc4)">0</span>]
+    <span style="color:var(--acc5)">else</span>:
+        <span style="color:var(--acc5)">try</span>:
+            sources[<span style="color:var(--acc4)">'os_guid'</span>] = open(<span style="color:var(--acc4)">'/etc/machine-id'</span>).read().strip()
+        <span style="color:var(--acc5)">except</span>: sources[<span style="color:var(--acc4)">'os_guid'</span>] = <span style="color:var(--acc5)">None</span>
+
+    <span style="color:var(--acc5)">return</span> sources</code></pre>
+
+<h2 id="combinaison">Combinaison et hachage SHA-256</h2>
+<p>Les sources sont concaténées dans un ordre déterministe, normalisées (minuscules, espaces supprimés), puis hachées. Les sources absentes (None) sont remplacées par un placeholder constant pour ne pas perturber la longueur :</p>
+<pre><code><span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">build_fingerprint</span>(sources: dict, salt: bytes = <span style="color:var(--acc4)">b'IRONLOCK_V2'</span>) -> str:
+    ORDER = [<span style="color:var(--acc4)">'mb_uuid'</span>, <span style="color:var(--acc4)">'bios_serial'</span>, <span style="color:var(--acc4)">'cpu_id'</span>, <span style="color:var(--acc4)">'mac'</span>,
+             <span style="color:var(--acc4)">'disk_serial'</span>, <span style="color:var(--acc4)">'ram_config'</span>, <span style="color:var(--acc4)">'os_guid'</span>, <span style="color:var(--acc4)">'hostname_hash'</span>]
+
+    parts = []
+    <span style="color:var(--acc5)">for</span> key <span style="color:var(--acc5)">in</span> ORDER:
+        val = sources.get(key) <span style="color:var(--acc5)">or</span> <span style="color:var(--acc4)">f'MISSING_{key.upper()}'</span>
+        <span style="color:var(--textd)"># Normalisation : minuscules, sans espaces ni tirets</span>
+        val = val.lower().replace(<span style="color:var(--acc4)">'-'</span>, <span style="color:var(--acc4)">''</span>).replace(<span style="color:var(--acc4)">' '</span>, <span style="color:var(--acc4)">''</span>)
+        parts.append(val)
+
+    raw = <span style="color:var(--acc4)">'|'</span>.join(parts).encode(<span style="color:var(--acc4)">'utf-8'</span>)
+    <span style="color:var(--acc5)">return</span> hashlib.sha256(salt + raw).hexdigest()
+
+<span style="color:var(--textd)"># Exemple de résultat</span>
+fp = build_fingerprint(collect_sources())
+<span style="color:var(--textd)"># → 'a3f8c2e1d4b7f09a...64 caractères hexadécimaux'</span></code></pre>
+
+<h2 id="tolerance">Tolérance aux changements matériels</h2>
+<p>Un utilisateur légitime peut changer de RAM, de carte réseau ou réinstaller son OS. Le système de tolérance d'IronLock v2 fonctionne par <strong>score de concordance</strong> : chaque source vaut un certain poids, et la licence est valide tant que le score dépasse un seuil configurable :</p>
+<pre><code>WEIGHTS = {
+    <span style="color:var(--acc4)">'mb_uuid'</span>:      <span style="color:var(--acc4)">3</span>,  <span style="color:var(--textd)"># critique</span>
+    <span style="color:var(--acc4)">'bios_serial'</span>:  <span style="color:var(--acc4)">3</span>,  <span style="color:var(--textd)"># critique</span>
+    <span style="color:var(--acc4)">'disk_serial'</span>:  <span style="color:var(--acc4)">2</span>,  <span style="color:var(--textd)"># important</span>
+    <span style="color:var(--acc4)">'cpu_id'</span>:       <span style="color:var(--acc4)">2</span>,
+    <span style="color:var(--acc4)">'os_guid'</span>:      <span style="color:var(--acc4)">1</span>,
+    <span style="color:var(--acc4)">'mac'</span>:          <span style="color:var(--acc4)">1</span>,
+    <span style="color:var(--acc4)">'ram_config'</span>:   <span style="color:var(--acc4)">1</span>,
+    <span style="color:var(--acc4)">'hostname_hash'</span>:<span style="color:var(--acc4)">1</span>,
+}
+THRESHOLD = <span style="color:var(--acc4)">10</span>  <span style="color:var(--textd)"># sur 14 points max — tolérance ~30%</span>
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">verify_tolerance</span>(stored: dict, current: dict) -> bool:
+    score = sum(WEIGHTS[k] <span style="color:var(--acc5)">for</span> k, w <span style="color:var(--acc5)">in</span> WEIGHTS.items()
+                <span style="color:var(--acc5)">if</span> stored.get(k) == current.get(k))
+    <span style="color:var(--acc5)">return</span> score >= THRESHOLD</code></pre>
+
+<h2 id="antivm">Détection de virtualisation</h2>
+<p>Les machines virtuelles retournent des valeurs prévisibles ou absentes pour plusieurs sources. IronLock détecte les VMs en croisant plusieurs indicateurs :</p>
+<ul>
+  <li><strong>UUID carte mère</strong> — les VMs VMware retournent des UUID commençant par <code>564d</code>. VirtualBox : <code>080027</code>.</li>
+  <li><strong>MAC address</strong> — préfixes connus : <code>00:0C:29</code> VMware, <code>08:00:27</code> VirtualBox, <code>52:54:00</code> QEMU.</li>
+  <li><strong>BIOS serial</strong> — les VMs légères retournent <code>None</code> ou une chaîne vide.</li>
+  <li><strong>RAM config</strong> — les VMs cloud ont souvent des configurations RAM non standard (2047 MB, puissances de 2 exactes).</li>
+</ul>
+
+<h2 id="ironlock">Implémentation dans IronLock v2</h2>
+<p>IronLock v2 automatise tout ce processus. Le fingerprint est généré en une ligne et exporté en JSON pour la gestion des licences :</p>
+<pre><code><span style="color:var(--textd)"># Générer le fingerprint de la machine courante</span>
+ironlock fingerprint --output fingerprint.json
+
+<span style="color:var(--textd)"># fingerprint.json (envoyé par le client pour activation)</span>
+{
+  <span style="color:var(--acc4)">"hardware_id"</span>: <span style="color:var(--acc4)">"a3f8c2e1d4b7..."</span>,
+  <span style="color:var(--acc4)">"sources"</span>: {
+    <span style="color:var(--acc4)">"mb_uuid"</span>: <span style="color:var(--acc4)">"presente"</span>,
+    <span style="color:var(--acc4)">"mac"</span>: <span style="color:var(--acc4)">"presente"</span>
+    <span style="color:var(--textd)">// valeurs hachées, jamais en clair</span>
+  },
+  <span style="color:var(--acc4)">"version"</span>: <span style="color:var(--acc4)">"2.0"</span>,
+  <span style="color:var(--acc4)">"timestamp"</span>: <span style="color:var(--acc4)">"2026-02-14T10:30:00Z"</span>
+}</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Un fingerprint hardware robuste nécessite au minimum 6 à 8 sources indépendantes, une normalisation stricte et un système de tolérance aux changements légitimes. La combinaison UUID carte mère + BIOS serial + Disk serial constitue le noyau irréductible. Les autres sources servent à la tolérance et à la détection de VM.</p>
+<p>IronLock v2 implémente ce système complet, y compris la gestion des absences de sources, la détection de virtualisation et le scoring de concordance — sans que vous ayez à gérer ces cas un par un.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc2);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0 — Fingerprint × 8 sources</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="../../" class="btn btn-ghost">← Retour au blog</a>
+  <a href="aes-gcm-vs-chacha20.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

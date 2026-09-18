@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Implémenter un système d&#x27;auto-update complet pour une application Python — TRUvector</title>
+<meta name="description" content="Vérification de version, téléchargement delta UXC, redémarrage propre, rollback automatique et UX de mise à jour — guide complet pour implémenter l&#x27;auto-update dans une application Python.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/auto-update-python.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Implémenter un système d&#x27;auto-update complet pour une application Python">
+<meta property="og:description" content="Vérification de version, téléchargement delta UXC, redémarrage propre, rollback automatique et UX de mise à jour — guide complet pour implémenter l&#x27;auto-update dans une application Python.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Implémenter un système d&#x27;auto-update complet pour une application Python</h1>
+    <div class="art-tags"><span class="tg">Déploiement</span><span class="tg">Python</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Architecture d'un auto-update robuste</h2>
+<p>Un système d'auto-update Python fiable repose sur 5 composants distincts : le checker de version (interroge le serveur), le downloader delta (télécharge seulement les différences), l'applicateur (installe la mise à jour), le launcher (redémarre proprement) et le rollback (restaure si échec). Universal Installer V2 fournit tous ces composants.</p>
+
+<blockquote><p>Un auto-update qui plante laisse l'application dans un état incohérent. La règle absolue : ne jamais modifier les fichiers actifs en cours d'exécution. Toujours écrire dans un dossier temporaire, puis basculer atomiquement.</p></blockquote>
+
+<h2 id="check">Vérification de version</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.updater <span style="color:var(--acc5)">import</span> UpdateChecker
+<span style="color:var(--acc5)">from</span> packaging.version <span style="color:var(--acc5)">import</span> Version
+
+checker = UpdateChecker(
+    manifest_url=<span style="color:var(--acc4)">"https://cdn.exemple.fr/releases/manifest.json"</span>,
+    public_key_path=<span style="color:var(--acc4)">"keys/public.pem"</span>,
+    current_version=<span style="color:var(--acc4)">"1.1.0"</span>
+)
+
+update_info = checker.check()
+
+<span style="color:var(--acc5)">if</span> update_info.available:
+    print(f<span style="color:var(--acc4)">"Mise à jour disponible : {update_info.version}"</span>)
+    print(f<span style="color:var(--acc4)">"Taille patch : {update_info.patch_size_mb:.1f} MB"</span>)
+    print(f<span style="color:var(--acc4)">"Taille complète : {update_info.full_size_mb:.1f} MB"</span>)
+    print(f<span style="color:var(--acc4)">"Changelog : {update_info.changelog_url}"</span>)
+<span style="color:var(--acc5)">else</span>:
+    print(<span style="color:var(--acc4)">"Application à jour."</span>)</code></pre>
+
+<h2 id="download">Téléchargement delta</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.updater <span style="color:var(--acc5)">import</span> DeltaDownloader
+<span style="color:var(--acc5)">import</span> threading
+
+downloader = DeltaDownloader(update_info)
+
+<span style="color:var(--textd)"># Téléchargement en arrière-plan avec callback de progression</span>
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">on_progress</span>(downloaded_mb, total_mb, speed_mbps):
+    pct = int(downloaded_mb / total_mb * <span style="color:var(--acc4)">100</span>)
+    update_ui_progress(pct, f<span style="color:var(--acc4)">"{speed_mbps:.1f} MB/s"</span>)
+
+thread = threading.Thread(
+    target=downloader.download,
+    kwargs={{
+        <span style="color:var(--acc4)">'output_path'</span>: <span style="color:var(--acc4)">'tmp/update.uxcd'</span>,
+        <span style="color:var(--acc4)">'progress_callback'</span>: on_progress,
+        <span style="color:var(--acc4)">'verify_signature'</span>: <span style="color:var(--acc5)">True</span>,  <span style="color:var(--textd)"># ECDSA P-384</span>
+        <span style="color:var(--acc4)">'resume'</span>: <span style="color:var(--acc5)">True</span>             <span style="color:var(--textd)"># reprise si interrompu</span>
+    }}
+)
+thread.start()
+<span style="color:var(--textd)"># L'application continue à fonctionner pendant le téléchargement</span></code></pre>
+
+<h2 id="apply">Application de la mise à jour</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.updater <span style="color:var(--acc5)">import</span> UpdateApplicator
+
+applicator = UpdateApplicator(
+    current_dir=<span style="color:var(--acc4)">r"C:\MonApp"</span>,
+    backup_dir=<span style="color:var(--acc4)">r"C:\MonApp_backup"</span>,
+    patch_path=<span style="color:var(--acc4)">"tmp/update.uxcd"</span>
+)
+
+<span style="color:var(--textd)"># L'applicateur :</span>
+<span style="color:var(--textd)"># 1. Sauvegarde current_dir → backup_dir</span>
+<span style="color:var(--textd)"># 2. Extrait le patch dans un dossier tmp</span>
+<span style="color:var(--textd)"># 3. Fusionne les fichiers modifiés avec la version actuelle</span>
+<span style="color:var(--textd)"># 4. Vérifie le SHA-256 de chaque fichier mis à jour</span>
+<span style="color:var(--textd)"># 5. Valide l'intégrité globale de la nouvelle version</span>
+result = applicator.apply()
+
+<span style="color:var(--acc5)">if not</span> result.success:
+    print(f<span style="color:var(--acc4)">"Échec : {result.error}"</span>)
+    applicator.rollback()  <span style="color:var(--textd)"># restaure backup automatiquement</span></code></pre>
+
+<h2 id="restart">Redémarrage propre</h2>
+<p>Impossible de remplacer un EXE en cours d'exécution sur Windows. La technique : lancer un process updater séparé qui attend la fermeture de l'application principale, remplace les fichiers, puis relance :</p>
+<pre><code><span style="color:var(--acc5)">import</span> subprocess, sys, os
+<span style="color:var(--acc5)">from</span> pathlib <span style="color:var(--acc5)">import</span> Path
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">schedule_restart_update</span>(patch_path: str):
+    updater_exe = Path(sys.executable).parent / <span style="color:var(--acc4)">"ui-updater.exe"</span>
+
+    <span style="color:var(--textd)"># Lancer l'updater qui attend PID courant + applique + relance</span>
+    subprocess.Popen([
+        str(updater_exe),
+        <span style="color:var(--acc4)">"--wait-pid"</span>, str(os.getpid()),
+        <span style="color:var(--acc4)">"--patch"</span>, patch_path,
+        <span style="color:var(--acc4)">"--app"</span>, sys.executable,
+        <span style="color:var(--acc4)">"--backup"</span>, <span style="color:var(--acc4)">r"C:\MonApp_backup"</span>
+    ], creationflags=subprocess.DETACHED_PROCESS)
+
+    <span style="color:var(--textd)"># Fermer l'application principale proprement</span>
+    save_application_state()
+    sys.exit(<span style="color:var(--acc4)">0</span>)</code></pre>
+
+<h2 id="rollback">Rollback automatique</h2>
+<pre><code><span style="color:var(--textd)"># Dans ui-updater.exe — après application du patch</span>
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">verify_update_and_launch</span>(app_path: str, backup_path: str) -> bool:
+    <span style="color:var(--textd)"># Lancer la nouvelle version avec timeout de démarrage</span>
+    proc = subprocess.Popen([app_path, <span style="color:var(--acc4)">"--post-update-check"</span>])
+    <span style="color:var(--acc5)">try</span>:
+        proc.wait(timeout=<span style="color:var(--acc4)">30</span>)  <span style="color:var(--textd)"># 30s pour confirmer le démarrage</span>
+        <span style="color:var(--acc5)">if</span> proc.returncode == <span style="color:var(--acc4)">0</span>:
+            shutil.rmtree(backup_path)  <span style="color:var(--textd)"># Succès → supprimer le backup</span>
+            <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">True</span>
+    <span style="color:var(--acc5)">except</span> subprocess.TimeoutExpired:
+        proc.kill()
+
+    <span style="color:var(--textd)"># Échec → rollback</span>
+    shutil.rmtree(Path(app_path).parent)
+    shutil.copytree(backup_path, Path(app_path).parent)
+    subprocess.Popen([backup_path])  <span style="color:var(--textd)"># relancer l'ancienne version</span>
+    <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span></code></pre>
+
+<h2 id="ux">UX de mise à jour</h2>
+<ul>
+  <li><strong>Téléchargement silencieux</strong> — en arrière-plan dès le démarrage, sans bloquer l'interface.</li>
+  <li><strong>Notification non intrusive</strong> — toast Windows / bandeau en bas de fenêtre : "Mise à jour prête — redémarrer pour installer".</li>
+  <li><strong>Redémarrage différé</strong> — l'utilisateur choisit le moment du redémarrage, pas forcé.</li>
+  <li><strong>Changelog intégré</strong> — dialog "Nouveautés de v1.2" avant la confirmation.</li>
+  <li><strong>Rollback transparent</strong> — si la mise à jour échoue, l'ancienne version se relance automatiquement avec un message explicatif.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Un auto-update Python robuste requiert trois éléments non négociables : le téléchargement en arrière-plan sans bloquer l'UI, l'écriture dans un dossier temporaire avant de basculer (jamais en place), et le rollback automatique si la nouvelle version ne démarre pas. Universal Installer V2 fournit tous ces composants prêts à l'emploi avec vérification ECDSA et delta UXC.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">📦</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc2);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="reparer-archive-uxc.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="convertir-formats-archives.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutomationSequence V8 : 145+ actions Python pour les environnements pros — TRUvector</title>
+<meta name="description" content="Architecture plugin, séquences JSON chiffrées AES-256-GCM, moteur asynchrone, IA/LLM et orchestration multi-machine : ce que V8 change concrètement.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/automation-sequence-v8-guide.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="AutomationSequence V8 : 145+ actions Python pour les environnements pros">
+<meta property="og:description" content="Architecture plugin, séquences JSON chiffrées AES-256-GCM, moteur asynchrone, IA/LLM et orchestration multi-machine : ce que V8 change concrètement.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>AutomationSequence V8 : 145+ actions Python pour les environnements pros</h1>
+    <div class="art-tags"><span class="tg">Automatisation</span><span class="tg">Python</span><span class="tg">IA/LLM</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Pourquoi une plateforme d'automatisation Python en 2026 ?</h2>
+        <p>Les outils d'automatisation grand public (AutoHotkey, UiPath, n8n) atteignent leurs limites dès qu'on touche aux environnements professionnels contraints : pas d'accès cloud, politiques EDR strictes, connexions Oracle propriétaires, flux SIH hospitaliers. C'est le terrain sur lequel AutomationSequence V8 a été construit.</p>
+        <p>Le principe fondateur est simple : <strong>une séquence = un fichier JSON</strong>. Pas de script qui dérive, pas de GUI qui cache la logique — chaque automatisation est un document versionnable, auditable, chiffrable. Le moteur Python n'est que l'exécutant.</p>
+
+        <blockquote><p>Une automatisation non auditée est une dette technique qui s'accumule silencieusement. V8 fait du JSON la source de vérité, pas du code.</p></blockquote>
+
+        <h2 id="json-engine">L'architecture séquence JSON</h2>
+        <p>Une séquence V8 est un tableau d'actions ordonnées avec conditions, variables et branchements. Exemple minimal :</p>
+        <pre><code>{
+  <span style="color:var(--acc2)">"name"</span>: <span style="color:var(--acc4)">"Deploy et notifie"</span>,
+  <span style="color:var(--acc2)">"version"</span>: <span style="color:var(--acc4)">"8.0"</span>,
+  <span style="color:var(--acc2)">"vars"</span>: {
+    <span style="color:var(--acc2)">"target_host"</span>: <span style="color:var(--acc4)">"192.168.1.50"</span>,
+    <span style="color:var(--acc2)">"deploy_path"</span>: <span style="color:var(--acc4)">"/opt/app"</span>
+  },
+  <span style="color:var(--acc2)">"actions"</span>: [
+    {
+      <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"ssh_exec"</span>,
+      <span style="color:var(--acc2)">"host"</span>: <span style="color:var(--acc4)">"{{target_host}}"</span>,
+      <span style="color:var(--acc2)">"cmd"</span>: <span style="color:var(--acc4)">"systemctl stop app"</span>,
+      <span style="color:var(--acc2)">"on_error"</span>: <span style="color:var(--acc4)">"continue"</span>
+    },
+    {
+      <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"file_copy"</span>,
+      <span style="color:var(--acc2)">"src"</span>: <span style="color:var(--acc4)">"./dist/app.tar.gz"</span>,
+      <span style="color:var(--acc2)">"dst"</span>: <span style="color:var(--acc4)">"{{target_host}}:{{deploy_path}}"</span>
+    },
+    {
+      <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"condition"</span>,
+      <span style="color:var(--acc2)">"if"</span>: <span style="color:var(--acc4)">"{{last_exit_code}} == 0"</span>,
+      <span style="color:var(--acc2)">"then"</span>: <span style="color:var(--acc4)">"notify_teams"</span>,
+      <span style="color:var(--acc2)">"else"</span>: <span style="color:var(--acc4)">"alert_critical"</span>
+    }
+  ]
+}</code></pre>
+
+        <h3 id="chiffrement">Chiffrement AES-256-GCM des séquences</h3>
+        <p>Dans les environnements sensibles (CHU, banques, industrie), les séquences contiennent des credentials, des chemins réseau internes et des logiques métier confidentielles. V8 les chiffre natalement :</p>
+        <pre><code><span style="color:var(--textd)"># Chiffrer une séquence avant de la distribuer</span>
+from automation_sequence import SequenceCrypto
+
+crypto = SequenceCrypto(key_source=<span style="color:var(--acc4)">"hardware_fingerprint"</span>)
+crypto.encrypt_file(<span style="color:var(--acc4)">"deploy.json"</span>, <span style="color:var(--acc4)">"deploy.asenc"</span>)
+
+<span style="color:var(--textd)"># Le moteur déchiffre en mémoire à l'exécution</span>
+<span style="color:var(--textd)"># Jamais de JSON en clair sur disque en production</span></code></pre>
+
+        <h2 id="catalog">Catalogue des 145+ actions</h2>
+        <p>Les actions sont regroupées en 9 familles fonctionnelles. Chaque famille est un module Python indépendant chargé dynamiquement :</p>
+
+        <div class="action-grid">
+          <div class="action-cat">
+            <div class="action-cat-icon">🖱</div>
+            <div class="action-cat-name">GUI & Système</div>
+            <div class="action-cat-count">~22 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">📁</div>
+            <div class="action-cat-name">Fichiers & Données</div>
+            <div class="action-cat-count">~18 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🌐</div>
+            <div class="action-cat-name">Réseau & HTTP</div>
+            <div class="action-cat-count">~20 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🗄</div>
+            <div class="action-cat-name">Bases de données</div>
+            <div class="action-cat-count">~16 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🔍</div>
+            <div class="action-cat-name">OCR & Vision</div>
+            <div class="action-cat-count">~12 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">⏰</div>
+            <div class="action-cat-name">Planification</div>
+            <div class="action-cat-count">~14 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🔐</div>
+            <div class="action-cat-name">Sécurité & Crypto</div>
+            <div class="action-cat-count">~10 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🤖</div>
+            <div class="action-cat-name">IA / LLM</div>
+            <div class="action-cat-count">~15 actions</div>
+          </div>
+          <div class="action-cat">
+            <div class="action-cat-icon">🔗</div>
+            <div class="action-cat-name">Multi-machine</div>
+            <div class="action-cat-count">~18 actions</div>
+          </div>
+        </div>
+
+        <h2 id="plugin-api">L'architecture Plugin API</h2>
+        <p>Chaque action V8 est un plugin. La Plugin API expose une interface unifiée qui permet d'ajouter une nouvelle action sans toucher au core :</p>
+        <pre><code><span style="color:var(--acc5)">from</span> automation_sequence.plugin <span style="color:var(--acc5)">import</span> ActionPlugin, action_result
+
+<span style="color:var(--acc5)">class</span> <span style="color:var(--acc2)">OracleQueryAction</span>(ActionPlugin):
+    <span style="color:var(--textd)">"""Action personnalisée : exécute une requête Oracle."""</span>
+
+    name        = <span style="color:var(--acc4)">"oracle_query"</span>
+    category    = <span style="color:var(--acc4)">"databases"</span>
+    description = <span style="color:var(--acc4)">"Exécute une requête Oracle et stocke le résultat"</span>
+
+    schema = {
+        <span style="color:var(--acc4)">"dsn"</span>:   {<span style="color:var(--acc4)">"type"</span>: <span style="color:var(--acc4)">"string"</span>, <span style="color:var(--acc4)">"required"</span>: <span style="color:var(--acc5)">True</span>},
+        <span style="color:var(--acc4)">"query"</span>: {<span style="color:var(--acc4)">"type"</span>: <span style="color:var(--acc4)">"string"</span>, <span style="color:var(--acc4)">"required"</span>: <span style="color:var(--acc5)">True</span>},
+        <span style="color:var(--acc4)">"output_var"</span>: {<span style="color:var(--acc4)">"type"</span>: <span style="color:var(--acc4)">"string"</span>, <span style="color:var(--acc4)">"default"</span>: <span style="color:var(--acc4)">"query_result"</span>}
+    }
+
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">execute</span>(self, params, context):
+        <span style="color:var(--acc5)">import</span> cx_Oracle
+        conn   = cx_Oracle.connect(params[<span style="color:var(--acc4)">"dsn"</span>])
+        cursor = conn.cursor()
+        cursor.execute(params[<span style="color:var(--acc4)">"query"</span>])
+        rows   = cursor.fetchall()
+        context.set_var(params[<span style="color:var(--acc4)">"output_var"</span>], rows)
+        <span style="color:var(--acc5)">return</span> action_result(success=<span style="color:var(--acc5)">True</span>, data={<span style="color:var(--acc4)">"rows"</span>: len(rows)})</code></pre>
+        <p>Le plugin est auto-découvert au démarrage : placez-le dans le dossier <code>plugins/</code> et il apparaît dans l'interface et dans le catalogue JSON.</p>
+
+        <h2 id="llm">Intégration IA / LLM avec Ollama</h2>
+        <p>V8 intègre un connecteur Ollama natif pour les actions d'analyse intelligente. Le LLM devient une action comme une autre dans la séquence :</p>
+        <pre><code>{
+  <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"llm_analyze"</span>,
+  <span style="color:var(--acc2)">"model"</span>: <span style="color:var(--acc4)">"llama3:8b"</span>,
+  <span style="color:var(--acc2)">"prompt"</span>: <span style="color:var(--acc4)">"Analyse ce log et détecte les anomalies : {{file_content}}"</span>,
+  <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"anomaly_report"</span>,
+  <span style="color:var(--acc2)">"temperature"</span>: <span style="color:var(--acc4)">0.2</span>
+}</code></pre>
+        <p>L'intégration reste 100% locale : Ollama tourne sur l'intranet, aucune donnée ne sort. Utile pour les environnements HDS ou les réseaux isolés.</p>
+
+        <h2 id="multi-machine">Orchestration multi-machine</h2>
+        <p>Le moteur V8 peut distribuer les actions sur plusieurs machines via SSH ou un agent léger Python. Une séquence coordonne plusieurs nœuds en parallèle ou séquentiellement :</p>
+        <pre><code>{
+  <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"parallel_exec"</span>,
+  <span style="color:var(--acc2)">"nodes"</span>: [<span style="color:var(--acc4)">"srv01"</span>, <span style="color:var(--acc4)">"srv02"</span>, <span style="color:var(--acc4)">"srv03"</span>],
+  <span style="color:var(--acc2)">"actions"</span>: [
+    {<span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"ssh_exec"</span>, <span style="color:var(--acc2)">"cmd"</span>: <span style="color:var(--acc4)">"systemctl restart nginx"</span>}
+  ],
+  <span style="color:var(--acc2)">"timeout"</span>: <span style="color:var(--acc4)">30</span>,
+  <span style="color:var(--acc2)">"fail_threshold"</span>: <span style="color:var(--acc4)">1</span>  <span style="color:var(--textd)">// stoppe si &gt;1 nœud échoue</span>
+}</code></pre>
+
+        <h2 id="securite">Sécurité en environnement EDR</h2>
+        <p>AutomationSequence V8 a été conçu pour fonctionner dans des environnements avec EDR actif (Cortex XDR, SentinelOne, Defender for Endpoint). Les points critiques :</p>
+        <ul>
+          <li><strong>Pas d'injection de code</strong> — toutes les actions utilisent des API Python standard, pas de shellcode ni d'exec() dynamique.</li>
+          <li><strong>Signatures numériques des séquences</strong> — chaque séquence peut être signée ECDSA pour garantir l'intégrité avant exécution.</li>
+          <li><strong>Logging structuré</strong> — chaque action produit un log JSON horodaté pour l'audit SIEM.</li>
+          <li><strong>Pas de persistance automatique</strong> — V8 ne s'installe pas en service sans action explicite de l'administrateur.</li>
+        </ul>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>AutomationSequence V8 n'est pas un outil de plus dans la catégorie RPA. C'est une plateforme d'ingénierie d'automatisation pensée pour les contraintes réelles : EDR, réseaux isolés, bases propriétaires, conformité HDS. Le format JSON chiffré comme source de vérité, combiné à une Plugin API ouverte et à un moteur asynchrone, couvre des cas d'usage que les solutions cloud ne peuvent pas adresser.</p>
+
+        <div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:22px">⚙️</span>
+          <div style="flex:1;min-width:200px">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--acc);letter-spacing:.2em;margin-bottom:4px">PRODUIT</div>
+            <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">AutomationSequence V8.0</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="../../logiciels/" class="btn btn-primary">Découvrir V8 →</a>
+            <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+          <a href="../../" class="btn btn-ghost">← Retour au blog</a>
+          <a href="ironlock-vs-pyarmor-vs-themida.html" class="btn btn-outline">Article suivant →</a>
+        </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

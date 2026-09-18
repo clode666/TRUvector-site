@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Argon2id vs PBKDF2 vs bcrypt pour la dérivation de clé — TRUvector</title>
+<meta name="description" content="Argon2id remplace PBKDF2 dans IronLock v2. Mémoire-intensive, résistant GPU/ASIC, PHC winner 2015. Comparatif complet avec implémentation Python et recommandations pratiques.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/argon2id-vs-pbkdf2-bcrypt.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Argon2id vs PBKDF2 vs bcrypt pour la dérivation de clé">
+<meta property="og:description" content="Argon2id remplace PBKDF2 dans IronLock v2. Mémoire-intensive, résistant GPU/ASIC, PHC winner 2015. Comparatif complet avec implémentation Python et recommandations pratiques.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Argon2id vs PBKDF2 vs bcrypt pour la dérivation de clé</h1>
+    <div class="art-tags"><span class="tg">Cryptographie</span><span class="tg">KDF</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Qu'est-ce qu'un KDF ?</h2>
+<p>Un KDF (Key Derivation Function) transforme un secret de faible entropie (mot de passe, fingerprint hardware) en une clé cryptographique de haute entropie. La propriété essentielle : le calcul doit être <em>délibérément lent et coûteux</em> pour rendre les attaques par dictionnaire et brute-force prohibitives.</p>
+
+<blockquote><p>Un KDF mal choisi transforme votre chiffrement AES-256-GCM solide en une porte ouverte : si la clé est dérivée rapidement, un GPU moderne peut tester des milliards de variantes par seconde.</p></blockquote>
+
+<h2 id="pbkdf2">PBKDF2 (2000)</h2>
+<p>PBKDF2 (Password-Based Key Derivation Function 2) est le KDF standard de référence depuis RFC 2898. Il applique une fonction de hachage itérativement un nombre configurable de fois.</p>
+<ul>
+  <li><strong>Avantages</strong> : standardisé NIST, FIPS 140-2 certifiable, disponible partout.</li>
+  <li><strong>Limites critiques</strong> : ne consomme quasiment pas de mémoire. Un GPU peut paralléliser massivement PBKDF2. Avec 100 000 itérations SHA-256, un RTX 4090 teste ~1 milliard de mots de passe par seconde.</li>
+</ul>
+
+<h2 id="bcrypt">bcrypt (1999)</h2>
+<p>bcrypt utilise l'algorithme Blowfish avec un facteur de coût configurable (2^cost itérations). Il est plus résistant aux GPUs que PBKDF2 mais limité à des mots de passe de 72 bytes maximum.</p>
+<ul>
+  <li><strong>Avantages</strong> : très répandu, bon track record sur 25 ans.</li>
+  <li><strong>Limites</strong> : 72 bytes max, pas optimal pour dériver des clés AES-256, mémoire toujours faible, GPUs récents le craquent 10× plus vite qu'en 2010.</li>
+</ul>
+
+<h2 id="argon2">Argon2id (2015)</h2>
+<p>Argon2 est le winner du Password Hashing Competition 2015. Il existe en trois variantes — Argon2i (résistant aux side-channels), Argon2d (résistant aux GPUs), et <strong>Argon2id</strong> (hybride recommandé). Ses paramètres sont :</p>
+<ul>
+  <li><strong>Memory cost</strong> : quantité de RAM requise (64 MB dans IronLock v2). Rend l'attaque GPU impraticable : un GPU a peu de RAM par core.</li>
+  <li><strong>Time cost</strong> : nombre d'itérations (3 par défaut).</li>
+  <li><strong>Parallelism</strong> : nombre de threads (4 par défaut).</li>
+</ul>
+
+<h2 id="comparatif">Comparatif</h2>
+<table class="cmp-table">
+  <thead><tr><th>Critère</th><th style="color:var(--acc5)">Argon2id</th><th style="color:var(--textd)">bcrypt</th><th style="color:var(--textd)">PBKDF2-SHA256</th></tr></thead>
+  <tbody>
+    <tr><td>Année</td><td>2015</td><td>1999</td><td>2000</td></tr>
+    <tr><td>Memory-hard</td><td class="v-good">✓ configurable</td><td class="v-bad">✗</td><td class="v-bad">✗</td></tr>
+    <tr><td>Résistance GPU</td><td class="v-good">Très haute</td><td class="v-warn">Moyenne</td><td class="v-bad">Faible</td></tr>
+    <tr><td>Résistance ASIC</td><td class="v-good">Haute</td><td class="v-warn">Moyenne</td><td class="v-bad">Faible</td></tr>
+    <tr><td>Taille entrée max</td><td class="v-good">Illimitée</td><td class="v-warn">72 bytes</td><td class="v-good">Illimitée</td></tr>
+    <tr><td>Taille sortie</td><td class="v-good">Variable</td><td>192 bits fixe</td><td class="v-good">Variable</td></tr>
+    <tr><td>FIPS 140-2</td><td class="v-bad">Non</td><td class="v-bad">Non</td><td class="v-good">Oui</td></tr>
+    <tr><td>OWASP recommandé</td><td class="v-good">✓ Premier choix</td><td class="v-warn">Acceptable</td><td class="v-warn">Si FIPS requis</td></tr>
+  </tbody>
+</table>
+
+<h2 id="impl">Implémentation Python</h2>
+<pre><code><span style="color:var(--acc5)">from</span> argon2.low_level <span style="color:var(--acc5)">import</span> hash_secret_raw, Type
+<span style="color:var(--acc5)">import</span> os
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">derive_key_argon2id</span>(
+    secret: bytes,
+    salt: bytes = <span style="color:var(--acc5)">None</span>,
+    key_len: int = <span style="color:var(--acc4)">32</span>,
+    memory_cost: int = <span style="color:var(--acc4)">65536</span>,  <span style="color:var(--textd)"># 64 MB</span>
+    time_cost: int = <span style="color:var(--acc4)">3</span>,
+    parallelism: int = <span style="color:var(--acc4)">4</span>
+) -> bytes:
+    <span style="color:var(--acc5)">if</span> salt <span style="color:var(--acc5)">is</span> <span style="color:var(--acc5)">None</span>:
+        salt = os.urandom(<span style="color:var(--acc4)">16</span>)
+    
+    key = hash_secret_raw(
+        secret=secret,
+        salt=salt,
+        time_cost=time_cost,
+        memory_cost=memory_cost,
+        parallelism=parallelism,
+        hash_len=key_len,
+        type=Type.ID  <span style="color:var(--textd)"># Argon2id</span>
+    )
+    <span style="color:var(--acc5)">return</span> key, salt
+
+<span style="color:var(--textd)"># Usage dans IronLock</span>
+hw_fingerprint = get_hardware_fingerprint()  <span style="color:var(--textd)"># bytes</span>
+aes_key, salt  = derive_key_argon2id(hw_fingerprint)
+<span style="color:var(--textd)"># aes_key → chiffrement AES-256-GCM</span>
+<span style="color:var(--textd)"># aes_key effacée de la mémoire après usage</span></code></pre>
+
+<h2 id="ironlock">Dans IronLock v2</h2>
+<p>IronLock v2 utilise Argon2id avec <code>memory=64MB</code>, <code>time=3</code>, <code>parallelism=4</code> pour dériver la clé AES-256 à partir du fingerprint hardware. Le sel est stocké en clair dans le header <code>.ironenc</code> (pas besoin d'être secret — il rend chaque dérivation unique). La clé dérivée n'est jamais persistée sur disque ; elle vit uniquement en mémoire le temps du déchiffrement, puis est effacée.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Pour tout nouveau projet en 2026, Argon2id est le seul bon choix de KDF. PBKDF2 reste acceptable uniquement sous contrainte FIPS. bcrypt est en fin de vie pour les nouveaux développements. La migration d'IronLock v1 (PBKDF2-SHA256, 100 000 itérations) vers v2 (Argon2id 64MB) rend une attaque GPU ~62 000× plus coûteuse.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc5);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="vm-detection-ironlock.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="distribuer-exe-python-ironlock.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

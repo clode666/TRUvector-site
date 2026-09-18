@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cas réel : migration d&#x27;un parc logiciel legacy vers UXC en entreprise — TRUvector</title>
+<meta name="description" content="Inventaire du parc, conversion batch, tests de régression automatisés, plan de déploiement par vagues et métriques après migration — retour d&#x27;expérience complet sur une migration de 200 packages.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/migration-legacy-uxc.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Cas réel : migration d&#x27;un parc logiciel legacy vers UXC en entreprise">
+<meta property="og:description" content="Inventaire du parc, conversion batch, tests de régression automatisés, plan de déploiement par vagues et métriques après migration — retour d&#x27;expérience complet sur une migration de 200 packages.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Cas réel : migration d&#x27;un parc logiciel legacy vers UXC en entreprise</h1>
+    <div class="art-tags"><span class="tg">Cas d&#x27;usage</span><span class="tg">Déploiement</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Contexte : 200 packages ZIP dispersés</h2>
+<p>Un éditeur de logiciels industriels distribuait 200 packages distincts à 1 200 clients via des archives ZIP hébergées sur un FTP. Pas de vérification d'intégrité, pas de mises à jour différentielles, pas de chiffrement. Chaque release nécessitait de retélécharger des archives de 50 à 800 MB — et les équipes support passaient 30% de leur temps à gérer des archives corrompues.</p>
+<blockquote><p>La migration vers UXC n'est pas juste un changement de format — c'est l'opportunité d'industrialiser un processus de distribution qui s'était construit organiquement au fil des années. Planifier 3 mois, exécuter en 6 semaines.</p></blockquote>
+<h2 id="inventaire">Phase 1 : Inventaire du parc</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.migration <span style="color:var(--acc5)">import</span> PackageInventory
+
+inventory = PackageInventory()
+
+<span style="color:var(--textd)"># Scanner le répertoire FTP</span>
+packages = inventory.scan(
+    source_dir=<span style="color:var(--acc4)">"/ftp/releases/"</span>,
+    formats=[<span style="color:var(--acc4)">"*.zip"</span>, <span style="color:var(--acc4)">"*.7z"</span>, <span style="color:var(--acc4)">"*.tar.gz"</span>],
+    recursive=<span style="color:var(--acc5)">True</span>
+)
+
+inventory.export_csv(<span style="color:var(--acc4)">"inventaire_packages.csv"</span>)
+print(f<span style="color:var(--acc4)">"Packages trouvés : {len(packages)}"</span>)
+print(f<span style="color:var(--acc4)">"Taille totale : {sum(p.size_mb for p in packages):.0f} MB"</span>)
+print(f<span style="color:var(--acc4)">"Doublons détectés : {inventory.count_duplicates()}"</span>)
+<span style="color:var(--textd)"># → 200 packages — 42 GB total — 23 doublons identifiés</span></code></pre>
+<h2 id="conversion">Phase 2 : Conversion batch</h2>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.migration <span style="color:var(--acc5)">import</span> BatchConverter
+<span style="color:var(--acc5)">from</span> concurrent.futures <span style="color:var(--acc5)">import</span> ProcessPoolExecutor
+
+converter = BatchConverter(
+    source_dir=<span style="color:var(--acc4)">"/ftp/releases/"</span>,
+    output_dir=<span style="color:var(--acc4)">"/releases/uxc/"</span>,
+    pubkey=<span style="color:var(--acc4)">"keys/public.pem"</span>,
+    privkey=<span style="color:var(--acc4)">"keys/private.pem"</span>,  <span style="color:var(--textd)"># pour signer</span>
+    encrypt=<span style="color:var(--acc5)">True</span>,
+    compress_algo=<span style="color:var(--acc4)">"auto"</span>
+)
+
+<span style="color:var(--textd)"># Conversion en parallèle (8 workers)</span>
+results = converter.convert_all(max_workers=<span style="color:var(--acc4)">8</span>, progress=<span style="color:var(--acc5)">True</span>)
+
+<span style="color:var(--textd)"># Résumé</span>
+print(f<span style="color:var(--acc4)">"Convertis : {results.success}/{results.total}"</span>)
+print(f<span style="color:var(--acc4)">"Erreurs   : {results.failed}"</span>)
+print(f<span style="color:var(--acc4)">"Réduction : {results.size_reduction_pct:.1f}% (42 GB → {results.new_size_gb:.1f} GB)"</span>)
+<span style="color:var(--textd)"># → Convertis : 198/200 — Réduction : 34.2% (42 GB → 27.6 GB)</span></code></pre>
+<h2 id="regression">Phase 3 : Tests de régression</h2>
+<pre><code><span style="color:var(--textd)"># Pour chaque package converti : extraire et comparer</span>
+<span style="color:var(--acc5)">from</span> universal_installer.migration <span style="color:var(--acc5)">import</span> RegressionTester
+
+tester = RegressionTester()
+report = tester.compare_all(
+    original_dir=<span style="color:var(--acc4)">"/ftp/releases/"</span>,
+    converted_dir=<span style="color:var(--acc4)">"/releases/uxc/"</span>,
+    checks=[<span style="color:var(--acc4)">"file_count"</span>, <span style="color:var(--acc4)">"file_sha256"</span>, <span style="color:var(--acc4)">"permissions"</span>, <span style="color:var(--acc4)">"symlinks"</span>]
+)
+
+<span style="color:var(--textd)"># Rapport de régression</span>
+print(f<span style="color:var(--acc4)">"Packages identiques : {report.identical}"</span>)
+print(f<span style="color:var(--acc4)">"Différences mineures : {report.minor_diffs}"</span>)  <span style="color:var(--textd)"># timestamp</span>
+print(f<span style="color:var(--acc4)">"Problèmes : {report.issues}"</span>)
+<span style="color:var(--textd)"># → Identiques : 196 — Différences mineures : 2 — Problèmes : 0</span></code></pre>
+<h2 id="vagues">Phase 4 : Déploiement par vagues</h2>
+<ul>
+  <li><strong>Semaine 1</strong> — 5 clients pilotes volontaires. Feedback rapide sur les 2 packages avec différences mineures (timestamps).</li>
+  <li><strong>Semaine 2-3</strong> — 120 clients standard. Support dédié pendant 2 semaines, 0 incident signalé.</li>
+  <li><strong>Semaine 4-5</strong> — 1 080 clients restants. Migration du FTP vers le nouveau CDN UXC simultanément.</li>
+  <li><strong>Semaine 6</strong> — FTP legacy désactivé. Anciens packages ZIP conservés en archive froide 1 an.</li>
+</ul>
+<h2 id="chiffres">Chiffres après migration</h2>
+<ul>
+  <li><strong>Réduction de taille</strong> : 42 GB → 27.6 GB (-34.2%) pour le catalogue complet.</li>
+  <li><strong>Taille moyenne d'une mise à jour</strong> : 180 MB → 8 MB grâce au delta UXC (-95.6%).</li>
+  <li><strong>Archives corrompues signalées</strong> : 0 depuis la migration (vs 15-20/mois avec le FTP ZIP).</li>
+  <li><strong>Temps de déploiement d'une release</strong> : 3 jours → 4 heures (génération + signature + upload + manifest).</li>
+  <li><strong>Tickets support liés à la distribution</strong> : -87% en 3 mois post-migration.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>La migration de 200 packages ZIP vers UXC a pris 6 semaines et nécessité principalement : un inventaire rigoureux, la conversion batch parallélisée, les tests de régression SHA-256 et un plan de déploiement par vagues avec fenêtre de support dédiée. Les gains sont immédiats et mesurables : -34% de stockage, -95% de bande passante pour les mises à jour, 0 archive corrompue. Le ROI est atteint dès le premier trimestre post-migration.</p>
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">📦</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc4);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="deploiement-offline-airgap.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="../../" class="btn btn-outline">Retour au blog →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>

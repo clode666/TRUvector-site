@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cas réel : protéger un SaaS Python avec IronLock v2 — TRUvector</title>
+<meta name="description" content="Retour d&#x27;expérience complet : architecture, migration v1→v2, gestion des renouvellements de licence, monitoring et pièges évités en production.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/cas-reel-saas-python-ironlock.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Cas réel : protéger un SaaS Python avec IronLock v2">
+<meta property="og:description" content="Retour d&#x27;expérience complet : architecture, migration v1→v2, gestion des renouvellements de licence, monitoring et pièges évités en production.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Cas réel : protéger un SaaS Python avec IronLock v2</h1>
+    <div class="art-tags"><span class="tg">Cas d&#x27;usage</span><span class="tg">Python</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="context">Contexte du projet</h2>
+<p>Ce retour d'expérience est basé sur la migration d'un outil d'analyse Python distribué à une cinquantaine de clients professionnels. L'outil traitait des données confidentielles (secteur médical) et était initialement protégé par IronLock v1 (RSA-2048, PBKDF2, fingerprint 3 sources). La migration vers v2 a été motivée par trois besoins :</p>
+<ul>
+  <li><strong>Sécurité</strong> : passage à ECDSA P-384 et Argon2id suite à une politique de sécurité renforcée.</li>
+  <li><strong>Robustesse</strong> : plusieurs clients avaient perdu leur licence après un changement de RAM — le fingerprint 3 sources était trop rigide.</li>
+  <li><strong>Opérationnel</strong> : la gestion manuelle des licences (envoi par email) devenait ingérable à 50 clients.</li>
+</ul>
+
+<blockquote><p>La migration de licences est la partie la plus délicate d'une montée de version IronLock. Bien planifiée, elle est transparente pour les clients. Mal planifiée, elle génère un pic de tickets support.</p></blockquote>
+
+<h2 id="archi">Architecture de distribution</h2>
+<p>L'architecture mise en place pour 50 clients :</p>
+<pre><code><span style="color:var(--textd)"># Côté éditeur (serveur interne)</span>
+licence-server/
+├── keys/
+│   ├── private_p384.pem    <span style="color:var(--textd)"># hors ligne, chiffrée AES</span>
+│   └── public_p384.pem     <span style="color:var(--textd)"># embarquée dans loader</span>
+├── clients/
+│   ├── client_001/
+│   │   ├── fingerprint.json
+│   │   ├── licence_v2.lic
+│   │   └── history.log
+│   └── ...
+├── templates/
+│   └── app_v2.ironenc      <span style="color:var(--textd)"># payload chiffré unique</span>
+└── scripts/
+    ├── generate_licence.sh
+    └── renew_licence.sh
+
+<span style="color:var(--textd)"># Le payload chiffré est identique pour tous les clients</span>
+<span style="color:var(--textd)"># Seule la licence change (liée au fingerprint du client)</span></code></pre>
+
+<h2 id="migration">Migration v1 → v2</h2>
+<p>La migration a été planifiée sur 4 semaines avec une période de double-validation :</p>
+<pre><code><span style="color:var(--textd)"># Semaine 1 : génération des nouvelles clés P-384</span>
+ironlock keygen --algo ecdsa-p384 --output keys/v2/
+
+<span style="color:var(--textd)"># Semaine 2 : recollecte des fingerprints clients</span>
+<span style="color:var(--textd)"># Email aux clients : télécharger l'utilitaire fingerprint</span>
+ironlock fingerprint-tool --output fp_collector.exe
+
+<span style="color:var(--textd)"># Semaine 3 : migration des licences existantes</span>
+<span style="color:var(--acc5)">for</span> client <span style="color:var(--acc5)">in</span> clients/:
+    ironlock migrate       --from v1       --old-licence clients/$client/licence_v1.lic       --fingerprint clients/$client/fingerprint_v2.json       --privkey keys/v2/private_p384.pem       --expires +365d       --output clients/$client/licence_v2.lic
+
+<span style="color:var(--textd)"># Semaine 4 : déploiement du nouveau loader v2 + licences</span>
+<span style="color:var(--textd)"># Validation : chaque client teste avant que l'ancienne</span>
+<span style="color:var(--textd)"># version soit désactivée</span></code></pre>
+
+<p>Résultat : 47 clients migrés sans incident. 3 clients ont nécessité un renouvellement de fingerprint (changement de machine entre la collecte et le déploiement).</p>
+
+<h2 id="licences">Gestion des licences en production</h2>
+<p>Après la migration, le process de gestion des licences a été semi-automatisé avec un script Python interne :</p>
+<pre><code><span style="color:var(--acc5)">import</span> json, subprocess
+<span style="color:var(--acc5)">from</span> datetime <span style="color:var(--acc5)">import</span> date, timedelta
+<span style="color:var(--acc5)">from</span> pathlib <span style="color:var(--acc5)">import</span> Path
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">renew_client</span>(client_id: str, extend_days: int = <span style="color:var(--acc4)">365</span>):
+    client_dir = Path(<span style="color:var(--acc4)">f'clients/{client_id}'</span>)
+    
+    <span style="color:var(--textd)"># Lire la licence existante</span>
+    lic = json.loads((client_dir / <span style="color:var(--acc4)">'licence_v2.lic'</span>).read_text())
+    new_expiry = date.today() + timedelta(days=extend_days)
+    
+    <span style="color:var(--textd)"># Regénérer avec nouvelle expiration</span>
+    subprocess.run([
+        <span style="color:var(--acc4)">'ironlock'</span>, <span style="color:var(--acc4)">'license'</span>,
+        <span style="color:var(--acc4)">'--privkey'</span>, <span style="color:var(--acc4)">'keys/v2/private_p384.pem'</span>,
+        <span style="color:var(--acc4)">'--fingerprint'</span>, str(client_dir / <span style="color:var(--acc4)">'fingerprint.json'</span>),
+        <span style="color:var(--acc4)">'--expires'</span>, new_expiry.isoformat(),
+        <span style="color:var(--acc4)">'--output'</span>, str(client_dir / <span style="color:var(--acc4)">'licence_v2.lic'</span>)
+    ], check=<span style="color:var(--acc5)">True</span>)</code></pre>
+
+<h2 id="monitoring">Monitoring et alertes</h2>
+<p>Un script cron vérifie quotidiennement les licences arrivant à expiration et envoie des alertes :</p>
+<ul>
+  <li><strong>J-30</strong> : email automatique au client avec lien vers le formulaire de renouvellement.</li>
+  <li><strong>J-7</strong> : relance + notification interne.</li>
+  <li><strong>J-1</strong> : alerte urgente, contact direct si pas de réponse.</li>
+  <li><strong>J+0</strong> : la licence expire, le programme se ferme avec un message clair.</li>
+</ul>
+
+<h2 id="chiffres">Chiffres clés après 6 mois</h2>
+<ul>
+  <li><strong>Tentatives de bypass détectées</strong> : 3 (détectées par les logs anti-debug — sortie silencieuse, pas de fuite d'information).</li>
+  <li><strong>Faux positifs anti-debug</strong> : 0 (avec score threshold=3).</li>
+  <li><strong>Renouvellements de fingerprint</strong> : 8 (changements matériels légitimes), 0 rejet abusif.</li>
+  <li><strong>Tickets support liés à la licence</strong> : 4 en 6 mois vs 23 en 6 mois avec IronLock v1.</li>
+  <li><strong>Temps moyen de génération de licence</strong> : 12 secondes (script semi-automatisé).</li>
+</ul>
+
+<h2 id="pieges">Pièges rencontrés</h2>
+<ul>
+  <li><strong>Clients sur VMs légitimes</strong> — 6 clients travaillaient dans des VMs d'entreprise (Citrix, VMware Horizon). Le VM detector en mode "block" rejetait leur licence. Solution : passer en mode "warn" pour ces clients spécifiques.</li>
+  <li><strong>Windows Update et fingerprint</strong> — une mise à jour majeure de Windows 11 a modifié l'OS GUID sur 3 machines. Le système de tolérance Argon2id a absorbé ce changement (source de poids 1, seuil à 10/14).</li>
+  <li><strong>Antivirus faux positifs</strong> — deux clients avaient un EDR qui marquait le loader comme suspect. Résolu en ajoutant une signature Authenticode au loader.exe.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>La migration vers IronLock v2 a réduit les tickets support de 80% et zéro bypass réussi en 6 mois. Le fingerprint 8 sources avec tolérance est le bon compromis entre sécurité et facilité d'usage client. Le point d'attention principal reste la gestion des environnements virtualisés légitimes : configurer le VM detector en mode "warn" plutôt que "block" pour les clients en environnement VDI.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc4);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="distribuer-exe-python-ironlock.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="../../" class="btn btn-outline">Retour au blog →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=3"></script>
+</body>
+</html>
