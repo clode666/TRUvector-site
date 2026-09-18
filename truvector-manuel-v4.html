@@ -188,6 +188,17 @@
       <li><code>cookies/</code> — politique de cookies (strictement nécessaires uniquement).</li>
       <li><code>securite/</code> — politique de sécurité (SSI) + divulgation responsable, avec <code>/.well-known/security.txt</code>.</li>
     </ul>
+    <h3>Sections thématiques (un code par page)</h3>
+    <p>Accessibles depuis le <strong>hub</strong> de l'accueil (<code>index.html#sections</code>). Chacune possède <strong>son propre code</strong> (<code>config.access.sections</code>)&nbsp;:</p>
+    <ul>
+      <li><code>logiciels/</code> — catalogue (pré-rempli, éditable via <code>config.catalog.logiciels</code>).</li>
+      <li><code>ebooks/</code> — e-books et publications.</li>
+      <li><code>musique/</code> — <strong>lecteur audio</strong> ; fichiers dans <code>musique/assets/</code>, déclarés dans <code>config.catalog.musique</code>. La case <strong>« lecture en fond (tout le site) »</strong> fait suivre la musique sur toutes les pages (mini-lecteur en bas à droite ; léger blanc au changement de page, un clic sur ▶ parfois nécessaire après la 1re navigation).</li>
+      <li><code>articles/</code> — notes et tutoriels.</li>
+      <li><code>dons/</code> — page de soutien (<code>config.dons.links</code>).</li>
+      <li><code>concours/</code> — jeux-concours (<code>config.concours</code>).</li>
+      <li><code>modules/</code> — modules interactifs (<code>config.catalog.modules</code>).</li>
+    </ul>
 
     <h3>Roadmap — <code>roadmap.html</code> (bonus)</h3>
     <p>La feuille de route v4, autonome, aux mêmes couleurs.</p>
@@ -211,11 +222,16 @@
 │   └── index.html             <span class="c"># politique de cookies</span>
 ├── securite/
 │   └── index.html             <span class="c"># politique de sécurité (SSI)</span>
+├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
+│   └── index.html × 7         <span class="c"># 7 sections, un code d'accès distinct chacune</span>
+│       └── musique/assets/    <span class="c"># fichiers audio (.mp3, .ogg…)</span>
 ├── admin/
 │   └── index.html             <span class="p"># panneau d'administration (paramètres + droits)</span>
 ├── assets/
 │   ├── css/tokens.css         <span class="p"># design system : couleurs, typo, composants</span>
 │   ├── js/config.js           <span class="p"># configuration partagée (defaults + fusion)</span>
+│   ├── js/gate.js             <span class="p"># portail d'accès générique (codes par section)</span>
+│   ├── js/player.js           <span class="p"># mini-lecteur global (musique sur tout le site)</span>
 │   ├── js/countdown.js        <span class="c"># compte à rebours (piloté par la config)</span>
 │   └── img/                   <span class="c"># triskele.svg, createur.webp, og-banner.*</span>
 ├── config.json                <span class="p"># ★ source de vérité : paramètres, droits, galerie</span>
@@ -311,6 +327,8 @@ git push -u origin main</pre></div>
 
     <h3>Retirer la porte JS (si tu passes sur Access)</h3>
     <p>Dans <code>galerie/index.html</code>, supprime le bloc <code>&lt;div class="gate" id="gate"&gt;…&lt;/div&gt;</code> ainsi que le script commenté « PORTE D'ACCÈS ».</p>
+    <h3>Codes par section</h3>
+    <p>Chaque section (logiciels, e-books, musique, articles, dons, concours, modules) a son propre code dans <code>config.access.sections</code>, modifiable depuis le panneau d'admin (bloc « Sections &amp; codes »). Chaque accès est mémorisé indépendamment le temps de la session.</p>
     <h3>Protéger aussi l'admin</h3>
     <p>La page <code>/admin</code> a sa propre porte (code <code>adminCode</code> dans <code>config.json</code>). Protège <strong>/admin</strong> et <strong>/galerie</strong> avec Cloudflare Access ; les <strong>rôles</strong> (admin / éditeur / lecteur) définis dans le panneau se transposent en règles Access (liste d'e-mails exportable depuis l'admin).</p>
   </section>
@@ -403,6 +421,7 @@ git push</pre></div>
         <tr><td>Le compte à rebours reste figé</td><td>JavaScript bloqué, ou date mal formée. Garde le format <code>2026-09-21T00:00:00+02:00</code> dans <code>countdown.js</code>.</td></tr>
         <tr><td>Le bouton « Entrer » n'apparaît pas</td><td>Normal avant le 21/09 : il ne se révèle qu'à échéance du décompte.</td></tr>
         <tr><td>Un script est bloqué en prod</td><td>La CSP de <code>_headers</code> autorise <code>'self'</code> et l'inline. Si tu ajoutes un outil externe, ajoute son domaine à la directive concernée.</td></tr>
+        <tr><td>La musique ne repart pas en changeant de page</td><td>Politique d'autoplay du navigateur : clique une fois sur ▶ du mini-lecteur, ensuite la lecture suit d'une page à l'autre.</td></tr>
         <tr><td>Build échoue sur <code>npx hugo</code> / « could not determine executable »</td><td>Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une <b>Build command vide</b> (Pages), ou committe le <code>wrangler.toml</code> fourni à la racine (Workers).</td></tr>
         <tr><td>Cloudflare Pages sert une vieille version</td><td>Cache. Force un nouveau déploiement (nouveau commit) ou purge le cache dans le dashboard.</td></tr>
       </tbody>
@@ -425,6 +444,10 @@ git push</pre></div>
         <tr><td>Sécurité / cache</td><td><code>_headers</code></td></tr>
         <tr><td>Déployer une mise à jour</td><td><code>git push</code> (redéploiement auto)</td></tr>
         <tr><td>Vraie authentification</td><td>Cloudflare Zero Trust → Access → <code>/galerie</code></td></tr>
+        <tr><td>Changer le code d'une section</td><td><code>config.json</code> → <code>access.sections.&lt;nom&gt;</code> (ou /admin)</td></tr>
+        <tr><td>Ajouter logiciel / e-book / module</td><td><code>config.catalog.&lt;nom&gt;</code></td></tr>
+        <tr><td>Ajouter un morceau de musique</td><td>fichier dans <code>musique/assets/</code> + <code>config.catalog.musique</code></td></tr>
+        <tr><td>Configurer les dons</td><td><code>config.dons.links</code></td></tr>
       </tbody>
     </table></div>
   </section>
