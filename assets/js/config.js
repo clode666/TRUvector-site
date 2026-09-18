@@ -23,7 +23,7 @@ window.TV = (function(){
       { slug:"atelier-etoiles", title:"L'atelier des étoiles", format:"square", visible:true, download:true },
       { slug:"portrait-matriciel", title:"Portrait matriciel", format:"square", visible:true, download:true }
     ],
-    catalog: { logiciels: [], ebooks: [], musique: [], articles: [], modules: [] },
+    catalog: { logiciels: [], ebooks: [], musique: [ {title:"Aurora Pad",src:"aurora-pad.mp3"}, {title:"Nébuleuse",src:"nebuleuse.mp3"} ], articles: [], modules: [] },
     dons: { intro: "TRUvector est un projet indépendant. Ton soutien aide à créer de nouveaux logiciels, e-books et créations libres.", links: [] },
     concours: []
   };

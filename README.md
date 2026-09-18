@@ -61,7 +61,7 @@ Quatre pages complètes, renseignées avec l'identité réelle et reliées entre
 Accessibles depuis le **menu déroulant « Sections »** (en haut à droite, sur toutes les pages), organisé en sous-menus *Créations* et *Communauté*. Chacune a **son propre code** (dans `config.access.sections`) :
 - `logiciels/` — catalogue de logiciels (pré-rempli, éditable dans `config.catalog.logiciels`).
 - `ebooks/` — e-books et publications.
-- `musique/` — **lecteur audio** ; fichiers dans `musique/assets/`, déclarés dans `config.catalog.musique`. La case **« lecture en fond (tout le site) »** fait suivre la musique sur **toutes les pages** via un mini-lecteur en bas à droite (léger blanc au changement de page ; un clic sur ▶ peut être nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs).
+- `musique/` — **lecteur audio** ; fichiers dans `musique/assets/`, déclarés dans `config.catalog.musique`. La case **« lecture en fond (tout le site) »** fait suivre la musique sur **toutes les pages** via un mini-lecteur en bas à droite (léger blanc au changement de page ; un clic sur ▶ peut être nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs). **Deux morceaux de démo** sont inclus : ouvre la page Musique et presse ▶ pour voir le lecteur ; remplace-les dans `musique/assets/` + `config.catalog.musique`.
 - `articles/` — notes et tutoriels.
 - `dons/` — page de soutien (liens configurables dans `config.dons.links`).
 - `concours/` — jeux-concours (`config.concours`).
@@ -310,6 +310,7 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 | Changer le code d'une section | `config.json` → `access.sections.<nom>` (ou /admin) |
 | Ajouter un logiciel / e-book / module | `config.catalog.<nom>` (tableau d'items) |
 | Ajouter un morceau de musique | fichier dans `musique/assets/` + entrée `config.catalog.musique` |
+| Activer / trouver le player | page **Musique** → bouton ▶ (le lecteur n'apparaît que s'il y a des morceaux) |
 | Musique sur tout le site | page Musique → cocher « lecture en fond (tout le site) » |
 | Configurer les dons | `config.dons.links` (label + url) |
 

@@ -29,7 +29,7 @@
 
   var links=document.querySelector('.site-nav .nav-links');
   if(!links) return;
-  [].slice.call(links.querySelectorAll('a')).forEach(function(a){ var h=a.getAttribute('href')||''; if(h.indexOf('#sections')>-1) a.parentNode.removeChild(a); });
+  [].slice.call(links.querySelectorAll('a')).forEach(function(a){ var h=a.getAttribute('href')||''; var t=(a.textContent||'').trim(); if(h.indexOf('#sections')>-1 || t==='Galerie') a.parentNode.removeChild(a); });
   var oldm=links.querySelector('.has-menu, .tvnav-wrap'); if(oldm) oldm.parentNode.removeChild(oldm);
 
   var groups=[
