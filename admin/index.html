@@ -161,6 +161,21 @@
     </div>
   </section>
 
+  <!-- 02b Sections & codes -->
+  <section class="panel">
+    <h2><span class="n">02b</span> Sections &amp; codes d'accès</h2>
+    <p class="hint">Un code distinct par page (logiciels, e-books, musique, articles, dons, concours, modules).</p>
+    <div class="row2">
+      <div><label class="f">Logiciels</label><input type="text" id="f-sec-logiciels" class="mono"></div>
+      <div><label class="f">E-books</label><input type="text" id="f-sec-ebooks" class="mono"></div>
+      <div><label class="f">Musique</label><input type="text" id="f-sec-musique" class="mono"></div>
+      <div><label class="f">Articles</label><input type="text" id="f-sec-articles" class="mono"></div>
+      <div><label class="f">Dons</label><input type="text" id="f-sec-dons" class="mono"></div>
+      <div><label class="f">Concours</label><input type="text" id="f-sec-concours" class="mono"></div>
+      <div><label class="f">Modules interactifs</label><input type="text" id="f-sec-modules" class="mono"></div>
+    </div>
+  </section>
+
   <!-- 03 Droits -->
   <section class="panel">
     <h2><span class="n">03</span> Droits &amp; utilisateurs</h2>
@@ -226,6 +241,8 @@ function fill(cfg){
   document.querySelector('input[name=method][value="'+method+'"]').checked=true;
   document.getElementById('f-code').value=(cfg.access&&cfg.access.code)||'';
   document.getElementById('f-admincode').value=(cfg.access&&cfg.access.adminCode)||'';
+  var _sec=(cfg.access&&cfg.access.sections)||{};
+  ['logiciels','ebooks','musique','articles','dons','concours','modules'].forEach(function(k){ var el=document.getElementById('f-sec-'+k); if(el) el.value=_sec[k]||''; });
   methodNote();
   // 03
   renderUsers((cfg.access&&cfg.access.users)||[]);
@@ -284,6 +301,8 @@ function collect(){
   cfg.access.method = document.querySelector('input[name=method]:checked').value;
   cfg.access.code = document.getElementById('f-code').value.trim();
   cfg.access.adminCode = document.getElementById('f-admincode').value.trim();
+  cfg.access.sections = cfg.access.sections||{};
+  ['logiciels','ebooks','musique','articles','dons','concours','modules'].forEach(function(k){ var el=document.getElementById('f-sec-'+k); if(el) cfg.access.sections[k]=el.value.trim(); });
   cfg.access.users = [].map.call(document.querySelectorAll('#users .rowline'),function(r){
     return { email:r.querySelector('.u-email').value.trim(), role:r.querySelector('.u-role').value };
   }).filter(function(u){return u.email;});
@@ -343,5 +362,6 @@ function bindActions(){
   });
 })();
 </script>
+<script src="../assets/js/player.js"></script>
 </body>
 </html>

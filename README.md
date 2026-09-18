@@ -57,6 +57,16 @@ Quatre pages complètes, renseignées avec l'identité réelle et reliées entre
 - `cookies/` — politique de cookies (strictement nécessaires uniquement).
 - `securite/` — politique de sécurité (SSI) + divulgation responsable, avec `/.well-known/security.txt`.
 
+### Sections thématiques (accès par code, un par page)
+Accessibles depuis le **hub** de l'accueil (`index.html#sections`). Chacune a **son propre code** (dans `config.access.sections`) :
+- `logiciels/` — catalogue de logiciels (pré-rempli, éditable dans `config.catalog.logiciels`).
+- `ebooks/` — e-books et publications.
+- `musique/` — **lecteur audio** ; fichiers dans `musique/assets/`, déclarés dans `config.catalog.musique`. La case **« lecture en fond (tout le site) »** fait suivre la musique sur **toutes les pages** via un mini-lecteur en bas à droite (léger blanc au changement de page ; un clic sur ▶ peut être nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs).
+- `articles/` — notes et tutoriels.
+- `dons/` — page de soutien (liens configurables dans `config.dons.links`).
+- `concours/` — jeux-concours (`config.concours`).
+- `modules/` — modules interactifs (`config.catalog.modules`).
+
 ### Administration — `admin/index.html`
 Panneau qui édite `config.json` : paramètres, accès, droits, galerie, licence. Voir §13.
 
@@ -83,11 +93,16 @@ truvector.dev/
 │   └── index.html             # politique de cookies
 ├── securite/
 │   └── index.html             # politique de sécurité (SSI)
+├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
+│   └── index.html × 7         # 7 sections, chacune un code d'accès distinct
+│       └── (musique/assets/)  # y déposer les fichiers audio (.mp3, .ogg…)
 ├── admin/
 │   └── index.html             # panneau d'administration (paramètres + droits)
 ├── assets/
 │   ├── css/tokens.css         # design system : couleurs, typo, composants
 │   ├── js/config.js           # configuration partagée (defaults + fusion)
+│   ├── js/gate.js             # portail d'accès générique (codes par section)
+│   ├── js/player.js           # mini-lecteur global (musique sur tout le site)
 │   ├── js/countdown.js        # compte à rebours (piloté par la config)
 │   └── img/                   # triskele.svg, createur.webp, og-banner.*
 ├── config.json                # ★ source de vérité : paramètres, droits, galerie
@@ -177,6 +192,7 @@ Gratuit ≤ 50 utilisateurs, sans code, connexion par code e-mail à usage uniqu
 Codes définis dans `config.json` (ou via le panneau d'admin) :
 - `access.code` → porte de la **galerie** (défaut `truvector2026`) ;
 - `access.adminCode` → porte de l'**admin** (défaut `truvector-admin`).
+- `access.sections.<nom>` → un code par section (logiciels, ebooks, musique, articles, dons, concours, modules), éditables dans le panneau d'admin (bloc « Sections & codes »).
 
 > ⚠️ Le code est visible dans la source : filtre « doux », pas une sécurité réelle. Pour du sérieux → option A.
 
@@ -268,6 +284,7 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 | `config.json` ignoré en local (file://) | Le `fetch` échoue sur `file://` : teste via un serveur local ou sur Cloudflare Pages. Les défauts de `config.js` prennent le relais. |
 | Le compte à rebours reste figé | JS bloqué ou date mal formée. Garde le format `2026-09-21T00:00:00+02:00`. |
 | Le bouton « Entrer » n'apparaît pas | Normal avant le jour J en statut `auto` ; force-le avec `status: "open"`. |
+| La musique ne repart pas en changeant de page | Politique d'autoplay du navigateur : clique une fois sur ▶ du mini-lecteur. Ensuite ça suit. |
 | Build échoue sur `npx hugo` / *could not determine executable* | Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une **Build command vide** (Pages) ou committe le **`wrangler.toml`** fourni à la racine (Workers). |
 | Cloudflare sert une vieille version | Cache. Nouveau commit ou purge du cache. |
 
@@ -289,6 +306,11 @@ Le pôle légal est renseigné avec l'identité officielle (attestation INPI) :
 | Déployer une mise à jour | `git push` (redéploiement auto) |
 | Vraie authentification / droits | Cloudflare Zero Trust → Access → `/galerie`, `/admin` |
 | Corriger un build qui lance Hugo | `wrangler.toml` (racine) + Build command vide |
+| Changer le code d'une section | `config.json` → `access.sections.<nom>` (ou /admin) |
+| Ajouter un logiciel / e-book / module | `config.catalog.<nom>` (tableau d'items) |
+| Ajouter un morceau de musique | fichier dans `musique/assets/` + entrée `config.catalog.musique` |
+| Musique sur tout le site | page Musique → cocher « lecture en fond (tout le site) » |
+| Configurer les dons | `config.dons.links` (label + url) |
 
 ---
 

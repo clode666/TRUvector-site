@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créations musicales — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css">
+</head>
+<body data-section="musique">
+
+<div class="gate" id="gate"><div class="box">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h2>Accès — Créations musicales</h2>
+  <p>Entre le code d'accès de cette section.</p>
+  <input id="gate-code" type="password" autocomplete="off" placeholder="code d'accès" aria-label="Code d'accès">
+  <div class="err" id="gate-err" role="alert"></div>
+  <button class="btn" id="gate-go">Entrer →</button>
+</div></div>
+
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Accueil</a>
+    <a href="../index.html#sections">Sections</a>
+    <a href="../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="section-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Créations musicales</h1>
+    <p>Écoute mes créations — active « lecture en fond » pour qu'elles te suivent sur tout le site.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="content"></div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p class="fm">$ truvector musique --background site-wide</p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
+  </div>
+</footer>
+
+<script>window.TV_FALLBACK_CODE="musique-2026";</script>
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/gate.js"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function ss(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
+function set(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
+document.addEventListener('tv:config',function(e){
+  var cfg=e.detail, tracks=((cfg.catalog||{}).musique)||[], c=document.getElementById('content');
+  if(!tracks.length){ c.innerHTML='<div class="empty"><span class="ic">🎵</span>Les premières créations musicales arrivent bientôt.</div>'; return; }
+  c.innerHTML='<div class="player" id="pl"><div class="now"><div class="disc"></div><div class="meta"><div class="tt" id="pt">—</div><div class="stt">TRUvector · créations musicales</div></div></div>'+
+    '<div class="ctrls"><button id="prev" aria-label="Précédent">⏮</button><button class="play" id="pp" aria-label="Lecture">▶</button><button id="next" aria-label="Suivant">⏭</button>'+
+    '<label class="bg"><input type="checkbox" id="bg"> lecture en fond (tout le site)</label></div></div>'+
+    '<ul class="playlist" id="list"></ul><audio id="audio" preload="auto"></audio>';
+  var audio=document.getElementById('audio'), pl=document.getElementById('pl'), pp=document.getElementById('pp'),
+      pt=document.getElementById('pt'), list=document.getElementById('list'), bg=document.getElementById('bg'), i=0;
+  tracks.forEach(function(t,idx){ var li=document.createElement('li'); li.innerHTML='<span class="n">'+('0'+(idx+1)).slice(-2)+'</span>'+esc(t.title||t.src); li.onclick=function(){ go(idx,true); }; list.appendChild(li); });
+  function mark(){ for(var k=0;k<list.children.length;k++){ list.children[k].classList.toggle('active',k===i); } }
+  function persist(){ set('tv_music_i',String(i)); set('tv_music_t',String(audio.currentTime||0)); set('tv_music_vol',String(audio.volume)); }
+  function go(idx,play){ i=(idx+tracks.length)%tracks.length; audio.src='assets/'+tracks[i].src; pt.textContent=tracks[i].title||tracks[i].src; mark(); set('tv_music_i',String(i)); if(play){ audio.play().catch(function(){}); } }
+  function setPlay(on){ pl.classList.toggle('playing',on); pp.textContent=on?'⏸':'▶'; set('tv_music_playing',on?'1':'0'); }
+  audio.addEventListener('play',function(){setPlay(true);});
+  audio.addEventListener('pause',function(){setPlay(false);});
+  audio.addEventListener('ended',function(){ go(i+1,true); });
+  audio.addEventListener('timeupdate',function(){ set('tv_music_t',String(audio.currentTime||0)); });
+  pp.onclick=function(){ if(audio.paused){ audio.play().catch(function(){}); } else { audio.pause(); } };
+  document.getElementById('prev').onclick=function(){ go(i-1,true); };
+  document.getElementById('next').onclick=function(){ go(i+1,true); };
+
+  // reprise de l'état partagé (venant d'une autre page)
+  var si=parseInt(ss('tv_music_i')||'0',10); if(!isNaN(si)&&si>=0&&si<tracks.length) i=si;
+  var st=parseFloat(ss('tv_music_t')||'0')||0;
+  var sv=parseFloat(ss('tv_music_vol')||'0.9'); if(!isNaN(sv)) audio.volume=sv;
+  go(i,false);
+  audio.addEventListener('loadedmetadata',function(){ try{ if(st>0 && st<audio.duration) audio.currentTime=st; }catch(err){} });
+
+  // "lecture en fond (tout le site)"
+  bg.checked = ss('tv_music_on')==='1';
+  bg.onchange=function(){ set('tv_music_on', bg.checked?'1':'0'); if(bg.checked){ audio.play().catch(function(){}); } };
+
+  if(ss('tv_music_on')==='1' && ss('tv_music_playing')!=='0'){ audio.play().catch(function(){}); }
+  document.addEventListener('tv:unlocked',function(){ if(bg.checked){ audio.play().catch(function(){}); } });
+  window.addEventListener('pagehide',persist);
+});
+</script>
+<script src="../assets/js/player.js"></script>
+</body>
+</html>

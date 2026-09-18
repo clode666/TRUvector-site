@@ -6,6 +6,15 @@
     "method": "soft",
     "code": "truvector2026",
     "adminCode": "truvector-admin",
+    "sections": {
+      "logiciels": "logiciels-2026",
+      "ebooks": "ebooks-2026",
+      "musique": "musique-2026",
+      "articles": "articles-2026",
+      "dons": "dons-2026",
+      "concours": "concours-2026",
+      "modules": "modules-2026"
+    },
     "users": [
       { "email": "tristan@truvector.dev", "role": "admin" }
     ]
@@ -19,5 +28,25 @@
     { "slug": "coeur-aurore", "title": "Cœur d'aurore", "format": "square", "visible": true, "download": true },
     { "slug": "atelier-etoiles", "title": "L'atelier des étoiles", "format": "square", "visible": true, "download": true },
     { "slug": "portrait-matriciel", "title": "Portrait matriciel", "format": "square", "visible": true, "download": true }
-  ]
+  ],
+  "catalog": {
+    "logiciels": [
+      { "title": "GrowVault", "desc": "Suivi de croissance d'organismes vivants — le projet phare TRUvector.", "url": "https://github.com/clode666", "badge": "Logiciel" },
+      { "title": "ATLAS", "desc": "Plateforme d'intelligence documentaire.", "url": "https://github.com/clode666", "badge": "Logiciel" },
+      { "title": "IronLock", "desc": "Système de licence et de liaison machine pour protéger tes logiciels.", "url": "https://github.com/clode666", "badge": "Sécurité" },
+      { "title": "Universal Installer", "desc": "Gestionnaire d'archives avec moteur de compression UXC (.uxc).", "url": "https://github.com/clode666", "badge": "Outil" },
+      { "title": "Universal PDF Converter", "desc": "Conversion de 32+ formats depuis et vers le PDF.", "url": "https://github.com/clode666", "badge": "Outil" },
+      { "title": "AutomationSequence", "desc": "Automatisation d'actions Windows (clics, OCR, SSH) avec tableau de bord web.", "url": "https://github.com/clode666", "badge": "Outil" },
+      { "title": "UniversalCasting", "desc": "MediaCenter open-source pour diffuser vers TV et navigateurs.", "url": "https://github.com/clode666", "badge": "Média" }
+    ],
+    "ebooks": [],
+    "musique": [],
+    "articles": [],
+    "modules": []
+  },
+  "dons": {
+    "intro": "TRUvector est un projet indépendant. Ton soutien aide à créer de nouveaux logiciels, e-books et créations libres.",
+    "links": []
+  },
+  "concours": []
 }
