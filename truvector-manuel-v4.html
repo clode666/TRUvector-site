@@ -195,7 +195,7 @@
       <li><code>logiciels/</code> — catalogue (pré-rempli, éditable via <code>config.catalog.logiciels</code>).</li>
       <li><code>ebooks/</code> — e-books et publications.</li>
       <li><code>musique/</code> — <strong>lecteur audio</strong> ; fichiers dans <code>musique/assets/</code>, déclarés dans <code>config.catalog.musique</code>. La case <strong>« lecture en fond (tout le site) »</strong> fait suivre la musique sur toutes les pages (mini-lecteur en bas à droite ; léger blanc au changement de page, un clic sur ▶ parfois nécessaire après la 1re navigation). <strong>Deux morceaux de démo</strong> sont inclus : ouvre la page Musique et presse ▶ pour voir le lecteur ; remplace-les dans <code>musique/assets/</code> + <code>config.catalog.musique</code>.</li>
-      <li><code>articles/</code> — notes et tutoriels.</li>
+      <li><code>articles/</code> — <strong>blog public</strong> (60 articles, recherche, indexable) ; billets dans <code>articles/posts/</code>. Réintégrés de l'ancien site, ré-habillés v4.</li>
       <li><code>dons/</code> — page de soutien (<code>config.dons.links</code>).</li>
       <li><code>concours/</code> — jeux-concours (<code>config.concours</code>).</li>
       <li><code>modules/</code> — modules interactifs (<code>config.catalog.modules</code>).</li>
@@ -225,7 +225,7 @@
 │   └── index.html             <span class="c"># politique de sécurité (SSI)</span>
 ├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
 │   └── index.html × 7         <span class="c"># 7 sections, un code d'accès distinct chacune</span>
-│       └── musique/assets/    <span class="c"># fichiers audio (.mp3, .ogg…)</span>
+│       └── musique/assets/    <span class="c"># audio ; articles/ contient aussi posts/ = 60 articles</span>
 ├── admin/
 │   └── index.html             <span class="p"># panneau d'administration (paramètres + droits)</span>
 ├── assets/
@@ -242,6 +242,7 @@
 ├── _headers                   <span class="c"># sécurité + cache (Cloudflare Pages)</span>
 ├── _redirects                 <span class="c"># redirections optionnelles</span>
 ├── wrangler.toml              <span class="p"># déploiement Cloudflare statique (sans build)</span>
+├── BingSiteAuth.xml           <span class="c"># vérification Bing Webmaster</span>
 ├── .well-known/security.txt   <span class="c"># contact sécurité (RFC 9116)</span>
 ├── robots.txt · sitemap.xml
 └── README.md</pre></div>
