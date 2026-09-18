@@ -58,7 +58,7 @@ Quatre pages complètes, renseignées avec l'identité réelle et reliées entre
 - `securite/` — politique de sécurité (SSI) + divulgation responsable, avec `/.well-known/security.txt`.
 
 ### Sections thématiques (accès par code, un par page)
-Accessibles depuis le **menu déroulant « Sections »** en haut à droite (présent sur toutes les pages) et depuis le hub de l'accueil. Chacune a **son propre code** (dans `config.access.sections`) :
+Accessibles depuis le **menu déroulant « Sections »** (en haut à droite, sur toutes les pages), organisé en sous-menus *Créations* et *Communauté*. Chacune a **son propre code** (dans `config.access.sections`) :
 - `logiciels/` — catalogue de logiciels (pré-rempli, éditable dans `config.catalog.logiciels`).
 - `ebooks/` — e-books et publications.
 - `musique/` — **lecteur audio** ; fichiers dans `musique/assets/`, déclarés dans `config.catalog.musique`. La case **« lecture en fond (tout le site) »** fait suivre la musique sur **toutes les pages** via un mini-lecteur en bas à droite (léger blanc au changement de page ; un clic sur ▶ peut être nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs).
