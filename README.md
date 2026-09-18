@@ -42,6 +42,7 @@ Tout le comportement éditable (statut, date d'ouverture, accès, droits, galeri
 - Héros : triskèle animé, logo néon, baseline *« Where Code Meets Creativity »*.
 - **Compte à rebours** vers la date d'ouverture, piloté par `config.json`.
 - **Porte de lancement** : le bouton « Entrer dans la galerie » apparaît automatiquement au jour J (statut `auto`), ou tout de suite en statut `open`.
+- **Vitrine des sections** : grandes cartes vers les 8 espaces (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir), bande « points forts » romantico·geek, section créateur et bandeau final, avec apparitions au scroll.
 
 ### Galerie — `galerie/index.html` (protégée)
 - **Porte d'accès** (code) au chargement — voir §6.

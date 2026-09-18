@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRUvector.dev — Where Code Meets Creativity</title>
-<meta name="description" content="TRUvector.dev — créations graphiques romantico·geek en libre téléchargement. Ouverture le 21 septembre 2026.">
+<meta name="description" content="TRUvector.dev — atelier romantico·geek : créations graphiques, logiciels, e-books, musique. Ouverture le 21 septembre 2026.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta property="og:title" content="TRUvector.dev — Grand Opening">
 <meta property="og:description" content="Where Code Meets Creativity. Ouverture le 21 septembre 2026.">
@@ -16,15 +16,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/tokens.css?v=5">
 <style>
-  header.hero{position:relative;padding:86px 0 60px;text-align:center;overflow:hidden}
+  /* ---------- HERO ---------- */
+  header.hero{position:relative;padding:88px 0 64px;text-align:center;overflow:hidden}
   .hero-inner{position:relative;z-index:2}
-  .hero .triskele{width:104px;height:104px;margin:0 auto 22px;animation:spin 42s linear infinite}
+  .hero .triskele{width:108px;height:108px;margin:0 auto 22px;animation:spin 42s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .hero .wordmark{font-size:clamp(34px,8vw,60px)}
-  .hero .kicker{margin:8px 0 0}
-  .lede{max-width:52ch;margin:20px auto 0;color:var(--texte-2);font-size:16.5px}
+  .hero .wordmark{font-size:clamp(36px,8.5vw,64px)}
+  .hero .kicker{margin:10px 0 0}
+  .lede{max-width:54ch;margin:20px auto 0;color:var(--texte-2);font-size:16.5px}
   .lede b{color:var(--texte);font-weight:600}
+  .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
 
+  /* ---------- COUNTDOWN ---------- */
   .countdown{margin:34px auto 0;max-width:540px}
   .cd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--texte-3);text-transform:uppercase;margin-bottom:12px}
   #cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -32,26 +35,61 @@
   .cd-num{font-family:var(--mono);font-weight:700;font-size:clamp(28px,7vw,42px);color:var(--menthe);text-shadow:0 0 16px rgba(52,245,197,.35);line-height:1}
   .cd-unit{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--texte-3);text-transform:uppercase;margin-top:8px}
   .cd-open{font-family:var(--mono);color:var(--aurore-g);font-size:18px;padding:16px;border:1px solid rgba(89,227,154,.4);border-radius:14px;background:rgba(89,227,154,.08);grid-column:1/-1}
-
-  .launch-gate{margin-top:26px;min-height:52px}
+  .launch-gate{margin-top:22px;min-height:48px}
   .launch-gate .enter-btn{display:none}
   .launch-gate[data-open="1"] .enter-btn{display:inline-flex}
   .launch-gate[data-open="1"] .soon-note{display:none}
   .soon-note{font-family:var(--mono);font-size:12.5px;color:var(--texte-3)}
 
-  .teaser{padding:26px 0 46px}
-  .teaser-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-  .teaser-grid .card .ic{font-size:22px}
-  .teaser-grid .card h3{margin:10px 0 6px;font-size:16px;font-weight:600}
-  .teaser-grid .card p{margin:0;color:var(--texte-2);font-size:14px}
+  /* ---------- SECTIONS UTILS ---------- */
+  .eyebrow{font-family:var(--mono);font-size:12px;color:var(--menthe);letter-spacing:2px}
+  h2.sec{font-size:clamp(24px,5vw,34px);margin:8px 0 4px;font-weight:700;letter-spacing:-.4px}
+  h2.sec .g{background:linear-gradient(90deg,var(--menthe),var(--aurore-v-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--texte-2);margin:0 0 26px;font-size:15.5px}
+  section.blk{padding:56px 0;position:relative;z-index:2}
 
-  .maker{padding:20px 0 60px}
-  .maker-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-  .maker-card img{width:88px;height:88px;border-radius:16px;border:1px solid var(--bord-fort);box-shadow:0 0 22px rgba(52,245,197,.15)}
+  /* ---------- SHOWCASE (les sections) ---------- */
+  .showcase{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+  .sc-card{--a:var(--menthe);position:relative;display:flex;flex-direction:column;gap:12px;background:var(--panneau-2);
+    border:1px solid var(--bord);border-radius:18px;padding:22px 20px;color:var(--texte);overflow:hidden;
+    transition:transform .18s ease,border-color .2s ease,box-shadow .25s ease}
+  .sc-card:nth-child(4n+2){--a:var(--aurore-v)} .sc-card:nth-child(4n+3){--a:var(--ambre)} .sc-card:nth-child(4n+4){--a:var(--aurore-g)}
+  .sc-card::after{content:"";position:absolute;inset:-40% -40% auto auto;width:70%;height:70%;background:radial-gradient(circle,var(--a),transparent 70%);opacity:.10;filter:blur(20px);pointer-events:none;transition:opacity .25s}
+  .sc-card:hover{transform:translateY(-4px);border-color:var(--a);box-shadow:0 12px 34px rgba(0,0,0,.4),0 0 26px color-mix(in srgb,var(--a) 30%,transparent);text-decoration:none}
+  .sc-card:hover::after{opacity:.22}
+  .sc-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;
+    background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 45%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--a) 22%,transparent)}
+  .sc-card h3{margin:0;font-size:18px;font-weight:600}
+  .sc-card p{margin:0;color:var(--texte-2);font-size:14px;flex:1;line-height:1.55}
+  .sc-go{font-family:var(--mono);font-size:12.5px;color:var(--a);display:inline-flex;align-items:center;gap:6px}
+  .sc-badge{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--texte-3);border:1px solid var(--bord);border-radius:999px;padding:3px 8px}
+
+  /* ---------- FEATURES ---------- */
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .feat{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:20px}
+  .feat .fi{font-size:22px}
+  .feat h3{margin:10px 0 6px;font-size:16px;font-weight:600}
+  .feat p{margin:0;color:var(--texte-2);font-size:14px}
+
+  /* ---------- MAKER ---------- */
+  .maker-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panneau-2);border:1px solid var(--bord);border-radius:18px;padding:22px}
+  .maker-card img{width:92px;height:92px;border-radius:16px;border:1px solid var(--bord-fort);box-shadow:0 0 22px rgba(52,245,197,.15)}
   .maker-card .txt{flex:1;min-width:220px}
-  .maker-card h3{margin:0 0 4px;font-size:17px}
+  .maker-card h3{margin:0 0 4px;font-size:18px}
   .maker-card p{margin:0;color:var(--texte-2);font-size:14.5px}
-  .maker-card .links{margin-top:10px;font-family:var(--mono);font-size:13px;display:flex;gap:16px;flex-wrap:wrap}
+  .maker-card .links{margin-top:12px;font-family:var(--mono);font-size:13px;display:flex;gap:18px;flex-wrap:wrap}
+
+  /* ---------- CTA BAND ---------- */
+  .cta{position:relative;overflow:hidden;border:1px solid var(--bord-fort);border-radius:22px;padding:44px 28px;text-align:center;
+    background:radial-gradient(700px 300px at 30% -20%,rgba(52,245,197,.14),transparent 60%),radial-gradient(700px 300px at 80% 120%,rgba(177,74,237,.16),transparent 60%),var(--panneau-2)}
+  .cta h2{font-size:clamp(24px,4.6vw,32px);margin:0 0 8px;font-weight:700}
+  .cta p{color:var(--texte-2);margin:0 0 22px}
+  .cta .date{font-family:var(--mono);color:var(--menthe-soft)}
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.hero .triskele{animation:none}}
 </style>
 </head>
 <body>
@@ -63,8 +101,6 @@
   </a>
   <div class="nav-links">
     <a href="index.html" aria-current="page">Accueil</a>
-    <a href="#sections">Sections</a>
-    <a href="galerie/">Galerie</a>
     <a href="mentions-legales/">Légal</a>
   </div>
 </div></nav>
@@ -73,10 +109,10 @@
   <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
   <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
   <div class="hero-inner wrap">
-    <svg class="triskele" viewBox="0 0 200 200" role="img" aria-label="Triskèle TRUvector"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <h1 class="wordmark"><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></h1>
     <p class="kicker">WHERE CODE MEETS CREATIVITY</p>
-    <p class="lede">Un atelier <b>romantico·geek</b> où le code rencontre l'art. Créations graphiques en libre téléchargement, aurores et univers fantastiques. <b>Ouverture le 21 septembre 2026.</b></p>
+    <p class="lede">Un atelier <b>romantico·geek</b> où le code rencontre l'art : créations graphiques en libre téléchargement, logiciels, e-books, musique et bien plus — sous des aurores et des univers fantastiques. <b>Ouverture le 21 septembre 2026.</b></p>
 
     <div class="countdown">
       <div class="cd-label">Ouverture du site — 21 septembre 2026</div>
@@ -92,34 +128,67 @@
       <a class="btn enter-btn" href="galerie/">Entrer dans la galerie →</a>
       <p class="soon-note">La galerie ouvre le jour J. Reviens le 21/09 🌌</p>
     </div>
+
+    <div class="hero-cta">
+      <a class="btn" href="#sections">Explorer les sections</a>
+      <a class="btn-ghost btn" href="galerie/">Voir la galerie</a>
+    </div>
   </div>
 </header>
 
 <main>
-  <section class="teaser wrap">
-    <div class="eyebrow">// ce qui t'attend</div>
-    <h2>Un lieu, trois promesses</h2>
-    <p class="sub">Simple, beau, à toi.</p>
-    <div class="teaser-grid">
-      <div class="card"><div class="ic">🎨</div><h3>Créations en libre accès</h3><p>Une galerie d'œuvres romantico·geek à télécharger en haute définition.</p></div>
-      <div class="card"><div class="ic">🔑</div><h3>Accès simple</h3><p>Une porte d'entrée légère : tu entres, tu profites, rien de compliqué.</p></div>
-      <div class="card"><div class="ic">🌌</div><h3>Un univers qui grandit</h3><p>De nouvelles créas, régulièrement, dans le même esprit d'aurores et d'étoiles.</p></div>
+  <!-- L'UNIVERS / SECTIONS -->
+  <section class="blk wrap" id="sections">
+    <div class="eyebrow reveal">// l'univers</div>
+    <h2 class="sec reveal">Huit espaces, un seul <span class="g">univers</span></h2>
+    <p class="sub reveal">Chaque espace a son propre accès. Explore, télécharge, écoute, participe.</p>
+    <div class="showcase">
+      <a class="sc-card reveal" href="galerie/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🎨</div><h3>Galerie</h3><p>Créations graphiques romantico·geek en libre téléchargement, en haute définition.</p><span class="sc-go">Entrer →</span></a>
+      <a class="sc-card reveal" href="logiciels/"><span class="sc-badge">accès dédié</span><div class="sc-ic">💾</div><h3>Logiciels</h3><p>Mes applications et outils, proposés sous licence d'utilisation.</p><span class="sc-go">Découvrir →</span></a>
+      <a class="sc-card reveal" href="ebooks/"><span class="sc-badge">accès dédié</span><div class="sc-ic">📖</div><h3>E-books</h3><p>Publications numériques et guides à lire et à garder.</p><span class="sc-go">Feuilleter →</span></a>
+      <a class="sc-card reveal" href="musique/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🎵</div><h3>Musique</h3><p>Créations audio à écouter — et à laisser jouer en fond sur tout le site.</p><span class="sc-go">Écouter →</span></a>
+      <a class="sc-card reveal" href="articles/"><span class="sc-badge">accès dédié</span><div class="sc-ic">📝</div><h3>Articles</h3><p>Notes, tutoriels et réflexions autour du code et de la création.</p><span class="sc-go">Lire →</span></a>
+      <a class="sc-card reveal" href="modules/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🧩</div><h3>Modules interactifs</h3><p>Des outils et expériences à manipuler directement dans le navigateur.</p><span class="sc-go">Manipuler →</span></a>
+      <a class="sc-card reveal" href="concours/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🏆</div><h3>Concours</h3><p>Jeux-concours et défis créatifs pour la communauté.</p><span class="sc-go">Participer →</span></a>
+      <a class="sc-card reveal" href="dons/"><span class="sc-badge">accès dédié</span><div class="sc-ic">💚</div><h3>Soutenir</h3><p>Un coup de pouce pour faire grandir le projet TRUvector.</p><span class="sc-go">Soutenir →</span></a>
     </div>
   </section>
 
+  <!-- POINTS FORTS -->
+  <section class="blk wrap">
+    <div class="eyebrow reveal">// pourquoi tu vas aimer</div>
+    <h2 class="sec reveal">L'esprit <span class="g">romantico·geek</span></h2>
+    <p class="sub reveal">Du code, de l'art, et une âme.</p>
+    <div class="features">
+      <div class="feat reveal"><div class="fi">🌌</div><h3>Un univers cohérent</h3><p>Aurores, triskèle néon, guirlandes : une direction artistique soignée du début à la fin.</p></div>
+      <div class="feat reveal"><div class="fi">⬇️</div><h3>Créations en libre accès</h3><p>Des œuvres graphiques à télécharger librement, en haute définition.</p></div>
+      <div class="feat reveal"><div class="fi">🎧</div><h3>Musique en fond</h3><p>Lance une nappe et laisse-la te suivre de page en page pendant ta visite.</p></div>
+      <div class="feat reveal"><div class="fi">🔑</div><h3>Un accès par espace</h3><p>Chaque section a son propre code — simple, clair, à ta main.</p></div>
+    </div>
+  </section>
 
-  <section class="maker wrap">
-    <div class="eyebrow">// le créateur</div>
-    <div class="card maker-card" style="margin-top:12px">
-      <img src="assets/img/createur.webp" alt="Portrait stylisé du créateur de TRUvector" width="88" height="88" loading="lazy">
+  <!-- LE CRÉATEUR -->
+  <section class="blk wrap">
+    <div class="eyebrow reveal">// le créateur</div>
+    <div class="maker-card reveal" style="margin-top:12px">
+      <img src="assets/img/createur.webp" alt="Portrait stylisé du créateur de TRUvector" width="92" height="92" loading="lazy">
       <div class="txt">
         <h3>TRUvector</h3>
-        <p>Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e-books et créations graphiques.</p>
+        <p>Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e-books, musique et créations graphiques.</p>
         <div class="links">
           <a href="https://github.com/clode666" rel="me noopener" target="_blank">↗ github.com/clode666</a>
           <a href="mentions-legales/">↗ Mentions légales</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="blk wrap">
+    <div class="cta reveal">
+      <h2>Le compte à rebours a commencé</h2>
+      <p>Rendez-vous le <span class="date">21 septembre 2026</span> pour l'ouverture complète.</p>
+      <a class="btn" href="#sections">Explorer l'univers</a>
     </div>
   </section>
 </main>
@@ -128,7 +197,7 @@
   <div class="wrap">
     <div class="hr" style="margin-bottom:28px"></div>
     <p class="fm">$ truvector open --date 2026-09-21 --style romantico-geek</p>
-    <p>© 2026 TRUvector.dev · Where Code Meets Creativity</p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard · Where Code Meets Creativity</p>
     <p class="foot-legal"><a href="mentions-legales/">Mentions légales</a> · <a href="cgv/">CGV</a> · <a href="confidentialite/">Confidentialité</a> · <a href="cookies/">Cookies</a> · <a href="securite/">Sécurité</a></p>
   </div>
 </footer>
@@ -137,5 +206,13 @@
 <script src="assets/js/countdown.js"></script>
 <script src="assets/js/player.js?v=2"></script>
 <script src="assets/js/nav.js?v=3"></script>
+<script>
+  (function(){
+    var els=[].slice.call(document.querySelectorAll('.reveal'));
+    if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
+    var io=new IntersectionObserver(function(en){ en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); },{threshold:.12});
+    els.forEach(function(e){ io.observe(e); });
+  })();
+</script>
 </body>
 </html>
