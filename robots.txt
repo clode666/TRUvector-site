@@ -5,7 +5,6 @@ Disallow: /admin/
 Disallow: /modules/
 Disallow: /concours/
 Disallow: /dons/
-Disallow: /articles/
 Disallow: /musique/
 Disallow: /ebooks/
 Disallow: /logiciels/

@@ -63,7 +63,7 @@ Accessibles depuis le **menu déroulant « Sections »** (en haut à droite, sur
 - `logiciels/` — catalogue de logiciels (pré-rempli, éditable dans `config.catalog.logiciels`).
 - `ebooks/` — e-books et publications.
 - `musique/` — **lecteur audio** ; fichiers dans `musique/assets/`, déclarés dans `config.catalog.musique`. La case **« lecture en fond (tout le site) »** fait suivre la musique sur **toutes les pages** via un mini-lecteur en bas à droite (léger blanc au changement de page ; un clic sur ▶ peut être nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs). **Deux morceaux de démo** sont inclus : ouvre la page Musique et presse ▶ pour voir le lecteur ; remplace-les dans `musique/assets/` + `config.catalog.musique`.
-- `articles/` — notes et tutoriels.
+- `articles/` — **blog public** (60 articles, recherche, **indexable**) ; les billets sont dans `articles/posts/`. Réintégrés depuis l'ancien site et ré-habillés en v4.
 - `dons/` — page de soutien (liens configurables dans `config.dons.links`).
 - `concours/` — jeux-concours (`config.concours`).
 - `modules/` — modules interactifs (`config.catalog.modules`).
@@ -96,7 +96,7 @@ truvector.dev/
 │   └── index.html             # politique de sécurité (SSI)
 ├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
 │   └── index.html × 7         # 7 sections, chacune un code d'accès distinct
-│       └── (musique/assets/)  # y déposer les fichiers audio (.mp3, .ogg…)
+│       └── (musique/assets/)  # audio ; articles/ contient aussi posts/ = 60 articles publics
 ├── admin/
 │   └── index.html             # panneau d'administration (paramètres + droits)
 ├── assets/
@@ -113,6 +113,7 @@ truvector.dev/
 ├── _headers                   # sécurité + cache (Cloudflare Pages)
 ├── _redirects                 # redirections optionnelles
 ├── wrangler.toml              # déploiement Cloudflare statique (sans build)
+├── BingSiteAuth.xml           # vérification Bing Webmaster
 ├── .well-known/security.txt   # contact sécurité (RFC 9116)
 ├── robots.txt · sitemap.xml
 └── README.md
@@ -194,7 +195,7 @@ Gratuit ≤ 50 utilisateurs, sans code, connexion par code e-mail à usage uniqu
 Codes définis dans `config.json` (ou via le panneau d'admin) :
 - `access.code` → porte de la **galerie** (défaut `truvector2026`) ;
 - `access.adminCode` → porte de l'**admin** (défaut `truvector-admin`).
-- `access.sections.<nom>` → un code par section (logiciels, ebooks, musique, articles, dons, concours, modules), éditables dans le panneau d'admin (bloc « Sections & codes »).
+- `access.sections.<nom>` → un code par section (logiciels, ebooks, musique, dons, concours, modules), éditables dans le panneau d'admin. **Exception : `articles/` est public** (blog indexable, sans code).
 
 > ⚠️ Le code est visible dans la source : filtre « doux », pas une sécurité réelle. Pour du sérieux → option A.
 
