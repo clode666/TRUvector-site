@@ -22,6 +22,24 @@ Le **blog (articles)** et les pages légales restent **publics** dans les deux c
 
 ---
 
+## 🛠️ Cockpit d'administration (/admin)
+
+`/admin` est le poste de pilotage complet (protégé par code). Il édite **tout le contenu** — Général, Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Dons, Accès — et **exporte un `config.json`**.
+
+**Workflow :**
+1. Ouvre `/admin` (code par défaut : `truvector-admin`).
+2. **Importer config.json** → charge `_v5-build/src/config.json`.
+3. Édite : ajoute / retire / réordonne, **uploade images & audio** (intégrés en base64).
+4. **Exporter config.json** → remplace `_v5-build/src/config.json`.
+5. `node _v5-build/build.mjs open` (public) — ou `node _v5-build/build.mjs` (coffres chiffrés).
+6. Committe / redeploie **`truvector.dev/`**.
+
+- **Articles** : un nouvel article (avec contenu) est généré en `articles/posts/<slug>.html` par le build ; les articles importés restent référencés par leur `url`.
+- **Médias** : les images/audios uploadés sont intégrés au `config.json` (base64) — aucun fichier séparé à gérer.
+- « Aperçu local » conserve ton travail dans le navigateur entre deux sessions.
+
+---
+
 ## Sommaire
 1. [Vue d'ensemble](#1-vue-densemble)
 2. [Contenu du site](#2-contenu-du-site)

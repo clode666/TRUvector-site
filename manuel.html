@@ -126,6 +126,17 @@
 
 <main class="wrap">
 
+  <section id="s0ck">
+    <h2 class="s"><span class="n">★</span> Cockpit d'administration (/admin)</h2>
+    <p class="lead"><code>/admin</code> est le poste de pilotage complet (protégé par code) : il édite <strong>tout le contenu</strong> et exporte un <code>config.json</code>.</p>
+    <div class="block"><div class="lbl">workflow</div><pre>1. /admin  (code par défaut : truvector-admin)
+2. Importer config.json  ← _v5-build/src/config.json
+3. Éditer (galerie, articles, concours, dons… + upload images/audio)
+4. Exporter config.json  → remplace _v5-build/src/config.json
+5. <span class="g">node _v5-build/build.mjs open</span>   (public)  |  <span class="g">node _v5-build/build.mjs</span> (coffres)
+6. committer / déployer truvector.dev/</pre></div>
+    <p>Un nouvel <strong>article</strong> (avec contenu) est généré en <code>articles/posts/&lt;slug&gt;.html</code>. Les images/audios uploadés sont intégrés au <code>config.json</code> (base64).</p>
+  </section>
   <section id="s0v5">
     <h2 class="s"><span class="n">v5</span> Accès : deux modes (sans Cloudflare)</h2>
     <p class="lead">Le site se génère en deux modes via <code>_v5-build/build.mjs</code>.</p>
