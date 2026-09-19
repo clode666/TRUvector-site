@@ -106,18 +106,19 @@
   }
   function music(){
     var pl=content.querySelector('#tvpl'); if(!pl) return;
-    var srcsEl=content.querySelector('#tvsrcs'); var srcs=[]; try{ srcs=JSON.parse(srcsEl.textContent); }catch(e){}
-    var audio=content.querySelector('#tvaudio'), pp=content.querySelector('#tvpp'), tt=content.querySelector('#tvtt'),
-        list=content.querySelector('#tvlist'), items=content.querySelectorAll('#tvlist li'), i=0;
-    function mark(){ items.forEach(function(li,k){ li.classList.toggle('active',k===i); }); }
-    function load(idx,play){ i=(idx+srcs.length)%srcs.length; audio.src=srcs[i]||''; tt.textContent=(items[i]?items[i].textContent.replace(/^\d+/,'').trim():''); mark(); if(play) audio.play().catch(function(){}); }
+    var srcs=[]; try{ srcs=JSON.parse(content.querySelector('#tvsrcs').textContent); }catch(e){ srcs=[]; }
+    if(!srcs.length) return;
+    var audio=content.querySelector('#tvaudio'), pp=content.querySelector('#tvpp'), tt=content.querySelector('#tvtt'), items=content.querySelectorAll('#tvlist li'), i=0;
+    function mark(){ for(var k=0;k<items.length;k++) items[k].classList.toggle('active',k===i); }
+    function title(k){ return items[k]?(items[k].getAttribute('data-title')||items[k].textContent):''; }
+    function load(idx,play){ i=((idx%srcs.length)+srcs.length)%srcs.length; audio.src=srcs[i]; tt.textContent=title(i); mark(); if(play){ var q=audio.play(); if(q&&q.catch) q.catch(function(){}); } }
     function setPlay(on){ pl.classList.toggle('playing',on); pp.textContent=on?'⏸':'▶'; }
     audio.addEventListener('play',function(){setPlay(true);}); audio.addEventListener('pause',function(){setPlay(false);});
     audio.addEventListener('ended',function(){ load(i+1,true); });
-    pp.onclick=function(){ if(audio.paused) audio.play().catch(function(){}); else audio.pause(); };
-    content.querySelector('#tvprev').onclick=function(){ load(i-1,true); };
-    content.querySelector('#tvnext').onclick=function(){ load(i+1,true); };
-    items.forEach(function(li,k){ li.style.cursor='pointer'; li.onclick=function(){ load(k,true); }; });
+    pp.addEventListener('click',function(){ if(audio.paused) load(i,true); else audio.pause(); });
+    content.querySelector('#tvprev').addEventListener('click',function(){ load(i-1,true); });
+    content.querySelector('#tvnext').addEventListener('click',function(){ load(i+1,true); });
+    for(var k=0;k<items.length;k++){ (function(k){ items[k].style.cursor='pointer'; items[k].addEventListener('click',function(){ load(k,true); }); })(k); }
     load(0,false);
   }
 })();

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurora Weaver — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .tool{max-width:900px;margin:0 auto;padding:8px 22px 60px}
+  .tool-hero{text-align:center;padding:36px 0 8px}
+  .tool-hero .triskele{width:52px;height:52px;margin:0 auto 10px}
+  .tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .tool-hero p{color:var(--texte-2);margin:8px auto 0;max-width:52ch;font-size:15px}
+  .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 12px}
+  .back:hover{color:var(--menthe);text-decoration:none}
+  .stage{border:1px solid var(--bord);border-radius:16px;overflow:hidden;background:#04070c;box-shadow:0 0 30px rgba(52,245,197,.08)}
+  canvas{width:100%;display:block;aspect-ratio:16/9}
+  .ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:16px;margin:14px 0}
+  .f label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-2);text-transform:uppercase;margin-bottom:6px}
+  input[type=range]{width:100%;accent-color:var(--menthe)}
+  select{width:100%;font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:9px 11px}
+  .toggles{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:13px;color:var(--texte-2)}
+  .toggles label{display:flex;gap:7px;align-items:center}
+  .actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Aurora <span class="dev">Weaver</span></h1>
+  <p>Compose ton aurore romantico·geek, puis télécharge‑la en fond d'écran.</p>
+</header>
+
+<main class="tool">
+  <a class="back" href="../">← Modules</a>
+  <div class="stage"><canvas id="cv" width="1600" height="900"></canvas></div>
+  <div class="ctl">
+    <div class="f"><label>Palette</label><select id="pal">
+      <option value="mv">Menthe · Violet</option>
+      <option value="ga">Vert · Ambre</option>
+      <option value="full">Aurore complète</option>
+      <option value="ice">Glacier</option>
+    </select></div>
+    <div class="f"><label>Vitesse</label><input type="range" id="speed" min="0" max="100" value="45"></div>
+    <div class="f"><label>Intensité</label><input type="range" id="inten" min="20" max="100" value="70"></div>
+    <div class="f"><label>Ondulation</label><input type="range" id="wave" min="10" max="100" value="55"></div>
+  </div>
+  <div class="ctl" style="grid-template-columns:1fr">
+    <div class="toggles">
+      <label><input type="checkbox" id="stars" checked> étoiles</label>
+      <label><input type="checkbox" id="heart" checked> cœur d'aurore</label>
+      <label><input type="checkbox" id="city"> ligne d'horizon</label>
+    </div>
+    <div class="actions"><button class="btn btn-ghost" id="shuffle">↻ Aléatoire</button><button class="btn" id="dl">↓ Télécharger en PNG</button></div>
+  </div>
+</main>
+
+<script src="../../assets/js/nav.js?v=3"></script>
+<script>
+(function(){
+  var cv=document.getElementById('cv'), ctx=cv.getContext('2d'), W=cv.width, H=cv.height, t=0;
+  var PAL={ mv:['#34f5c5','#b14aed'], ga:['#59e39a','#f4c56b'], full:['#34f5c5','#59e39a','#b14aed'], ice:['#7ff0ff','#8ff3d9','#c98bf5'] };
+  var stars=[]; for(var i=0;i<180;i++)stars.push({x:Math.random()*W,y:Math.random()*H*0.7,r:Math.random()*1.6+0.3,a:Math.random()*0.7+0.2});
+  var $=function(id){return document.getElementById(id);};
+  function hex(c,a){var n=parseInt(c.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function draw(){
+    var cols=PAL[$('pal').value], inten=+$('inten').value/100, wave=+$('wave').value, spd=+$('speed').value/100;
+    ctx.globalCompositeOperation='source-over';
+    var g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#05080e'); g.addColorStop(1,'#0b1220'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+    if($('stars').checked){ for(var s=0;s<stars.length;s++){var st=stars[s]; ctx.globalAlpha=st.a*(0.6+0.4*Math.sin(t*2+s)); ctx.fillStyle='#dff'; ctx.beginPath(); ctx.arc(st.x,st.y,st.r,0,7); ctx.fill();} ctx.globalAlpha=1; }
+    ctx.globalCompositeOperation='lighter';
+    var bands=cols.length*3;
+    for(var b=0;b<bands;b++){
+      var col=cols[b%cols.length]; var baseY=H*(0.18+ (b/bands)*0.5);
+      var amp=(wave/100)*H*0.16*(0.6+0.4*Math.sin(b));
+      var grd=ctx.createLinearGradient(0,baseY-amp-60,0,baseY+140);
+      grd.addColorStop(0,hex(col,0)); grd.addColorStop(0.5,hex(col,0.10*inten)); grd.addColorStop(1,hex(col,0));
+      ctx.fillStyle=grd; ctx.beginPath(); ctx.moveTo(0,H);
+      for(var x=0;x<=W;x+=14){ var y=baseY + amp*Math.sin(x*0.004 + t*spd*1.4 + b*0.7) + amp*0.4*Math.sin(x*0.011 - t*spd + b); ctx.lineTo(x,y); }
+      ctx.lineTo(W,H); ctx.closePath(); ctx.fill();
+    }
+    if($('heart').checked){ drawHeart(W*0.5,H*0.30,H*0.11,cols[0]); }
+    ctx.globalCompositeOperation='source-over';
+    if($('city').checked){ ctx.fillStyle='rgba(4,7,12,.9)'; var bx=0; while(bx<W){var bw=20+Math.random()*46, bh=30+Math.random()*150; ctx.fillRect(bx,H-bh,bw,bh); bx+=bw+6;} }
+  }
+  function drawHeart(cx,cy,s,col){
+    ctx.save(); ctx.translate(cx,cy); ctx.globalCompositeOperation='lighter';
+    for(var pass=0;pass<3;pass++){ ctx.beginPath();
+      for(var a=0;a<=Math.PI*2+0.1;a+=0.08){ var x=16*Math.pow(Math.sin(a),3); var y=-(13*Math.cos(a)-5*Math.cos(2*a)-2*Math.cos(3*a)-Math.cos(4*a));
+        var px=x*(s/16), py=y*(s/16); if(a===0)ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+      ctx.closePath(); ctx.lineWidth=(3-pass)*3+2; ctx.strokeStyle=hex(col,0.10+pass*0.05); ctx.stroke(); }
+    ctx.restore();
+  }
+  function loop(){ t+=0.016; draw(); if(!reduce) requestAnimationFrame(loop); }
+  ['pal','speed','inten','wave','stars','heart','city'].forEach(function(id){$(id).addEventListener('input',function(){ if(reduce)draw(); });});
+  $('shuffle').onclick=function(){ var keys=Object.keys(PAL); $('pal').value=keys[Math.floor(Math.random()*keys.length)]; $('speed').value=20+Math.random()*70|0; $('inten').value=40+Math.random()*60|0; $('wave').value=20+Math.random()*70|0; draw(); };
+  $('dl').onclick=function(){ var a=document.createElement('a'); a.href=cv.toDataURL('image/png'); a.download='truvector-aurora.png'; a.click(); };
+  draw(); if(!reduce) requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

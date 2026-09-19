@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TRUvector.dev — Where Code Meets Creativity</title>
-<meta name="description" content="TRUvector.dev — atelier romantico·geek : créations graphiques, logiciels, e-books, musique. Ouverture le 21 septembre 2026.">
+<meta name="description" content="TRUvector.dev — atelier romantico·geek : créations graphiques, logiciels, e-books, musique, articles et modules interactifs.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
-<meta property="og:title" content="TRUvector.dev — Grand Opening">
-<meta property="og:description" content="Where Code Meets Creativity. Ouverture le 21 septembre 2026.">
+<meta property="og:title" content="TRUvector.dev">
+<meta property="og:description" content="Where Code Meets Creativity.">
 <meta property="og:image" content="assets/img/og-banner.png">
-<meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,178 +16,152 @@
 <link rel="stylesheet" href="assets/css/tokens.css?v=5">
 <style>
   /* ---------- HERO ---------- */
-  header.hero{position:relative;padding:88px 0 64px;text-align:center;overflow:hidden}
-  .hero-inner{position:relative;z-index:2}
-  .hero .triskele{width:108px;height:108px;margin:0 auto 22px;animation:spin 42s linear infinite}
+  header.hero{position:relative;min-height:92vh;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:80px 0 60px}
+  #aurora-cv{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+  .hero .vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 90% at 50% 30%,transparent 40%,rgba(5,8,14,.55) 100%)}
+  .lights{position:absolute;top:14px;left:0;right:0;height:26px;z-index:2;display:flex;justify-content:space-around;padding:0 5%;pointer-events:none}
+  .lights i{width:6px;height:6px;border-radius:50%;background:var(--ambre);box-shadow:0 0 12px 2px rgba(244,197,107,.75);animation:twinkle 3.6s ease-in-out infinite}
+  .lights i:nth-child(2n){animation-delay:.7s;opacity:.6}.lights i:nth-child(3n){animation-delay:1.4s}
+  @keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+  .hero-inner{position:relative;z-index:3;padding:0 22px;transition:transform .2s ease-out}
+  .hero .triskele{width:118px;height:118px;margin:0 auto 24px;animation:spin 46s linear infinite, pulse 5s ease-in-out infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .hero .wordmark{font-size:clamp(36px,8.5vw,64px)}
-  .hero .kicker{margin:10px 0 0}
-  .lede{max-width:54ch;margin:20px auto 0;color:var(--texte-2);font-size:16.5px}
-  .lede b{color:var(--texte);font-weight:600}
-  .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+  @keyframes pulse{0%,100%{filter:drop-shadow(0 0 10px rgba(52,245,197,.6)) drop-shadow(0 0 24px rgba(52,245,197,.25))}50%{filter:drop-shadow(0 0 18px rgba(52,245,197,.9)) drop-shadow(0 0 40px rgba(52,245,197,.5))}}
+  .wordmark{font-weight:700;letter-spacing:.5px;line-height:1;margin:0;font-size:clamp(42px,10vw,92px)}
+  .wordmark .tru{background:linear-gradient(90deg,#34f5c5,#c9fff2,#34f5c5);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s linear infinite;text-shadow:0 0 30px rgba(52,245,197,.25)}
+  .wordmark .vec{color:var(--texte)}
+  .wordmark .dev{background:linear-gradient(90deg,#b14aed,#e2b8ff,#b14aed);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 6s linear infinite}
+  @keyframes sheen{to{background-position:200% center}}
+  .kicker{font-family:var(--mono);font-size:clamp(12px,2.4vw,15px);color:var(--menthe-soft);letter-spacing:clamp(3px,1.4vw,7px);margin:16px 0 0}
+  .lede{max-width:56ch;margin:22px auto 0;color:var(--texte-2);font-size:clamp(15px,2.2vw,17px)}
+  .lede b{color:var(--texte)}
+  .hero-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  .btn-xl{padding:15px 26px;font-size:15px}
+  .scrolldown{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;color:var(--texte-3);font-family:var(--mono);font-size:11px;letter-spacing:2px;text-align:center;animation:bob 2.4s ease-in-out infinite}
+  .scrolldown span{display:block;font-size:20px;color:var(--menthe)}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
-  /* ---------- COUNTDOWN ---------- */
-  .countdown{margin:34px auto 0;max-width:540px}
-  .cd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--texte-3);text-transform:uppercase;margin-bottom:12px}
-  #cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .cd-cell{background:var(--panneau);border:1px solid var(--bord);border-radius:14px;padding:18px 6px 12px;backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 26px rgba(52,245,197,.06)}
-  .cd-num{font-family:var(--mono);font-weight:700;font-size:clamp(28px,7vw,42px);color:var(--menthe);text-shadow:0 0 16px rgba(52,245,197,.35);line-height:1}
-  .cd-unit{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--texte-3);text-transform:uppercase;margin-top:8px}
-  .cd-open{font-family:var(--mono);color:var(--aurore-g);font-size:18px;padding:16px;border:1px solid rgba(89,227,154,.4);border-radius:14px;background:rgba(89,227,154,.08);grid-column:1/-1}
-  .launch-gate{margin-top:22px;min-height:48px}
-  .launch-gate .enter-btn{display:none}
-  .launch-gate[data-open="1"] .enter-btn{display:inline-flex}
-  .launch-gate[data-open="1"] .soon-note{display:none}
-  .soon-note{font-family:var(--mono);font-size:12.5px;color:var(--texte-3)}
+  /* ---------- MARQUEE ---------- */
+  .marquee{position:relative;z-index:3;border-top:1px solid var(--bord);border-bottom:1px solid var(--bord);background:rgba(9,14,21,.6);overflow:hidden;white-space:nowrap}
+  .marquee .track{display:inline-block;padding:12px 0;animation:scrollx 26s linear infinite;font-family:var(--mono);font-size:13px;color:var(--texte-2)}
+  .marquee .track span{margin:0 22px}.marquee .track b{color:var(--menthe)}
+  @keyframes scrollx{to{transform:translateX(-50%)}}
 
-  /* ---------- SECTIONS UTILS ---------- */
+  /* ---------- SECTIONS ---------- */
   .eyebrow{font-family:var(--mono);font-size:12px;color:var(--menthe);letter-spacing:2px}
-  h2.sec{font-size:clamp(24px,5vw,34px);margin:8px 0 4px;font-weight:700;letter-spacing:-.4px}
-  h2.sec .g{background:linear-gradient(90deg,var(--menthe),var(--aurore-v-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h2.sec{font-size:clamp(24px,5vw,36px);margin:8px 0 4px;font-weight:700;letter-spacing:-.4px}
+  h2.sec .g{background:linear-gradient(90deg,var(--menthe),var(--aurore-v-soft));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 7s linear infinite}
   .sub{color:var(--texte-2);margin:0 0 26px;font-size:15.5px}
-  section.blk{padding:56px 0;position:relative;z-index:2}
+  section.blk{padding:64px 0;position:relative;z-index:2}
 
-  /* ---------- SHOWCASE (les sections) ---------- */
   .showcase{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-  .sc-card{--a:var(--menthe);position:relative;display:flex;flex-direction:column;gap:12px;background:var(--panneau-2);
-    border:1px solid var(--bord);border-radius:18px;padding:22px 20px;color:var(--texte);overflow:hidden;
-    transition:transform .18s ease,border-color .2s ease,box-shadow .25s ease}
-  .sc-card:nth-child(4n+2){--a:var(--aurore-v)} .sc-card:nth-child(4n+3){--a:var(--ambre)} .sc-card:nth-child(4n+4){--a:var(--aurore-g)}
-  .sc-card::after{content:"";position:absolute;inset:-40% -40% auto auto;width:70%;height:70%;background:radial-gradient(circle,var(--a),transparent 70%);opacity:.10;filter:blur(20px);pointer-events:none;transition:opacity .25s}
-  .sc-card:hover{transform:translateY(-4px);border-color:var(--a);box-shadow:0 12px 34px rgba(0,0,0,.4),0 0 26px color-mix(in srgb,var(--a) 30%,transparent);text-decoration:none}
-  .sc-card:hover::after{opacity:.22}
-  .sc-ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;
-    background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 45%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--a) 22%,transparent)}
+  .sc-card{--a:var(--menthe);position:relative;display:flex;flex-direction:column;gap:12px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:18px;padding:22px 20px;color:var(--texte);overflow:hidden;transform-style:preserve-3d;transition:transform .18s ease,border-color .2s ease,box-shadow .25s ease}
+  .sc-card:nth-child(4n+2){--a:var(--aurore-v)}.sc-card:nth-child(4n+3){--a:var(--ambre)}.sc-card:nth-child(4n+4){--a:var(--aurore-g)}
+  .sc-card::after{content:"";position:absolute;inset:-40% -40% auto auto;width:70%;height:70%;background:radial-gradient(circle,var(--a),transparent 70%);opacity:.1;filter:blur(20px);pointer-events:none;transition:opacity .25s}
+  .sc-card:hover{border-color:var(--a);box-shadow:0 14px 40px rgba(0,0,0,.45),0 0 30px color-mix(in srgb,var(--a) 32%,transparent)}
+  .sc-card:hover::after{opacity:.26}
+  .sc-ic{width:54px;height:54px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:27px;background:color-mix(in srgb,var(--a) 14%,transparent);border:1px solid color-mix(in srgb,var(--a) 45%,transparent);box-shadow:0 0 20px color-mix(in srgb,var(--a) 24%,transparent)}
   .sc-card h3{margin:0;font-size:18px;font-weight:600}
   .sc-card p{margin:0;color:var(--texte-2);font-size:14px;flex:1;line-height:1.55}
-  .sc-go{font-family:var(--mono);font-size:12.5px;color:var(--a);display:inline-flex;align-items:center;gap:6px}
+  .sc-go{font-family:var(--mono);font-size:12.5px;color:var(--a)}
   .sc-badge{position:absolute;top:16px;right:16px;font-family:var(--mono);font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--texte-3);border:1px solid var(--bord);border-radius:999px;padding:3px 8px}
 
-  /* ---------- FEATURES ---------- */
   .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-  .feat{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:20px}
-  .feat .fi{font-size:22px}
-  .feat h3{margin:10px 0 6px;font-size:16px;font-weight:600}
-  .feat p{margin:0;color:var(--texte-2);font-size:14px}
+  .feat{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:22px;transition:transform .18s,border-color .2s}
+  .feat:hover{transform:translateY(-3px);border-color:var(--bord-fort)}
+  .feat .fi{font-size:24px}.feat h3{margin:10px 0 6px;font-size:16px;font-weight:600}.feat p{margin:0;color:var(--texte-2);font-size:14px}
 
-  /* ---------- MAKER ---------- */
-  .maker-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panneau-2);border:1px solid var(--bord);border-radius:18px;padding:22px}
-  .maker-card img{width:92px;height:92px;border-radius:16px;border:1px solid var(--bord-fort);box-shadow:0 0 22px rgba(52,245,197,.15)}
-  .maker-card .txt{flex:1;min-width:220px}
-  .maker-card h3{margin:0 0 4px;font-size:18px}
-  .maker-card p{margin:0;color:var(--texte-2);font-size:14.5px}
+  .maker-card{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--panneau-2);border:1px solid var(--bord);border-radius:18px;padding:24px;position:relative;overflow:hidden}
+  .maker-card::before{content:"";position:absolute;inset:auto auto -30% -10%;width:50%;height:80%;background:radial-gradient(circle,var(--aurore-v),transparent 70%);opacity:.12;filter:blur(30px)}
+  .maker-card img{width:96px;height:96px;border-radius:18px;border:1px solid var(--bord-fort);box-shadow:0 0 24px rgba(52,245,197,.18);position:relative}
+  .maker-card .txt{flex:1;min-width:220px;position:relative}
+  .maker-card h3{margin:0 0 4px;font-size:19px}.maker-card p{margin:0;color:var(--texte-2);font-size:14.5px}
   .maker-card .links{margin-top:12px;font-family:var(--mono);font-size:13px;display:flex;gap:18px;flex-wrap:wrap}
 
-  /* ---------- CTA BAND ---------- */
-  .cta{position:relative;overflow:hidden;border:1px solid var(--bord-fort);border-radius:22px;padding:44px 28px;text-align:center;
-    background:radial-gradient(700px 300px at 30% -20%,rgba(52,245,197,.14),transparent 60%),radial-gradient(700px 300px at 80% 120%,rgba(177,74,237,.16),transparent 60%),var(--panneau-2)}
-  .cta h2{font-size:clamp(24px,4.6vw,32px);margin:0 0 8px;font-weight:700}
-  .cta p{color:var(--texte-2);margin:0 0 22px}
-  .cta .date{font-family:var(--mono);color:var(--menthe-soft)}
+  .cta{position:relative;overflow:hidden;border:1px solid var(--bord-fort);border-radius:24px;padding:50px 28px;text-align:center;background:radial-gradient(700px 300px at 25% -20%,rgba(52,245,197,.16),transparent 60%),radial-gradient(700px 320px at 80% 120%,rgba(177,74,237,.18),transparent 60%),var(--panneau-2)}
+  .cta h2{font-size:clamp(26px,5vw,38px);margin:0 0 10px;font-weight:700}
+  .cta p{color:var(--texte-2);margin:0 0 24px}
 
-  /* ---------- REVEAL ---------- */
-  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
   .reveal.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.hero .triskele{animation:none}}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .hero .triskele,.wordmark .tru,.wordmark .dev,.marquee .track,.scrolldown,.lights i{animation:none!important}
+  }
 </style>
 </head>
 <body>
 
 <nav class="site-nav"><div class="wrap row">
-  <a class="brand" href="index.html" aria-label="Accueil TRUvector">
-    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
-  </a>
-  <div class="nav-links">
-    <a href="index.html" aria-current="page">Accueil</a>
-    <a href="mentions-legales/">Légal</a>
-  </div>
+  <a class="brand" href="index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="index.html" aria-current="page">Accueil</a><a href="mentions-legales/">Légal</a></div>
 </div></nav>
 
 <header class="hero">
-  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
-  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-  <div class="hero-inner wrap">
+  <canvas id="aurora-cv" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-inner" id="heroInner">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <h1 class="wordmark"><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></h1>
     <p class="kicker">WHERE CODE MEETS CREATIVITY</p>
-    <p class="lede">Un atelier <b>romantico·geek</b> où le code rencontre l'art : créations graphiques en libre téléchargement, logiciels, e-books, musique et bien plus — sous des aurores et des univers fantastiques. <b>Ouverture le 21 septembre 2026.</b></p>
-
-    <div class="countdown">
-      <div class="cd-label">Ouverture du site — 21 septembre 2026</div>
-      <div id="cd-grid">
-        <div class="cd-cell"><div class="cd-num" id="cd-d">--</div><div class="cd-unit">Jours</div></div>
-        <div class="cd-cell"><div class="cd-num" id="cd-h">--</div><div class="cd-unit">Heures</div></div>
-        <div class="cd-cell"><div class="cd-num" id="cd-m">--</div><div class="cd-unit">Min</div></div>
-        <div class="cd-cell"><div class="cd-num" id="cd-s">--</div><div class="cd-unit">Sec</div></div>
-      </div>
-    </div>
-
-    <div class="launch-gate" id="launch-gate">
-      <a class="btn enter-btn" href="galerie/">Entrer dans la galerie →</a>
-      <p class="soon-note">La galerie ouvre le jour J. Reviens le 21/09 🌌</p>
-    </div>
-
+    <p class="lede">Un atelier <b>romantico·geek</b> où le code rencontre l'art : créations graphiques, logiciels, e‑books, musique, articles et <b>modules interactifs</b> — sous des aurores et des univers fantastiques.</p>
     <div class="hero-cta">
-      <a class="btn" href="#sections">Explorer les sections</a>
-      <a class="btn-ghost btn" href="galerie/">Voir la galerie</a>
+      <a class="btn btn-xl" href="#sections">✨ Explorer l'univers</a>
+      <a class="btn btn-ghost btn-xl" href="galerie/">Voir la galerie</a>
     </div>
   </div>
+  <a class="scrolldown" href="#sections">défiler<span>↓</span></a>
 </header>
 
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
 <main>
-  <!-- L'UNIVERS / SECTIONS -->
   <section class="blk wrap" id="sections">
     <div class="eyebrow reveal">// l'univers</div>
     <h2 class="sec reveal">Huit espaces, un seul <span class="g">univers</span></h2>
-    <p class="sub reveal">Chaque espace a son propre accès. Explore, télécharge, écoute, participe.</p>
-    <div class="showcase">
-      <a class="sc-card reveal" href="galerie/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🎨</div><h3>Galerie</h3><p>Créations graphiques romantico·geek en libre téléchargement, en haute définition.</p><span class="sc-go">Entrer →</span></a>
-      <a class="sc-card reveal" href="logiciels/"><span class="sc-badge">accès dédié</span><div class="sc-ic">💾</div><h3>Logiciels</h3><p>Mes applications et outils, proposés sous licence d'utilisation.</p><span class="sc-go">Découvrir →</span></a>
-      <a class="sc-card reveal" href="ebooks/"><span class="sc-badge">accès dédié</span><div class="sc-ic">📖</div><h3>E-books</h3><p>Publications numériques et guides à lire et à garder.</p><span class="sc-go">Feuilleter →</span></a>
-      <a class="sc-card reveal" href="musique/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🎵</div><h3>Musique</h3><p>Créations audio à écouter — et à laisser jouer en fond sur tout le site.</p><span class="sc-go">Écouter →</span></a>
-      <a class="sc-card reveal" href="articles/"><span class="sc-badge">blog public</span><div class="sc-ic">📝</div><h3>Articles</h3><p>Le blog technique : licensing, automatisation, sécurité, compression — 60 articles.</p><span class="sc-go">Lire le blog →</span></a>
-      <a class="sc-card reveal" href="modules/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🧩</div><h3>Modules interactifs</h3><p>Des outils et expériences à manipuler directement dans le navigateur.</p><span class="sc-go">Manipuler →</span></a>
-      <a class="sc-card reveal" href="concours/"><span class="sc-badge">accès dédié</span><div class="sc-ic">🏆</div><h3>Concours</h3><p>Jeux-concours et défis créatifs pour la communauté.</p><span class="sc-go">Participer →</span></a>
-      <a class="sc-card reveal" href="dons/"><span class="sc-badge">accès dédié</span><div class="sc-ic">💚</div><h3>Soutenir</h3><p>Un coup de pouce pour faire grandir le projet TRUvector.</p><span class="sc-go">Soutenir →</span></a>
+    <p class="sub reveal">Explore, télécharge, écoute, joue, participe.</p>
+    <div class="showcase" id="showcase">
+      <a class="sc-card reveal" href="galerie/"><span class="sc-badge">créations</span><div class="sc-ic">🎨</div><h3>Galerie</h3><p>Créations graphiques romantico·geek en libre téléchargement, en haute définition.</p><span class="sc-go">Entrer →</span></a>
+      <a class="sc-card reveal" href="logiciels/"><span class="sc-badge">apps</span><div class="sc-ic">💾</div><h3>Logiciels</h3><p>Mes applications et outils, proposés sous licence d'utilisation.</p><span class="sc-go">Découvrir →</span></a>
+      <a class="sc-card reveal" href="ebooks/"><span class="sc-badge">lecture</span><div class="sc-ic">📖</div><h3>E-books</h3><p>Publications numériques et guides à lire et à garder.</p><span class="sc-go">Feuilleter →</span></a>
+      <a class="sc-card reveal" href="musique/"><span class="sc-badge">audio</span><div class="sc-ic">🎵</div><h3>Musique</h3><p>Créations audio à écouter, tout en douceur.</p><span class="sc-go">Écouter →</span></a>
+      <a class="sc-card reveal" href="articles/"><span class="sc-badge">blog</span><div class="sc-ic">📝</div><h3>Articles</h3><p>Le carnet technique : licensing, sécurité, automatisation… 60 articles.</p><span class="sc-go">Lire →</span></a>
+      <a class="sc-card reveal" href="modules/"><span class="sc-badge">interactif</span><div class="sc-ic">🧩</div><h3>Modules</h3><p>Keyforge, Aurora Weaver, GrowVault Lite — des outils à manipuler.</p><span class="sc-go">Jouer →</span></a>
+      <a class="sc-card reveal" href="concours/"><span class="sc-badge">défis</span><div class="sc-ic">🏆</div><h3>Concours</h3><p>Jeux-concours et défis créatifs pour la communauté.</p><span class="sc-go">Participer →</span></a>
+      <a class="sc-card reveal" href="dons/"><span class="sc-badge">soutien</span><div class="sc-ic">💚</div><h3>Soutenir</h3><p>Un coup de pouce pour faire grandir le projet TRUvector.</p><span class="sc-go">Soutenir →</span></a>
     </div>
   </section>
 
-  <!-- POINTS FORTS -->
   <section class="blk wrap">
     <div class="eyebrow reveal">// pourquoi tu vas aimer</div>
     <h2 class="sec reveal">L'esprit <span class="g">romantico·geek</span></h2>
     <p class="sub reveal">Du code, de l'art, et une âme.</p>
     <div class="features">
-      <div class="feat reveal"><div class="fi">🌌</div><h3>Un univers cohérent</h3><p>Aurores, triskèle néon, guirlandes : une direction artistique soignée du début à la fin.</p></div>
-      <div class="feat reveal"><div class="fi">⬇️</div><h3>Créations en libre accès</h3><p>Des œuvres graphiques à télécharger librement, en haute définition.</p></div>
-      <div class="feat reveal"><div class="fi">🎧</div><h3>Musique en fond</h3><p>Lance une nappe et laisse-la te suivre de page en page pendant ta visite.</p></div>
-      <div class="feat reveal"><div class="fi">🔑</div><h3>Un accès par espace</h3><p>Chaque section a son propre code — simple, clair, à ta main.</p></div>
+      <div class="feat reveal"><div class="fi">🌌</div><h3>Un univers cohérent</h3><p>Aurores, triskèle néon, guirlandes : une direction artistique soignée de bout en bout.</p></div>
+      <div class="feat reveal"><div class="fi">⬇️</div><h3>Créations en libre accès</h3><p>Des œuvres à télécharger librement, en haute définition.</p></div>
+      <div class="feat reveal"><div class="fi">🧩</div><h3>Des modules à manipuler</h3><p>Générateur de clés, aurore générative, mini‑tracker : le code qui s'utilise.</p></div>
+      <div class="feat reveal"><div class="fi">🔐</div><h3>Chiffré à la demande</h3><p>Les sections peuvent passer en coffres AES‑256‑GCM, sans dépendre de personne.</p></div>
     </div>
   </section>
 
-  <!-- LE CRÉATEUR -->
   <section class="blk wrap">
     <div class="eyebrow reveal">// le créateur</div>
     <div class="maker-card reveal" style="margin-top:12px">
-      <img src="assets/img/createur.webp" alt="Portrait stylisé du créateur de TRUvector" width="92" height="92" loading="lazy">
+      <img src="assets/img/createur.webp" alt="Portrait stylisé du créateur de TRUvector" width="96" height="96" loading="lazy">
       <div class="txt">
         <h3>TRUvector</h3>
-        <p>Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e-books, musique et créations graphiques.</p>
-        <div class="links">
-          <a href="https://github.com/clode666" rel="me noopener" target="_blank">↗ github.com/clode666</a>
-          <a href="mentions-legales/">↗ Mentions légales</a>
-        </div>
+        <p>Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e‑books, musique et créations graphiques.</p>
+        <div class="links"><a href="https://github.com/clode666" rel="me noopener" target="_blank">↗ github.com/clode666</a><a href="mentions-legales/">↗ Mentions légales</a></div>
       </div>
     </div>
   </section>
 
-  <!-- CTA FINAL -->
   <section class="blk wrap">
     <div class="cta reveal">
-      <h2>Le compte à rebours a commencé</h2>
-      <p>Rendez-vous le <span class="date">21 septembre 2026</span> pour l'ouverture complète.</p>
-      <a class="btn" href="#sections">Explorer l'univers</a>
+      <h2>Bienvenue dans l'atelier ✨</h2>
+      <p>Plonge dans l'univers TRUvector — huit espaces à explorer.</p>
+      <a class="btn btn-xl" href="#sections">Explorer l'univers</a>
     </div>
   </section>
 </main>
@@ -196,23 +169,56 @@
 <footer class="site-foot">
   <div class="wrap">
     <div class="hr" style="margin-bottom:28px"></div>
-    <p class="fm">$ truvector open --date 2026-09-21 --style romantico-geek</p>
+    <p class="fm">$ truvector --style romantico-geek --version 5</p>
     <p>© 2026 TRUvector.dev — Tristan Ruard · Where Code Meets Creativity</p>
     <p class="foot-legal"><a href="mentions-legales/">Mentions légales</a> · <a href="cgv/">CGV</a> · <a href="confidentialite/">Confidentialité</a> · <a href="cookies/">Cookies</a> · <a href="securite/">Sécurité</a></p>
   </div>
 </footer>
 
-<script src="assets/js/config.js"></script>
-<script src="assets/js/countdown.js"></script>
-<script src="assets/js/player.js?v=2"></script>
 <script src="assets/js/nav.js?v=3"></script>
 <script>
-  (function(){
-    var els=[].slice.call(document.querySelectorAll('.reveal'));
-    if(!('IntersectionObserver' in window)){ els.forEach(function(e){e.classList.add('in');}); return; }
-    var io=new IntersectionObserver(function(en){ en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } }); },{threshold:.12});
-    els.forEach(function(e){ io.observe(e); });
-  })();
+(function(){
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+  // marquee
+  var words=['aurores','code','créations libres','triskèle','musique','logiciels','sécurité','e-books','modules interactifs','romantico·geek','open source','pixels &amp; néons'];
+  var line=words.map(function(w){return '<span><b>◆</b> '+w+'</span>';}).join('');
+  document.getElementById('mq').innerHTML=line+line;
+  // reveal
+  var els=[].slice.call(document.querySelectorAll('.reveal'));
+  if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});}
+  else{var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){var el=x.target;var sibs=[].slice.call(el.parentNode.children).indexOf(el);setTimeout(function(){el.classList.add('in');},Math.min(sibs*60,300));io.unobserve(el);}});},{threshold:.12});els.forEach(function(e){io.observe(e);});}
+  // parallax hero
+  var hi=document.getElementById('heroInner');
+  if(hi&&!reduce&&matchMedia('(pointer:fine)').matches){
+    document.querySelector('header.hero').addEventListener('mousemove',function(e){var r=this.getBoundingClientRect();var dx=(e.clientX-r.left)/r.width-.5,dy=(e.clientY-r.top)/r.height-.5;hi.style.transform='translate('+(dx*14)+'px,'+(dy*12)+'px)';});
+    document.querySelector('header.hero').addEventListener('mouseleave',function(){hi.style.transform='';});
+  }
+  // tilt cards
+  if(!reduce&&matchMedia('(pointer:fine)').matches){
+    document.querySelectorAll('.sc-card').forEach(function(c){
+      c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect();var px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;c.style.transform='translateY(-4px) perspective(700px) rotateX('+(-py*6)+'deg) rotateY('+(px*7)+'deg)';});
+      c.addEventListener('mouseleave',function(){c.style.transform='';});
+    });
+  }
+  // canvas aurora + particules
+  var cv=document.getElementById('aurora-cv'); if(!cv) return; var ctx=cv.getContext('2d'), W,H,dpr=Math.min(window.devicePixelRatio||1,1.5), t=0, parts=[];
+  function resize(){var r=cv.getBoundingClientRect();W=cv.width=r.width*dpr;H=cv.height=r.height*dpr;parts=[];for(var i=0;i<70;i++)parts.push({x:Math.random()*W,y:Math.random()*H,r:(Math.random()*1.8+.4)*dpr,s:(Math.random()*.3+.1)*dpr,c:['#34f5c5','#b14aed','#f4c56b','#59e39a'][i%4],a:Math.random()*.6+.2});}
+  function hex(c,a){var n=parseInt(c.slice(1),16);return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')';}
+  var cols=['#34f5c5','#59e39a','#b14aed'];
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation='lighter';
+    for(var b=0;b<6;b++){var col=cols[b%3],baseY=H*(0.15+(b/6)*0.6),amp=H*0.11*(0.6+0.4*Math.sin(b));
+      var g=ctx.createLinearGradient(0,baseY-amp-40*dpr,0,baseY+120*dpr);g.addColorStop(0,hex(col,0));g.addColorStop(.5,hex(col,0.05));g.addColorStop(1,hex(col,0));
+      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(0,H);
+      for(var x=0;x<=W;x+=18*dpr){var y=baseY+amp*Math.sin(x*0.004/dpr+t*0.5+b*0.7)+amp*0.4*Math.sin(x*0.011/dpr-t*0.4+b);ctx.lineTo(x,y);}
+      ctx.lineTo(W,H);ctx.closePath();ctx.fill();}
+    for(var i=0;i<parts.length;i++){var p=parts[i];p.y-=p.s;if(p.y<-4)p.y=H+4;ctx.fillStyle=hex(p.c,p.a*(0.6+0.4*Math.sin(t*2+i)));ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}
+    ctx.globalCompositeOperation='source-over';
+  }
+  resize();window.addEventListener('resize',resize);
+  if(reduce){draw();}else{(function loop(){t+=0.016;draw();requestAnimationFrame(loop);})();}
+})();
 </script>
 </body>
 </html>
