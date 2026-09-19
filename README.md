@@ -3,6 +3,25 @@
 Site statique **romantico · geek**, hébergé sur **Cloudflare Pages**, piloté par un fichier `config.json` et un **panneau d'administration**.
 Contenu · installation · déploiement · authentification · configuration · administration · maintenance · dépannage.
 
+## ⚡ v5 — Accès : deux modes (sans Cloudflare)
+
+Le site se génère en deux modes via l'outil `_v5-build/build.mjs` :
+
+- **PUBLIC (build livré)** — `node _v5-build/build.mjs open`
+  Les 7 sections (galerie, logiciels, e-books, musique, modules, concours, dons) sont **accessibles sans aucun code**. Seule la page **`/admin` reste protégée** par un code. *C'est le build de production actuel.*
+- **COFFRES chiffrés** — `node _v5-build/build.mjs`
+  Les 7 sections sont **chiffrées (AES-256-GCM)** et se déverrouillent par **passphrase** ou **fichier-clé `.trukey`** (voir `_v5-build/KEYS.txt`). À utiliser si un jour tu veux protéger le contenu.
+
+Le **blog (articles)** et les pages légales restent **publics** dans les deux cas.
+
+**Code admin** : `truvector-admin` (défaut) — modifiable dans `config.json` → `access.adminCode`.
+
+**Modifier le contenu** (galerie, logiciels, musique, dons, concours…) : édite `_v5-build/src/config.json` (+ assets dans `_v5-build/src/…`), relance le build dans le mode voulu, puis redeploie **uniquement** `truvector.dev/`.
+
+> ℹ️ `_v5-build/` **ne se déploie pas** (sources + clés). En mode PUBLIC, le contenu des sections est en clair — c'est voulu (accès sans code) ; seule l'admin exige un code.
+
+---
+
 ## Sommaire
 1. [Vue d'ensemble](#1-vue-densemble)
 2. [Contenu du site](#2-contenu-du-site)
@@ -95,14 +114,15 @@ truvector.dev/
 ├── securite/
 │   └── index.html             # politique de sécurité (SSI)
 ├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
-│   └── index.html × 7         # 7 sections, chacune un code d'accès distinct
+│   └── index.html × 7         # 7 coffres verrouillés (chacun un vault.json chiffré)
 │       └── (musique/assets/)  # audio ; articles/ contient aussi posts/ = 60 articles publics
 ├── admin/
 │   └── index.html             # panneau d'administration (paramètres + droits)
 ├── assets/
 │   ├── css/tokens.css         # design system : couleurs, typo, composants
 │   ├── js/config.js           # configuration partagée (defaults + fusion)
-│   ├── js/gate.js             # portail d'accès générique (codes par section)
+│   ├── js/gate.js             # (legacy v4) portail à code
+│   ├── js/unlock.js           # v5 : déverrouillage chiffré (passphrase / fichier-clé)
 │   ├── js/player.js           # mini-lecteur global (musique sur tout le site)
 │   ├── js/nav.js              # menu déroulant "Sections" (toutes les pages)
 │   ├── js/countdown.js        # compte à rebours (piloté par la config)

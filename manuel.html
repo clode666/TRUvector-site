@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manuel du site — TRUvector.dev v4</title>
+<title>Manuel du site — TRUvector.dev v5</title>
 <meta name="description" content="Manuel complet du site TRUvector.dev v4 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -118,13 +118,30 @@
   <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
   <div class="wrap in">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <h1>Manuel du site — TRUvector.dev v4</h1>
+    <h1>Manuel du site — TRUvector.dev v5</h1>
     <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
     <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
   </div>
 </header>
 
 <main class="wrap">
+
+  <section id="s0v5">
+    <h2 class="s"><span class="n">v5</span> Accès : deux modes (sans Cloudflare)</h2>
+    <p class="lead">Le site se génère en deux modes via <code>_v5-build/build.mjs</code>.</p>
+    <ul>
+      <li><strong>PUBLIC (build livré)</strong> — <code>node _v5-build/build.mjs open</code> : les 7 sections sont accessibles <strong>sans code</strong> ; seule <code>/admin</code> est protégée par code.</li>
+      <li><strong>COFFRES chiffrés</strong> — <code>node _v5-build/build.mjs</code> : les 7 sections sont chiffrées (AES-256-GCM), déverrouillage par passphrase ou fichier-clé <code>.trukey</code>.</li>
+    </ul>
+    <p>Le blog (articles) et les pages légales restent publics dans les deux cas. <strong>Code admin</strong> : <code>truvector-admin</code> (modifiable dans <code>config.json → access.adminCode</code>).</p>
+    <h3>Modifier le contenu</h3>
+    <div class="block"><div class="lbl">atelier privé</div><pre>1. éditer  _v5-build/src/config.json  (+ assets dans _v5-build/src/…)
+2. build   <span class="g">node _v5-build/build.mjs open</span>   <span class="c"># public (actuel)</span>
+       ou  <span class="g">node _v5-build/build.mjs</span>        <span class="c"># coffres chiffrés</span>
+3. déployer UNIQUEMENT truvector.dev/  (jamais _v5-build/)</pre></div>
+    <div class="note ok"><b>Aucune dépendance Cloudflare</b> pour les droits. En mode PUBLIC, le contenu est en clair (accès sans code) ; seule l'admin exige un code.</div>
+  </section>
+
 
   <nav class="toc" aria-label="Sommaire">
     <h2>Sommaire</h2>
@@ -224,14 +241,15 @@
 ├── securite/
 │   └── index.html             <span class="c"># politique de sécurité (SSI)</span>
 ├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
-│   └── index.html × 7         <span class="c"># 7 sections, un code d'accès distinct chacune</span>
+│   └── index.html × 7         <span class="c"># 7 coffres verrouillés (chacun un vault.json chiffré)</span>
 │       └── musique/assets/    <span class="c"># audio ; articles/ contient aussi posts/ = 60 articles</span>
 ├── admin/
 │   └── index.html             <span class="p"># panneau d'administration (paramètres + droits)</span>
 ├── assets/
 │   ├── css/tokens.css         <span class="p"># design system : couleurs, typo, composants</span>
 │   ├── js/config.js           <span class="p"># configuration partagée (defaults + fusion)</span>
-│   ├── js/gate.js             <span class="p"># portail d'accès générique (codes par section)</span>
+│   ├── js/gate.js             <span class="c"># (legacy v4) portail à code</span>
+│   ├── js/unlock.js           <span class="p"># v5 : déverrouillage chiffré (passphrase / fichier-clé)</span>
 │   ├── js/player.js           <span class="p"># mini-lecteur global (musique sur tout le site)</span>
 │   ├── js/nav.js              <span class="p"># menu déroulant "Sections" (toutes les pages)</span>
 │   ├── js/countdown.js        <span class="c"># compte à rebours (piloté par la config)</span>
