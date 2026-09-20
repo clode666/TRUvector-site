@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Licences à durée limitée : expiration, grâce et renouvellement automatique — TRUvector</title>
+<meta name="description" content="Clock skew, NTP spoofing, timestamp ancré hardware, période de grâce, renouvellement silencieux — architecture complète d&#x27;un système de gestion d&#x27;expiration de licence robuste.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/licences-expiration-renouvellement.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Licences à durée limitée : expiration, grâce et renouvellement automatique">
+<meta property="og:description" content="Clock skew, NTP spoofing, timestamp ancré hardware, période de grâce, renouvellement silencieux — architecture complète d&#x27;un système de gestion d&#x27;expiration de licence robuste.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Licences à durée limitée : expiration, grâce et renouvellement automatique</h1>
+    <div class="art-tags"><span class="tg">Licensing</span><span class="tg">Cryptographie</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Les enjeux de l'expiration</h2>
+<p>Une licence à durée limitée est un mécanisme commercial fondamental — mais sa mise en œuvre technique est plus délicate qu'il n'y paraît. L'horloge système peut être manipulée, le timestamp d'expiration peut être falsifié, et une expiration brutale en plein travail crée une expérience utilisateur désastreuse.</p>
+
+<blockquote><p>Une bonne gestion d'expiration de licence est invisible quand tout va bien et gracieuse quand ça expire. L'utilisateur ne doit jamais perdre de données à cause d'une expiration surprise.</p></blockquote>
+
+<h2 id="clock">Protection contre le clock skew</h2>
+<p>Un utilisateur peut régler l'horloge système en arrière pour prolonger une licence expirée. Plusieurs contre-mesures :</p>
+<pre><code><span style="color:var(--acc5)">from</span> datetime <span style="color:var(--acc5)">import</span> datetime, timezone, timedelta
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_clock_integrity</span>(licence_issued_at: datetime) -> bool:
+    now = datetime.now(timezone.utc)
+
+    <span style="color:var(--textd)"># 1. L'heure actuelle ne peut pas être avant la date d'émission</span>
+    <span style="color:var(--acc5)">if</span> now < licence_issued_at:
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span>  <span style="color:var(--textd)"># Horloge reculée</span>
+
+    <span style="color:var(--textd)"># 2. Vérifier contre un timestamp ancré (dernière exécution connue)</span>
+    last_run = load_last_run_timestamp()  <span style="color:var(--textd)"># chiffré dans un cache local</span>
+    <span style="color:var(--acc5)">if</span> last_run <span style="color:var(--acc5)">and</span> now < last_run - timedelta(minutes=<span style="color:var(--acc4)">5</span>):
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">False</span>  <span style="color:var(--textd)"># Horloge reculée depuis la dernière exécution</span>
+
+    <span style="color:var(--textd)"># 3. Sauvegarder le timestamp courant pour la prochaine vérification</span>
+    save_last_run_timestamp(now)
+    <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">True</span></code></pre>
+
+<h2 id="ntp">NTP spoofing</h2>
+<p>Un attaquant sophistiqué peut configurer un faux serveur NTP local qui retourne une date passée. La mitigation : utiliser plusieurs sources NTP et vérifier la cohérence entre elles :</p>
+<pre><code><span style="color:var(--acc5)">import</span> ntplib
+
+NTP_SERVERS = [<span style="color:var(--acc4)">'pool.ntp.org'</span>, <span style="color:var(--acc4)">'time.cloudflare.com'</span>, <span style="color:var(--acc4)">'time.google.com'</span>]
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">get_ntp_consensus</span>() -> datetime | None:
+    times = []
+    <span style="color:var(--acc5)">for</span> srv <span style="color:var(--acc5)">in</span> NTP_SERVERS:
+        <span style="color:var(--acc5)">try</span>:
+            r = ntplib.NTPClient().request(srv, version=<span style="color:var(--acc4)">3</span>, timeout=<span style="color:var(--acc4)">3</span>)
+            times.append(datetime.fromtimestamp(r.tx_time, timezone.utc))
+        <span style="color:var(--acc5)">except</span>: <span style="color:var(--acc5)">pass</span>
+
+    <span style="color:var(--acc5)">if</span> len(times) < <span style="color:var(--acc4)">2</span>: <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">None</span>  <span style="color:var(--textd)"># offline</span>
+
+    <span style="color:var(--textd)"># Vérifier la cohérence : toutes les réponses dans une fenêtre de 30s</span>
+    times.sort()
+    <span style="color:var(--acc5)">if</span> (times[-<span style="color:var(--acc4)">1</span>] - times[<span style="color:var(--acc4)">0</span>]).total_seconds() > <span style="color:var(--acc4)">30</span>:
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">None</span>  <span style="color:var(--textd)"># Incohérence → NTP spoofing probable</span>
+    <span style="color:var(--acc5)">return</span> times[len(times) // <span style="color:var(--acc4)">2</span>]  <span style="color:var(--textd)"># médiane</span></code></pre>
+
+<h2 id="ancrage">Timestamp ancré hardware</h2>
+<p>La technique la plus robuste : ancrer le timestamp de dernière exécution dans le fingerprint hardware. La valeur est chiffrée avec une clé dérivée du hardware_id — impossible à transférer sur une autre machine :</p>
+<pre><code><span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">save_last_run_timestamp</span>(ts: datetime, hw_id: str):
+    key  = derive_key_argon2id(hw_id.encode(), salt=b<span style="color:var(--acc4)">'LASTRUN'</span>)
+    data = ts.isoformat().encode()
+    enc  = aesgcm_encrypt(key, data)
+    Path.home().joinpath(<span style="color:var(--acc4)">".monapp/.lastrun"</span>).write_bytes(enc)
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">load_last_run_timestamp</span>(hw_id: str) -> datetime | None:
+    p = Path.home().joinpath(<span style="color:var(--acc4)">".monapp/.lastrun"</span>)
+    <span style="color:var(--acc5)">if not</span> p.exists(): <span style="color:var(--acc5)">return</span> <span style="color:var(--acc5)">None</span>
+    key = derive_key_argon2id(hw_id.encode(), salt=b<span style="color:var(--acc4)">'LASTRUN'</span>)
+    <span style="color:var(--acc5)">return</span> datetime.fromisoformat(aesgcm_decrypt(key, p.read_bytes()).decode())</code></pre>
+
+<h2 id="grace">Période de grâce</h2>
+<p>La période de grâce évite les coupures brutales en plein travail. L'application continue à fonctionner N jours après l'expiration mais affiche un bandeau d'avertissement croissant :</p>
+<pre><code><span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">check_expiry_with_grace</span>(licence: dict) -> tuple[str, int]:
+    now     = datetime.now(timezone.utc)
+    expires = datetime.fromisoformat(licence[<span style="color:var(--acc4)">'expires_at'</span>].replace(<span style="color:var(--acc4)">'Z'</span>,<span style="color:var(--acc4)">'+00:00'</span>))
+    grace   = timedelta(days=licence.get(<span style="color:var(--acc4)">'grace_days'</span>, <span style="color:var(--acc4)">7</span>))
+
+    <span style="color:var(--acc5)">if</span> now <= expires:
+        days_left = (expires - now).days
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc4)">'valid'</span>, days_left
+    <span style="color:var(--acc5)">elif</span> now <= expires + grace:
+        grace_left = (expires + grace - now).days
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc4)">'grace'</span>, grace_left
+    <span style="color:var(--acc5)">else</span>:
+        <span style="color:var(--acc5)">return</span> <span style="color:var(--acc4)">'expired'</span>, <span style="color:var(--acc4)">0</span></code></pre>
+
+<h2 id="renouvellement">Renouvellement automatique</h2>
+<pre><code><span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">auto_renew_if_needed</span>(licence_path: str, renewal_url: str, hw_id: str):
+    lic = load_licence(licence_path)
+    status, days = check_expiry_with_grace(lic)
+
+    <span style="color:var(--acc5)">if</span> status == <span style="color:var(--acc4)">'valid'</span> <span style="color:var(--acc5)">and</span> days <= <span style="color:var(--acc4)">30</span>:
+        <span style="color:var(--textd)"># Tenter un renouvellement silencieux 30 jours avant expiration</span>
+        <span style="color:var(--acc5)">try</span>:
+            r = requests.post(renewal_url, json={
+                <span style="color:var(--acc4)">"licence_id"</span>: lic[<span style="color:var(--acc4)">"licence_id"</span>],
+                <span style="color:var(--acc4)">"hardware_id"</span>: hw_id
+            }, timeout=<span style="color:var(--acc4)">10</span>)
+            <span style="color:var(--acc5)">if</span> r.ok:
+                new_lic = r.json()[<span style="color:var(--acc4)">"licence"</span>]
+                save_licence(new_lic, licence_path)
+        <span style="color:var(--acc5)">except</span>: <span style="color:var(--acc5)">pass</span>  <span style="color:var(--textd)"># silencieux si offline</span></code></pre>
+
+<h2 id="ux">UX de l'expiration</h2>
+<ul>
+  <li><strong>J-30</strong> : bandeau discret dans l'interface, lien vers renouvellement.</li>
+  <li><strong>J-7</strong> : bandeau orange, popup au démarrage (fermable).</li>
+  <li><strong>J-0 à J+7 (grâce)</strong> : bandeau rouge persistant, compteur de jours restants.</li>
+  <li><strong>J+8 (blocage)</strong> : dialogue modal non fermable avec instructions de renouvellement. Les données de l'utilisateur restent accessibles en lecture seule.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>La gestion d'expiration robuste repose sur trois couches : timestamp ancré hardware (anti-retour d'horloge), NTP multi-sources (anti-spoofing) et période de grâce (UX). IronLock v2 implémente les deux premières nativement. La période de grâce se configure dans le champ <code>grace_days</code> du .lic. Le renouvellement automatique est optionnel et se configure avec l'URL de renouvellement dans le manifest de l'application.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc5);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="migrer-pyarmor-ironlock.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="ironlock-docker-kubernetes.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

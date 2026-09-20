@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intégrer AutomationSequence dans un pipeline GitHub Actions — TRUvector</title>
+<meta name="description" content="Export EXE standalone, tests unitaires Phase 14, artifacts GitHub, secrets chiffrés et déploiement SCCM — guide complet pour intégrer AutomationSequence V8 dans un pipeline CI/CD GitHub.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/github-actions-automation.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Intégrer AutomationSequence dans un pipeline GitHub Actions">
+<meta property="og:description" content="Export EXE standalone, tests unitaires Phase 14, artifacts GitHub, secrets chiffrés et déploiement SCCM — guide complet pour intégrer AutomationSequence V8 dans un pipeline CI/CD GitHub.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Intégrer AutomationSequence dans un pipeline GitHub Actions</h1>
+    <div class="art-tags"><span class="tg">Automatisation</span><span class="tg">Python</span><span class="tg">CI/CD</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Pourquoi CI/CD pour une séquence ?</h2>
+<p>Une séquence AutomationSequence est un fichier JSON — versionnable dans Git comme n'importe quel code. Intégrer la validation, les tests et le packaging dans un pipeline GitHub Actions garantit que chaque modification est testée avant déploiement et que le package distribué aux utilisateurs est toujours à jour.</p>
+
+<blockquote><p>Versionner une séquence d'automatisation dans Git sans pipeline CI/CD, c'est versionner du code sans tests. La régression peut rester invisible pendant des semaines.</p></blockquote>
+
+<h2 id="structure">Structure du dépôt</h2>
+<pre><code>sequences/
+├── .github/
+│   └── workflows/
+│       └── build-and-deploy.yml
+├── sequences/
+│   ├── export_mensuel.json
+│   └── audit_chronotime.json
+├── templates/
+│   └── rapport_mensuel.docx
+├── keys/
+│   └── public.pem          <span style="color:var(--textd)"># clé publique uniquement dans le repo</span>
+├── tests/
+│   └── test_sequences.py
+└── requirements.txt</code></pre>
+
+<h2 id="workflow">Le workflow GitHub Actions</h2>
+<pre><code><span style="color:var(--textd)"># .github/workflows/build-and-deploy.yml</span>
+name: Build & Deploy Sequences
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-build:
+    runs-on: windows-latest  <span style="color:var(--textd)"># Windows pour l'export EXE</span>
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with: {{python-version: '3.12'}}
+
+      - name: Install dependencies
+        run: pip install automation-sequence[full] -r requirements.txt
+
+      - name: Validate sequences (dry-run)
+        run: |
+          automation-sequence validate sequences/export_mensuel.json
+          automation-sequence validate sequences/audit_chronotime.json
+
+      - name: Run unit tests
+        run: python -m pytest tests/ -v
+
+      - name: Export EXE standalone
+        run: |
+          automation-sequence export sequences/export_mensuel.json ^
+            --output dist/export_mensuel.exe ^
+            --encrypt --key-vault ${{{{ secrets.VAULT_PASSWORD }}}}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sequences-package
+          path: dist/
+          retention-days: 30</code></pre>
+
+<h2 id="tests">Tests unitaires Phase 14</h2>
+<p>AutomationSequence V8 Phase 14 introduit un framework de tests unitaires pour les séquences. Chaque action peut être mockée et le contexte simulé :</p>
+<pre><code><span style="color:var(--textd)"># tests/test_sequences.py</span>
+<span style="color:var(--acc5)">from</span> automation_sequence.testing <span style="color:var(--acc5)">import</span> SequenceTestRunner, MockContext
+
+<span style="color:var(--acc5)">class</span> <span style="color:var(--acc2)">TestExportMensuel</span>:
+
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">test_requete_oracle_retourne_donnees</span>(self):
+        ctx = MockContext()
+        ctx.mock_action(<span style="color:var(--acc4)">"oracle_query"</span>, returns={<span style="color:var(--acc4)">"rows"</span>: SAMPLE_DATA})
+
+        runner = SequenceTestRunner(<span style="color:var(--acc4)">"sequences/export_mensuel.json"</span>)
+        result = runner.run_until(<span style="color:var(--acc4)">"file_write_csv"</span>, context=ctx)
+
+        assert result.vars[<span style="color:var(--acc4)">"sejours"</span>] == SAMPLE_DATA
+        assert result.status == <span style="color:var(--acc4)">"paused"</span>
+
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">test_alerte_si_donnees_vides</span>(self):
+        ctx = MockContext()
+        ctx.mock_action(<span style="color:var(--acc4)">"oracle_query"</span>, returns={<span style="color:var(--acc4)">"rows"</span>: []})
+
+        runner = SequenceTestRunner(<span style="color:var(--acc4)">"sequences/export_mensuel.json"</span>)
+        result = runner.run(context=ctx)
+
+        assert <span style="color:var(--acc4)">"smtp_send"</span> <span style="color:var(--acc5)">in</span> result.executed_actions
+        assert <span style="color:var(--acc4)">"anormalement faibles"</span> <span style="color:var(--acc5)">in</span> result.smtp_subjects[<span style="color:var(--acc4)">0</span>]</code></pre>
+
+<h2 id="export">Export EXE standalone</h2>
+<p>L'export EXE bundle la séquence chiffrée, le moteur AutomationSequence et toutes les dépendances dans un seul exécutable Windows. L'utilisateur final n'a besoin ni de Python ni d'AutomationSequence installé :</p>
+<pre><code><span style="color:var(--textd)"># Export en ligne de commande</span>
+automation-sequence export sequences/export_mensuel.json ^
+  --output dist/export_mensuel_v1.2.exe ^
+  --encrypt ^
+  --key-vault %VAULT_PASSWORD% ^
+  --include-templates templates/ ^
+  --icon assets/icon.ico ^
+  --version 1.2.0
+
+<span style="color:var(--textd)"># L'EXE produit :</span>
+<span style="color:var(--textd)"># - Déchiffre la séquence en mémoire au démarrage</span>
+<span style="color:var(--textd)"># - Exécute sans aucune dépendance externe</span>
+<span style="color:var(--textd)"># - Compatible EDR (signable avec Authenticode)</span></code></pre>
+
+<h2 id="secrets">Gestion des secrets GitHub</h2>
+<pre><code><span style="color:var(--textd)"># Secrets à configurer dans GitHub Settings → Secrets</span>
+VAULT_PASSWORD      <span style="color:var(--textd)"># mot de passe du vault AutomationSequence</span>
+ORACLE_DSN          <span style="color:var(--textd)"># DSN Oracle (injecté à la volée, jamais dans le JSON)</span>
+SMTP_PASSWORD       <span style="color:var(--textd)"># mot de passe SMTP</span>
+SCCM_DEPLOY_TOKEN   <span style="color:var(--textd)"># token de déploiement SCCM</span>
+
+<span style="color:var(--textd)"># Dans le workflow — injection via variable d'environnement</span>
+- name: Inject secrets into vault
+  run: |
+    automation-sequence vault add ORACLE_DSN "${{ secrets.ORACLE_DSN }}"
+    automation-sequence vault add SMTP_PASSWORD "${{ secrets.SMTP_PASSWORD }}"
+  env:
+    AS_VAULT_PASSWORD: ${{ secrets.VAULT_PASSWORD }}</code></pre>
+
+<h2 id="sccm">Déploiement SCCM</h2>
+<p>Une fois l'EXE produit et signé, le déploiement sur le parc se fait via SCCM (System Center Configuration Manager) ou Intune :</p>
+<pre><code><span style="color:var(--textd)"># Étape post-build : déployer via SCCM API</span>
+- name: Deploy to SCCM
+  if: github.ref == 'refs/heads/main'
+  run: |
+    curl -X POST "${{ secrets.SCCM_URL }}/api/v1/deploy" ^
+      -H "Authorization: Bearer ${{ secrets.SCCM_DEPLOY_TOKEN }}" ^
+      -F "package=@dist/export_mensuel_v1.2.exe" ^
+      -F "collection=CHU_DSN_Postes" ^
+      -F "schedule=immediate"</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Intégrer AutomationSequence V8 dans GitHub Actions apporte les bénéfices du CI/CD au monde des séquences d'automatisation : validation automatique, tests unitaires avec mocks, export EXE reproductible et déploiement SCCM automatisé sur tag. La séquence JSON devient un artefact de production aussi rigoureusement testé qu'une application classique.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">⚙️</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc2);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">AutomationSequence V8.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V8 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="watch-mode-dossiers.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="scraping-web-sequences.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

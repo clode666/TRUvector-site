@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Web temps réel pour vos séquences AutomationSequence V8 — TRUvector</title>
+<meta name="description" content="API REST, Server-Sent Events (SSE), monitoring live des séquences, historique SQLite, alertes SMTP — guide complet du dashboard web local d&#x27;AutomationSequence V8.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/dashboard-web-sequences.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Dashboard Web temps réel pour vos séquences AutomationSequence V8">
+<meta property="og:description" content="API REST, Server-Sent Events (SSE), monitoring live des séquences, historique SQLite, alertes SMTP — guide complet du dashboard web local d&#x27;AutomationSequence V8.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Dashboard Web temps réel pour vos séquences AutomationSequence V8</h1>
+    <div class="art-tags"><span class="tg">Automatisation</span><span class="tg">Web API</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Le dashboard web local</h2>
+<p>AutomationSequence V8 embarque un serveur web local (FastAPI + Uvicorn) accessible depuis n'importe quel navigateur sur le réseau. Le dashboard affiche en temps réel l'état des séquences en cours d'exécution, l'historique des passages, les métriques et les alertes — sans dépendance cloud, sans compte à créer.</p>
+<p>C'est particulièrement utile pour les séquences longues (exports nocturnes, traitements batch) que l'on veut surveiller depuis un autre poste sans accès à la machine d'exécution.</p>
+
+<h2 id="activation">Activation et accès</h2>
+<pre><code><span style="color:var(--textd)"># Activer le dashboard dans la config</span>
+<span style="color:var(--textd)"># Outils → Préférences → Web Dashboard → Activer</span>
+<span style="color:var(--textd)"># Port: 8420  |  Bind: 0.0.0.0 (réseau) ou 127.0.0.1 (local)</span>
+
+<span style="color:var(--textd)"># Ou en ligne de commande</span>
+automation-sequence --dashboard --port 8420
+
+<span style="color:var(--textd)"># Accès depuis un autre poste</span>
+<span style="color:var(--textd)"># http://192.168.1.42:8420</span>
+
+<span style="color:var(--textd)"># Avec authentification token</span>
+automation-sequence --dashboard --port 8420 --token MonTokenSecret
+<span style="color:var(--textd)"># → Header requis : Authorization: Bearer MonTokenSecret</span></code></pre>
+
+<h2 id="sse">Server-Sent Events : le temps réel</h2>
+<p>Le dashboard utilise SSE (Server-Sent Events) pour pousser les mises à jour en temps réel vers le navigateur sans polling. Le flux SSE est disponible à <code>/api/v1/events</code> :</p>
+<pre><code><span style="color:var(--textd)"># Exemple de flux SSE (brut)</span>
+event: sequence_start
+data: {"sequence": "export_pmsi.asenc", "timestamp": "2026-08-01T22:00:01Z"}
+
+event: action_progress
+data: {"index": 3, "type": "oracle_query", "status": "running", "elapsed_ms": 142}
+
+event: action_done
+data: {"index": 3, "type": "oracle_query", "status": "success", "rows": 15420}
+
+event: sequence_end
+data: {"status": "success", "duration_s": 47, "actions_total": 12}</code></pre>
+
+<p>Côté client (JavaScript), un simple <code>EventSource</code> suffit pour recevoir ces événements et mettre à jour l'interface :</p>
+<pre><code><span style="color:var(--acc5)">const</span> es = <span style="color:var(--acc5)">new</span> EventSource(<span style="color:var(--acc4)">'http://localhost:8420/api/v1/events'</span>);
+es.addEventListener(<span style="color:var(--acc4)">'action_progress'</span>, e => {
+  <span style="color:var(--acc5)">const</span> data = JSON.parse(e.data);
+  updateProgressBar(data.index, data.status);
+});</code></pre>
+
+<h2 id="api">API REST complète</h2>
+<table class="cmp-table">
+  <thead><tr><th>Endpoint</th><th>Méthode</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>/api/v1/status</code></td><td>GET</td><td>Statut global du moteur</td></tr>
+    <tr><td><code>/api/v1/sequences</code></td><td>GET</td><td>Liste des séquences disponibles</td></tr>
+    <tr><td><code>/api/v1/run/{seq}</code></td><td>POST</td><td>Lancer une séquence</td></tr>
+    <tr><td><code>/api/v1/stop</code></td><td>POST</td><td>Arrêter la séquence en cours</td></tr>
+    <tr><td><code>/api/v1/history</code></td><td>GET</td><td>Historique des exécutions</td></tr>
+    <tr><td><code>/api/v1/history/{id}</code></td><td>GET</td><td>Détail d'une exécution</td></tr>
+    <tr><td><code>/api/v1/vars</code></td><td>GET</td><td>Variables courantes de la séquence</td></tr>
+    <tr><td><code>/api/v1/events</code></td><td>GET (SSE)</td><td>Flux temps réel</td></tr>
+    <tr><td><code>/api/v1/metrics</code></td><td>GET</td><td>Métriques Prometheus-compatible</td></tr>
+  </tbody>
+</table>
+
+<h2 id="historique">Historique SQLite</h2>
+<p>Chaque exécution est persistée dans une base SQLite locale (<code>history.db</code>). Le dashboard expose cet historique avec filtres et pagination :</p>
+<pre><code><span style="color:var(--textd)"># Requêter l'historique via API</span>
+GET /api/v1/history?status=error&limit=20&offset=0
+
+<span style="color:var(--textd)"># Réponse</span>
+{
+  "total": 3,
+  "items": [
+    {
+      "id": 1042,
+      "sequence": "export_pmsi.asenc",
+      "started_at": "2026-08-01T22:00:01Z",
+      "ended_at": "2026-08-01T22:00:43Z",
+      "status": "error",
+      "failed_action": 7,
+      "error": "oracle_query: ORA-00942: table or view does not exist"
+    }
+  ]
+}</code></pre>
+
+<h2 id="alertes">Alertes SMTP et Toast Windows</h2>
+<pre><code><span style="color:var(--textd)"># Configuration des alertes dans la séquence JSON</span>
+{
+  <span style="color:var(--acc2)">"alerts"</span>: {
+    <span style="color:var(--acc2)">"on_error"</span>: [
+      {
+        <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"smtp"</span>,
+        <span style="color:var(--acc2)">"to"</span>: <span style="color:var(--acc4)">"ops@entreprise.fr"</span>,
+        <span style="color:var(--acc2)">"subject"</span>: <span style="color:var(--acc4)">"[ERREUR] {{sequence_name}} — action {{failed_action}}"</span>,
+        <span style="color:var(--acc2)">"body"</span>: <span style="color:var(--acc4)">"Erreur : {{error_message}}
+Durée : {{elapsed_s}}s"</span>
+      },
+      {
+        <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"toast"</span>,
+        <span style="color:var(--acc2)">"title"</span>: <span style="color:var(--acc4)">"Séquence en erreur"</span>,
+        <span style="color:var(--acc2)">"message"</span>: <span style="color:var(--acc4)">"{{sequence_name}} : {{error_message}}"</span>
+      }
+    ],
+    <span style="color:var(--acc2)">"on_success"</span>: [
+      {<span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"toast"</span>, <span style="color:var(--acc2)">"message"</span>: <span style="color:var(--acc4)">"{{sequence_name}} terminée en {{elapsed_s}}s"</span>}
+    ]
+  }
+}</code></pre>
+
+<h2 id="securite">Sécurité du dashboard</h2>
+<ul>
+  <li><strong>Token Bearer obligatoire</strong> en production — toute requête sans token valide retourne 401.</li>
+  <li><strong>HTTPS recommandé</strong> — utiliser un reverse proxy (Nginx, Caddy) avec certificat TLS pour les accès réseau.</li>
+  <li><strong>Bind 127.0.0.1 par défaut</strong> — le dashboard n'est accessible que depuis localhost sauf configuration explicite.</li>
+  <li><strong>Logs d'accès</strong> — chaque requête API est loguée avec IP source, timestamp et action dans le journal HMAC.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Le dashboard web local d'AutomationSequence V8 transforme le monitoring des séquences longues sans aucune dépendance externe. SSE pour le temps réel, API REST pour l'intégration CI/CD, SQLite pour l'historique, alertes SMTP pour les équipes ops — le tout accessible depuis n'importe quel navigateur sur le réseau interne.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">⚙️</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc7);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">AutomationSequence V8.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V8 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="automation-edr-cortex.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="cas-reel-chu-automation.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

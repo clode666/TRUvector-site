@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatiser Excel et Word avec des séquences JSON — TRUvector</title>
+<meta name="description" content="openpyxl, python-docx, génération de rapports automatisés, fusion de documents, tableaux croisés dynamiques — guide complet pour automatiser vos fichiers Office depuis des séquences AutomationSequence V8.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/automatiser-excel-word-sequences.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Automatiser Excel et Word avec des séquences JSON">
+<meta property="og:description" content="openpyxl, python-docx, génération de rapports automatisés, fusion de documents, tableaux croisés dynamiques — guide complet pour automatiser vos fichiers Office depuis des séquences AutomationSequence V8.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Automatiser Excel et Word avec des séquences JSON</h1>
+    <div class="art-tags"><span class="tg">Automatisation</span><span class="tg">Python</span><span class="tg">Tutoriel</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Automatiser Office sans macro</h2>
+<p>Les macros VBA sont puissantes mais fragiles — elles ne fonctionnent pas sur Linux, déclenchent souvent des alertes de sécurité et sont difficiles à versionner. AutomationSequence V8 propose des actions natives openpyxl (Excel) et python-docx (Word) qui s'exécutent sans Office installé et produisent des fichiers natifs .xlsx et .docx.</p>
+
+<blockquote><p>Générer un rapport Excel ou Word depuis Python est plus reproductible qu'une macro VBA : le code est versionnable, testable, et tourne sur Windows, Linux et macOS sans dépendance Office.</p></blockquote>
+
+<h2 id="excel">Actions Excel — openpyxl</h2>
+<pre><code><span style="color:var(--textd)"># Créer un fichier Excel depuis une séquence JSON</span>
+[
+  {
+    <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"excel_create"</span>,
+    <span style="color:var(--acc2)">"output"</span>: <span style="color:var(--acc4)">"rapport_{{date_today}}.xlsx"</span>,
+    <span style="color:var(--acc2)">"sheets"</span>: [
+      {
+        <span style="color:var(--acc2)">"name"</span>: <span style="color:var(--acc4)">"Données"</span>,
+        <span style="color:var(--acc2)">"data_var"</span>: <span style="color:var(--acc4)">"query_result"</span>,
+        <span style="color:var(--acc2)">"headers"</span>: <span style="color:var(--acc5)">true</span>,
+        <span style="color:var(--acc2)">"auto_width"</span>: <span style="color:var(--acc5)">true</span>,
+        <span style="color:var(--acc2)">"freeze_row"</span>: <span style="color:var(--acc4)">1</span>,
+        <span style="color:var(--acc2)">"style"</span>: <span style="color:var(--acc4)">"table_blue"</span>
+      }
+    ],
+    <span style="color:var(--acc2)">"output_var"</span>: <span style="color:var(--acc4)">"excel_path"</span>
+  }
+]</code></pre>
+<p>Actions Excel disponibles :</p>
+<ul>
+  <li><strong><code>excel_create</code></strong> — créer un nouveau classeur avec une ou plusieurs feuilles.</li>
+  <li><strong><code>excel_read</code></strong> — lire une feuille et stocker les données dans une variable.</li>
+  <li><strong><code>excel_write_sheet</code></strong> — écrire des données dans une feuille existante.</li>
+  <li><strong><code>excel_add_chart</code></strong> — ajouter un graphique (bar, line, pie, scatter).</li>
+  <li><strong><code>excel_apply_formula</code></strong> — insérer des formules Excel dans des cellules.</li>
+  <li><strong><code>excel_format_range</code></strong> — appliquer des styles, couleurs, bordures.</li>
+</ul>
+
+<h2 id="formules">Formules et tableaux croisés</h2>
+<pre><code><span style="color:var(--acc5)">from</span> automation_sequence.actions.excel <span style="color:var(--acc5)">import</span> ExcelAction
+<span style="color:var(--acc5)">import</span> openpyxl
+<span style="color:var(--acc5)">from</span> openpyxl.chart <span style="color:var(--acc5)">import</span> BarChart, Reference
+
+<span style="color:var(--acc5)">class</span> <span style="color:var(--acc2)">ExcelWithPivotPlugin</span>(ExcelAction):
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">execute</span>(self, params, ctx):
+        wb = openpyxl.load_workbook(params[<span style="color:var(--acc4)">'file'</span>])
+        ws = wb.active
+
+        <span style="color:var(--textd)"># Ajouter une ligne de totaux</span>
+        last_row = ws.max_row + <span style="color:var(--acc4)">2</span>
+        ws.cell(last_row, <span style="color:var(--acc4)">1</span>, <span style="color:var(--acc4)">"TOTAL"</span>)
+        ws.cell(last_row, <span style="color:var(--acc4)">3</span>, f<span style="color:var(--acc4)">"=SUM(C2:C{ws.max_row})"</span>)
+
+        <span style="color:var(--textd)"># Graphique bar depuis la colonne C</span>
+        chart = BarChart()
+        data  = Reference(ws, min_col=<span style="color:var(--acc4)">3</span>, min_row=<span style="color:var(--acc4)">1</span>, max_row=ws.max_row-<span style="color:var(--acc4)">2</span>)
+        cats  = Reference(ws, min_col=<span style="color:var(--acc4)">1</span>, min_row=<span style="color:var(--acc4)">2</span>, max_row=ws.max_row-<span style="color:var(--acc4)">2</span>)
+        chart.add_data(data, titles_from_data=<span style="color:var(--acc5)">True</span>)
+        chart.set_categories(cats)
+        ws.add_chart(chart, <span style="color:var(--acc4)">"E5"</span>)
+        wb.save(params[<span style="color:var(--acc4)">'file'</span>])</code></pre>
+
+<h2 id="word">Actions Word — python-docx</h2>
+<pre><code><span style="color:var(--textd)"># Générer un document Word depuis un template</span>
+{
+  <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"word_from_template"</span>,
+  <span style="color:var(--acc2)">"template"</span>: <span style="color:var(--acc4)">"templates/rapport_mensuel.docx"</span>,
+  <span style="color:var(--acc2)">"variables"</span>: {
+    <span style="color:var(--acc2)">"{{mois}}"</span>:        <span style="color:var(--acc4)">"{{date_MMMM_YYYY}}"</span>,
+    <span style="color:var(--acc2)">"{{nb_sejours}}"</span>: <span style="color:var(--acc4)">"{{rsa_data|length}}"</span>,
+    <span style="color:var(--acc2)">"{{service}}"</span>:    <span style="color:var(--acc4)">"Cardiologie"</span>
+  },
+  <span style="color:var(--acc2)">"output"</span>: <span style="color:var(--acc4)">"rapports/rapport_{{date_YYYYMM}}.docx"</span>
+}</code></pre>
+
+<h2 id="templates">Templates dynamiques</h2>
+<p>Le système de templates Word fonctionne par remplacement de marqueurs dans le document source. Les marqueurs <code>{{variable}}</code> dans le texte, les tableaux et les en-têtes sont remplacés automatiquement :</p>
+<pre><code><span style="color:var(--acc5)">from</span> docx <span style="color:var(--acc5)">import</span> Document
+
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">fill_template</span>(template_path: str, variables: dict, output_path: str):
+    doc = Document(template_path)
+
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">replace_in_paragraphs</span>(paragraphs):
+        <span style="color:var(--acc5)">for</span> para <span style="color:var(--acc5)">in</span> paragraphs:
+            <span style="color:var(--acc5)">for</span> run <span style="color:var(--acc5)">in</span> para.runs:
+                <span style="color:var(--acc5)">for</span> key, val <span style="color:var(--acc5)">in</span> variables.items():
+                    <span style="color:var(--acc5)">if</span> key <span style="color:var(--acc5)">in</span> run.text:
+                        run.text = run.text.replace(key, str(val))
+
+    replace_in_paragraphs(doc.paragraphs)
+    <span style="color:var(--acc5)">for</span> table <span style="color:var(--acc5)">in</span> doc.tables:
+        <span style="color:var(--acc5)">for</span> row <span style="color:var(--acc5)">in</span> table.rows:
+            replace_in_paragraphs(cell.paragraphs <span style="color:var(--acc5)">for</span> cell <span style="color:var(--acc5)">in</span> row.cells)
+
+    doc.save(output_path)</code></pre>
+
+<h2 id="fusion">Fusion de documents</h2>
+<pre><code>{
+  <span style="color:var(--acc2)">"type"</span>: <span style="color:var(--acc4)">"word_merge"</span>,
+  <span style="color:var(--acc2)">"files"</span>: [
+    <span style="color:var(--acc4)">"sections/couverture.docx"</span>,
+    <span style="color:var(--acc4)">"rapports/rapport_{{date_YYYYMM}}.docx"</span>,
+    <span style="color:var(--acc4)">"sections/annexes.docx"</span>
+  ],
+  <span style="color:var(--acc2)">"output"</span>: <span style="color:var(--acc4)">"livraison/rapport_complet_{{date_YYYYMM}}.docx"</span>,
+  <span style="color:var(--acc2)">"page_break_between"</span>: <span style="color:var(--acc5)">true</span>
+}</code></pre>
+
+<h2 id="sequence">Séquence complète : rapport mensuel automatisé</h2>
+<pre><code>[
+  <span style="color:var(--textd)">// 1. Récupérer les données Oracle</span>
+  {<span style="color:var(--acc2)">"type"</span>:<span style="color:var(--acc4)">"oracle_query"</span>, <span style="color:var(--acc2)">"query"</span>:<span style="color:var(--acc4)">"SELECT ..."</span>, <span style="color:var(--acc2)">"output_var"</span>:<span style="color:var(--acc4)">"data"</span>},
+
+  <span style="color:var(--textd)">// 2. Générer l'Excel avec graphique</span>
+  {<span style="color:var(--acc2)">"type"</span>:<span style="color:var(--acc4)">"excel_create"</span>, <span style="color:var(--acc2)">"data_var"</span>:<span style="color:var(--acc4)">"data"</span>, <span style="color:var(--acc2)">"output"</span>:<span style="color:var(--acc4)">"data.xlsx"</span>},
+
+  <span style="color:var(--textd)">// 3. Générer le Word depuis template</span>
+  {<span style="color:var(--acc2)">"type"</span>:<span style="color:var(--acc4)">"word_from_template"</span>, <span style="color:var(--acc2)">"template"</span>:<span style="color:var(--acc4)">"rapport.docx"</span>,
+   <span style="color:var(--acc2)">"variables"</span>:{<span style="color:var(--acc2)">"{{rows}}"</span>:<span style="color:var(--acc4)">"{{data|length}}"</span>}, <span style="color:var(--acc2)">"output"</span>:<span style="color:var(--acc4)">"rapport_final.docx"</span>},
+
+  <span style="color:var(--textd)">// 4. Envoyer par email avec pièces jointes</span>
+  {<span style="color:var(--acc2)">"type"</span>:<span style="color:var(--acc4)">"smtp_send"</span>, <span style="color:var(--acc2)">"attachments"</span>:[<span style="color:var(--acc4)">"data.xlsx"</span>,<span style="color:var(--acc4)">"rapport_final.docx"</span>],
+   <span style="color:var(--acc2)">"to"</span>:<span style="color:var(--acc4)">"direction@entreprise.fr"</span>}
+]</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>Les actions openpyxl et python-docx d'AutomationSequence V8 permettent de générer des rapports Office complets depuis des données Oracle, CSV ou API — sans Office installé, sans macro VBA, et avec une traçabilité complète dans le journal HMAC. La combinaison template Word + données Oracle + envoi SMTP constitue un pipeline de reporting mensuel entièrement automatisé en moins de 20 lignes de JSON.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">⚙️</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc2);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">AutomationSequence V8.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V8 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="../../" class="btn btn-ghost">← Retour au blog</a>
+  <a href="debugger-v3-breakpoints.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

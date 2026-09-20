@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Réparer une archive UXC corrompue : techniques et limites — TRUvector</title>
+<meta name="description" content="Récupération par blocs, reconstruction du manifest, validation CRC32 et SHA-256, cas irrécupérables — guide complet pour diagnostiquer et réparer une archive UXC endommagée.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/reparer-archive-uxc.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Réparer une archive UXC corrompue : techniques et limites">
+<meta property="og:description" content="Récupération par blocs, reconstruction du manifest, validation CRC32 et SHA-256, cas irrécupérables — guide complet pour diagnostiquer et réparer une archive UXC endommagée.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Réparer une archive UXC corrompue : techniques et limites</h1>
+    <div class="art-tags"><span class="tg">Déploiement</span><span class="tg">Maintenance</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Causes de corruption UXC</h2>
+<p>Une archive UXC peut être corrompue pour plusieurs raisons : coupure réseau pendant un téléchargement, défaillance disque, corruption par un antivirus trop agressif, ou altération volontaire (tentative de modification du contenu). Universal Installer V2 intègre des outils de diagnostic et de récupération partielle.</p>
+
+<blockquote><p>Avant toute tentative de réparation : vérifier d'abord si l'archive n'est pas simplement tronquée (téléchargement interrompu). Dans ce cas, le re-téléchargement est plus rapide que la réparation.</p></blockquote>
+
+<h2 id="diagnostic">Diagnostic de l'archive</h2>
+<pre><code><span style="color:var(--textd)"># Diagnostic complet d'une archive UXC</span>
+universal-installer diagnose archive_corrompu.uxc
+
+<span style="color:var(--textd)"># Résultat typique</span>
+=== Diagnostic UXC : archive_corrompu.uxc ===
+Format version : 3.0                    ✓
+Header HMAC    : INVALIDE               ✗
+Blocs total    : 1280
+Blocs valides  : 1247 (97.4%)
+Blocs invalides: 33 (2.6%)
+  - Blocs 124-127 : CRC32 mismatch
+  - Blocs 891-920 : données tronquées
+  - Bloc 1150    : SHA-256 invalide
+Manifest       : PARTIELLEMENT VALIDE   △
+Fichiers récupérables : 44/47 (93.6%)
+Fichiers perdus       : 3
+  - assets/video.mp4 (blocs 891-920)
+  - data/large_db.bin (bloc 1150, partiel)
+  - config/theme.bin (blocs 124-127)</code></pre>
+
+<h2 id="blocs">Récupération par blocs</h2>
+<p>UXC v3 stocke les données en blocs indépendants de 64 KB. Un bloc corrompu n'affecte que les données de ce bloc — les autres sont récupérables :</p>
+<pre><code><span style="color:var(--acc5)">from</span> universal_installer.repair <span style="color:var(--acc5)">import</span> UXCRepair
+
+repair = UXCRepair(<span style="color:var(--acc4)">"archive_corrompu.uxc"</span>)
+
+<span style="color:var(--textd)"># Récupérer les blocs valides</span>
+result = repair.recover_valid_blocks(
+    output=<span style="color:var(--acc4)">"archive_repare.uxc"</span>,
+    skip_invalid=<span style="color:var(--acc5)">True</span>,
+    verbose=<span style="color:var(--acc5)">True</span>
+)
+
+print(f<span style="color:var(--acc4)">"Blocs récupérés : {result.recovered}/{result.total}"</span>)
+print(f<span style="color:var(--acc4)">"Fichiers complets: {result.complete_files}"</span>)
+print(f<span style="color:var(--acc4)">"Fichiers perdus  : {result.lost_files}"</span>)
+
+<span style="color:var(--textd)"># Extraire uniquement les fichiers récupérables</span>
+repair.extract_recoverable(output_dir=<span style="color:var(--acc4)">"recovered/"</span>)</code></pre>
+
+<h2 id="manifest">Reconstruction du manifest</h2>
+<p>Si le manifest lui-même est corrompu mais que les blocs de données sont valides, Universal Installer peut reconstruire le manifest par inférence :</p>
+<pre><code><span style="color:var(--textd)"># Reconstruire le manifest depuis les blocs</span>
+universal-installer rebuild-manifest archive_corrompu.uxc   --output manifest_reconstruit.json   --verify-blocks
+
+<span style="color:var(--textd)"># Le manifest reconstruit contient</span>
+<span style="color:var(--textd)"># les fichiers dont tous les blocs sont valides</span>
+<span style="color:var(--textd)"># Les fichiers partiels sont signalés mais inclus</span></code></pre>
+
+<h2 id="irrecup">Cas irrécupérables</h2>
+<p>Certains types de corruption rendent la récupération impossible ou déconseillée :</p>
+<ul>
+  <li><strong>Header corrompu</strong> — si les 48 premiers bytes (magic + version + flags + salt) sont altérés, le format est illisible. Aucune récupération possible sans backup.</li>
+  <li><strong>Clé de déchiffrement manquante</strong> — si l'archive est chiffrée et que le mot de passe est perdu, aucun outil ne peut récupérer le contenu (AES-256-GCM).</li>
+  <li><strong>Corruption &gt; 30%</strong> — au-delà de 30% de blocs invalides, le re-téléchargement est plus rapide que la récupération partielle.</li>
+  <li><strong>Fichiers critiques dans les blocs perdus</strong> — si les blocs corrompus contiennent des fichiers essentiels à l'application (exécutables principaux), la récupération partielle produit une installation non fonctionnelle.</li>
+</ul>
+
+<h2 id="prevention">Prévention</h2>
+<p>Trois mécanismes préventifs dans Universal Installer V2 :</p>
+<pre><code><span style="color:var(--textd)"># 1. Vérification HMAC avant tout déchiffrement</span>
+<span style="color:var(--textd)"># (détecte la corruption avant l'extraction)</span>
+universal-installer verify archive.uxc --sig archive.uxc.sig
+
+<span style="color:var(--textd)"># 2. Reprise de téléchargement partielle</span>
+<span style="color:var(--textd)"># Si le téléchargement est interrompu, reprendre depuis</span>
+<span style="color:var(--textd)"># le dernier bloc valide (pas depuis le début)</span>
+universal-installer download https://cdn.exemple.fr/archive.uxc   --resume   --output archive.uxc
+
+<span style="color:var(--textd)"># 3. Double vérification SHA-256 après extraction</span>
+universal-installer extract archive.uxc   --output-dir ./dest/   --verify-all  <span style="color:var(--textd)"># SHA-256 de chaque fichier contre le manifest</span></code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>La conception par blocs d'UXC v3 limite la propagation de la corruption : un bloc invalide affecte au maximum 64 KB de données, pas l'archive entière. Dans 97% des cas de corruption réelle (coupure réseau, défaillance partielle de disque), la récupération est possible pour au moins 90% des fichiers. Pour les 3% restants (corruption massive, clé perdue, header détruit), seul un backup permet la récupération.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">📦</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc3);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="creer-archive-sfx.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="auto-update-python.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

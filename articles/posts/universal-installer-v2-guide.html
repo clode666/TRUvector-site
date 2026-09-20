@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Universal Installer V2 : déploiement Python avec IA prédictive et delta UXC v3 — TRUvector</title>
+<meta name="description" content="IA ONNX pour la compression prédictive, algorithme delta UXC v3, cloud S3/Azure/GCS, API REST FastAPI et installateurs MSI/MSIX/Snap/PKG natifs — tour complet de Universal Installer V2.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/universal-installer-v2-guide.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Universal Installer V2 : déploiement Python avec IA prédictive et delta UXC v3">
+<meta property="og:description" content="IA ONNX pour la compression prédictive, algorithme delta UXC v3, cloud S3/Azure/GCS, API REST FastAPI et installateurs MSI/MSIX/Snap/PKG natifs — tour complet de Universal Installer V2.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Universal Installer V2 : déploiement Python avec IA prédictive et delta UXC v3</h1>
+    <div class="art-tags"><span class="tg">Déploiement</span><span class="tg">IA/ONNX</span><span class="tg">Python</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Le problème du déploiement Python en 2026</h2>
+        <p>Distribuer une application Python reste un exercice d'ingénierie non trivial. Entre la gestion des dépendances, les formats d'archive incompatibles selon les OS, la mise à jour différentielle et la conformité sécurité (intégrité, chiffrement), les développeurs jonglent souvent entre 4 à 6 outils distincts.</p>
+        <p>Universal Installer V2 centralise ce pipeline. Un outil Python 3.14, une API REST, une GUI PyQt6 — et la même logique de déploiement pour Windows, Linux et macOS.</p>
+
+        <blockquote><p>La complexité du déploiement ne devrait pas croître linéairement avec le nombre de targets. V2 la fait décroître.</p></blockquote>
+
+        <h2 id="uxc-delta">L'algorithme UXC v3 et la compression delta</h2>
+        <p>Le format UXC (Universal eXchange Compression) v3 est l'algorithme de compression propriétaire de Universal Installer. Il combine plusieurs techniques classiques avec une couche de sélection adaptative :</p>
+
+        <h3 id="uxc-detail">Comment fonctionne UXC v3</h3>
+        <ul>
+          <li><strong>Analyse des blocs</strong> — le fichier est découpé en blocs de 64 KB analysés indépendamment.</li>
+          <li><strong>Sélection d'algorithme par bloc</strong> — selon l'entropie du bloc, UXC choisit entre LZMA2, Brotli, Zstd ou stockage non compressé (déjà compressé).</li>
+          <li><strong>Delta binaire</strong> — en mode mise à jour, seuls les blocs modifiés entre v1 et v2 sont transmis. Un binaire Python de 80 MB avec 5% de changements génère un patch de ~4 MB.</li>
+          <li><strong>Manifest de vérification</strong> — chaque bloc a son hash SHA-256 dans le manifest, permettant une reprise de téléchargement partielle sans recorruption.</li>
+        </ul>
+        <pre><code><span style="color:var(--textd)"># Création d'un patch delta entre deux versions</span>
+<span style="color:var(--acc5)">from</span> universal_installer.uxc <span style="color:var(--acc5)">import</span> UXCPatcher
+
+patcher = UXCPatcher()
+patcher.create_patch(
+    source=<span style="color:var(--acc4)">"app_v1.0.uxc"</span>,
+    target=<span style="color:var(--acc4)">"app_v1.1.uxc"</span>,
+    output=<span style="color:var(--acc4)">"patch_v1.0_to_v1.1.uxdelta"</span>
+)
+
+<span style="color:var(--textd)"># Résultat typique : 80 MB → patch de 3.2 MB</span>
+print(patcher.stats)
+<span style="color:var(--textd)"># {'ratio': 0.04, 'blocks_changed': 47, 'blocks_total': 1280}</span></code></pre>
+
+        <h2 id="ia-onnx">IA prédictive ONNX : choisir le bon algorithme</h2>
+        <p>La sélection manuelle d'un algorithme de compression est un compromis aveugle entre vitesse et ratio. V2 embarque un modèle ONNX léger (2.3 MB) entraîné sur 50 000 archives pour prédire le meilleur algorithme selon le profil des données :</p>
+        <pre><code><span style="color:var(--acc5)">from</span> universal_installer.ai <span style="color:var(--acc5)">import</span> CompressionPredictor
+
+predictor = CompressionPredictor()  <span style="color:var(--textd)"># charge le modèle ONNX</span>
+
+<span style="color:var(--textd)"># Analyse un dossier et prédit la config optimale</span>
+prediction = predictor.analyze(<span style="color:var(--acc4)">"./dist/"</span>)
+print(prediction)
+<span style="color:var(--textd"># {</span>
+<span style="color:var(--textd)">  'algorithm':   'zstd',      # brotli / lzma2 / zstd / store</span>
+<span style="color:var(--textd)">  'level':       19,</span>
+<span style="color:var(--textd)">  'expected_ratio': 0.31,     # 31% de la taille originale</span>
+<span style="color:var(--textd)">  'estimated_time': '12.4s',</span>
+<span style="color:var(--textd)">  'confidence':  0.94</span>
+<span style="color:var(--textd)">}</span></code></pre>
+        <p>Le modèle tourne entièrement en local via ONNX Runtime — pas d'appel cloud, pas de latence réseau. Gain moyen mesuré : 8 à 23% de taille en moins vs la sélection heuristique traditionnelle.</p>
+
+        <h2 id="cloud">Cloud multi-provider : S3, Azure Blob, GCS</h2>
+        <p>V2 abstrait les trois grands providers derrière une interface unifiée. La configuration se fait une seule fois dans un profil chiffré :</p>
+        <pre><code><span style="color:var(--textd)"># Config profil cloud (chiffré AES-256-GCM sur disque)</span>
+<span style="color:var(--acc5)">from</span> universal_installer.cloud <span style="color:var(--acc5)">import</span> CloudProfile, Deployer
+
+profile = CloudProfile.load(<span style="color:var(--acc4)">"prod.uiprofile"</span>)
+<span style="color:var(--textd)"># Supporte: provider="s3" | "azure" | "gcs"</span>
+
+deployer = Deployer(profile)
+result = deployer.push(
+    archive=<span style="color:var(--acc4)">"app_v1.1.uxc"</span>,
+    destination=<span style="color:var(--acc4)">"s3://my-bucket/releases/"</span>,
+    delta_from=<span style="color:var(--acc4)">"app_v1.0.uxc"</span>,  <span style="color:var(--textd)"># upload seulement le delta</span>
+    public_url=<span style="color:var(--acc5)">True</span>
+)
+print(result.url)  <span style="color:var(--textd)"># https://cdn.example.com/releases/app_v1.1.uxc</span></code></pre>
+
+        <h2 id="api-rest">API REST FastAPI : déploiement piloté</h2>
+        <p>V2 expose une API REST complète via FastAPI, permettant d'intégrer le déploiement dans n'importe quel CI/CD :</p>
+        <pre><code><span style="color:var(--textd)"># Démarrer le serveur API</span>
+universal-installer api --port 8420 --auth-token $UI_TOKEN
+
+<span style="color:var(--textd)"># Depuis votre pipeline CI</span>
+curl -X POST https://deploy-srv:8420/api/v1/deploy \
+  -H <span style="color:var(--acc4)">"Authorization: Bearer $UI_TOKEN"</span> \
+  -F <span style="color:var(--acc4)">"archive=@dist/app_v1.1.uxc"</span> \
+  -F <span style="color:var(--acc4)">"target=production"</span> \
+  -F <span style="color:var(--acc4)">"strategy=delta"</span></code></pre>
+
+        <h2 id="installeurs">Génération d'installateurs natifs</h2>
+        <p>V2 génère des installateurs natifs signés pour les trois plateformes à partir d'une archive UXC source :</p>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Plateforme</th>
+              <th>Signature</th>
+              <th>Silencieux</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>MSI</td><td>Windows</td><td class="ok">✓ Authenticode</td><td class="ok">✓</td></tr>
+            <tr><td>MSIX</td><td>Windows 10/11</td><td class="ok">✓ Store-ready</td><td class="ok">✓</td></tr>
+            <tr><td>Snap</td><td>Ubuntu/Debian</td><td class="ok">✓ GPG</td><td class="ok">✓</td></tr>
+            <tr><td>DEB</td><td>Debian/Ubuntu</td><td class="ok">✓ APT</td><td class="ok">✓</td></tr>
+            <tr><td>RPM</td><td>RHEL/Fedora</td><td class="ok">✓ RPM GPG</td><td class="ok">✓</td></tr>
+            <tr><td>PKG</td><td>macOS</td><td class="partial">△ Notarisation optionnelle</td><td class="ok">✓</td></tr>
+            <tr><td>DMG</td><td>macOS</td><td class="partial">△ Notarisation optionnelle</td><td class="no">✗</td></tr>
+          </tbody>
+        </table>
+
+        <h2 id="securite">Sécurité : AES-256-GCM et vérification d'intégrité</h2>
+        <p>Chaque archive UXC peut être chiffrée et liée à un profil de déploiement. L'installateur vérifie la signature ECDSA avant d'extraire quoi que ce soit sur le disque cible :</p>
+        <pre><code><span style="color:var(--textd)"># Créer une archive chiffrée et signée</span>
+universal-installer pack ./dist/ \
+  --output app_v1.1.uxc \
+  --encrypt \
+  --sign --key ./keys/release.pem \
+  --algo zstd --level 19
+
+<span style="color:var(--textd)"># Sur la machine cible : vérification automatique</span>
+<span style="color:var(--textd)"># avant extraction, l'installateur vérifie :</span>
+<span style="color:var(--textd)"># 1. Signature ECDSA de l'archive</span>
+<span style="color:var(--textd)"># 2. Hash SHA-256 de chaque bloc UXC</span>
+<span style="color:var(--textd)"># 3. Manifest d'intégrité global</span></code></pre>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>Universal Installer V2 répond à la question que beaucoup d'équipes se posent sans trouver de réponse unifiée : comment déployer une application Python sur Windows, Linux et macOS avec une chaîne sécurisée, des mises à jour différentielles et sans dépendre d'un cloud imposé ? Le tout avec une API REST pour l'intégration CI/CD et une GUI pour les équipes moins techniques.</p>
+        <p>La combinaison IA ONNX + delta UXC v3 est le différenciateur principal sur les environnements à bande passante contrainte — typiquement les sites industriels, les établissements de santé ou les agences gouvernementales.</p>
+
+        <div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:22px">📦</span>
+          <div style="flex:1;min-width:200px">
+            <div style="font-family:var(--mono);font-size:9px;color:var(--acc7);letter-spacing:.2em;margin-bottom:4px">PRODUIT</div>
+            <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+            <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+          </div>
+        </div>
+
+        <div class="sep"></div>
+        <div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+          <a href="../../" class="btn btn-ghost">← Retour au blog</a>
+          <a href="aes-gcm-vs-chacha20.html" class="btn btn-outline">Article suivant →</a>
+        </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

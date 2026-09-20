@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obfuscation AST avancée : CFG flattening, inlining et string splitting — TRUvector</title>
+<meta name="description" content="Au-delà du renommage de variables — techniques d&#x27;obfuscation post-compilation sur l&#x27;AST Python : aplatissement du graphe de contrôle, inlining de constantes, découpage de chaînes et insertion de faux blocs.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/obfuscation-ast-avancee.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Obfuscation AST avancée : CFG flattening, inlining et string splitting">
+<meta property="og:description" content="Au-delà du renommage de variables — techniques d&#x27;obfuscation post-compilation sur l&#x27;AST Python : aplatissement du graphe de contrôle, inlining de constantes, découpage de chaînes et insertion de faux blocs.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Obfuscation AST avancée : CFG flattening, inlining et string splitting</h1>
+    <div class="art-tags"><span class="tg">Sécurité</span><span class="tg">Python</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Limites de l'obfuscation basique</h2>
+<p>Renommer les variables et les fonctions est la forme d'obfuscation la plus simple — et la plus contournée. Un décompilateur moderne comme <code>pycdc</code> ou <code>decompile3</code> restaure du code lisible en quelques secondes. Pour ralentir sérieusement le reverse engineering, il faut agir sur la <em>structure du code</em>, pas seulement sur les noms.</p>
+
+<blockquote><p>L'objectif de l'obfuscation avancée n'est pas de rendre le code illisible — c'est de le rendre incompréhensible. Un attaquant peut lire chaque instruction et ne pas comprendre ce que le programme fait globalement.</p></blockquote>
+
+<h2 id="cfg">CFG Flattening — Aplatissement du graphe de contrôle</h2>
+<p>Le CFG flattening transforme une structure de contrôle naturelle (if/else, boucles) en une machine à états pilotée par une variable de dispatch. Le flux logique devient opaque même pour un analyste expérimenté :</p>
+<pre><code><span style="color:var(--textd)"># Code original</span>
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">calcul</span>(x):
+    <span style="color:var(--acc5)">if</span> x > <span style="color:var(--acc4)">0</span>:
+        y = x * <span style="color:var(--acc4)">2</span>
+    <span style="color:var(--acc5)">else</span>:
+        y = x - <span style="color:var(--acc4)">1</span>
+    <span style="color:var(--acc5)">return</span> y + <span style="color:var(--acc4)">10</span>
+
+<span style="color:var(--textd)"># Après CFG flattening</span>
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">calcul</span>(x):
+    _s, _r = <span style="color:var(--acc4)">0</span>, <span style="color:var(--acc5)">None</span>
+    <span style="color:var(--acc5)">while</span> <span style="color:var(--acc5)">True</span>:
+        <span style="color:var(--acc5)">if</span> _s == <span style="color:var(--acc4)">0</span>:
+            _s = <span style="color:var(--acc4)">1</span> <span style="color:var(--acc5)">if</span> x > <span style="color:var(--acc4)">0</span> <span style="color:var(--acc5)">else</span> <span style="color:var(--acc4)">2</span>
+        <span style="color:var(--acc5)">elif</span> _s == <span style="color:var(--acc4)">1</span>:
+            _x0a3f = x * <span style="color:var(--acc4)">2</span>; _s = <span style="color:var(--acc4)">3</span>
+        <span style="color:var(--acc5)">elif</span> _s == <span style="color:var(--acc4)">2</span>:
+            _x0a3f = x - <span style="color:var(--acc4)">1</span>; _s = <span style="color:var(--acc4)">3</span>
+        <span style="color:var(--acc5)">elif</span> _s == <span style="color:var(--acc4)">3</span>:
+            _r = _x0a3f + <span style="color:var(--acc4)">10</span>; <span style="color:var(--acc5)">break</span>
+    <span style="color:var(--acc5)">return</span> _r</code></pre>
+
+<h2 id="inlining">Inlining de constantes</h2>
+<p>Remplacer les constantes par des expressions calculées qui produisent le même résultat à l'exécution :</p>
+<pre><code><span style="color:var(--acc5)">import</span> ast, random
+
+<span style="color:var(--acc5)">class</span> <span style="color:var(--acc2)">ConstantInliner</span>(ast.NodeTransformer):
+    <span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">visit_Constant</span>(self, node):
+        <span style="color:var(--acc5)">if isinstance</span>(node.value, int) <span style="color:var(--acc5)">and</span> <span style="color:var(--acc4)">-1000</span> < node.value < <span style="color:var(--acc4)">1000</span>:
+            k = random.randint(<span style="color:var(--acc4)">1</span>, <span style="color:var(--acc4)">999</span>)
+            v = node.value
+            <span style="color:var(--textd)"># Remplace 42 par (42 + k - k)</span>
+            <span style="color:var(--acc5)">return</span> ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Constant(value=v + k),
+                    op=ast.Sub(),
+                    right=ast.Constant(value=k)
+                ),
+                op=ast.Add(),
+                right=ast.Constant(value=<span style="color:var(--acc4)">0</span>)
+            )
+        <span style="color:var(--acc5)">return</span> node</code></pre>
+
+<h2 id="strings">String splitting</h2>
+<p>Les chaînes de caractères sensibles (URLs, clés, chemins) sont découpées en fragments et reconstituées à l'exécution :</p>
+<pre><code><span style="color:var(--textd)"># Original</span>
+url = <span style="color:var(--acc4)">"https://licences.monapp.fr/activate"</span>
+
+<span style="color:var(--textd)"># Après string splitting</span>
+_p0 = <span style="color:var(--acc4)">"htt"</span>; _p1 = <span style="color:var(--acc4)">"ps://"</span>; _p2 = <span style="color:var(--acc4)">"licences."</span>
+_p3 = <span style="color:var(--acc4)">"monapp"</span>; _p4 = <span style="color:var(--acc4)">".fr"</span>; _p5 = <span style="color:var(--acc4)">"/activate"</span>
+url = _p0 + _p1 + _p2 + _p3 + _p4 + _p5
+
+<span style="color:var(--textd)"># Ou via XOR encoding</span>
+_enc = [<span style="color:var(--acc4)">0x68^0x42</span>, <span style="color:var(--acc4)">0x74^0x42</span>, <span style="color:var(--acc4)">0x74^0x42</span>]  <span style="color:var(--textd)"># ...</span>
+url = <span style="color:var(--acc4">""</span>.join(chr(c ^ <span style="color:var(--acc4)">0x42</span>) <span style="color:var(--acc5)">for</span> c <span style="color:var(--acc5)">in</span> _enc)</code></pre>
+
+<h2 id="opaque">Prédicats opaques</h2>
+<p>Un prédicat opaque est une condition toujours vraie (ou toujours fausse) mais difficile à prouver statiquement pour un analyseur :</p>
+<pre><code><span style="color:var(--textd)"># Toujours vrai : n*(n+1) est toujours pair</span>
+<span style="color:var(--acc5)">def</span> <span style="color:var(--acc6)">_op</span>(n): <span style="color:var(--acc5)">return</span> (n * (n + <span style="color:var(--acc4)">1</span>)) % <span style="color:var(--acc4)">2</span> == <span style="color:var(--acc4)">0</span>
+
+<span style="color:var(--acc5)">if</span> _op(random.randint(<span style="color:var(--acc4)">1</span>, <span style="color:var(--acc4)">9999</span>)):  <span style="color:var(--textd)"># toujours True</span>
+    <span style="color:var(--textd)"># code réel</span>
+    do_real_work()
+<span style="color:var(--acc5)">else</span>:
+    <span style="color:var(--textd)"># code mort jamais exécuté, mais analysé par le reverse engineer</span>
+    send_to_server(fake_key)</code></pre>
+
+<h2 id="dead">Faux blocs de code</h2>
+<p>Insérer du code mort qui ressemble à du code réel (fausses vérifications de licence, fausses requêtes réseau) noie les vrais mécanismes de protection dans du bruit :</p>
+<pre><code><span style="color:var(--textd)"># Faux check de licence (jamais exécuté)</span>
+<span style="color:var(--acc5)">if</span> _op_always_false():
+    _fake_hw = <span style="color:var(--acc4)">"DEADBEEF-0000-0000-0000-000000000000"</span>
+    _fake_sig = verify_signature(_fake_hw, b<span style="color:var(--acc4">""</span>)
+    <span style="color:var(--acc5)">if</span> _fake_sig:
+        activate_premium_mode()
+<span style="color:var(--textd)"># L'attaquant perd du temps à analyser ce chemin</span></code></pre>
+
+<h2 id="combine">Combiner les techniques</h2>
+<p>L'efficacité maximale vient de la combinaison : CFG flattening + string splitting + prédicats opaques + faux blocs. IronLock v2 applique ces transformations automatiquement lors du packaging avec <code>--obfuscation-level high</code> :</p>
+<pre><code>ironlock encrypt app.py   --obfuscation-level high   --cfg-flatten   --string-split   --opaque-predicates   --dead-code-injection   --output dist/</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>L'obfuscation AST avancée transforme un code compréhensible en un labyrinthe — sans changer son comportement. Combinée au chiffrement AES-256-GCM et à l'anti-debug, elle rend l'analyse statique et dynamique simultanément difficile. Chaque couche supplémentaire multiplie le temps nécessaire à un attaquant pour comprendre la logique métier.</p>
+
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">🔐</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc3);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">IronLock v2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir IronLock →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="activation-reseau-offline.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="licences-flottantes-par-poste.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

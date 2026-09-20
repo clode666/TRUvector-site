@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déployer sur un réseau offline avec Universal Installer V2 — TRUvector</title>
+<meta name="description" content="Mirror local, bundle air-gap, vérification sans internet, proxy interne, cache CDN — guide complet pour déployer avec Universal Installer V2 dans un environnement totalement isolé.">
+<link rel="canonical" href="https://truvector.dev/articles/posts/deploiement-offline-airgap.html">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Déployer sur un réseau offline avec Universal Installer V2">
+<meta property="og:description" content="Mirror local, bundle air-gap, vérification sans internet, proxy interne, cache CDN — guide complet pour déployer avec Universal Installer V2 dans un environnement totalement isolé.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .article-wrap{max-width:820px;margin:0 auto;padding:6px 22px 60px}
+  .art-hero{position:relative;padding:40px 0 6px;text-align:center;overflow:hidden}
+  .art-hero .in{position:relative;z-index:2}
+  .art-hero .triskele{width:50px;height:50px;margin:0 auto 12px}
+  .art-hero h1{font-size:clamp(25px,4.4vw,36px);margin:0 auto;max-width:22ch;line-height:1.18;font-weight:700;letter-spacing:-.4px}
+  .art-tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+  .art-tags .tg{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);background:rgba(177,74,237,.10);border-radius:999px;padding:4px 11px}
+  .back-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 10px}
+  .back-link:hover{color:var(--menthe);text-decoration:none}
+  .article{font-size:15.5px;line-height:1.75;color:var(--texte-2)}
+  .article h2{font-size:22px;margin:30px 0 10px;font-weight:600;letter-spacing:-.2px;color:var(--texte)}
+  .article h3{font-size:18px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  .article h4{font-size:15px;margin:18px 0 6px;font-weight:600;color:var(--texte)}
+  .article p{margin:0 0 14px}
+  .article a{color:var(--menthe)}
+  .article ul,.article ol{margin:0 0 14px;padding-left:22px}
+  .article li{margin:0 0 7px}
+  .article li::marker{color:var(--menthe)}
+  .article strong,.article b{color:var(--texte)}
+  .article blockquote{margin:0 0 16px;padding:12px 16px;border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:8px}
+  .article code{font-family:var(--mono);font-size:.86em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  .article pre{background:#060a0f;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;margin:0 0 16px}
+  .article pre code{background:none;border:0;padding:0;color:var(--menthe-soft);font-size:12.8px;line-height:1.7}
+  .article img{max-width:100%;border-radius:12px;border:1px solid var(--bord)}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  .article table,table.cmp-table{border-collapse:collapse;width:100%;min-width:460px;font-size:13.6px}
+  .article th,.article td,table.cmp-table th,table.cmp-table td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  .article th,table.cmp-table th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .v-good{color:#59e39a} .v-bad{color:#ff8b8b} .v-warn{color:#f4c56b}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../../index.html">Accueil</a>
+    <a href="../">Articles</a>
+    <a href="../../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="art-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Déployer sur un réseau offline avec Universal Installer V2</h1>
+    <div class="art-tags"><span class="tg">Déploiement</span><span class="tg">Sécurité</span></div>
+  </div>
+</header>
+
+<main class="article-wrap">
+  <a class="back-link" href="../">← Tous les articles</a>
+  <div class="article">
+<h2 id="intro">Le défi de l'air-gap</h2>
+<p>Un réseau air-gap est physiquement isolé d'internet. Hôpitaux HDS, centrales nucléaires, réseaux militaires, usines critiques — les déploiements sans internet nécessitent une stratégie complète : comment pré-charger les packages, vérifier leur intégrité sans connexion externe et distribuer les mises à jour sans CDN ?</p>
+<blockquote><p>Dans un environnement air-gap, toute vérification d'intégrité qui nécessite une connexion externe est une vérification qui ne se fait pas. Le système de signature ECDSA de Universal Installer est conçu pour fonctionner 100% offline.</p></blockquote>
+<h2 id="mirror">Créer un mirror local</h2>
+<pre><code><span style="color:var(--textd)"># Sur une machine connectée : créer le bundle air-gap</span>
+universal-installer airgap bundle   --source dist/app_v1.1.uxc   --include-keys keys/   --include-installer \      <span style="color:var(--textd)"># inclure universal-installer lui-même</span>
+  --include-python \         <span style="color:var(--textd)"># inclure Python 3.12 si non garanti</span>
+  --output airgap_bundle_v1.1/
+
+<span style="color:var(--textd)"># airgap_bundle_v1.1/</span>
+<span style="color:var(--textd)"># ├── app_v1.1.uxc</span>
+<span style="color:var(--textd)"># ├── app_v1.1.uxc.sig</span>
+<span style="color:var(--textd)"># ├── manifest.json</span>
+<span style="color:var(--textd)"># ├── keys/public.pem</span>
+<span style="color:var(--textd)"># ├── universal-installer.exe</span>
+<span style="color:var(--textd)"># └── install.bat / install.sh</span></code></pre>
+<h2 id="transfert">Transfert air-gap</h2>
+<pre><code><span style="color:var(--textd)"># Options de transfert physique</span>
+<span style="color:var(--textd)"># 1. Clé USB chiffrée (VeraCrypt / BitLocker)</span>
+<span style="color:var(--textd)"># 2. DVD/Blu-ray signé GPG</span>
+<span style="color:var(--textd)"># 3. Diode réseau unidirectionnelle (transfert sans retour)</span>
+
+<span style="color:var(--textd)"># Vérifier l'intégrité après transfert (AVANT d'exécuter)</span>
+universal-installer verify app_v1.1.uxc   --sig app_v1.1.uxc.sig   --pubkey keys/public.pem   --offline               <span style="color:var(--textd)"># aucune requête réseau</span>
+<span style="color:var(--textd)"># → ✓ Signature ECDSA valide — offline — 2026-12-01</span></code></pre>
+<h2 id="mirror-interne">Serveur de distribution interne</h2>
+<pre><code><span style="color:var(--textd)"># Démarrer un serveur de distribution local</span>
+<span style="color:var(--textd)"># (remplace le CDN cloud pour les postes du réseau air-gap)</span>
+universal-installer serve   --dir airgap_bundle_v1.1/   --port 8080   --bind 192.168.1.10   --auth-token vault:INTERNAL_DIST_TOKEN
+
+<span style="color:var(--textd)"># Sur les postes clients (même réseau interne)</span>
+<span style="color:var(--acc5)">from</span> universal_installer.updater <span style="color:var(--acc5)">import</span> UpdateChecker
+
+checker = UpdateChecker(
+    manifest_url=<span style="color:var(--acc4)">"http://192.168.1.10:8080/manifest.json"</span>,
+    public_key_path=<span style="color:var(--acc4)">"keys/public.pem"</span>,
+    current_version=<span style="color:var(--acc4)">"1.0.0"</span>,
+    offline_mode=<span style="color:var(--acc5)">True</span>  <span style="color:var(--textd)"># pas de vérification de révocation en ligne</span>
+)</code></pre>
+<h2 id="rotation">Rotation des clés en air-gap</h2>
+<p>La rotation des clés ECDSA en environnement air-gap nécessite une procédure rigoureuse :</p>
+<ol>
+  <li>Générer la nouvelle paire de clés sur une machine offline.</li>
+  <li>Créer un document de transition signé avec l'ancienne clé privée, contenant la nouvelle clé publique.</li>
+  <li>Transférer le document de transition via le canal air-gap habituel.</li>
+  <li>Les clients valident le document de transition avec l'ancienne clé publique, puis adoptent la nouvelle.</li>
+  <li>L'ancienne clé privée est détruite (cérémoniel de destruction documenté).</li>
+</ol>
+<h2 id="conclusion">Conclusion</h2>
+<p>Universal Installer V2 est conçu pour fonctionner 100% offline dès la création du bundle air-gap. La vérification ECDSA P-384 ne nécessite aucune connexion externe — la clé publique est distribuée avec le bundle. Le serveur de distribution interne remplace le CDN cloud pour les mises à jour intra-réseau. Pour les environnements les plus stricts (réseau unidirectionnel), le bundle peut être distribué sur support physique avec vérification GPG préalable.</p>
+<div style="margin-top:24px;padding:20px 22px;background:var(--bg3);border:1px solid var(--borderg);border-radius:var(--r);display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+  <span style="font-size:22px">📦</span>
+  <div style="flex:1;min-width:200px">
+    <div style="font-family:var(--mono);font-size:9px;color:var(--acc);letter-spacing:.2em;margin-bottom:4px">PRODUIT LIÉ</div>
+    <div style="font-family:var(--disp);font-size:12px;color:var(--textb);letter-spacing:.06em">Universal Installer V2.0</div>
+  </div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <a href="../../logiciels/" class="btn btn-primary">Découvrir V2 →</a>
+    <a href="../../logiciels/" class="btn btn-outline">Manuel complet</a>
+  </div>
+</div>
+<div class="sep"></div>
+<div style="display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap">
+  <a href="archives-multi-volumes.html" class="btn btn-ghost">← Article précédent</a>
+  <a href="migration-legacy-uxc.html" class="btn btn-outline">Article suivant →</a>
+</div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p><a class="back-link" href="../">← Tous les articles</a></p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../../mentions-legales/">Mentions légales</a> · <a href="../../cgv/">CGV</a> · <a href="../../confidentialite/">Confidentialité</a> · <a href="../../cookies/">Cookies</a> · <a href="../../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script>
+  (function(){var a=document.querySelectorAll('.article table');for(var i=0;i<a.length;i++){var t=a[i];if(t.parentNode.className!=='tw'){var w=document.createElement('div');w.className='tw';t.parentNode.insertBefore(w,t);w.appendChild(t);}}})();
+</script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script src="../../assets/js/nav.js?v=4"></script>
+</body>
+</html>

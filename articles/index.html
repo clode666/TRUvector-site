@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles — TRUvector.dev</title>
+<meta name="description" content="Le blog TRUvector : licensing, automatisation, sécurité, compression, protection de code Python et plus encore.">
+<link rel="canonical" href="https://truvector.dev/articles/">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<meta property="og:title" content="Articles — TRUvector.dev">
+<meta property="og:description" content="Notes, tutoriels et comparatifs autour du code et de la création.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+<style>
+  .section-hero{position:relative;padding:52px 0 18px;text-align:center;overflow:hidden}
+  .section-hero .in{position:relative;z-index:2}
+  .section-hero .triskele{width:58px;height:58px;margin:0 auto 14px}
+  .section-hero h1{font-size:clamp(26px,5.5vw,38px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .section-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .section-hero p{color:var(--texte-2);max-width:60ch;margin:12px auto 0;font-size:15.5px}
+  .search{max-width:520px;margin:22px auto 0;position:relative}
+  .search input{width:100%;font-family:var(--sans);font-size:15px;color:var(--texte);background:var(--panneau);border:1px solid var(--bord-fort);border-radius:12px;padding:13px 15px 13px 42px}
+  .search input:focus{outline:none;border-color:var(--menthe);box-shadow:0 0 0 3px rgba(52,245,197,.12)}
+  .search .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--texte-3)}
+  .count{font-family:var(--mono);font-size:12px;color:var(--texte-3);text-align:center;margin:14px 0 0}
+  .posts{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;padding:18px 0 40px}
+  .post-card{display:flex;flex-direction:column;gap:10px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px 18px 16px;color:var(--texte);transition:transform .15s,border-color .2s,box-shadow .25s}
+  .post-card:hover{transform:translateY(-3px);border-color:var(--bord-fort);box-shadow:0 10px 28px rgba(0,0,0,.35);text-decoration:none}
+  .pc-tags{display:flex;gap:6px;flex-wrap:wrap}
+  .pc-tags .tg{font-family:var(--mono);font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.35);background:rgba(177,74,237,.08);border-radius:999px;padding:3px 8px}
+  .post-card h3{margin:0;font-size:16.5px;font-weight:600;line-height:1.3}
+  .post-card p{margin:0;color:var(--texte-2);font-size:13.8px;flex:1;line-height:1.55}
+  .pc-go{font-family:var(--mono);font-size:12px;color:var(--menthe)}
+  .empty{text-align:center;color:var(--texte-2);border:1px dashed var(--bord-fort);border-radius:var(--r);padding:40px 20px;background:var(--panneau);margin:8px 0 34px}
+</style>
+  <script src="../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Accueil</a>
+    <a href="./" aria-current="page">Articles</a>
+    <a href="../mentions-legales/">Légal</a>
+  </div>
+</div></nav>
+
+<header class="section-hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Articles <span class="dev">&amp; tutoriels</span></h1>
+    <p>Licensing, automatisation, sécurité, compression, protection de code — le carnet technique de TRUvector.</p>
+    <div class="search"><span class="ic">🔍</span><input id="q" type="search" placeholder="Rechercher un article, un thème…" aria-label="Rechercher"></div>
+    <p class="count" id="count"></p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="posts" id="posts"></div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p class="fm">$ truvector blog --posts 60 --public</p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
+  </div>
+</footer>
+
+<script src="../assets/js/config.js"></script>
+<script>
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+(function(){
+  var wrap=document.getElementById('posts'), q=document.getElementById('q'), count=document.getElementById('count'), all=[];
+  function card(a){
+    var tags=(a.tags||[]).map(function(t){return '<span class="tg">'+esc(t)+'</span>';}).join('');
+    return '<a class="post-card" href="'+esc(a.url)+'"><div class="pc-tags">'+tags+'</div><h3>'+esc(a.title)+'</h3><p>'+esc(a.excerpt||'')+'</p><span class="pc-go">Lire →</span></a>';
+  }
+  function render(list){
+    wrap.innerHTML = list.length ? list.map(card).join('') : '<div class="empty">Aucun article ne correspond à ta recherche.</div>';
+    count.textContent = list.length + ' article' + (list.length>1?'s':'');
+  }
+  function filter(){
+    var t=(q.value||'').toLowerCase().trim();
+    if(!t){ render(all); return; }
+    render(all.filter(function(a){ return (a.title+' '+(a.excerpt||'')+' '+(a.tags||[]).join(' ')).toLowerCase().indexOf(t)>-1; }));
+  }
+  q.addEventListener('input',filter);
+  if(window.TV){ TV.load('../').then(function(cfg){ all=((cfg.catalog||{}).articles)||[]; render(all); }); }
+  else { render([]); }
+})();
+</script>
+<script src="../assets/js/player.js?v=2"></script>
+<script src="../assets/js/nav.js?v=4"></script>
+</body>
+</html>
