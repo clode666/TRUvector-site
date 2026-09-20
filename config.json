@@ -186,6 +186,102 @@
     ],
     "musique": [
       {
+        "title": "Rétrowave Néon",
+        "src": "01-retrowave-neon.mp3"
+      },
+      {
+        "title": "Lo-Fi Pluie",
+        "src": "02-lofi-pluie.mp3"
+      },
+      {
+        "title": "Chiptune Turbo",
+        "src": "03-chiptune-turbo.mp3"
+      },
+      {
+        "title": "Deep House Minuit",
+        "src": "04-deep-house.mp3"
+      },
+      {
+        "title": "Techno Souterrain",
+        "src": "05-techno.mp3"
+      },
+      {
+        "title": "Trance Aurore",
+        "src": "06-trance-aurore.mp3"
+      },
+      {
+        "title": "Drum & Bass Orage",
+        "src": "07-dnb-orage.mp3"
+      },
+      {
+        "title": "Trap Cristal",
+        "src": "08-trap-cristal.mp3"
+      },
+      {
+        "title": "Ambient Nébuleuse",
+        "src": "09-ambient-nebuleuse.mp3"
+      },
+      {
+        "title": "Trip-Hop Fumée",
+        "src": "10-triphop-fumee.mp3"
+      },
+      {
+        "title": "Funk Galactique",
+        "src": "11-funk-galactique.mp3"
+      },
+      {
+        "title": "Disco Miroir",
+        "src": "12-disco-miroir.mp3"
+      },
+      {
+        "title": "Reggae Dub Soleil",
+        "src": "13-reggae-dub.mp3"
+      },
+      {
+        "title": "Bossa Café",
+        "src": "14-bossa-cafe.mp3"
+      },
+      {
+        "title": "Jazz de Minuit",
+        "src": "15-jazz-minuit.mp3"
+      },
+      {
+        "title": "Blues Ruelle",
+        "src": "16-blues-ruelle.mp3"
+      },
+      {
+        "title": "Rock Circuit",
+        "src": "17-rock-circuit.mp3"
+      },
+      {
+        "title": "Cinéma Épique",
+        "src": "18-cinema-epique.mp3"
+      },
+      {
+        "title": "Clavecin Baroque",
+        "src": "19-clavecin-baroque.mp3"
+      },
+      {
+        "title": "Valse des Circuits",
+        "src": "20-valse-circuits.mp3"
+      },
+      {
+        "title": "Vaporwave Mirage",
+        "src": "21-vaporwave-mirage.mp3"
+      },
+      {
+        "title": "Future Bass Éclat",
+        "src": "22-future-bass.mp3"
+      },
+      {
+        "title": "Route de la Soie",
+        "src": "23-route-soie.mp3"
+      },
+      {
+        "title": "Pizzicato Espiègle",
+        "src": "24-pizzicato-espiegle.mp3"
+      },
+      {
         "title": "Néon & Rosée",
         "src": "neon-rosee.mp3"
       },
