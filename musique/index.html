@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Créations musicales — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+  <script src="../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../index.html">Accueil</a><a href="../mentions-legales/">Légal</a></div>
+</div></nav>
+<header class="section-hero"><div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="wrap in"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><h1>Créations musicales</h1><p>Écoute mes créations audio.</p></div>
+</header>
+<main class="wrap"><div id="tv-content"><div class="player" id="tvpl"><div class="now"><div class="disc"></div><div class="meta"><div class="tt" id="tvtt">—</div><div class="stt">TRUvector · créations musicales</div></div></div><div class="ctrls"><button id="tvprev">⏮</button><button class="play" id="tvpp">▶</button><button id="tvnext">⏭</button></div></div><ul class="playlist" id="tvlist"><li data-i="0" data-title="Néon &amp; Rosée"><span class="n">01</span>Néon &amp; Rosée</li><li data-i="1" data-title="Triskèle au clair de lune"><span class="n">02</span>Triskèle au clair de lune</li><li data-i="2" data-title="Cœur Cathode"><span class="n">03</span>Cœur Cathode</li><li data-i="3" data-title="Aurore 8-bit"><span class="n">04</span>Aurore 8-bit</li><li data-i="4" data-title="Pixel d'Or"><span class="n">05</span>Pixel d'Or</li><li data-i="5" data-title="Dérive Stellaire"><span class="n">06</span>Dérive Stellaire</li><li data-i="6" data-title="Slow Modem"><span class="n">07</span>Slow Modem</li><li data-i="7" data-title="Lettre en ASCII"><span class="n">08</span>Lettre en ASCII</li><li data-i="8" data-title="Comète de Velours"><span class="n">09</span>Comète de Velours</li><li data-i="9" data-title="Aube Arcade"><span class="n">10</span>Aube Arcade</li><li data-i="10" data-title="Aurora Pad"><span class="n">11</span>Aurora Pad</li><li data-i="11" data-title="Nébuleuse"><span class="n">12</span>Nébuleuse</li></ul><audio id="tvaudio" preload="none"></audio><script type="application/json" id="tvsrcs">["neon-rosee.mp3", "triskele-clair-lune.mp3", "coeur-cathode.mp3", "aurore-8bit.mp3", "pixel-dor.mp3", "derive-stellaire.mp3", "slow-modem.mp3", "lettre-ascii.mp3", "comete-velours.mp3", "aube-arcade.mp3", "aurora-pad.mp3", "nebuleuse.mp3"]</script></div></main>
+<footer class="site-foot"><div class="wrap"><div class="hr" style="margin-bottom:26px"></div>
+  <p class="fm">$ truvector serve --section musique --public</p>
+  <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+  <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
+</div></footer>
+<script>
+(function(){var content=document.getElementById('tv-content');if(!content)return;
+function lightbox(){var figs=content.querySelectorAll('.art .art-view');if(!figs.length)return;var lb=document.createElement('div');lb.style.cssText='position:fixed;inset:0;z-index:140;background:rgba(4,7,11,.92);display:none;align-items:center;justify-content:center;padding:24px';lb.innerHTML='<button aria-label="Fermer" style="position:absolute;top:16px;right:18px;width:42px;height:42px;border-radius:10px;background:none;border:1px solid rgba(126,240,205,.16);color:#9db2ae;font-size:20px;cursor:pointer">✕</button><img style="max-width:94vw;max-height:88vh;border-radius:12px;border:1px solid rgba(126,240,205,.16)" alt="">';document.body.appendChild(lb);function close(){lb.style.display='none';lb.querySelector('img').src='';}lb.querySelector('button').onclick=close;lb.addEventListener('click',function(e){if(e.target===lb)close();});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});figs.forEach(function(b){b.addEventListener('click',function(){var im=b.querySelector('img');lb.querySelector('img').src=im.src;lb.style.display='flex';});});}
+function music(){var pl=content.querySelector('#tvpl');if(!pl)return;var srcs=[];try{srcs=JSON.parse(content.querySelector('#tvsrcs').textContent);}catch(e){srcs=[];}if(!srcs.length)return;var audio=content.querySelector('#tvaudio'),pp=content.querySelector('#tvpp'),tt=content.querySelector('#tvtt'),items=content.querySelectorAll('#tvlist li'),i=0;function mark(){for(var k=0;k<items.length;k++)items[k].classList.toggle('active',k===i);}function title(k){return items[k]?(items[k].getAttribute('data-title')||items[k].textContent):'';}function load(idx,play){i=((idx%srcs.length)+srcs.length)%srcs.length;audio.src=(window.TRU_ASSET_BASE?window.TRU_ASSET_BASE+'/musique/':'assets/')+srcs[i];tt.textContent=title(i);mark();if(play){var q=audio.play();if(q&&q.catch)q.catch(function(){});}}function sp(on){pl.classList.toggle('playing',on);pp.textContent=on?'⏸':'▶';}audio.addEventListener('play',function(){sp(true);});audio.addEventListener('pause',function(){sp(false);});audio.addEventListener('ended',function(){load(i+1,true);});pp.addEventListener('click',function(){if(audio.paused)load(i,true);else audio.pause();});content.querySelector('#tvprev').addEventListener('click',function(){load(i-1,true);});content.querySelector('#tvnext').addEventListener('click',function(){load(i+1,true);});for(var k=0;k<items.length;k++){(function(k){items[k].style.cursor='pointer';items[k].addEventListener('click',function(){load(k,true);});})(k);}load(0,false);}
+lightbox();music();})();
+</script>
+<style>
+  .bg-toggle{display:flex;align-items:center;gap:10px;margin:14px 0 4px;padding:12px 15px;border:1px solid var(--bord);background:var(--panneau-2);border-radius:12px;font-family:var(--mono);font-size:13px;color:var(--texte-2);cursor:pointer;max-width:520px}
+  .bg-toggle input{width:18px;height:18px;accent-color:var(--menthe);flex:0 0 auto;cursor:pointer}
+  .bg-toggle b{color:var(--texte);font-weight:600}
+  .bg-toggle .h{color:var(--texte-3);font-size:11.5px;display:block;margin-top:2px}
+</style>
+<script>
+/* Lecture en fond : relaie l'état du lecteur de la page vers le lecteur global
+   (assets/js/player.js) via sessionStorage, pour continuer de page en page. */
+(function(){
+  var box=document.getElementById('tv-content'); if(!box) return;
+  var audio=box.querySelector('#tvaudio'), pl=box.querySelector('#tvpl');
+  if(!audio||!pl) return;
+  function ss(k,v){ try{ if(v===undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k,v); }catch(e){ return null; } }
+  function curIdx(){ var it=box.querySelectorAll('#tvlist li'); for(var k=0;k<it.length;k++){ if(it[k].classList.contains('active')) return k; } return 0; }
+
+  var wrap=document.createElement('label'); wrap.className='bg-toggle';
+  wrap.innerHTML='<input type="checkbox" id="tvbg"><span><b>Écouter en navigant</b> — la musique continue sur tout le site.<span class="h">Reprise automatique de la piste et de la position à chaque page.</span></span>';
+  if(pl.parentNode) pl.parentNode.insertBefore(wrap, pl.nextSibling);
+  var cb=wrap.querySelector('#tvbg');
+  cb.checked = ss('tv_music_on')==='1';
+
+  function persist(){ if(!cb.checked) return; ss('tv_music_i', String(curIdx())); ss('tv_music_t', String(audio.currentTime||0)); ss('tv_music_playing', audio.paused?'0':'1'); ss('tv_music_vol', String(audio.volume)); }
+  cb.addEventListener('change', function(){ ss('tv_music_on', cb.checked?'1':'0'); if(cb.checked) persist(); });
+  audio.addEventListener('timeupdate', persist);
+  audio.addEventListener('play', persist);
+  audio.addEventListener('pause', persist);
+  window.addEventListener('pagehide', persist);
+})();
+</script>
+<script src="../assets/js/nav.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+# TRUvector.dev — déploiement statique sur Cloudflare (Workers Assets).
+# La présence de ce fichier empêche l'auto-détection erronée (Hugo) :
+# aucun build n'est lancé, les fichiers sont servis tels quels.
+name = "truvector-site"
+compatibility_date = "2026-09-17"
+
+# Sert tout le dossier comme site statique. Les fichiers _headers et _redirects
+# à la racine sont pris en compte automatiquement.
+[assets]
+directory = "./"

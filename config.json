@@ -1,0 +1,804 @@
+{
+  "version": 4,
+  "status": "auto",
+  "launchDate": "2026-09-21T00:00:00+02:00",
+  "theme": {
+    "accent": "#34f5c5"
+  },
+  "license": "Usage personnel et non commercial, avec mention de TRUvector.dev.",
+  "access": {
+    "adminCode": "truvector-admin",
+    "code": "truvector2026",
+    "sections": {
+      "logiciels": "logiciels-2026",
+      "ebooks": "ebooks-2026",
+      "musique": "musique-2026",
+      "articles": "articles-2026",
+      "dons": "dons-2026",
+      "concours": "concours-2026",
+      "modules": "modules-2026"
+    },
+    "users": []
+  },
+  "gallery": [
+    {
+      "title": "Grand Opening",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "banner-grand-opening"
+    },
+    {
+      "title": "Sous l'arbre-monde",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "arbre-monde"
+    },
+    {
+      "title": "Deux tasses sous l'aurore",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "deux-tasses"
+    },
+    {
+      "title": "Cœur d'aurore",
+      "format": "square",
+      "visible": true,
+      "download": true,
+      "slug": "coeur-aurore"
+    },
+    {
+      "title": "L'atelier des étoiles",
+      "format": "square",
+      "visible": true,
+      "download": true,
+      "slug": "atelier-etoiles"
+    },
+    {
+      "title": "Portrait matriciel",
+      "format": "square",
+      "visible": true,
+      "download": true,
+      "slug": "portrait-matriciel"
+    }
+  ],
+  "catalog": {
+    "logiciels": [
+      {
+        "title": "GrowVault",
+        "desc": "Suivi de croissance d'organismes vivants — le projet phare TRUvector.",
+        "url": "https://github.com/clode666",
+        "badge": "Logiciel"
+      },
+      {
+        "title": "ATLAS",
+        "desc": "Plateforme d'intelligence documentaire.",
+        "url": "https://github.com/clode666",
+        "badge": "Logiciel"
+      },
+      {
+        "title": "IronLock",
+        "desc": "Système de licence et de liaison machine pour protéger tes logiciels.",
+        "url": "https://github.com/clode666",
+        "badge": "Sécurité"
+      },
+      {
+        "title": "Universal Installer",
+        "desc": "Gestionnaire d'archives avec moteur de compression UXC (.uxc).",
+        "url": "https://github.com/clode666",
+        "badge": "Outil"
+      },
+      {
+        "title": "Universal PDF Converter",
+        "desc": "Conversion de 32+ formats depuis et vers le PDF.",
+        "url": "https://github.com/clode666",
+        "badge": "Outil"
+      },
+      {
+        "title": "AutomationSequence",
+        "desc": "Automatisation d'actions Windows (clics, OCR, SSH) avec tableau de bord web.",
+        "url": "https://github.com/clode666",
+        "badge": "Outil"
+      },
+      {
+        "title": "UniversalCasting",
+        "desc": "MediaCenter open-source pour diffuser vers TV et navigateurs.",
+        "url": "https://github.com/clode666",
+        "badge": "Média"
+      }
+    ],
+    "ebooks": [],
+    "modules": [
+      {
+        "title": "TRU Keyforge",
+        "desc": "Générateur de mots de passe, passphrases et clés 256 bits, avec indicateur de robustesse.",
+        "url": "apps/keyforge.html",
+        "badge": "Sécurité"
+      },
+      {
+        "title": "Aurora Weaver",
+        "desc": "Compose ton aurore romantico·geek et télécharge-la en fond d'écran.",
+        "url": "apps/aurora.html",
+        "badge": "Créatif"
+      },
+      {
+        "title": "GrowVault Lite",
+        "desc": "Un mini suivi de croissance — l'esprit du projet phare, dans ton navigateur.",
+        "url": "apps/growvault-lite.html",
+        "badge": "Démo"
+      },
+      {
+        "title": "TRU Hasher",
+        "desc": "Empreintes SHA-1 à SHA-512 d'un texte ou d'un fichier, calculées en local.",
+        "url": "apps/hasher.html",
+        "badge": "Sécurité"
+      },
+      {
+        "title": "Base64 · Hex Studio",
+        "desc": "Encode et décode texte, Base64, hexadécimal et URL, dans les deux sens.",
+        "url": "apps/base64-studio.html",
+        "badge": "Dev"
+      },
+      {
+        "title": "Regex Lab",
+        "desc": "Teste tes expressions régulières en direct : correspondances, drapeaux et groupes.",
+        "url": "apps/regex-lab.html",
+        "badge": "Dev"
+      },
+      {
+        "title": "JSON Forge",
+        "desc": "Formate, minifie et valide ton JSON, avec statistiques de structure.",
+        "url": "apps/json-forge.html",
+        "badge": "Dev"
+      },
+      {
+        "title": "UXC Estimator",
+        "desc": "Estime le gain de compression : entropie de Shannon et ratio gzip réel.",
+        "url": "apps/uxc-estimator.html",
+        "badge": "Outil"
+      },
+      {
+        "title": "License Forge",
+        "desc": "Génère des clés de licence de démonstration au format segmenté, façon IronLock.",
+        "url": "apps/license-forge.html",
+        "badge": "Sécurité"
+      },
+      {
+        "title": "Cron Décodeur",
+        "desc": "Traduis une expression cron et prévois ses prochaines exécutions.",
+        "url": "apps/cron-decoder.html",
+        "badge": "Outil"
+      },
+      {
+        "title": "Color Aurora",
+        "desc": "Compose des dégradés et des palettes TRUvector, puis exporte le CSS.",
+        "url": "apps/color-aurora.html",
+        "badge": "Créatif"
+      },
+      {
+        "title": "Markdown Live",
+        "desc": "Écris en Markdown et vois le rendu HTML en direct.",
+        "url": "apps/markdown-live.html",
+        "badge": "Dev"
+      }
+    ],
+    "musique": [
+      {
+        "title": "Néon & Rosée",
+        "src": "neon-rosee.mp3"
+      },
+      {
+        "title": "Triskèle au clair de lune",
+        "src": "triskele-clair-lune.mp3"
+      },
+      {
+        "title": "Cœur Cathode",
+        "src": "coeur-cathode.mp3"
+      },
+      {
+        "title": "Aurore 8-bit",
+        "src": "aurore-8bit.mp3"
+      },
+      {
+        "title": "Pixel d'Or",
+        "src": "pixel-dor.mp3"
+      },
+      {
+        "title": "Dérive Stellaire",
+        "src": "derive-stellaire.mp3"
+      },
+      {
+        "title": "Slow Modem",
+        "src": "slow-modem.mp3"
+      },
+      {
+        "title": "Lettre en ASCII",
+        "src": "lettre-ascii.mp3"
+      },
+      {
+        "title": "Comète de Velours",
+        "src": "comete-velours.mp3"
+      },
+      {
+        "title": "Aube Arcade",
+        "src": "aube-arcade.mp3"
+      },
+      {
+        "title": "Aurora Pad",
+        "src": "aurora-pad.mp3"
+      },
+      {
+        "title": "Nébuleuse",
+        "src": "nebuleuse.mp3"
+      }
+    ],
+    "articles": [
+      {
+        "title": "Protéger un script Python contre le reverse engineering",
+        "excerpt": "AES-256-GCM, obfuscation AST, anti-debug, chargeur chiffré : toutes les techniques pour sécuriser un programme Python distribué en production.",
+        "tags": [
+          "Sécurité",
+          "Python"
+        ],
+        "url": "posts/proteger-python-reverse-engineering.html"
+      },
+      {
+        "title": "Fingerprint hardware : 8 sources d'entropie expliquées",
+        "excerpt": "UUID carte mère, BIOS serial, CPU ID, MAC address, Disk serial, RAM config, OS install GUID, Hostname hash — comment combiner ces 8 sources en un identifiant machine SHA-256 irréversible.",
+        "tags": [
+          "Cryptographie",
+          "Licensing"
+        ],
+        "url": "posts/fingerprint-hardware-8-sources.html"
+      },
+      {
+        "title": "AES-256-GCM vs ChaCha20-Poly1305 pour le licensing",
+        "excerpt": "Comparatif détaillé AES-256-GCM vs ChaCha20-Poly1305 : performance avec et sans AES-NI, sécurité AEAD, taille de clé, compatibilité Python — quel algorithme choisir pour un système de licensing embarqué.",
+        "tags": [
+          "Cryptographie",
+          "Licensing"
+        ],
+        "url": "posts/aes-gcm-vs-chacha20.html"
+      },
+      {
+        "title": "HMAC-SHA256 vs ECDSA pour l'intégrité de fichiers : matrice de décision",
+        "excerpt": "Quand un HMAC symétrique suffit, quand une signature asymétrique est nécessaire — comparatif complet avec implémentation Python, cas d'usage concrets et matrice de décision.",
+        "tags": [
+          "Cryptographie",
+          "Comparatif"
+        ],
+        "url": "posts/hmac-vs-ecdsa-integrite.html"
+      },
+      {
+        "title": "Variables, conditions et boucles dans AutomationSequence V8",
+        "excerpt": "Syntaxe {{var}}, interpolation avancée, conditions imbriquées, foreach, while_loop, goto, sous-séquences — maîtriser la logique de flux dans AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/variables-conditions-boucles.html"
+      },
+      {
+        "title": "Automatiser le scraping web avec des séquences JSON",
+        "excerpt": "Playwright, sélecteurs CSS, pagination automatique, gestion anti-bot, déduplication et stockage structuré — guide complet du scraping web piloté par des séquences AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/scraping-web-sequences.html"
+      },
+      {
+        "title": "Surveiller des dossiers avec Watch Mode V8 : 4 stratégies",
+        "excerpt": "immediate, debounced, scheduled, incremental — 4 stratégies de surveillance de dossiers avec watchdog, rotation automatique et upload cloud déclenché par événement fichier.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/watch-mode-dossiers.html"
+      },
+      {
+        "title": "Intégrer AutomationSequence dans un pipeline GitHub Actions",
+        "excerpt": "Export EXE standalone, tests unitaires Phase 14, artifacts GitHub, secrets chiffrés et déploiement SCCM — guide complet pour intégrer AutomationSequence V8 dans un pipeline CI/CD GitHub.",
+        "tags": [
+          "Automatisation",
+          "Python",
+          "CI/CD"
+        ],
+        "url": "posts/github-actions-automation.html"
+      },
+      {
+        "title": "Générer un MSI signé avec Python en 2026",
+        "excerpt": "cx_Freeze ou PyInstaller, WiX Toolset v4, signature Authenticode, pipeline CI/CD complet — guide pas-à-pas pour produire un installateur MSI Windows professionnel depuis Python.",
+        "tags": [
+          "Déploiement",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/generer-msi-python-2026.html"
+      },
+      {
+        "title": "Implémenter un système d'auto-update complet pour une application Python",
+        "excerpt": "Vérification de version, téléchargement delta UXC, redémarrage propre, rollback automatique et UX de mise à jour — guide complet pour implémenter l'auto-update dans une application Python.",
+        "tags": [
+          "Déploiement",
+          "Python"
+        ],
+        "url": "posts/auto-update-python.html"
+      },
+      {
+        "title": "Réparer une archive UXC corrompue : techniques et limites",
+        "excerpt": "Récupération par blocs, reconstruction du manifest, validation CRC32 et SHA-256, cas irrécupérables — guide complet pour diagnostiquer et réparer une archive UXC endommagée.",
+        "tags": [
+          "Déploiement",
+          "Maintenance"
+        ],
+        "url": "posts/reparer-archive-uxc.html"
+      },
+      {
+        "title": "Sécuriser une archive UXC : AES-256, ECDSA, manifest SHA-256",
+        "excerpt": "Chain of trust complète de la build jusqu'au déploiement : chiffrement AES-256-GCM, signature ECDSA de l'archive, manifest SHA-256 par fichier, vérification d'intégrité à chaque étape.",
+        "tags": [
+          "Sécurité",
+          "Cryptographie",
+          "Deep dive"
+        ],
+        "url": "posts/securiser-archive-uxc.html"
+      },
+      {
+        "title": "Déploiement Python sur Linux : Snap vs DEB vs AppImage en 2026",
+        "excerpt": "Comparatif 2026 des trois formats de distribution Linux pour les applications Python — isolation, compatibilité distrib, mises à jour, signature et génération avec Universal Installer V2.",
+        "tags": [
+          "Déploiement",
+          "Linux",
+          "Comparatif"
+        ],
+        "url": "posts/deploiement-linux-snap-deb-appimage.html"
+      },
+      {
+        "title": "Cas réel : mise à jour OTA d'un parc de 500 postes avec Universal Installer",
+        "excerpt": "Delta UXC, bande passante contrainte, vérification d'intégrité ECDSA, rollback automatique, monitoring — retour d'expérience complet sur un déploiement OTA massif avec Universal Installer V2.",
+        "tags": [
+          "Cas d'usage",
+          "Déploiement",
+          "OTA"
+        ],
+        "url": "posts/cas-reel-ota-500-postes.html"
+      },
+      {
+        "title": "Créer une archive auto-extractible (SFX) avec Universal Installer V2",
+        "excerpt": "PyInstaller vs Stub Python, personnalisation de l'UI d'extraction, scripts post-install, signature Authenticode — guide complet pour créer des archives SFX professionnelles.",
+        "tags": [
+          "Déploiement",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/creer-archive-sfx.html"
+      },
+      {
+        "title": "Convertir entre formats d'archives : ZIP, TAR.GZ, 7z, UXC",
+        "excerpt": "Pipeline de conversion bidirectionnelle, préservation des métadonnées, permissions Unix, cas limites et performances — guide complet pour convertir entre formats d'archives avec Universal Installer V2.",
+        "tags": [
+          "Déploiement",
+          "Python"
+        ],
+        "url": "posts/convertir-formats-archives.html"
+      },
+      {
+        "title": "Cas réel : migration d'un parc logiciel legacy vers UXC en entreprise",
+        "excerpt": "Inventaire du parc, conversion batch, tests de régression automatisés, plan de déploiement par vagues et métriques après migration — retour d'expérience complet sur une migration de 200 packages.",
+        "tags": [
+          "Cas d'usage",
+          "Déploiement"
+        ],
+        "url": "posts/migration-legacy-uxc.html"
+      },
+      {
+        "title": "Implémenter un système d'activation réseau offline-first",
+        "excerpt": "Tokens temporaires signés, reconnexion différée, anti-clone réseau — architecture complète d'un système d'activation qui fonctionne sans connexion permanente tout en restant sécurisé.",
+        "tags": [
+          "Licensing",
+          "Python"
+        ],
+        "url": "posts/activation-reseau-offline.html"
+      },
+      {
+        "title": "Anatomie d'un fichier de licence IronLock .lic",
+        "excerpt": "JSON signé ECDSA P-384, champs obligatoires, extensions custom, parsing sécurisé et validation complète côté client — tout ce qu'il y a dans un fichier .lic IronLock v2.",
+        "tags": [
+          "Cryptographie",
+          "Licensing"
+        ],
+        "url": "posts/anatomie-fichier-licence-lic.html"
+      },
+      {
+        "title": "Anti-debug : 12 techniques sur Windows et Linux",
+        "excerpt": "IsDebuggerPresent, ptrace, timing attacks, exception handlers, parent PID check — 12 techniques anti-debug documentées avec implémentation Python complète pour protéger un programme en production.",
+        "tags": [
+          "Sécurité",
+          "Python"
+        ],
+        "url": "posts/anti-debug-windows-linux.html"
+      },
+      {
+        "title": "Archives multi-volumes : découper, distribuer et reconstruire",
+        "excerpt": "Stratégies de découpe par taille fixe ou par contenu, reconstruction avec vérification d'intégrité, reprise partielle et cas d'usage pratiques pour les grands déploiements distribués.",
+        "tags": [
+          "Déploiement",
+          "Deep dive"
+        ],
+        "url": "posts/archives-multi-volumes.html"
+      },
+      {
+        "title": "Argon2id vs PBKDF2 vs bcrypt pour la dérivation de clé",
+        "excerpt": "Argon2id remplace PBKDF2 dans IronLock v2. Mémoire-intensive, résistant GPU/ASIC, PHC winner 2015. Comparatif complet avec implémentation Python et recommandations pratiques.",
+        "tags": [
+          "Cryptographie",
+          "KDF"
+        ],
+        "url": "posts/argon2id-vs-pbkdf2-bcrypt.html"
+      },
+      {
+        "title": "Audit de sécurité d'un système de licensing : checklist 2026",
+        "excerpt": "10 vecteurs d'attaque documentés, techniques de test de pénétration, contre-mesures concrètes et scoring de maturité — évaluez et renforcez votre système de licensing.",
+        "tags": [
+          "Sécurité",
+          "Audit"
+        ],
+        "url": "posts/audit-securite-licensing.html"
+      },
+      {
+        "title": "Automatiser sous EDR : comment éviter les faux positifs avec AutomationSequence",
+        "excerpt": "Cortex XDR, SentinelOne, Defender for Endpoint — comprendre pourquoi les scripts d'automatisation déclenchent des alertes et comment concevoir des séquences compatibles EDR dès le départ.",
+        "tags": [
+          "Sécurité",
+          "Automatisation"
+        ],
+        "url": "posts/automation-edr-cortex.html"
+      },
+      {
+        "title": "AutomationSequence V8 : 145+ actions Python pour les environnements pros",
+        "excerpt": "Architecture plugin, séquences JSON chiffrées AES-256-GCM, moteur asynchrone, IA/LLM et orchestration multi-machine : ce que V8 change concrètement.",
+        "tags": [
+          "Automatisation",
+          "Python",
+          "IA/LLM"
+        ],
+        "url": "posts/automation-sequence-v8-guide.html"
+      },
+      {
+        "title": "AutomationSequence vs n8n vs UiPath : lequel choisir en 2026 ?",
+        "excerpt": "Off-line, EDR, prix, extensibilité, formats d'action — comparatif objectif pour choisir la bonne plateforme d'automatisation selon votre contexte.",
+        "tags": [
+          "Automatisation",
+          "Comparatif"
+        ],
+        "url": "posts/automation-vs-n8n-uipath.html"
+      },
+      {
+        "title": "Automatiser Excel et Word avec des séquences JSON",
+        "excerpt": "openpyxl, python-docx, génération de rapports automatisés, fusion de documents, tableaux croisés dynamiques — guide complet pour automatiser vos fichiers Office depuis des séquences AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/automatiser-excel-word-sequences.html"
+      },
+      {
+        "title": "Automatiser Oracle avec des séquences JSON",
+        "excerpt": "cx_Oracle, requêtes asynchrones, export CSV/Excel, migration wm_concat→listagg, gestion des TNS et transactions complexes — guide complet pour l'automatisation Oracle sous AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python",
+          "Oracle"
+        ],
+        "url": "posts/automatiser-oracle-sequences-json.html"
+      },
+      {
+        "title": "Benchmark compression : UXC v3 vs Zstd vs Brotli vs LZ4 sur données réelles",
+        "excerpt": "8 corpus de données réelles (code, binaires, images, logs, DB), tableaux ratio/vitesse/mémoire complets — benchmark objectif des algorithmes de compression pour le déploiement logiciel en 2026.",
+        "tags": [
+          "Déploiement",
+          "Comparatif"
+        ],
+        "url": "posts/benchmark-compression-uxc.html"
+      },
+      {
+        "title": "Cas réel : automatiser un SI hospitalier avec AutomationSequence V8",
+        "excerpt": "HDS, Oracle MAGH2/HOSPILOG, Cortex XDR, Chronotime — retour d'expérience complet sur l'automatisation d'un SI hospitalier avec AutomationSequence V8 dans un CHU.",
+        "tags": [
+          "Cas d'usage",
+          "Automatisation",
+          "HDS"
+        ],
+        "url": "posts/cas-reel-chu-automation.html"
+      },
+      {
+        "title": "Cas réel : automatiser la gestion des incidents IT avec V8 + Ollama",
+        "excerpt": "Détection de log, classification LLM locale, création automatique de ticket JIRA, escalade conditionnelle et génération de rapport PDF — retour d'expérience sur l'automatisation des incidents IT.",
+        "tags": [
+          "Cas d'usage",
+          "Automatisation",
+          "IA/LLM"
+        ],
+        "url": "posts/cas-reel-incidents-it-ollama.html"
+      },
+      {
+        "title": "Cas réel : protéger un SaaS Python avec IronLock v2",
+        "excerpt": "Retour d'expérience complet : architecture, migration v1→v2, gestion des renouvellements de licence, monitoring et pièges évités en production.",
+        "tags": [
+          "Cas d'usage",
+          "Python"
+        ],
+        "url": "posts/cas-reel-saas-python-ironlock.html"
+      },
+      {
+        "title": "Chiffrer ses séquences JSON avec AES-256-GCM",
+        "excerpt": "Protéger les credentials, la logique métier et les clés API dans vos séquences d'automatisation — guide complet du chiffrement natif AES-256-GCM d'AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Cryptographie",
+          "Sécurité"
+        ],
+        "url": "posts/chiffrer-sequences-json-aes256.html"
+      },
+      {
+        "title": "Créer un plugin AutomationSequence V8 : guide complet",
+        "excerpt": "Plugin API, schéma JSON, cycle de vie, packaging, marketplace — guide pas-à-pas pour étendre AutomationSequence avec vos propres actions Python.",
+        "tags": [
+          "Automatisation",
+          "Python",
+          "Plugin API"
+        ],
+        "url": "posts/creer-plugin-automation-sequence.html"
+      },
+      {
+        "title": "Planification CRON et déclencheurs WebhookListen dans V8",
+        "excerpt": "Expressions CRON avancées avec fuseaux horaires, WebhookListen HTTP entrant, queue de déclenchement et déduplication des appels — planification complète dans AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/cron-webhook-v8.html"
+      },
+      {
+        "title": "Dashboard Web temps réel pour vos séquences AutomationSequence V8",
+        "excerpt": "API REST, Server-Sent Events (SSE), monitoring live des séquences, historique SQLite, alertes SMTP — guide complet du dashboard web local d'AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Web API"
+        ],
+        "url": "posts/dashboard-web-sequences.html"
+      },
+      {
+        "title": "Déboguer une séquence V8 : Debugger V3 et breakpoints conditionnels",
+        "excerpt": "Variable Inspector, Watch List, évaluation live, gouttière de breakpoints, breakpoints conditionnels et démarrage depuis l'action N — le guide complet du Debugger V3 d'AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/debugger-v3-breakpoints.html"
+      },
+      {
+        "title": "Compression delta binaire : UXC v3 vs xdelta3 vs bsdiff4",
+        "excerpt": "Ratio de patch, vitesse de génération, tolérance aux corruptions, mémoire requise — comparatif complet des algorithmes de delta binaire pour les mises à jour logicielles.",
+        "tags": [
+          "Déploiement",
+          "Comparatif"
+        ],
+        "url": "posts/delta-binaire-uxc-xdelta-bsdiff.html"
+      },
+      {
+        "title": "Déployer sur un réseau offline avec Universal Installer V2",
+        "excerpt": "Mirror local, bundle air-gap, vérification sans internet, proxy interne, cache CDN — guide complet pour déployer avec Universal Installer V2 dans un environnement totalement isolé.",
+        "tags": [
+          "Déploiement",
+          "Sécurité"
+        ],
+        "url": "posts/deploiement-offline-airgap.html"
+      },
+      {
+        "title": "Déployer sur S3, Azure Blob et GCS avec la même API Python",
+        "excerpt": "Abstraction multi-cloud, profils chiffrés, rollback automatique, presigned URLs et retry exponentiel — guide complet de l'intégration cloud multi-provider d'Universal Installer V2.",
+        "tags": [
+          "Cloud",
+          "Python",
+          "Déploiement"
+        ],
+        "url": "posts/deployer-s3-azure-gcs-api.html"
+      },
+      {
+        "title": "Distribuer un EXE Python sécurisé avec IronLock",
+        "excerpt": "Pipeline complet Python → PyInstaller → chiffrement IronLock → distribution. Gestion des PE32/PE64, HMAC intégrité, loader embarqué, mise à jour de licence et pièges courants.",
+        "tags": [
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/distribuer-exe-python-ironlock.html"
+      },
+      {
+        "title": "ECDSA P-384 vs RSA-2048 pour la signature de licences",
+        "excerpt": "Pourquoi les courbes elliptiques P-384 remplacent RSA-2048 dans IronLock v2 : sécurité 192 bits, clé 4× plus petite, vérification 1000× plus rapide. Implémentation Python complète.",
+        "tags": [
+          "Cryptographie",
+          "Licensing"
+        ],
+        "url": "posts/ecdsa-p384-vs-rsa-licences.html"
+      },
+      {
+        "title": "Gérer les erreurs et les reprises dans une séquence d'automatisation",
+        "excerpt": "on_error, retry exponentiel, checkpoint de reprise, rollback déclaratif, alertes conditionnelles — patterns professionnels de gestion d'erreur dans AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/gerer-erreurs-reprises.html"
+      },
+      {
+        "title": "IA ONNX pour la compression prédictive : comment ça marche vraiment",
+        "excerpt": "19 features d'entropie, modèle sklearn exporté en ONNX, inférence locale en < 1ms par bloc, gain mesuré 2-23% — les détails techniques de l'IA de sélection d'algorithme d'Universal Installer V2.",
+        "tags": [
+          "IA/ONNX",
+          "Deep dive"
+        ],
+        "url": "posts/ia-onnx-compression-predictive.html"
+      },
+      {
+        "title": "Intégrer Ollama dans une séquence d'automatisation",
+        "excerpt": "LLM local, analyse de logs, classification de documents, génération de rapports — guide complet pour utiliser un modèle IA embarqué dans vos séquences AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "IA/LLM",
+          "Python"
+        ],
+        "url": "posts/integrer-ollama-sequence.html"
+      },
+      {
+        "title": "Cas réel : IronLock dans un environnement Docker / Kubernetes",
+        "excerpt": "Fingerprint éphémère sur containers, licence par pod, sidecar de vérification, gestion des secrets Kubernetes — retour d'expérience sur l'adaptation d'IronLock à un environnement conteneurisé.",
+        "tags": [
+          "Cas d'usage",
+          "Licensing"
+        ],
+        "url": "posts/ironlock-docker-kubernetes.html"
+      },
+      {
+        "title": "IronLock vs PyArmor vs Themida : comparatif 2026",
+        "excerpt": "Analyse objective : sécurité, performance, prix, documentation, auto-hébergement — quel outil de protection logicielle choisir en 2026.",
+        "tags": [
+          "Licensing",
+          "Comparatif"
+        ],
+        "url": "posts/ironlock-vs-pyarmor-vs-themida.html"
+      },
+      {
+        "title": "Licences à durée limitée : expiration, grâce et renouvellement automatique",
+        "excerpt": "Clock skew, NTP spoofing, timestamp ancré hardware, période de grâce, renouvellement silencieux — architecture complète d'un système de gestion d'expiration de licence robuste.",
+        "tags": [
+          "Licensing",
+          "Cryptographie"
+        ],
+        "url": "posts/licences-expiration-renouvellement.html"
+      },
+      {
+        "title": "Licences flottantes vs par poste : architecture et implémentation",
+        "excerpt": "Pool de licences flottantes, checkout/checkin, timeout de session, haute disponibilité — quand utiliser chaque modèle et comment implémenter un serveur de licences flottantes en Python.",
+        "tags": [
+          "Licensing",
+          "Python"
+        ],
+        "url": "posts/licences-flottantes-par-poste.html"
+      },
+      {
+        "title": "Migrer de PyArmor 7 vers IronLock v2 : guide pratique",
+        "excerpt": "Mapping fonctionnel, remplacement du runtime obfusqué, adaptation des scripts de build et tests de non-régression — guide pas-à-pas pour migrer sans interruption de service.",
+        "tags": [
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/migrer-pyarmor-ironlock.html"
+      },
+      {
+        "title": "Obfuscation AST avancée : CFG flattening, inlining et string splitting",
+        "excerpt": "Au-delà du renommage de variables — techniques d'obfuscation post-compilation sur l'AST Python : aplatissement du graphe de contrôle, inlining de constantes, découpage de chaînes et insertion de faux blocs.",
+        "tags": [
+          "Sécurité",
+          "Python"
+        ],
+        "url": "posts/obfuscation-ast-avancee.html"
+      },
+      {
+        "title": "Orchestration multi-machine avec AutomationSequence V8",
+        "excerpt": "Agents SSH, parallel_exec, tolérance aux pannes, monitoring distribué — guide complet pour orchestrer des séquences d'automatisation sur plusieurs serveurs simultanément.",
+        "tags": [
+          "Automatisation",
+          "Multi-machine"
+        ],
+        "url": "posts/orchestration-multi-machine.html"
+      },
+      {
+        "title": "Créer un plugin Universal Installer : guide complet Plugin API V1.2",
+        "excerpt": "Structure, schéma JSON, cycle de vie setup/compress/extract/sign, tests unitaires, packaging et publication sur la marketplace — guide complet pour étendre Universal Installer V2.",
+        "tags": [
+          "Déploiement",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/plugin-universal-installer.html"
+      },
+      {
+        "title": "Protéger un package Python distribué via PyPI avec IronLock",
+        "excerpt": "Wheel chiffré, hook d'import personnalisé, vérification de licence à l'installation et à l'utilisation — guide complet pour distribuer via PyPI un package Python qui s'auto-protège.",
+        "tags": [
+          "Sécurité",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/proteger-package-pypi.html"
+      },
+      {
+        "title": "Automatiser l'envoi d'emails et notifications SMTP / Teams / Slack",
+        "excerpt": "Templates Jinja2, pièces jointes dynamiques, rate limiting, file d'attente SMTP et retry — guide complet des actions de notification dans AutomationSequence V8.",
+        "tags": [
+          "Automatisation",
+          "Python"
+        ],
+        "url": "posts/smtp-teams-slack-automation.html"
+      },
+      {
+        "title": "Intégrer Universal Installer dans un pipeline GitLab CI",
+        "excerpt": "API REST FastAPI, artifacts GitLab, déploiement cloud automatique, rollback sur tag, notifications — guide complet pour industrialiser vos déploiements avec Universal Installer V2.",
+        "tags": [
+          "Déploiement",
+          "Python",
+          "Tutoriel"
+        ],
+        "url": "posts/universal-installer-gitlab-ci.html"
+      },
+      {
+        "title": "Universal Installer sur Raspberry Pi et ARM : contraintes et solutions",
+        "excerpt": "Cross-compilation, ONNX Runtime ARM, installeurs adaptés, bande passante limitée — guide complet pour déployer avec Universal Installer V2 sur architectures ARM et Raspberry Pi.",
+        "tags": [
+          "Déploiement",
+          "ARM"
+        ],
+        "url": "posts/universal-installer-raspberry-pi.html"
+      },
+      {
+        "title": "Universal Installer V2 : déploiement Python avec IA prédictive et delta UXC v3",
+        "excerpt": "IA ONNX pour la compression prédictive, algorithme delta UXC v3, cloud S3/Azure/GCS, API REST FastAPI et installateurs MSI/MSIX/Snap/PKG natifs — tour complet de Universal Installer V2.",
+        "tags": [
+          "Déploiement",
+          "IA/ONNX",
+          "Python"
+        ],
+        "url": "posts/universal-installer-v2-guide.html"
+      },
+      {
+        "title": "Universal Installer vs Inno Setup vs NSIS vs Squirrel : comparatif 2026",
+        "excerpt": "Multi-OS, sécurité AES-256-GCM, delta UXC, IA ONNX, API REST — comparatif objectif des quatre outils de création d'installateurs les plus utilisés en 2026.",
+        "tags": [
+          "Déploiement",
+          "Comparatif"
+        ],
+        "url": "posts/universal-installer-vs-inno-nsis.html"
+      },
+      {
+        "title": "Détecter les VMs avec IronLock : VMware, VBox, Hyper-V, QEMU",
+        "excerpt": "15 vecteurs de détection documentés : CPUID, clés de registre Windows, préfixes MAC, processus actifs, drivers et timing side-channel. Implémentation Python cross-platform.",
+        "tags": [
+          "Sécurité",
+          "Anti-VM"
+        ],
+        "url": "posts/vm-detection-ironlock.html"
+      }
+    ]
+  },
+  "concours": [],
+  "dons": {
+    "intro": "TRUvector est un projet indépendant. Ton soutien aide à créer de nouveaux logiciels, e-books et créations libres.",
+    "links": []
+  }
+}

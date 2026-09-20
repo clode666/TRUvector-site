@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide Dons &amp; Concours — TRUvector.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark;--nuit:#070b11;--nuit-2:#0b121a;--panneau:rgba(17,27,37,.6);--panneau-2:rgba(13,21,29,.74);
+    --bord:rgba(126,240,205,.16);--bord-fort:rgba(126,240,205,.34);--menthe:#34f5c5;--menthe-soft:#8ff3d9;
+    --aurore-v:#b14aed;--aurore-v-soft:#c98bf5;--aurore-g:#59e39a;--ambre:#f4c56b;--texte:#e8f2ee;--texte-2:#9db2ae;--texte-3:#6f8582;
+    --sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace;--maxw:900px;}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--texte);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background:radial-gradient(1000px 560px at 50% -14%,rgba(177,74,237,.2),transparent 60%),radial-gradient(820px 480px at 84% 3%,rgba(52,245,197,.12),transparent 58%),var(--nuit)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--menthe)} code{font-family:var(--mono);font-size:.87em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+  header.hero{position:relative;padding:64px 0 34px;text-align:center;overflow:hidden}
+  .aur{position:absolute;inset:-30% -20% auto -20%;height:120%;z-index:0;filter:blur(46px);opacity:.5;pointer-events:none}
+  .aur span{position:absolute;border-radius:50%;mix-blend-mode:screen}
+  .aur .a1{width:60%;height:60%;left:6%;top:-6%;background:radial-gradient(circle,var(--aurore-g),transparent 62%)}
+  .aur .a2{width:58%;height:58%;right:4%;top:-2%;background:radial-gradient(circle,var(--aurore-v),transparent 62%)}
+  .hero .in{position:relative;z-index:2}
+  .tris{width:74px;height:74px;margin:0 auto 16px;display:block;filter:drop-shadow(0 0 9px rgba(52,245,197,.7))}
+  h1{font-weight:700;font-size:clamp(27px,6vw,44px);letter-spacing:-.5px;margin:0}
+  h1 .g{background:linear-gradient(90deg,var(--menthe),var(--aurore-v-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .kicker{font-family:var(--mono);font-size:12.5px;color:var(--menthe-soft);letter-spacing:2px;margin:8px 0 0}
+  .toc{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:16px 20px;margin:22px 0 8px}
+  .toc a{color:var(--texte-2);font-family:var(--mono);font-size:13px;margin-right:16px}
+  section{padding:34px 0;border-top:1px solid rgba(126,240,205,.08)}
+  .eyebrow{font-family:var(--mono);font-size:12px;color:var(--menthe);letter-spacing:2px}
+  h2{font-size:clamp(22px,4.6vw,30px);margin:8px 0 6px;font-weight:700;letter-spacing:-.3px}
+  h3{font-size:17px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  p{margin:0 0 12px}p.lead{color:var(--texte-2);font-size:15.5px}
+  ul{margin:0 0 12px;padding-left:22px}li{margin:0 0 7px;color:var(--texte)}li::marker{color:var(--menthe)}
+  b,strong{color:#fff}
+  .tw{overflow-x:auto;margin:0 0 16px}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:13.6px}
+  th,td{border:1px solid var(--bord);padding:9px 12px;text-align:left;vertical-align:top}
+  th{font-family:var(--mono);font-size:11px;letter-spacing:.5px;color:var(--texte-3);text-transform:uppercase;font-weight:500;background:var(--panneau)}
+  .reco{color:var(--aurore-g)} 
+  .block{background:#060a0f;border:1px solid var(--bord);border-radius:12px;overflow-x:auto;margin:0 0 14px}
+  .block .lbl{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--texte-3);padding:9px 16px 0;text-transform:uppercase}
+  .block pre{margin:0;padding:10px 16px 16px;font-family:var(--mono);font-size:12.6px;line-height:1.7;color:var(--menthe-soft);white-space:pre}
+  .block .c{color:var(--texte-3)}
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:13px 16px;margin:0 0 14px;font-size:14px;color:var(--texte-2)}
+  .note.warn{border-left-color:var(--ambre)} .note.ok{border-left-color:var(--aurore-g)} .note b{color:var(--texte)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:16px 18px}.card h3{margin:0 0 6px}.card p{margin:0;color:var(--texte-2);font-size:14px}
+  footer{padding:34px 0 60px;text-align:center;color:var(--texte-3);font-size:13px;border-top:1px solid var(--bord)}
+  .hr{height:1px;background:linear-gradient(90deg,transparent,var(--bord-fort),transparent)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="aur" aria-hidden="true"><span class="a1"></span><span class="a2"></span></div>
+  <div class="in wrap">
+    <svg class="tris" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Guide <span class="g">Dons &amp; Concours</span></h1>
+    <p class="kicker">VISION · PLATEFORMES · CONFIG · LÉGAL (FR)</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="toc"><a href="#dons">💚 Dons</a><a href="#concours">🏆 Concours</a><a href="#config">⚙️ Config</a><a href="#legal">⚖️ Légal</a></div>
+
+  <!-- ================= DONS ================= -->
+  <section id="dons">
+    <div class="eyebrow">// 1 — les dons</div>
+    <h2>Soutenir TRUvector</h2>
+    <p class="lead">Objectif : proposer un soutien <b>chaleureux, jamais mendiant</b>. On offre un « café cosmique » pour faire vivre l'atelier — pas une quête. Dis <b>ce que ça finance</b> (nouvelles créas, temps de dev, hébergement) et remercie.</p>
+
+    <h3>Quelle plateforme choisir ?</h3>
+    <p>Tout marche en statique : ce sont de simples <b>liens</b> vers des services externes (aucun backend à héberger).</p>
+    <div class="tw"><table>
+      <thead><tr><th>Service</th><th>Pour</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td class="reco">Ko-fi</td><td>Ponctuel + boutique + adhésion</td><td>Très simple, commission faible, page perso. <b>Bon défaut.</b></td></tr>
+        <tr><td class="reco">GitHub Sponsors</td><td>Dev (clode666)</td><td>Idéal vu ton profil ; mensuel ou ponctuel ; visible sur GitHub.</td></tr>
+        <tr><td class="reco">Liberapay</td><td>Récurrent, esprit libre</td><td>Non-lucratif, pas de commission (frais de paiement seulement).</td></tr>
+        <tr><td>PayPal.me</td><td>Universel</td><td>Connu de tous ; frais standards.</td></tr>
+        <tr><td>Stripe Payment Links</td><td>Pro (CB)</td><td>Liens sans code ; nécessite un compte Stripe.</td></tr>
+        <tr><td>uTip / Tipeee</td><td>Créateurs FR</td><td>Interface FR, communauté française.</td></tr>
+        <tr><td>Patreon</td><td>Abonnement + contreparties</td><td>Récurrent ; plus lourd à animer.</td></tr>
+        <tr><td>Crypto (option)</td><td>Niche</td><td>Adresses BTC/ETH ; public restreint.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note ok"><b>Ma reco pour toi</b> (artiste-auteur + dev) : <b>Ko-fi</b> (ponctuel + petite boutique) + <b>GitHub Sponsors</b> (public dev) + éventuellement <b>Liberapay</b> (récurrent). PayPal en secours.</div>
+
+    <h3>Bonnes pratiques</h3>
+    <ul>
+      <li>Un <b>« pourquoi »</b> en une phrase + un <b>merci</b> sincère.</li>
+      <li>Suggère des montants (2 € / 5 € / 10 €) pour lever l'hésitation.</li>
+      <li>Transparence sur l'usage des dons ; pas de pression.</li>
+      <li>Remercie publiquement les soutiens (avec leur accord).</li>
+    </ul>
+  </section>
+
+  <!-- ================= CONCOURS ================= -->
+  <section id="concours">
+    <div class="eyebrow">// 2 — les concours</div>
+    <h2>Animer la communauté</h2>
+    <p class="lead">Des <b>défis créatifs</b> réguliers (trimestriels) qui collent à l'univers : « Crée ta scène romantico·geek », « Meilleur mini-outil », « Fan-art aurore ». Lots simples : mise en avant dans la galerie, goodies, une <b>licence de tes logiciels</b>, un accès.</p>
+
+    <h3>Faire tourner un concours… sans backend</h3>
+    <ol>
+      <li><b>Annoncer</b> : titre, thème, règles, dates (début/fin), lot, comment participer.</li>
+      <li><b>Recevoir les participations</b> (au choix) :
+        <ul>
+          <li>E-mail dédié (<code>concours@truvector.dev</code>)</li>
+          <li>GitHub : <b>Issues / Discussions</b> (ou dépôt de <b>Pull Request</b> pour du code)</li>
+          <li>Formulaire tiers : <b>Tally</b>, <b>Google Forms</b>, <b>Formspree</b>, <b>Framaforms</b> (RGPD-friendly)</li>
+          <li>Réseaux sociaux avec un <b>hashtag</b></li>
+        </ul>
+      </li>
+      <li><b>Départager</b> : jury (toi) ou vote public (<b>Framadate</b>, <b>StrawPoll</b>, ou 👍 sur GitHub).</li>
+      <li><b>Annoncer les gagnants</b> : sur la page Concours + e-mail.</li>
+      <li><b>Archiver</b> les éditions passées (statut « Terminé »).</li>
+    </ol>
+    <div class="grid2">
+      <div class="card"><h3>Concours (mérite)</h3><p>Gagnant choisi sur la <b>qualité/créativité</b>. Recommandé — cadre le plus souple.</p></div>
+      <div class="card"><h3>Tirage au sort (hasard)</h3><p>Relève de la « loterie » : participation <b>gratuite</b> et sans obligation d'achat obligatoire.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= CONFIG ================= -->
+  <section id="config">
+    <div class="eyebrow">// 3 — brancher sur le site</div>
+    <h2>Configurer Dons &amp; Concours</h2>
+    <p class="lead">Tout se règle dans la config. En v5 (coffres), édite <code>_v5-build/src/config.json</code> puis relance le build ; en build de test « ouvert », c'est déjà affiché.</p>
+
+    <h3>Dons — <code>config.dons</code></h3>
+    <div class="block"><div class="lbl">config.json → dons</div><pre>"dons": {
+  "intro": "TRUvector est un projet indépendant…",
+  "links": [
+    { "label": "☕ Offrir un café", "url": "https://ko-fi.com/<span class="c">tonpseudo</span>" },
+    { "label": "❤ GitHub Sponsors", "url": "https://github.com/sponsors/clode666" },
+    { "label": "🔁 Don régulier",   "url": "https://liberapay.com/<span class="c">tonpseudo</span>" }
+  ]
+}</pre></div>
+    <p>Chaque entrée devient un bouton. Laisse <code>links</code> vide pour afficher « bientôt disponible ».</p>
+
+    <h3>Concours — <code>config.concours</code></h3>
+    <div class="block"><div class="lbl">config.json → concours</div><pre>"concours": [
+  {
+    "title":  "Aurora Fan-Art #1",
+    "desc":   "Crée une scène romantico·geek sous les aurores…",
+    "status": "En cours",        <span class="c">// "Bientôt" | "En cours" | "Terminé"</span>
+    "dates":  "01 → 30 nov. 2026",
+    "url":    "https://forms.tally.so/…"   <span class="c">// règlement / participation</span>
+  }
+]</pre></div>
+    <p>Chaque entrée devient une carte (badge de statut + dates + bouton « Participer »). Liste vide → « Aucun concours en cours ».</p>
+    <div class="note"><b>Rappel v5.</b> Après modif de <code>_v5-build/src/config.json</code> : <code>node _v5-build/build.mjs</code> (coffres) — ou pour tester sans code : <code>node _v5-build/build.mjs open</code>.</div>
+  </section>
+
+  <!-- ================= LEGAL ================= -->
+  <section id="legal">
+    <div class="eyebrow">// 4 — aspects légaux (France)</div>
+    <h2>Ce qu'il faut savoir</h2>
+
+    <h3>Dons</h3>
+    <ul>
+      <li>Les dons/tips reçus sont des <b>revenus</b> → à déclarer (BNC, régime artiste-auteur).</li>
+      <li><b>Don pur</b> (sans contrepartie) ≠ <b>vente</b> (avec contrepartie : fichier, accès) → si contrepartie, ce sont tes <a href="#">CGV</a> qui s'appliquent.</li>
+      <li><b>HelloAsso</b> est réservé aux <b>associations</b> : en entreprise individuelle, utilise Ko-fi / Liberapay / Stripe / PayPal.</li>
+      <li>Pas de <b>reçu fiscal</b> ni d'avantage fiscal à promettre (réservé aux organismes habilités).</li>
+      <li>Si tu collectes un e-mail (remerciement, newsletter) → RGPD : finalité, base légale, mention.</li>
+    </ul>
+
+    <h3>Concours</h3>
+    <ul>
+      <li><b>Règlement écrit</b> fortement recommandé, mis en ligne : organisateur, objet, participation, dates, désignation des gagnants, lots, données perso, acceptation.</li>
+      <li><b>Gratuité</b> de participation pour un tirage au sort (loterie publicitaire) — pas d'obligation d'achat.</li>
+      <li>Le <b>dépôt chez huissier</b> n'est plus systématiquement obligatoire, mais reste conseillé pour de gros lots.</li>
+      <li><b>RGPD</b> : ne collecte que le nécessaire (nom, e-mail), informe, et supprime après le concours.</li>
+      <li><b>Mineurs</b> : autorisation parentale selon l'âge et le lot.</li>
+      <li><b>Lots</b> : pour des lots modestes, obligations minimes ; au-delà, vérifier la fiscalité.</li>
+    </ul>
+
+    <div class="note warn"><b>Important.</b> Je ne suis pas juriste : ce guide donne les repères usuels. Fais relire ton <b>règlement de concours</b> et vérifie ta situation <b>dons/fiscalité</b> avec ton comptable ou l'URSSAF Artistes-Auteurs avant de lancer.</div>
+  </section>
+
+  <section>
+    <div class="eyebrow">// modèle</div>
+    <h2>Squelette de règlement de concours</h2>
+    <div class="block"><div class="lbl">reglement-concours.txt</div><pre>Article 1 — Organisateur (TRUvector — Ruard Tristan, EI, SIRET…)
+Article 2 — Objet &amp; thème du concours
+Article 3 — Conditions de participation (qui, comment, gratuité)
+Article 4 — Calendrier (ouverture, clôture, annonce des résultats)
+Article 5 — Critères de sélection &amp; jury
+Article 6 — Lots (nature, valeur, remise)
+Article 7 — Données personnelles (RGPD : finalité, durée, droits)
+Article 8 — Responsabilité
+Article 9 — Acceptation du règlement
+Article 10 — Contact / réclamations</pre></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><div class="hr" style="margin-bottom:26px"></div>
+    <p>© 2026 TRUvector.dev — Guide Dons &amp; Concours · Where Code Meets Creativity 💚🏆</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>License Forge — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .tool{max-width:760px;margin:0 auto;padding:8px 22px 60px}
+  .tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+  .tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+  .tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:56ch;font-size:15px}
+  .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 12px}
+  .back:hover{color:var(--menthe);text-decoration:none}
+  .ctl{display:grid;gap:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+  .row{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  .row label{font-size:14px;color:var(--texte)}
+  .row .v{font-family:var(--mono);font-size:13px;color:var(--menthe-soft)}
+  label.fl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--texte-2);margin-bottom:6px}
+  input[type=text],input[type=number],input[type=range],textarea,select{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--texte);background:var(--panneau);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px}
+  input[type=range]{padding:0;accent-color:var(--menthe)}
+  textarea{min-height:120px;resize:vertical;line-height:1.55;font-family:var(--mono);font-size:13px}
+  .out{background:#060a0f;border:1px solid var(--bord-fort);border-radius:14px;padding:14px 16px;margin:12px 0 0;font-family:var(--mono);font-size:13.5px;color:var(--menthe-soft);white-space:pre-wrap;word-break:break-word;min-height:22px}
+  .tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+  .tabs button{font-family:var(--mono);font-size:13px;padding:9px 14px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+  .tabs button.on{border-color:var(--menthe);color:var(--menthe)}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--texte-3);display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .meta b{color:var(--menthe-soft);font-weight:500}
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+  .note b{color:var(--texte)}
+  .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:80}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .out{font-size:18px;letter-spacing:1px;text-align:center;user-select:all}
+  .list{margin-top:12px;display:grid;gap:8px}
+  .list .k{font-family:var(--mono);font-size:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:10px;padding:10px 12px;cursor:pointer;color:var(--menthe-soft)}
+  .list .k:hover{border-color:var(--bord-fort)}
+  .valchk{margin-top:14px}
+  .ok{color:var(--aurore-g)} .bad{color:#ff8b8b}
+  </style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>License <span class="dev">Forge</span></h1>
+  <p>Génère des clés de licence de démonstration au format segmenté, avec somme de contrôle — dans l'esprit d'IronLock.</p>
+</header>
+
+<main class="tool">
+  <a class="back" href="../">← Modules</a>
+  <div class="ctl">
+    <div class="row"><label>Segments</label><span class="v"><span id="seg-v">5</span></span></div>
+    <input type="range" id="seg" min="3" max="8" value="5">
+    <div class="row"><label>Longueur d'un segment</label><span class="v"><span id="ln-v">5</span></span></div>
+    <input type="range" id="ln" min="4" max="6" value="5">
+    <div class="row"><label>Préfixe produit</label><input type="text" id="pfx" value="TRU" maxlength="6" style="width:auto;text-transform:uppercase"></div>
+    <div class="row"><label>Quantité</label><input type="number" id="qty" value="1" min="1" max="20" style="width:auto"></div>
+    <div class="actions"><button class="btn" id="gen">↻ Générer</button></div>
+  </div>
+  <div class="out" id="out">—</div>
+  <div class="list" id="list"></div>
+  <div class="ctl valchk"><div><label class="fl">Vérifier une clé (somme de contrôle)</label><input type="text" id="chk" placeholder="Colle une clé générée…" spellcheck="false"></div><div class="meta" id="verdict"></div></div>
+  <div class="note"><b>Démo pédagogique.</b> Ces clés sont aléatoires et servent d'exemples de format ; elles n'activent aucun logiciel réel. L'aléa vient de <code>crypto.getRandomValues</code>.</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function toast(m){var t=$('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1600);}
+  function copy(txt){ if(navigator.clipboard){navigator.clipboard.writeText(txt);} toast('Copié ✓'); }
+
+  var AL='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  function rnd(n){var u=new Uint32Array(n),s='';crypto.getRandomValues(u);for(var i=0;i<n;i++)s+=AL[u[i]%AL.length];return s;}
+  function checksum(str){var h=0;for(var i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))>>>0;}return AL[h%AL.length]+AL[(h>>5)%AL.length];}
+  function make(){ var seg=+$('seg').value, ln=+$('ln').value, pfx=($('pfx').value||'TRU').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+    var parts=[pfx]; for(var i=0;i<seg-1;i++)parts.push(rnd(ln)); var base=parts.join('-'); return base+'-'+checksum(base); }
+  function gen(){ var q=Math.max(1,Math.min(20,+$('qty').value||1)); var keys=[]; for(var i=0;i<q;i++)keys.push(make());
+    $('out').textContent=keys[0]; $('out').onclick=function(){copy(keys[0]);};
+    var list=$('list'); list.innerHTML=''; keys.forEach(function(k){var d=document.createElement('div');d.className='k';d.textContent=k;d.title='Cliquer pour copier';d.onclick=function(){copy(k);};list.appendChild(d);}); }
+  function verify(){ var v=$('verdict'), s=($('chk').value||'').trim().toUpperCase(); if(!s){v.textContent='';return;}
+    var i=s.lastIndexOf('-'); if(i<0){v.innerHTML='<span class="bad">✕ Format inattendu</span>';return;}
+    var base=s.slice(0,i), cs=s.slice(i+1); v.innerHTML = (cs===checksum(base)) ? '<span class="ok">✓ Somme de contrôle valide</span>' : '<span class="bad">✕ Somme de contrôle invalide</span>'; }
+  $('seg').oninput=function(){$('seg-v').textContent=this.value;gen();};
+  $('ln').oninput=function(){$('ln-v').textContent=this.value;gen();};
+  $('pfx').addEventListener('input',gen); $('qty').addEventListener('input',gen);
+  $('gen').onclick=gen; $('chk').addEventListener('input',verify);
+  gen();
+  
+})();
+</script>
+</body>
+</html>

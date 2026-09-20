@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /galerie/
+Disallow: /admin/
+Disallow: /modules/
+Disallow: /concours/
+Disallow: /dons/
+Disallow: /musique/
+Disallow: /ebooks/
+Disallow: /logiciels/
+
+Sitemap: https://truvector.dev/sitemap.xml

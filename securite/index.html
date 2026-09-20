@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Politique de sécurité — TRUvector.dev</title>
+<meta name="description" content="Politique de sécurité des systèmes d'information (SSI) et divulgation responsable de vulnérabilités — TRUvector.dev.">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+  <script src="../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../index.html" aria-label="Accueil TRUvector">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span>
+  </a>
+  <div class="nav-links">
+    <a href="../index.html">Accueil</a>
+    <a href="../galerie/">Galerie</a>
+    <a href="../mentions-legales/" aria-current="page">Légal</a>
+  </div>
+</div></nav>
+
+<main class="legal">
+  <svg class="triskele head-tris" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Politique de <span class="dev">sécurité</span></h1>
+  <p class="updated">Dernière mise à jour : 17 septembre 2026 · Sécurité des systèmes d'information (SSI)</p>
+  <p class="intro">TRUvector applique des mesures raisonnables et proportionnées pour protéger le site, ses contenus et les données traitées. Cette page décrit ces mesures et la marche à suivre pour signaler une faille.</p>
+
+  <div class="toc-legal">
+    <a href="../mentions-legales/">Mentions légales</a>
+    <a href="../cgv/">CGV / CGU</a>
+    <a href="../confidentialite/">Confidentialité (RGPD)</a>
+    <a href="../cookies/">Cookies</a>
+    <a href="../securite/" aria-current="page">Sécurité</a>
+  </div>
+
+  <section>
+    <h2>1. Hébergement &amp; réseau</h2>
+    <ul>
+      <li><b>HTTPS forcé</b> et chiffrement TLS de bout en bout (certificats gérés par Cloudflare).</li>
+      <li>Protection <b>anti-DDoS</b> et pare-feu applicatif (WAF) au niveau du réseau Cloudflare.</li>
+      <li>Diffusion via un <b>CDN mondial</b> ; site statique, sans base de données exposée.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>2. En-têtes de sécurité HTTP</h2>
+    <p>Configurés dans le fichier <code>_headers</code> :</p>
+    <ul>
+      <li><code>Content-Security-Policy</code> — restreint les sources de scripts, styles, polices et images.</li>
+      <li><code>X-Content-Type-Options: nosniff</code></li>
+      <li><code>X-Frame-Options: SAMEORIGIN</code> (anti-clickjacking)</li>
+      <li><code>Referrer-Policy: strict-origin-when-cross-origin</code></li>
+      <li><code>Permissions-Policy</code> — géolocalisation, micro et caméra désactivés.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>3. Contrôle d'accès &amp; gestion des droits</h2>
+    <ul>
+      <li>Espaces sensibles (<code>/galerie</code>, <code>/admin</code>) protégés par <b>Cloudflare Access</b> (Zero Trust) : authentification par code e-mail à usage unique ou fournisseur d'identité.</li>
+      <li><b>Rôles</b> : administrateur, éditeur, lecteur — la liste des accès autorisés est gérée dans le panneau d'administration et appliquée à la porte par Access.</li>
+      <li>Principe du moindre privilège : seules les personnes nécessaires disposent d'un accès.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>4. Développement, sauvegarde &amp; mises à jour</h2>
+    <ul>
+      <li>Code <b>versionné sur GitHub</b> (historique complet, restauration possible).</li>
+      <li>Déploiement continu via <b>Cloudflare Pages</b> ; chaque version est traçable.</li>
+      <li>Absence de secret sensible dans le code public ; les codes des portes « légères » ne remplacent pas Cloudflare Access.</li>
+      <li>Revue régulière des dépendances et des configurations de sécurité.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>5. Signalement d'une vulnérabilité (divulgation responsable)</h2>
+    <p>Si tu découvres une faille de sécurité, merci de la signaler de façon responsable à&nbsp;:</p>
+    <p><span class="k">security@truvector.dev</span></p>
+    <ul>
+      <li>Décris la vulnérabilité et les étapes pour la reproduire.</li>
+      <li>N'exploite pas la faille au-delà du nécessaire, n'accède pas à des données qui ne t'appartiennent pas, ne la divulgue pas publiquement avant correction.</li>
+      <li>Un délai raisonnable sera pris pour corriger ; ta contribution de bonne foi sera reconnue.</li>
+    </ul>
+    <p>Voir aussi le fichier <code>/.well-known/security.txt</code>.</p>
+  </section>
+
+  <section>
+    <h2>6. Incident sur données personnelles</h2>
+    <p>En cas de violation de données à caractère personnel présentant un risque pour les personnes, une notification à la <b>CNIL</b> sous 72&nbsp;h et, le cas échéant, une information des personnes concernées seront réalisées conformément au RGPD.</p>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p class="fm">$ truvector security --tls --waf --zero-trust</p>
+    <p>© 2026 TRUvector.dev — Tristan Ruard</p>
+    <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
+  </div>
+</footer>
+<script src="../assets/js/player.js?v=2"></script>
+<script src="../assets/js/nav.js?v=4"></script>
+</body>
+</html>

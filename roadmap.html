@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRUvector — Feuille de route v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark;
+    --nuit:#070b11;
+    --nuit-2:#0b121a;
+    --panneau:rgba(17,27,37,.60);
+    --panneau-2:rgba(13,21,29,.72);
+    --bord:rgba(126,240,205,.16);
+    --bord-fort:rgba(126,240,205,.34);
+    --menthe:#34f5c5;
+    --menthe-soft:#8ff3d9;
+    --aurore-v:#b14aed;
+    --aurore-v-soft:#c98bf5;
+    --aurore-g:#59e39a;
+    --ambre:#f4c56b;
+    --texte:#e8f2ee;
+    --texte-2:#9db2ae;
+    --texte-3:#6f8582;
+    --sans:'Space Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --r:18px;
+    --maxw:920px;
+  }
+  /* garder l'esthétique nuit quel que soit le thème du visualiseur */
+  :root:not([data-theme="light"]), :root[data-theme="dark"]{ color-scheme: dark; }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    color:var(--texte);
+    background:
+      radial-gradient(1100px 620px at 50% -12%, rgba(177,74,237,.20), transparent 60%),
+      radial-gradient(900px 520px at 84% 4%, rgba(52,245,197,.12), transparent 58%),
+      radial-gradient(700px 400px at 12% 8%, rgba(244,197,107,.08), transparent 60%),
+      var(--nuit);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--menthe);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;
+    padding:74px 0 58px;
+    text-align:center;
+    overflow:hidden;
+  }
+  .aurora{position:absolute;inset:-30% -20% auto -20%;height:120%;z-index:0;filter:blur(46px);opacity:.55;pointer-events:none}
+  .aurora span{position:absolute;border-radius:50%;mix-blend-mode:screen}
+  .aurora .a1{width:60%;height:60%;left:6%;top:-6%;background:radial-gradient(circle,var(--aurore-g),transparent 62%);animation:drift 17s ease-in-out infinite alternate}
+  .aurora .a2{width:58%;height:58%;right:4%;top:-2%;background:radial-gradient(circle,var(--aurore-v),transparent 62%);animation:drift 21s ease-in-out infinite alternate-reverse}
+  .aurora .a3{width:44%;height:44%;left:34%;top:16%;background:radial-gradient(circle,var(--menthe),transparent 60%);opacity:.5;animation:drift 24s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translate3d(-3%,0,0) scale(1)}to{transform:translate3d(4%,5%,0) scale(1.12)}}
+
+  .lights{position:absolute;top:14px;left:0;right:0;height:30px;z-index:1;display:flex;justify-content:space-around;padding:0 6%;pointer-events:none}
+  .lights i{width:6px;height:6px;border-radius:50%;background:var(--ambre);box-shadow:0 0 10px 2px rgba(244,197,107,.7);opacity:.9;animation:twinkle 3.4s ease-in-out infinite}
+  .lights i:nth-child(2n){animation-delay:.7s;opacity:.6}
+  .lights i:nth-child(3n){animation-delay:1.4s}
+  @keyframes twinkle{0%,100%{opacity:.35}50%{opacity:1}}
+
+  .hero-inner{position:relative;z-index:2}
+  .triskele{width:96px;height:96px;margin:0 auto 20px;display:block;filter:drop-shadow(0 0 10px rgba(52,245,197,.85)) drop-shadow(0 0 26px rgba(52,245,197,.45))}
+  .triskele path{fill:none;stroke:var(--menthe);stroke-width:7;stroke-linecap:round}
+  .triskele .core{fill:var(--menthe);stroke:none}
+  .triskele{animation:spin 40s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .wordmark{font-weight:700;letter-spacing:.5px;font-size:clamp(30px,7vw,52px);line-height:1.05;margin:0}
+  .wordmark .tru{color:var(--menthe);text-shadow:0 0 18px rgba(52,245,197,.55)}
+  .wordmark .vec{color:var(--texte)}
+  .wordmark .dev{color:var(--aurore-v-soft);font-weight:500}
+  .kicker{font-family:var(--mono);font-size:12.5px;color:var(--menthe-soft);letter-spacing:2px;margin:6px 0 0;opacity:.9}
+  .lede{max-width:56ch;margin:20px auto 0;color:var(--texte-2);font-size:16.5px}
+  .lede b{color:var(--texte);font-weight:600}
+  .tag{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);border-radius:999px;padding:4px 12px;margin-top:18px;background:rgba(177,74,237,.10)}
+
+  /* ---------- COUNTDOWN ---------- */
+  .countdown{margin:30px auto 0;max-width:520px}
+  .cd-label{font-family:var(--mono);font-size:11.5px;letter-spacing:2px;color:var(--texte-3);text-transform:uppercase;margin-bottom:12px}
+  .cd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .cd-cell{
+    background:var(--panneau);
+    border:1px solid var(--bord);
+    border-radius:14px;
+    padding:16px 6px 12px;
+    backdrop-filter:blur(8px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 0 26px rgba(52,245,197,.06);
+  }
+  .cd-num{font-family:var(--mono);font-weight:700;font-size:clamp(26px,6.5vw,38px);color:var(--menthe);text-shadow:0 0 16px rgba(52,245,197,.35);line-height:1}
+  .cd-unit{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--texte-3);text-transform:uppercase;margin-top:8px}
+  .cd-done{font-family:var(--mono);color:var(--aurore-g);font-size:18px;padding:14px;border:1px solid rgba(89,227,154,.4);border-radius:14px;background:rgba(89,227,154,.08)}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:44px 0;position:relative;z-index:2}
+  .eyebrow{font-family:var(--mono);font-size:12px;color:var(--menthe);letter-spacing:2px}
+  h2{font-size:clamp(22px,4.6vw,30px);margin:8px 0 4px;font-weight:600;letter-spacing:-.3px}
+  h2 + p.sub{color:var(--texte-2);margin:0 0 26px;font-size:15.5px}
+
+  .grid-brief{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+  .card{
+    background:var(--panneau-2);
+    border:1px solid var(--bord);
+    border-radius:var(--r);
+    padding:18px 18px 16px;
+    backdrop-filter:blur(8px);
+  }
+  .card h3{margin:10px 0 6px;font-size:16px;font-weight:600}
+  .card p{margin:0;color:var(--texte-2);font-size:14px}
+  .card .ic{font-size:20px;line-height:1}
+
+  .stack{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  .stack li{display:flex;gap:12px;align-items:flex-start;background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:13px 15px}
+  .stack .k{font-family:var(--mono);font-size:12.5px;color:var(--menthe);min-width:118px;padding-top:1px}
+  .stack .v{color:var(--texte);font-size:14.5px}
+  .stack .v small{display:block;color:var(--texte-3);font-family:var(--mono);font-size:11.5px;margin-top:2px}
+
+  /* ---------- TIMELINE ---------- */
+  .planning{display:flex;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:12px;color:var(--texte-2);margin-bottom:8px}
+  .planning span{border:1px solid var(--bord);border-radius:999px;padding:5px 11px;background:var(--panneau)}
+  .planning span.hot{border-color:var(--bord-fort);color:var(--menthe)}
+  .planning span.day{border-color:rgba(177,74,237,.5);color:var(--aurore-v-soft);background:rgba(177,74,237,.10)}
+
+  .timeline{position:relative;margin-top:26px;padding-left:34px}
+  .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--menthe),var(--aurore-v) 55%,var(--ambre))}
+  .phase{position:relative;margin-bottom:26px}
+  .phase::before{content:"";position:absolute;left:-33px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--nuit);border:2px solid var(--menthe);box-shadow:0 0 0 4px rgba(52,245,197,.10),0 0 14px rgba(52,245,197,.5)}
+  .phase.v::before{border-color:var(--aurore-v);box-shadow:0 0 0 4px rgba(177,74,237,.12),0 0 14px rgba(177,74,237,.5)}
+  .phase.g::before{border-color:var(--ambre);box-shadow:0 0 0 4px rgba(244,197,107,.12),0 0 14px rgba(244,197,107,.5)}
+  .phase-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .pid{font-family:var(--mono);font-size:12.5px;color:var(--menthe);font-weight:700}
+  .phase.v .pid{color:var(--aurore-v-soft)} .phase.g .pid{color:var(--ambre)}
+  .phase h3{margin:0;font-size:17.5px;font-weight:600}
+  .when{font-family:var(--mono);font-size:11.5px;color:var(--texte-3);margin-left:auto}
+  .phase-body{background:var(--panneau-2);border:1px solid var(--bord);border-radius:var(--r);padding:15px 17px;margin-top:11px;backdrop-filter:blur(6px)}
+  .tasks{margin:0;padding:0;list-style:none;display:grid;gap:7px}
+  .tasks li{padding-left:22px;position:relative;color:var(--texte);font-size:14.5px}
+  .tasks li::before{content:"›";position:absolute;left:4px;top:0;color:var(--menthe);font-family:var(--mono)}
+  .deliver{display:inline-flex;align-items:center;gap:7px;margin-top:13px;font-size:12.5px;font-family:var(--mono);color:var(--aurore-g);border:1px solid rgba(89,227,154,.35);background:rgba(89,227,154,.07);border-radius:999px;padding:5px 12px}
+  .note{font-family:var(--mono);font-size:12px;color:var(--texte-3);margin-top:11px;border-top:1px dashed var(--bord);padding-top:10px}
+  .note b{color:var(--menthe-soft);font-weight:500}
+
+  /* ---------- DECISIONS ---------- */
+  .decisions{display:grid;gap:12px}
+  .decision{background:var(--panneau-2);border:1px solid var(--bord);border-left:3px solid var(--aurore-v);border-radius:12px;padding:14px 16px}
+  .decision h4{margin:0 0 5px;font-size:15px;font-weight:600}
+  .decision p{margin:0;color:var(--texte-2);font-size:14px}
+  .decision .reco{color:var(--menthe-soft);font-family:var(--mono);font-size:12.5px}
+
+  /* ---------- CODE / ARBO ---------- */
+  .codeblock{background:#060a0f;border:1px solid var(--bord);border-radius:14px;padding:16px 18px;overflow-x:auto}
+  .codeblock pre{margin:0;font-family:var(--mono);font-size:12.8px;color:var(--menthe-soft);line-height:1.75;white-space:pre}
+  .codeblock .c{color:var(--texte-3)}
+  .codeblock .p{color:var(--aurore-v-soft)}
+
+  /* ---------- PALETTE ---------- */
+  .swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+  .sw{border:1px solid var(--bord);border-radius:12px;overflow:hidden;background:var(--panneau-2)}
+  .sw .chip{height:52px}
+  .sw .meta{padding:9px 11px;font-family:var(--mono);font-size:11.5px}
+  .sw .meta .n{color:var(--texte);display:block}
+  .sw .meta .h{color:var(--texte-3)}
+
+  /* ---------- CHECKLIST ---------- */
+  .check{list-style:none;padding:0;margin:0;display:grid;gap:9px}
+  .check li{display:flex;gap:11px;align-items:flex-start;background:var(--panneau-2);border:1px solid var(--bord);border-radius:12px;padding:12px 14px;font-size:14.5px}
+  .check .box{color:var(--menthe);font-family:var(--mono);flex:0 0 auto;margin-top:1px}
+
+  footer{padding:40px 0 60px;text-align:center;color:var(--texte-3);font-size:13px;position:relative;z-index:2}
+  footer .fm{font-family:var(--mono);color:var(--menthe-soft)}
+  .hr{height:1px;background:linear-gradient(90deg,transparent,var(--bord-fort),transparent);margin:0 0 30px}
+
+  @media (max-width:560px){
+    .cd-grid{gap:7px}
+    .stack .k{min-width:96px}
+    .when{margin-left:0;width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .aurora span,.lights i,.triskele{animation:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
+  <div class="lights" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-inner wrap">
+    <svg class="triskele" viewBox="0 0 200 200" role="img" aria-label="Triskèle TRUvector">
+      <g>
+        <path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+        <path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+        <path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+        <circle class="core" cx="100" cy="100" r="5"/>
+      </g>
+    </svg>
+    <h1 class="wordmark"><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></h1>
+    <p class="kicker">WHERE CODE MEETS CREATIVITY</p>
+    <p class="lede">Feuille de route <b>v4</b> — un site entièrement neuf, au design <b>romantico·geek</b> : créas graphiques en libre téléchargement, mentions légales, accès par authentification simple, hébergé sur Cloudflare.</p>
+    <span class="tag">design system · aurore · triskèle · terminal</span>
+
+    <div class="countdown">
+      <div class="cd-label">Ouverture du site — 21 septembre 2026</div>
+      <div class="cd-grid" id="cd">
+        <div class="cd-cell"><div class="cd-num" id="d">--</div><div class="cd-unit">Jours</div></div>
+        <div class="cd-cell"><div class="cd-num" id="h">--</div><div class="cd-unit">Heures</div></div>
+        <div class="cd-cell"><div class="cd-num" id="m">--</div><div class="cd-unit">Min</div></div>
+        <div class="cd-cell"><div class="cd-num" id="s">--</div><div class="cd-unit">Sec</div></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- BRIEF -->
+  <section class="wrap">
+    <div class="eyebrow">// le brief</div>
+    <h2>Ce que doit contenir la v4</h2>
+    <p class="sub">Le cœur du projet, en cinq pièces.</p>
+    <div class="grid-brief">
+      <div class="card"><div class="ic">🎨</div><h3>Style artistique</h3><p>Direction romantico·geek : aurores, triskèle néon, guirlandes, univers sci-fi/fantasy fidèle à tes créas.</p></div>
+      <div class="card"><div class="ic">⬇️</div><h3>Galerie de créas</h3><p>Tes œuvres graphiques en libre téléchargement, dans une galerie navigable et fluide.</p></div>
+      <div class="card"><div class="ic">⏳</div><h3>Compte à rebours</h3><p>Décompte jusqu'au 21/09/2026, date d'ouverture officielle du site.</p></div>
+      <div class="card"><div class="ic">🔑</div><h3>Accès simple</h3><p>Une authentification légère pour entrer — sans usine à gaz.</p></div>
+      <div class="card"><div class="ic">📄</div><h3>Mentions légales</h3><p>Une page unique, conforme à ton statut d'entreprise individuelle artiste-auteur.</p></div>
+      <div class="card"><div class="ic">☁️</div><h3>Cloudflare</h3><p>Toujours hébergé sur Cloudflare : rapide, mondial, gratuit pour ce type de site.</p></div>
+    </div>
+  </section>
+
+  <!-- STACK -->
+  <section class="wrap">
+    <div class="eyebrow">// la stack recommandée</div>
+    <h2>Sur quoi on construit</h2>
+    <p class="sub">Du 100 % Cloudflare, statique et sans serveur à maintenir.</p>
+    <ul class="stack">
+      <li><span class="k">Hébergement</span><span class="v">Cloudflare Pages <small>statique · CDN mondial · déploiement Git · gratuit</small></span></li>
+      <li><span class="k">Authentification</span><span class="v">Cloudflare Access (Zero Trust) <small>OTP e-mail ou Google · ≤ 50 utilisateurs gratuits · zéro code</small></span></li>
+      <li><span class="k">Anti-bot</span><span class="v">Cloudflare Turnstile <small>captcha discret et respectueux de la vie privée</small></span></li>
+      <li><span class="k">Statistiques</span><span class="v">Cloudflare Web Analytics <small>sans cookies · pas de bandeau à gérer</small></span></li>
+      <li><span class="k">Base</span><span class="v">HTML / CSS / JS natif — ou Astro <small>Astro si tu veux gérer la galerie comme une collection de contenus</small></span></li>
+      <li><span class="k">Domaine</span><span class="v">TruVector.dev <small>DNS Cloudflare · HTTPS automatique</small></span></li>
+    </ul>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="wrap">
+    <div class="eyebrow">// la trajectoire</div>
+    <h2>Les phases, dans l'ordre</h2>
+    <p class="sub">On est à J-4 du lancement : le teaser part en premier, le reste se boucle en parallèle.</p>
+    <div class="planning">
+      <span class="hot">J-4 · jeu. 17/09 — aujourd'hui</span>
+      <span>ven. 18/09</span>
+      <span>sam. 19/09</span>
+      <span>dim. 20/09</span>
+      <span class="day">J · lun. 21/09 — ouverture 🎉</span>
+    </div>
+
+    <div class="timeline">
+
+      <div class="phase">
+        <div class="phase-head"><span class="pid">PHASE 00</span><h3>Fondations & design system</h3><span class="when">J-4 → J-3</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Verrouiller la palette (menthe néon, aurore violette, guirlande ambre, base nuit) et la typo (Space&nbsp;Grotesk + JetBrains&nbsp;Mono).</li>
+            <li>Créer les tokens CSS et les composants de base : boutons néon, cartes « verre », halos d'aurore.</li>
+            <li>Redessiner le logo triskèle en SVG animé néon.</li>
+            <li>Rassembler les 7 créas et produire les versions optimisées (WebP + PNG HD) pour le téléchargement.</li>
+          </ul>
+          <span class="deliver">✔ Livrable — design system + assets prêts</span>
+          <div class="note"><b># reco</b> — un seul fichier <code>tokens.css</code> réutilisé partout : tout le site reste cohérent.</div>
+        </div>
+      </div>
+
+      <div class="phase v">
+        <div class="phase-head"><span class="pid">PHASE 01</span><h3>Landing « compte à rebours »</h3><span class="when">J-3 · à mettre en ligne AVANT le 21</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Page teaser unique : triskèle en héros, aurore animée en fond, cœur, guirlandes.</li>
+            <li>Compte à rebours JS vers le 21/09/2026 00:00 (Europe/Paris).</li>
+            <li>Message d'annonce + éventuel champ « préviens-moi ».</li>
+            <li>Responsive mobile et accessible dès le départ.</li>
+          </ul>
+          <span class="deliver">✔ Livrable — teaser en prod, décompte qui tourne</span>
+          <div class="note"><b># priorité</b> — c'est la première chose visible : elle doit être en ligne au plus vite pour occuper le domaine.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><span class="pid">PHASE 02</span><h3>Porte d'entrée — auth simple</h3><span class="when">J-2</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li><b>Reco :</b> Cloudflare Access devant la zone protégée — OTP e-mail / Google, gratuit, zéro code.</li>
+            <li>Alternative : page mot de passe via un Cloudflare Worker + secret partagé.</li>
+            <li>Turnstile en anti-bot sur le formulaire.</li>
+            <li>Choisir le périmètre : tout le site, ou seulement la galerie (voir « Décisions »).</li>
+          </ul>
+          <span class="deliver">✔ Livrable — accès contrôlé fonctionnel</span>
+          <div class="note"><b># astuce</b> — Access se pose devant une route (ex. <code>/galerie/*</code>) sans toucher au code.</div>
+        </div>
+      </div>
+
+      <div class="phase v">
+        <div class="phase-head"><span class="pid">PHASE 03</span><h3>Galerie de créas en libre téléchargement</h3><span class="when">J-2 → J-1</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Grille responsive (cartes « verre » ou masonry) de tes œuvres.</li>
+            <li>Lightbox + bouton « Télécharger » (PNG HD / WebP).</li>
+            <li>Fiche par créa : titre, format, licence d'utilisation.</li>
+            <li>Lazy-load des images ; favoris et tri en bonus.</li>
+          </ul>
+          <span class="deliver">✔ Livrable — galerie navigable + téléchargements</span>
+          <div class="note"><b># perf</b> — servir en WebP par défaut, PNG HD au clic « télécharger ».</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><span class="pid">PHASE 04</span><h3>Mentions légales — page unique</h3><span class="when">J-1</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Éditeur : TRUvector — entreprise individuelle (artiste-auteur, BNC), immatriculation INPI du 21/08/2026.</li>
+            <li>Directeur de la publication, contact, hébergeur : Cloudflare, Inc.</li>
+            <li>Propriété intellectuelle + licence des créas téléchargeables.</li>
+            <li>Données personnelles & cookies (au minimum, du fait de l'analytics).</li>
+          </ul>
+          <span class="deliver">✔ Livrable — page /mentions-legales conforme</span>
+          <div class="note"><b># rappel</b> — la licence de tes créas doit être écrite noir sur blanc ici (voir « Décisions »).</div>
+        </div>
+      </div>
+
+      <div class="phase g">
+        <div class="phase-head"><span class="pid">PHASE 05</span><h3>Déploiement Cloudflare & ouverture</h3><span class="when">J · 21/09 🎉</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Repo Git relié à Cloudflare Pages (build statique automatique).</li>
+            <li>Domaine TruVector.dev sur le DNS Cloudflare, HTTPS auto.</li>
+            <li>Cloudflare Access activé sur la zone protégée.</li>
+            <li>Bascule teaser → site complet le 21/09 (date-gate / feature flag).</li>
+            <li>Headers de sécurité, cache, sitemap, favicon, cartes de partage.</li>
+          </ul>
+          <span class="deliver">✔ Livrable — site v4 en ligne le 21/09</span>
+          <div class="note"><b># le jour J</b> — le décompte tombe à zéro, le site s'ouvre tout seul.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head"><span class="pid">PHASE 06</span><h3>Post-lancement & itérations</h3><span class="when">après le 21</span></div>
+        <div class="phase-body">
+          <ul class="tasks">
+            <li>Web Analytics sans cookies + tableau de bord perf (Lighthouse).</li>
+            <li>SEO / OpenGraph : cartes de partage romantico·geek.</li>
+            <li>Nouvelles créas, newsletter, version bilingue FR/EN.</li>
+            <li>Accessibilité (contrastes, focus clavier, motion réduit).</li>
+          </ul>
+          <span class="deliver">✔ Livrable — un site qui vit et grandit</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- DECISIONS -->
+  <section class="wrap">
+    <div class="eyebrow">// à trancher</div>
+    <h2>4 décisions qui débloquent tout</h2>
+    <p class="sub">Donne-moi ton choix sur chacune et je code la suite.</p>
+    <div class="decisions">
+      <div class="decision"><h4>1 · Périmètre de l'authentification</h4><p>Tout le site derrière l'auth, ou teaser public + galerie protégée ?</p><p class="reco">reco → teaser & compte à rebours publics pour tous, galerie derrière Access.</p></div>
+      <div class="decision"><h4>2 · Méthode d'accès</h4><p>Cloudflare Access (OTP/Google) ou une simple page mot de passe ?</p><p class="reco">reco → Cloudflare Access : plus simple à vivre, rien à maintenir.</p></div>
+      <div class="decision"><h4>3 · Licence des créas</h4><p>« Libre téléchargement » = quel usage autorisé (perso, commercial, attribution) ?</p><p class="reco">reco → à afficher sur chaque fiche + dans les mentions légales.</p></div>
+      <div class="decision"><h4>4 · Bilingue FR/EN</h4><p>Dès le lancement, ou en Phase 06 ?</p><p class="reco">reco → FR au 21/09, EN juste après pour tenir la date.</p></div>
+    </div>
+  </section>
+
+  <!-- ARBO -->
+  <section class="wrap">
+    <div class="eyebrow">// structure</div>
+    <h2>Arborescence du site</h2>
+    <p class="sub">Simple, statique, compatible Cloudflare Pages.</p>
+    <div class="codeblock">
+<pre>truvector.dev/
+├── index.html            <span class="c"># teaser + compte à rebours (public)</span>
+├── galerie/              <span class="p"># protégé par Cloudflare Access</span>
+│   ├── index.html        <span class="c"># grille + lightbox + téléchargements</span>
+│   └── assets/           <span class="c"># créas en WebP + PNG HD</span>
+├── mentions-legales/
+│   └── index.html
+├── assets/
+│   ├── css/tokens.css    <span class="c"># le design system, une seule source</span>
+│   ├── js/countdown.js
+│   └── img/triskele.svg
+├── _headers              <span class="c"># sécurité + cache (Cloudflare Pages)</span>
+└── _redirects            <span class="c"># bascule teaser → site le 21/09</span></pre>
+    </div>
+  </section>
+
+  <!-- PALETTE -->
+  <section class="wrap">
+    <div class="eyebrow">// design tokens</div>
+    <h2>La palette TRUvector</h2>
+    <p class="sub">Néon menthe + aurore violette, réchauffés par l'ambre des guirlandes, sur fond nuit.</p>
+    <div class="swatches">
+      <div class="sw"><div class="chip" style="background:#34f5c5"></div><div class="meta"><span class="n">Menthe néon</span><span class="h">#34F5C5</span></div></div>
+      <div class="sw"><div class="chip" style="background:#b14aed"></div><div class="meta"><span class="n">Aurore violette</span><span class="h">#B14AED</span></div></div>
+      <div class="sw"><div class="chip" style="background:#59e39a"></div><div class="meta"><span class="n">Aurore verte</span><span class="h">#59E39A</span></div></div>
+      <div class="sw"><div class="chip" style="background:#f4c56b"></div><div class="meta"><span class="n">Ambre guirlande</span><span class="h">#F4C56B</span></div></div>
+      <div class="sw"><div class="chip" style="background:#0b121a"></div><div class="meta"><span class="n">Nuit</span><span class="h">#0B121A</span></div></div>
+      <div class="sw"><div class="chip" style="background:#e8f2ee"></div><div class="meta"><span class="n">Texte clair</span><span class="h">#E8F2EE</span></div></div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section class="wrap">
+    <div class="eyebrow">// go-live 21/09</div>
+    <h2>La check-list du jour J</h2>
+    <ul class="check">
+      <li><span class="box">[ ]</span> Teaser + compte à rebours en ligne et vérifiés sur mobile</li>
+      <li><span class="box">[ ]</span> Domaine TruVector.dev pointé, HTTPS actif</li>
+      <li><span class="box">[ ]</span> Cloudflare Access configuré sur la galerie</li>
+      <li><span class="box">[ ]</span> Créas exportées (WebP + PNG HD) et téléchargements testés</li>
+      <li><span class="box">[ ]</span> Page mentions légales publiée avec la licence des créas</li>
+      <li><span class="box">[ ]</span> Bascule teaser → site programmée pour le 21/09 00:00</li>
+      <li><span class="box">[ ]</span> Web Analytics activé · favicon · cartes de partage</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="hr"></div>
+  <p class="fm">$ truvector deploy --version 4 --style romantico-geek --host cloudflare</p>
+  <p>TRUvector.dev · Feuille de route v4 · Ouverture le 21 septembre 2026 — <span style="color:var(--menthe-soft)">on repart 💪</span></p>
+</footer>
+
+<script>
+  (function(){
+    var target = new Date('2026-09-21T00:00:00+02:00').getTime();
+    var d=document.getElementById('d'),h=document.getElementById('h'),
+        m=document.getElementById('m'),s=document.getElementById('s'),
+        grid=document.getElementById('cd');
+    function pad(n){return (n<10?'0':'')+n;}
+    function tick(){
+      var now=Date.now(), diff=target-now;
+      if(diff<=0){
+        grid.innerHTML='<div class="cd-done" style="grid-column:1/-1">🌌 Le site est ouvert — bienvenue</div>';
+        clearInterval(timer);
+        return;
+      }
+      var sec=Math.floor(diff/1000);
+      d.textContent=Math.floor(sec/86400);
+      h.textContent=pad(Math.floor(sec%86400/3600));
+      m.textContent=pad(Math.floor(sec%3600/60));
+      s.textContent=pad(sec%60);
+    }
+    tick();
+    var timer=setInterval(tick,1000);
+  })();
+</script>
+</body>
+</html>

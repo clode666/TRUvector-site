@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRU Hasher — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .tool{max-width:760px;margin:0 auto;padding:8px 22px 60px}
+  .tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+  .tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+  .tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:56ch;font-size:15px}
+  .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 12px}
+  .back:hover{color:var(--menthe);text-decoration:none}
+  .ctl{display:grid;gap:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+  .row{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  .row label{font-size:14px;color:var(--texte)}
+  .row .v{font-family:var(--mono);font-size:13px;color:var(--menthe-soft)}
+  label.fl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--texte-2);margin-bottom:6px}
+  input[type=text],input[type=number],input[type=range],textarea,select{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--texte);background:var(--panneau);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px}
+  input[type=range]{padding:0;accent-color:var(--menthe)}
+  textarea{min-height:120px;resize:vertical;line-height:1.55;font-family:var(--mono);font-size:13px}
+  .out{background:#060a0f;border:1px solid var(--bord-fort);border-radius:14px;padding:14px 16px;margin:12px 0 0;font-family:var(--mono);font-size:13.5px;color:var(--menthe-soft);white-space:pre-wrap;word-break:break-word;min-height:22px}
+  .tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+  .tabs button{font-family:var(--mono);font-size:13px;padding:9px 14px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+  .tabs button.on{border-color:var(--menthe);color:var(--menthe)}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--texte-3);display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .meta b{color:var(--menthe-soft);font-weight:500}
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+  .note b{color:var(--texte)}
+  .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:4px}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:80}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .out{user-select:all}
+  .algo{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+  .algo label{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:13px;color:var(--texte-2)}
+  .drop{border:1px dashed var(--bord-fort);border-radius:12px;padding:16px;text-align:center;color:var(--texte-3);font-family:var(--mono);font-size:12.5px;cursor:pointer}
+  .drop.over{border-color:var(--menthe);color:var(--menthe)}
+  .hres{margin-top:12px}
+  .hres .h{font-family:var(--mono);font-size:11px;color:var(--aurore-v-soft);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 3px}
+  </style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>TRU <span class="dev">Hasher</span></h1>
+  <p>Empreintes SHA-1, SHA-256, SHA-384 et SHA-512 d'un texte ou d'un fichier — calcul 100 % local via Web Crypto.</p>
+</header>
+
+<main class="tool">
+  <a class="back" href="../">← Modules</a>
+  <div class="tabs"><button class="on" data-t="txt">Texte</button><button data-t="file">Fichier</button></div>
+  <div class="ctl">
+    <div id="p-txt"><textarea id="src" placeholder="Colle ton texte ici…">TRUvector</textarea></div>
+    <div id="p-file" hidden>
+      <label class="drop" id="drop">Glisse un fichier ici, ou clique pour choisir<input id="file" type="file" hidden></label>
+      <div class="meta" id="finfo"></div>
+    </div>
+    <div class="algo">
+      <label><input type="checkbox" value="SHA-1"> SHA-1</label>
+      <label><input type="checkbox" value="SHA-256" checked> SHA-256</label>
+      <label><input type="checkbox" value="SHA-384"> SHA-384</label>
+      <label><input type="checkbox" value="SHA-512"> SHA-512</label>
+    </div>
+  </div>
+  <div class="hres" id="res"></div>
+  <div class="note"><b>100 % local.</b> Le hachage utilise <code>crypto.subtle.digest</code> de ton navigateur. Aucun texte ni fichier n'est envoyé.</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  function toast(m){var t=$('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1600);}
+  function copy(txt){ if(navigator.clipboard){navigator.clipboard.writeText(txt);} toast('Copié ✓'); }
+
+  var mode='txt', fileBuf=null;
+  function toHex(buf){var u=new Uint8Array(buf),s='';for(var i=0;i<u.length;i++)s+=('0'+u[i].toString(16)).slice(-2);return s;}
+  async function run(){
+    var algos=[].slice.call(document.querySelectorAll('.algo input:checked')).map(function(x){return x.value;});
+    var res=$('res'); res.innerHTML='';
+    if(!algos.length){res.innerHTML='<div class="meta">Coche au moins un algorithme.</div>';return;}
+    var data;
+    if(mode==='txt'){ data=new TextEncoder().encode($('src').value); }
+    else { if(!fileBuf){res.innerHTML='<div class="meta">Choisis un fichier.</div>';return;} data=fileBuf; }
+    for(var i=0;i<algos.length;i++){
+      var a=algos[i];
+      try{ var d=await crypto.subtle.digest(a, data); var hex=toHex(d);
+        var w=document.createElement('div'); w.innerHTML='<div class="h">'+a+'</div><div class="out" title="Cliquer pour copier">'+hex+'</div>';
+        w.querySelector('.out').onclick=(function(h){return function(){copy(h);};})(hex); res.appendChild(w);
+      }catch(e){}
+    }
+  }
+  document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){
+    document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+    mode=b.dataset.t; $('p-txt').hidden=mode!=='txt'; $('p-file').hidden=mode!=='file'; run();};});
+  $('src').addEventListener('input',run);
+  document.querySelectorAll('.algo input').forEach(function(c){c.addEventListener('change',run);});
+  var drop=$('drop'), fi=$('file');
+  function loadFile(f){ if(!f)return; var r=new FileReader(); r.onload=function(){ fileBuf=r.result; $('finfo').innerHTML='<span><b>'+f.name+'</b></span><span>'+f.size.toLocaleString('fr')+' o</span>'; run(); }; r.readAsArrayBuffer(f); }
+  fi.addEventListener('change',function(){loadFile(fi.files[0]);});
+  ['dragover','dragenter'].forEach(function(e){drop.addEventListener(e,function(ev){ev.preventDefault();drop.classList.add('over');});});
+  ['dragleave','drop'].forEach(function(e){drop.addEventListener(e,function(ev){ev.preventDefault();drop.classList.remove('over');});});
+  drop.addEventListener('drop',function(ev){loadFile(ev.dataTransfer.files[0]);});
+  run();
+  
+})();
+</script>
+</body>
+</html>

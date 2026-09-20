@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRU Keyforge — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .tool{max-width:720px;margin:0 auto;padding:8px 22px 60px}
+  .tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+  .tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+  .tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:52ch;font-size:15px}
+  .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 12px}
+  .back:hover{color:var(--menthe);text-decoration:none}
+  .out{display:flex;gap:10px;align-items:center;background:#060a0f;border:1px solid var(--bord-fort);border-radius:14px;padding:14px 16px;margin:0 0 12px}
+  .out code{font-family:var(--mono);font-size:16px;color:var(--menthe-soft);flex:1;word-break:break-all;background:none;border:0;padding:0}
+  .out button{flex:0 0 auto}
+  .bar{height:8px;border-radius:999px;background:var(--panneau);overflow:hidden;margin:2px 0 4px}
+  .bar i{display:block;height:100%;width:0;transition:.25s}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--texte-3);display:flex;justify-content:space-between;margin-bottom:18px}
+  .tabs{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+  .tabs button{font-family:var(--mono);font-size:13px;padding:9px 14px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+  .tabs button.on{border-color:var(--menthe);color:var(--menthe)}
+  .ctl{display:grid;gap:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+  .row{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+  .row label{font-size:14px;color:var(--texte)}
+  .row .v{font-family:var(--mono);font-size:13px;color:var(--menthe-soft)}
+  input[type=range]{width:100%;accent-color:var(--menthe)}
+  .checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .checks label{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--texte-2);font-family:var(--mono)}
+  select{font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:9px 11px}
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>TRU <span class="dev">Keyforge</span></h1>
+  <p>Génère des mots de passe, des passphrases et des clés 256 bits — aléatoire cryptographique, tout en local.</p>
+</header>
+
+<main class="tool">
+  <a class="back" href="../">← Modules</a>
+  <div class="out"><code id="out">—</code><button class="btn" id="copy">Copier</button></div>
+  <div class="bar"><i id="bar"></i></div>
+  <div class="meta"><span id="strength">—</span><span id="entropy">— bits</span></div>
+
+  <div class="tabs">
+    <button class="on" data-mode="pass">Mot de passe</button>
+    <button data-mode="phrase">Passphrase</button>
+    <button data-mode="key">Clé 256 bits</button>
+  </div>
+
+  <div class="ctl">
+    <div id="c-pass">
+      <div class="row"><label>Longueur</label><span class="v"><span id="len-v">20</span> car.</span></div>
+      <input type="range" id="len" min="8" max="64" value="20">
+      <div class="checks">
+        <label><input type="checkbox" id="up" checked> ABC</label>
+        <label><input type="checkbox" id="lo" checked> abc</label>
+        <label><input type="checkbox" id="di" checked> 123</label>
+        <label><input type="checkbox" id="sy" checked> #$&amp;</label>
+        <label><input type="checkbox" id="amb"> exclure ambigus (O0l1)</label>
+      </div>
+    </div>
+    <div id="c-phrase" hidden>
+      <div class="row"><label>Nombre de mots</label><span class="v"><span id="words-v">5</span></span></div>
+      <input type="range" id="words" min="3" max="10" value="5">
+      <div class="row"><label>Séparateur</label><select id="sep"><option value="-">tiret -</option><option value=".">point .</option><option value="_">underscore _</option><option value=" ">espace</option></select></div>
+    </div>
+    <div id="c-key" hidden>
+      <div class="row"><label>Format</label><select id="kfmt"><option value="hex">hex</option><option value="b64">base64</option><option value="trukey">.trukey (JSON)</option></select></div>
+      <p style="margin:0;color:var(--texte-3);font-family:var(--mono);font-size:12px">Clé aléatoire 256 bits — compatible avec les fichiers‑clés v5.</p>
+    </div>
+    <div class="row" style="justify-content:flex-end;gap:10px">
+      <button class="btn" id="gen">↻ Générer</button>
+      <button class="btn btn-ghost" id="dl" hidden>↓ .trukey</button>
+    </div>
+  </div>
+
+  <div class="note"><b>100 % local.</b> Rien n'est envoyé : l'aléa vient de <code>crypto.getRandomValues</code> de ton navigateur. Rafraîchis pour tout oublier.</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+(function(){
+  var WORDS=("aurore nebula triskele photon quartz cedre lynx orage prisme onyx zephyr comete brume ambre echo silex halo givre lotus corvus"+
+  " braise faille pixel vecteur cobalt cyan magma spore runes vortex saphir ombre lueur terra flux nova cristal foret dune orbe"+
+  " menthe velours arcane sylve maree tesla ferrite glaive pulsar nadir zenith calme brise ecume givre").split(" ");
+  var $=function(id){return document.getElementById(id);};
+  var mode='pass';
+  function bytes(n){var u=new Uint8Array(n);crypto.getRandomValues(u);return u;}
+  function pick(arr){var u=new Uint32Array(1);crypto.getRandomValues(u);return arr[u[0]%arr.length];}
+  function toHex(u){return Array.from(u).map(function(b){return ('0'+b.toString(16)).slice(-2);}).join('');}
+  function toB64(u){var s='';for(var i=0;i<u.length;i++)s+=String.fromCharCode(u[i]);return btoa(s);}
+  var last={val:'',key:null};
+
+  function genPass(){
+    var sets=[]; if($('up').checked)sets.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ'); if($('lo').checked)sets.push('abcdefghijklmnopqrstuvwxyz');
+    if($('di').checked)sets.push('0123456789'); if($('sy').checked)sets.push('!@#$%^&*()-_=+[]{};:,.?/');
+    var pool=sets.join(''); if($('amb').checked)pool=pool.replace(/[O0l1I|]/g,'');
+    if(!pool){pool='abcdefghijklmnopqrstuvwxyz';}
+    var len=+$('len').value, out='';
+    var u=new Uint32Array(len); crypto.getRandomValues(u);
+    for(var i=0;i<len;i++)out+=pool[u[i]%pool.length];
+    var ent=Math.round(len*Math.log2(pool.length));
+    return {val:out,ent:ent};
+  }
+  function genPhrase(){
+    var n=+$('words').value, sep=$('sep').value, w=[];
+    for(var i=0;i<n;i++)w.push(pick(WORDS));
+    var ent=Math.round(n*Math.log2(WORDS.length));
+    return {val:w.join(sep),ent:ent};
+  }
+  function genKey(){
+    var b=bytes(32), fmt=$('kfmt').value, val;
+    if(fmt==='hex')val=toHex(b); else if(fmt==='b64')val=toB64(b);
+    else val=JSON.stringify({tru:'v5',name:'ma-cle',k:toB64(b)});
+    last.key=toB64(b);
+    return {val:val,ent:256};
+  }
+  function strengthLabel(e){ if(e<50)return['Faible','#ff8b8b',e/128]; if(e<80)return['Correct','#f4c56b',e/128]; if(e<120)return['Fort','#59e39a',e/128]; return['Excellent','#34f5c5',1]; }
+
+  function generate(){
+    var r = mode==='pass'?genPass():mode==='phrase'?genPhrase():genKey();
+    last.val=r.val; $('out').textContent=r.val;
+    var s=strengthLabel(r.ent); $('bar').style.width=Math.min(100,s[2]*100)+'%'; $('bar').style.background=s[1];
+    $('strength').textContent='Robustesse : '+s[0]; $('entropy').textContent='~'+r.ent+' bits';
+    $('dl').hidden = (mode!=='key');
+  }
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1600);}
+
+  $('len').oninput=function(){$('len-v').textContent=this.value;generate();};
+  $('words').oninput=function(){$('words-v').textContent=this.value;generate();};
+  ['up','lo','di','sy','amb','sep','kfmt'].forEach(function(id){$(id).addEventListener('change',generate);});
+  $('gen').onclick=generate;
+  $('copy').onclick=function(){ if(!last.val)return; navigator.clipboard&&navigator.clipboard.writeText(last.val); toast('Copié ✓'); };
+  $('dl').onclick=function(){ var blob=new Blob([JSON.stringify({tru:'v5',name:'ma-cle',k:last.key})],{type:'application/json'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='ma-cle.trukey'; a.click(); URL.revokeObjectURL(a.href); toast('Fichier-clé téléchargé'); };
+  document.querySelectorAll('.tabs button').forEach(function(b){ b.onclick=function(){
+    document.querySelectorAll('.tabs button').forEach(function(x){x.classList.remove('on');}); b.classList.add('on');
+    mode=b.dataset.mode; $('c-pass').hidden=mode!=='pass'; $('c-phrase').hidden=mode!=='phrase'; $('c-key').hidden=mode!=='key'; generate();
+  };});
+  generate();
+})();
+</script>
+</body>
+</html>
