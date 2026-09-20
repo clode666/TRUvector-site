@@ -172,6 +172,7 @@
     <h3>Mettre à jour un média</h3>
     <p>Remplace le fichier dans <code>truvector-assets</code> + <code>git push</code>. jsDelivr met <code>@main</code> en cache ~24&nbsp;h–7&nbsp;j&nbsp;; pour forcer&nbsp;: purge <code>https://purge.jsdelivr.net/gh/clode666/truvector-assets@main/&lt;chemin&gt;</code>, ou crée un tag (<code>v1</code>…) et pointe <code>TRU_ASSET_BASE</code> sur <code>@v1</code>.</p>
     <div class="note"><b>Alternative « pro » (facultatif).</b> Stocke les médias sur <strong>Cloudflare R2</strong> (10 Go gratuits, egress gratuit) exposé sur <code>media.truvector.dev</code>, et mets cette URL dans <code>TRU_ASSET_BASE</code>. Même mécanisme, sur ton propre domaine.</div>
+    <div class="note"><b>⚠️ CSP (important).</b> Le fichier <code>_headers</code> définit une Content-Security-Policy stricte. C'est déjà réglé pour <code>https://cdn.jsdelivr.net</code> (dans <code>img-src</code> et <code>media-src</code>) et pour l'analytics Cloudflare (<code>static.cloudflareinsights.com</code> / <code>cloudflareinsights.com</code>). Si tu changes d'hébergement de médias, ajoute son domaine à <code>img-src</code> et <code>media-src</code> dans <code>_headers</code>.</div>
     <div class="note ok"><b>Pourquoi c'était lourd&nbsp;:</b> la galerie encodait ses images en base64 dans la page (4&nbsp;Mo) et chaque section gardait un <code>vault.json</code> chiffré inutile en mode public (~6,6&nbsp;Mo). Supprimés de la structure&nbsp;; la galerie pointe désormais vers des fichiers.</div>
   </section>
 

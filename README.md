@@ -66,6 +66,8 @@ Le lecteur audio, le mini-lecteur global et la galerie construisent leurs URLs �
 
 > **Alternative « pro » (facultatif).** Au lieu de jsDelivr, tu peux stocker les médias sur **Cloudflare R2** (10 Go gratuits, egress gratuit) exposé sur un sous-domaine `media.truvector.dev` : mets simplement cette URL dans `TRU_ASSET_BASE`. Même mécanisme, hébergement sur ton propre domaine.
 
+> ⚠️ **CSP (important).** Le fichier `_headers` définit une Content-Security-Policy stricte. Les domaines externes doivent y être autorisés — c'est déjà fait pour `https://cdn.jsdelivr.net` (dans `img-src` et `media-src`) et pour `https://static.cloudflareinsights.com` + `https://cloudflareinsights.com` (analytics Cloudflare). **Si tu changes d'hébergement de médias** (R2, autre CDN), ajoute son domaine à `img-src` et `media-src` dans `_headers`, sinon le navigateur bloquera le chargement.
+
 > ℹ️ **Pourquoi c'était lourd :** la galerie encodait ses images en base64 *dans la page* (4 Mo) et chaque section gardait un `vault.json` chiffré **inutile en mode public** (~6,6 Mo). Ces deux poids ont été supprimés de la structure ; la galerie pointe désormais vers des fichiers.
 
 ---
