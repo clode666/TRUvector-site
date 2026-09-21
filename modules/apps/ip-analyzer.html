@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Analyzer — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+  .tool{max-width:960px;margin:0 auto;padding:8px 22px 60px}
+  .tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+  .tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+  .tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+  .tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+  .tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:60ch;font-size:15px}
+  .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 12px}
+  .back:hover{color:var(--menthe);text-decoration:none}
+  .ctl{display:grid;gap:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+  label.fl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--texte-2);margin-bottom:6px}
+  input[type=text],input[type=range]{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--texte);background:var(--panneau);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px}
+  input[type=range]{padding:0;accent-color:var(--menthe)}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--texte-3);margin-top:10px;min-height:0}
+  .meta:empty{display:none}
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2);line-height:1.6}
+  .note b{color:var(--texte)}
+  .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:80}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .qrow{display:flex;gap:10px;flex-wrap:wrap}
+  .qrow input{flex:1;min-width:220px;width:auto;font-family:var(--mono);font-size:15px}
+  .presets{display:flex;gap:8px;flex-wrap:wrap}
+  .presets button,.ipchip{font-family:var(--mono);font-size:12px;padding:7px 11px;border-radius:9px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+  .presets button:hover,.ipchip:hover{border-color:var(--menthe);color:var(--menthe)}
+  .ipchip{padding:4px 9px;color:var(--menthe-soft);margin:0 4px 4px 0}
+  .opts{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+  .opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+  .opts input{accent-color:var(--menthe)}
+  button:focus-visible,input:focus-visible,a:focus-visible,.kv .v:focus-visible{outline:2px solid var(--menthe);outline-offset:2px}
+
+  #out{margin-top:16px}
+  .ipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:14px;align-items:start}
+  .ipc{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:16px;min-width:0}
+  .ipc.wide{grid-column:1/-1}
+  .ipc h3{margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--aurore-v-soft);font-weight:500;display:flex;justify-content:space-between;gap:10px;align-items:center}
+  .ipc h3 em{font-style:normal;color:var(--texte-3);letter-spacing:0;text-transform:none}
+  .ipc a{color:var(--menthe)}
+  .kv{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-top:1px dashed var(--bord);font-size:13.5px;align-items:baseline}
+  .kvs>.kv:first-child{border-top:0}
+  .kv .k{color:var(--texte-2);flex:0 0 auto;max-width:42%}
+  .kv .v{font-family:var(--mono);font-size:12.5px;color:var(--menthe-soft);text-align:right;word-break:break-word;overflow-wrap:anywhere;min-width:0}
+  .kv .v:not(.nc){cursor:copy}
+  .tg{display:inline-block;font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--bord-fort);color:var(--menthe-soft);white-space:nowrap}
+  .tg.ok{border-color:rgba(89,227,154,.5);color:#59e39a}
+  .tg.warn{border-color:rgba(244,197,107,.5);color:#f4c56b}
+  .tg.bad{border-color:rgba(255,139,139,.55);color:#ff8b8b}
+  .ok{color:#59e39a}.warn{color:#f4c56b}.bad{color:#ff8b8b}
+  .ipload{font-family:var(--mono);font-size:12.5px;color:var(--texte-3)}
+  .iphint{font-size:12px;color:var(--texte-3);margin-top:10px;line-height:1.55}
+  .ipsum{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .ipbig{font-family:var(--mono);font-size:clamp(20px,4.6vw,30px);font-weight:700;color:var(--menthe);word-break:break-all;cursor:copy;line-height:1.25}
+  .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .sl{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .sl .v{font-family:var(--mono);font-size:13px;color:var(--menthe-soft)}
+  .plot{width:100%;height:auto;display:block;background:#04070c;border:1px solid var(--bord);border-radius:12px;margin:0 0 10px}
+  .ping{fill:none;stroke:#34f5c5;stroke-width:.8;transform-box:fill-box;transform-origin:center;animation:ping 2.2s ease-out infinite}
+  @keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(6);opacity:0}}
+  @media (prefers-reduced-motion:reduce){.ping{animation:none;opacity:.5}}
+  .links{display:flex;gap:8px;flex-wrap:wrap}
+  .links a{font-family:var(--mono);font-size:12.5px;padding:8px 12px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2)}
+  .links a:hover{border-color:var(--menthe);color:var(--menthe);text-decoration:none}
+</style>
+  <script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>IP <span class="dev">Analyzer</span></h1>
+  <p>Analyse une adresse IP, un bloc CIDR ou un domaine : type et portée, sous-réseau, géolocalisation, ASN, DNS inverse, registre RDAP et réputation.</p>
+</header>
+
+<main class="tool">
+  <a class="back" href="../">← Modules</a>
+  <div class="ctl">
+    <div>
+      <label class="fl" for="q">Adresse IP, CIDR ou domaine</label>
+      <div class="qrow">
+        <input type="text" id="q" value="8.8.8.8" spellcheck="false" autocomplete="off" placeholder="8.8.8.8 · 2606:4700:4700::1111 · 192.168.1.0/24 · example.com">
+        <button class="btn" id="go">Analyser</button>
+        <button class="btn btn-ghost" id="me">Mon IP</button>
+      </div>
+      <div class="meta" id="msg" role="status"></div>
+    </div>
+    <div class="presets" id="presets">
+      <button data-c="8.8.8.8">8.8.8.8</button>
+      <button data-c="2606:4700:4700::1111">IPv6 Cloudflare</button>
+      <button data-c="192.168.1.10/24">192.168.1.10/24</button>
+      <button data-c="100.64.0.1">CGNAT</button>
+      <button data-c="::ffff:192.0.2.1">IPv4-mapped</button>
+      <button data-c="169.254.169.254">Metadata cloud</button>
+      <button data-c="example.com">example.com</button>
+    </div>
+    <div class="opts" aria-label="Sources en ligne">
+      <label><input type="checkbox" id="o-geo" checked> géolocalisation et ASN</label>
+      <label><input type="checkbox" id="o-ptr" checked> DNS inverse</label>
+      <label><input type="checkbox" id="o-rdap" checked> RDAP</label>
+      <label><input type="checkbox" id="o-rep" checked> réputation</label>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <div class="note"><b>Ce qui reste local, et ce qui ne l’est pas.</b> L’analyse de l’adresse (type, représentations, sous-réseau) se fait dans ton navigateur au fil de la frappe. Le bouton <b>Analyser</b> interroge en plus des services tiers, selon les cases cochées : ipwho.is (repli ipapi.co puis ipinfo.io) pour la géolocalisation, Cloudflare ou Google (DNS over HTTPS) pour le DNS inverse et la réputation, rdap.org puis le registre régional pour le RDAP. <b>Mon IP</b> utilise ipify, et le test WebRTC contacte un serveur STUN de Google. Ces services voient l’adresse analysée et ton adresse IP.</div>
+</main>
+<div class="toast" id="toast"></div>
+
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id);};
+  function toast(m){var t=$('toast');if(!t)return;t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},1600);}
+  function copy(txt){ if(navigator.clipboard){navigator.clipboard.writeText(txt);} toast('Copié ✓'); }
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function pad(s,n){s=String(s);while(s.length<n)s='0'+s;return s;}
+  function fmt(n){return Number(n).toLocaleString('fr-FR');}
+  function nul(){return null;}
+
+  var STATE={seq:0,S:null,R:{},me:null,dom:null,mine:false};
+
+  /* ============================== Analyse d’adresses (local) ============================== */
+  function parseV4(s){
+    var m=/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/.exec(s); if(!m)return null;
+    var a=[]; for(var i=1;i<=4;i++){ if(m[i].length>1&&m[i].charAt(0)==='0')return null; var n=+m[i]; if(n>255)return null; a.push(n); }
+    return a;
+  }
+  function v4int(a){return a[0]*16777216+(a[1]<<16)+(a[2]<<8)+a[3];}
+  function int2v4(n){return [(n>>>24)&255,(n>>>16)&255,(n>>>8)&255,n&255];}
+  function parseV6(s){
+    var z=s.indexOf('%'); if(z>=0)s=s.slice(0,z);
+    if(!/^[0-9a-fA-F:.]+$/.test(s))return null;
+    if(s.indexOf('.')>0){
+      var lc=s.lastIndexOf(':'); var t=parseV4(s.slice(lc+1)); if(!t)return null;
+      s=s.slice(0,lc+1)+((t[0]<<8)|t[1]).toString(16)+':'+((t[2]<<8)|t[3]).toString(16);
+    }
+    var dbl=s.split('::'); if(dbl.length>2)return null;
+    function grp(x){ if(x==='')return []; var p=x.split(':'); for(var i=0;i<p.length;i++){ if(!/^[0-9a-fA-F]{1,4}$/.test(p[i]))return null; } return p.map(function(h){return parseInt(h,16);}); }
+    var head=grp(dbl[0]); if(!head)return null;
+    if(dbl.length===1)return head.length===8?head:null;
+    var tail=grp(dbl[1]); if(!tail)return null;
+    var miss=8-head.length-tail.length; if(miss<1)return null;
+    var out=head.slice(); for(var k=0;k<miss;k++)out.push(0); return out.concat(tail);
+  }
+  function v6comp(w){
+    var best=-1,bl=0,cur=-1,cl=0;
+    for(var i=0;i<8;i++){ if(w[i]===0){ if(cur<0){cur=i;cl=1;}else cl++; if(cl>bl){bl=cl;best=cur;} } else {cur=-1;cl=0;} }
+    if(bl<2)best=-1;
+    var p=w.map(function(x){return x.toString(16);});
+    if(best<0)return p.join(':');
+    return p.slice(0,best).join(':')+'::'+p.slice(best+bl).join(':');
+  }
+  function v6full(w){return w.map(function(x){return pad(x.toString(16),4);}).join(':');}
+  function w2big(w){var n=BigInt(0);for(var i=0;i<8;i++)n=(n<<BigInt(16))|BigInt(w[i]);return n;}
+  function big2w(n){var w=[];for(var i=7;i>=0;i--)w.push(Number((n>>BigInt(i*16))&BigInt(65535)));return w;}
+
+  function parseInput(raw){
+    var s=(raw||'').trim(); if(!s)return {kind:'empty'};
+    var pref=null,note=null;
+    if(/^[a-z][a-z0-9+.\-]*:\/\//i.test(s)){
+      try{ s=new URL(s).hostname; }catch(e){ return {kind:'invalid'}; }
+    } else {
+      var i=s.indexOf('/');
+      if(i>=0){ var ps=s.slice(i+1); s=s.slice(0,i); if(/^\d{1,3}$/.test(ps))pref=+ps; }
+    }
+    var m6=/^\[([^\]]+)\](?::\d{1,5})?$/.exec(s);
+    if(m6)s=m6[1];
+    else if(/^\d{1,3}(\.\d{1,3}){3}:\d{1,5}$/.test(s)||/^[a-z0-9\-]+(\.[a-z0-9\-]+)+:\d{1,5}$/i.test(s))s=s.replace(/:\d{1,5}$/,'');
+    var v4=parseV4(s);
+    if(!v4&&/^\d{8,10}$/.test(s)&&+s<=4294967295){ v4=int2v4(+s); note='Entier décimal interprété comme adresse IPv4'; }
+    else if(!v4&&/^0x[0-9a-f]{1,8}$/i.test(s)){ v4=int2v4(parseInt(s,16)); note='Valeur hexadécimale interprétée comme adresse IPv4'; }
+    if(v4){ if(pref!==null&&pref>32)return {kind:'invalid'}; return {kind:'v4',a:v4,prefix:pref,note:note}; }
+    if(s.indexOf(':')>=0){ var w=parseV6(s); if(w){ if(pref!==null&&pref>128)return {kind:'invalid'}; return {kind:'v6',w:w,prefix:pref}; } return {kind:'invalid'}; }
+    var h=s.toLowerCase(); try{ h=new URL('http://'+h).hostname; }catch(e){}
+    if(/^(?=.{1,253}$)([a-z0-9_]([a-z0-9_\-]{0,61}[a-z0-9_])?\.)+[a-z][a-z0-9\-]{1,62}$/.test(h))return {kind:'domain',host:h};
+    return {kind:'invalid'};
+  }
+  function canon(ip){ var p=parseInput(ip); if(p.kind==='v4')return p.a.join('.'); if(p.kind==='v6')return v6comp(p.w); return String(ip); }
+
+  var V4T=[
+    ['255.255.255.255',32,'Broadcast limité','broadcast','RFC 919'],
+    ['0.0.0.0',8,'Réseau « ce réseau » (0.0.0.0/8)','reserved','RFC 1122'],
+    ['10.0.0.0',8,'Privée','private','RFC 1918'],
+    ['100.64.0.0',10,'Espace partagé opérateur (CGNAT)','cgnat','RFC 6598'],
+    ['127.0.0.0',8,'Loopback (boucle locale)','loopback','RFC 1122'],
+    ['169.254.0.0',16,'Link-local (auto-configuration APIPA)','linklocal','RFC 3927'],
+    ['172.16.0.0',12,'Privée','private','RFC 1918'],
+    ['192.0.0.0',24,'Assignations de protocole IETF','reserved','RFC 6890'],
+    ['192.0.2.0',24,'Documentation (TEST-NET-1)','doc','RFC 5737'],
+    ['192.88.99.0',24,'Relais 6to4 (obsolète)','reserved','RFC 7526'],
+    ['192.168.0.0',16,'Privée','private','RFC 1918'],
+    ['198.18.0.0',15,'Tests de performance (benchmark)','reserved','RFC 2544'],
+    ['198.51.100.0',24,'Documentation (TEST-NET-2)','doc','RFC 5737'],
+    ['203.0.113.0',24,'Documentation (TEST-NET-3)','doc','RFC 5737'],
+    ['224.0.0.0',4,'Multicast','multicast','RFC 5771'],
+    ['240.0.0.0',4,'Réservée (classe E, usage futur)','reserved','RFC 1112']
+  ].map(function(t){ t.push(v4int(t[0].split('.').map(Number))); return t; });
+
+  function classifyV4(n,a){
+    for(var i=0;i<V4T.length;i++){
+      var t=V4T[i];
+      if(((n^t[5])>>>(32-t[1]))===0){
+        var c={cat:t[3],label:t[2],rfc:t[4],pub:false};
+        if(t[3]==='multicast'){
+          if(a[0]===224&&a[1]===0&&a[2]===0)c.sub='Contrôle du réseau local (ne traverse pas les routeurs)';
+          else if(a[0]===224&&a[1]===0&&a[2]===1)c.sub='Contrôle inter-réseaux';
+          else if(a[0]===232)c.sub='Source-specific multicast (SSM)';
+          else if(a[0]===239)c.sub='Portée administrative (usage privé)';
+        }
+        return c;
+      }
+    }
+    return {cat:'public',label:'Publique (unicast global)',rfc:null,pub:true};
+  }
+  function classV4(a){ var f=a[0]; if(f<128)return {l:'A',def:'/8'}; if(f<192)return {l:'B',def:'/16'}; if(f<224)return {l:'C',def:'/24'}; if(f<240)return {l:'D (multicast)',def:null}; return {l:'E (réservée)',def:null}; }
+
+  var V6T=[
+    ['::',128,'Adresse non spécifiée','unspecified','RFC 4291'],
+    ['::1',128,'Loopback (boucle locale)','loopback','RFC 4291'],
+    ['::ffff:0:0',96,'IPv4-mapped (IPv4 dans IPv6)','mapped','RFC 4291'],
+    ['64:ff9b::',96,'NAT64 (traduction IPv6 vers IPv4)','nat64','RFC 6052'],
+    ['64:ff9b:1::',48,'NAT64 à usage local','nat64','RFC 8215'],
+    ['100::',64,'Discard-only (trou noir)','reserved','RFC 6666'],
+    ['2001::',32,'Teredo (tunnel IPv6 sur IPv4)','teredo','RFC 4380'],
+    ['2001:db8::',32,'Documentation','doc','RFC 3849'],
+    ['2002::',16,'6to4 (tunnel IPv6 sur IPv4)','6to4','RFC 3056'],
+    ['fc00::',7,'ULA, unique local (privée)','private','RFC 4193'],
+    ['fe80::',10,'Link-local','linklocal','RFC 4291'],
+    ['fec0::',10,'Site-local (obsolète)','reserved','RFC 3879'],
+    ['ff00::',8,'Multicast','multicast','RFC 4291'],
+    ['2000::',3,'Unicast global (publique)','public','RFC 4291']
+  ].map(function(t){ t.push(parseV6(t[0])); return t; });
+  function inV6(w,base,len){
+    for(var i=0;i<8&&len>0;i++){ var bits=Math.min(16,len); var mask=bits===16?0xffff:((0xffff<<(16-bits))&0xffff); if((w[i]&mask)!==(base[i]&mask))return false; len-=bits; }
+    return true;
+  }
+  var SCOPES={1:'interface',2:'lien local',4:'administrative',5:'site',8:'organisation',14:'globale'};
+  function v4fromWords(x,y){ return [x>>8,x&255,y>>8,y&255].join('.'); }
+  function classifyV6(w){
+    var c=null;
+    for(var i=0;i<V6T.length;i++){ var t=V6T[i]; if(inV6(w,t[5],t[1])){ c={cat:t[3],label:t[2],rfc:t[4],pub:t[3]==='public'}; break; } }
+    if(!c)c={cat:'reserved',label:'Réservée ou non allouée (IANA)',rfc:null,pub:false};
+    if(c.cat==='mapped'||c.cat==='nat64'){ c.emb=v4fromWords(w[6],w[7]); }
+    else if(c.cat==='6to4'){ c.emb=v4fromWords(w[1],w[2]); }
+    else if(c.cat==='teredo'){ c.emb=v4fromWords(w[6]^0xffff,w[7]^0xffff); c.tserver=v4fromWords(w[2],w[3]); c.tport=w[5]^0xffff; }
+    if(c.cat==='multicast'){ var sc=w[0]&15; c.sub='Portée '+(SCOPES[sc]||('#'+sc)); }
+    if(c.cat==='public'||c.cat==='private'||c.cat==='linklocal'){
+      if((w[5]&255)===255&&(w[6]>>8)===254){
+        var mac=[(w[4]>>8)^2,w[4]&255,w[5]>>8,w[6]&255,w[7]>>8,w[7]&255].map(function(b){return pad(b.toString(16),2);}).join(':');
+        c.mac=mac;
+      }
+    }
+    return c;
+  }
+  var KNOWN={
+    '8.8.8.8':'Google Public DNS','8.8.4.4':'Google Public DNS','1.1.1.1':'Cloudflare DNS','1.0.0.1':'Cloudflare DNS',
+    '9.9.9.9':'Quad9 DNS','149.112.112.112':'Quad9 DNS','208.67.222.222':'OpenDNS (Cisco)','208.67.220.220':'OpenDNS (Cisco)',
+    '2001:4860:4860::8888':'Google Public DNS','2001:4860:4860::8844':'Google Public DNS',
+    '2606:4700:4700::1111':'Cloudflare DNS','2606:4700:4700::1001':'Cloudflare DNS','2620:fe::fe':'Quad9 DNS',
+    '169.254.169.254':'Service de métadonnées cloud (AWS, GCP, Azure), cible classique des attaques SSRF',
+    '168.63.129.16':'Adresse virtuelle de la plateforme Azure','100.100.100.200':'Service de métadonnées Alibaba Cloud'
+  };
+
+  function buildState(p){
+    var S={kind:p.kind,prefix:p.prefix,note:p.note};
+    if(p.kind==='v4'){ S.a=p.a; S.n=v4int(p.a); S.text=p.a.join('.'); S.cl=classifyV4(S.n,p.a); S.cls=classV4(p.a); }
+    else { S.w=p.w; S.big=w2big(p.w); S.text=v6comp(p.w); S.cl=classifyV6(p.w); }
+    S.pub=S.cl.pub; return S;
+  }
+  function arpaName(S){
+    if(S.kind==='v4')return S.a.slice().reverse().join('.')+'.in-addr.arpa';
+    return v6full(S.w).replace(/:/g,'').split('').reverse().join('.')+'.ip6.arpa';
+  }
+
+  /* ============================== Rendu ============================== */
+  function kv(k,v,o){ o=o||{}; if(v==null||v==='')return ''; return '<div class="kv"><span class="k">'+k+'</span><span class="v'+(o.nc?' nc':'')+'"'+(o.nc?'':' tabindex="0" title="Cliquer pour copier"')+'>'+(o.html?v:esc(v))+'</span></div>'; }
+  function wrap(h){return '<div class="kvs">'+h+'</div>';}
+  function tg(t,c){return '<span class="tg'+(c?' '+c:'')+'">'+esc(t)+'</span>';}
+  function cardHTML(id,title,badge,inner,cls){ return '<section class="ipc'+(cls?' '+cls:'')+'" id="'+id+'"><h3><span>'+esc(title)+'</span>'+(badge?'<em>'+esc(badge)+'</em>':'')+'</h3><div class="cb">'+inner+'</div></section>'; }
+  function setCard(id,inner){ var el=$(id); if(!el)return; var cb=el.querySelector('.cb'); if(cb)cb.innerHTML=inner; }
+  function chip(ip,extra){ return '<button class="ipchip" data-ip="'+esc(ip)+'"'+(extra||'')+'>'+esc(ip)+'</button>'; }
+  function msg(t,c){ var m=$('msg'); m.className='meta'+(c?' '+c:''); m.textContent=t||''; }
+  function catCls(cat){ return cat==='public'?'ok':(cat==='doc'||cat==='reserved'||cat==='broadcast'||cat==='unspecified')?'warn':''; }
+  function addPill(t,c){ var p=$('pills'); if(p)p.insertAdjacentHTML('beforeend',tg(t,c)); }
+
+  function scopeText(c){
+    switch(c.cat){
+      case 'public': return 'Publique : routable sur Internet';
+      case 'private': return 'Privée : réseau local uniquement';
+      case 'cgnat': return 'Partagée par l’opérateur (CGNAT) : non routable sur Internet';
+      case 'loopback': return 'Cette machine uniquement';
+      case 'linklocal': return 'Segment réseau local uniquement (jamais routée)';
+      case 'multicast': return 'Diffusion vers un groupe (multicast)';
+      case 'doc': return 'Réservée aux exemples : ne doit jamais être routée';
+      case 'broadcast': return 'Tous les hôtes du segment local';
+      case 'unspecified': return 'Aucune adresse (valeur « inconnue »)';
+      case 'mapped': case 'nat64': case 'teredo': case '6to4': return 'Mécanisme de transition IPv4 / IPv6';
+      default: return 'Réservée : non utilisable sur Internet public';
+    }
+  }
+
+  function idRows(S){
+    var c=S.cl, r='';
+    r+=kv('Adresse',S.text);
+    r+=kv('Version',S.kind==='v4'?'IPv4 (32 bits)':'IPv6 (128 bits)');
+    r+=kv('Type',c.label);
+    r+=kv('Portée',scopeText(c));
+    r+=kv('Précision',c.sub);
+    r+=kv('Référence',c.rfc);
+    if(S.kind==='v4')r+=kv('Classe historique','Classe '+S.cls.l+(S.cls.def?' (masque par défaut '+S.cls.def+')':''));
+    r+=kv('Usage connu',KNOWN[S.text]);
+    if(c.mac)r+=kv('MAC probable (EUI-64)',c.mac);
+    if(c.cat==='teredo'){ r+=kv('Serveur Teredo',c.tserver); r+=kv('Port client (NAT)',c.tport); }
+    if(c.emb)r+=kv(c.cat==='teredo'?'IPv4 du client':'IPv4 embarquée',chip(c.emb),{html:true,nc:true});
+    r+=kv('Remarque',S.note);
+    return wrap(r);
+  }
+  function bin(n,len){return pad(n.toString(2),len);}
+  function repRows(S){
+    var r='';
+    if(S.kind==='v4'){
+      var a=S.a, hi=(a[0]<<8)|a[1], lo=(a[2]<<8)|a[3];
+      r+=kv('Décimal',String(S.n));
+      r+=kv('Hexadécimal','0x'+pad(S.n.toString(16).toUpperCase(),8));
+      r+=kv('Octal','0'+S.n.toString(8));
+      r+=kv('Binaire',a.map(function(x){return bin(x,8);}).join('.'));
+      r+=kv('DNS inverse (ARPA)',arpaName(S));
+      r+=kv('IPv4-mapped IPv6','::ffff:'+S.text+'  ('+v6comp([0,0,0,0,0,0xffff,hi,lo])+')');
+      r+=kv('Préfixe 6to4','2002:'+pad(hi.toString(16),4)+':'+pad(lo.toString(16),4)+'::/48');
+      r+=kv('NAT64 (préfixe standard)','64:ff9b::'+S.text);
+    } else {
+      var w=S.w;
+      r+=kv('Compressée',S.text);
+      r+=kv('Étendue',v6full(w));
+      if(S.cl.emb&&(S.cl.cat==='mapped'||S.cl.cat==='nat64'))r+=kv('Notation mixte',(S.cl.cat==='mapped'?'::ffff:':'64:ff9b::')+S.cl.emb);
+      r+=kv('Entier décimal',S.big.toString());
+      r+=kv('Hexadécimal','0x'+S.big.toString(16).toUpperCase().padStart(32,'0'));
+      r+=kv('Binaire, préfixe (64 bits)',w.slice(0,4).map(function(x){return bin(x,16);}).join(' '));
+      r+=kv('Binaire, interface (64 bits)',w.slice(4).map(function(x){return bin(x,16);}).join(' '));
+      r+=kv('DNS inverse (ARPA)',arpaName(S));
+    }
+    return wrap(r);
+  }
+  function subnetRows(S,p){
+    var r='';
+    if(S.kind==='v4'){
+      var mask=p===0?0:((0xFFFFFFFF<<(32-p))>>>0), net=(S.n&mask)>>>0, wild=(~mask)>>>0, bc=(net|wild)>>>0;
+      var total=Math.pow(2,32-p), usable=p===32?1:(p===31?2:total-2);
+      var first=p>=31?net:net+1, last=p>=31?bc:bc-1;
+      r+=kv('Réseau',int2v4(net).join('.')+'/'+p);
+      r+=kv('Masque',int2v4(mask).join('.'));
+      r+=kv('Masque inverse (wildcard)',int2v4(wild).join('.'));
+      r+=kv('Diffusion (broadcast)',p>=31?null:int2v4(bc).join('.'));
+      r+=kv('Plage utilisable',int2v4(first).join('.')+' – '+int2v4(last).join('.'));
+      r+=kv('Adresses au total',fmt(total));
+      r+=kv('Hôtes utilisables',fmt(usable));
+      r+=kv('Position de l’IP dans le bloc','n° '+fmt(S.n-net)+' sur '+fmt(total));
+    } else {
+      var host=BigInt(128-p), all=(BigInt(1)<<BigInt(128))-BigInt(1), hm=(BigInt(1)<<host)-BigInt(1);
+      var net6=S.big&(all^hm), last6=net6|hm, total6=BigInt(1)<<host;
+      r+=kv('Réseau',v6comp(big2w(net6))+'/'+p);
+      r+=kv('Masque',v6comp(big2w(all^hm)));
+      r+=kv('Première adresse',v6comp(big2w(net6)));
+      r+=kv('Dernière adresse',v6comp(big2w(last6)));
+      r+=kv('Adresses au total','2^'+(128-p)+'  ('+total6.toLocaleString('fr-FR')+')');
+      r+=kv('Sous-réseaux /64 inclus',p<=64?('2^'+(64-p)+'  ('+(BigInt(1)<<BigInt(64-p)).toLocaleString('fr-FR')+')'):null);
+    }
+    return r;
+  }
+  function subnetCard(S){
+    var max=S.kind==='v4'?32:128, def=S.prefix!=null?S.prefix:(S.kind==='v4'?24:64);
+    var inner='<div class="sl"><label class="fl" for="sub" style="margin:0">Longueur du préfixe</label><span class="v" id="sub-v">/'+def+'</span></div>'
+      +'<input type="range" id="sub" min="0" max="'+max+'" value="'+def+'" aria-label="Longueur du préfixe">'
+      +'<div class="kvs" id="sub-body"></div>'
+      +'<div class="iphint">Un CIDR saisi (ex. 192.168.1.10/24) règle le curseur ; glisse-le pour explorer d’autres tailles de bloc.</div>';
+    return cardHTML('c-sub','Sous-réseau (CIDR)','local',inner);
+  }
+  function bindSubnet(S){
+    var sl=$('sub'); if(!sl)return;
+    function up(){ var p=+sl.value; $('sub-v').textContent='/'+p; $('sub-body').innerHTML=subnetRows(S,p); }
+    sl.addEventListener('input',up); up();
+  }
+
+  function offText(S){
+    var c=S.cl, t='<p style="margin:0 0 8px;color:var(--texte-2);font-size:14px;line-height:1.6">Cette adresse (<b>'+esc(c.label)+'</b>) n’est pas routable sur l’Internet public : géolocalisation, ASN, DNS inverse public, RDAP et réputation ne s’appliquent pas.</p>';
+    var h={
+      private:'Pour identifier l’équipement, regarde plutôt le DHCP, le DNS interne, la table ARP (<code>arp -a</code>) ou l’inventaire du réseau.',
+      cgnat:'Ton opérateur partage une même IP publique entre plusieurs abonnés : l’IP vue depuis Internet est différente. Utilise « Mon IP » pour la connaître.',
+      linklocal:'Adresse auto-attribuée sur le segment local : signe fréquent d’un DHCP injoignable (IPv4) ou d’une configuration automatique (IPv6).',
+      loopback:'Désigne la machine elle-même (localhost).',
+      doc:'Plage réservée aux exemples de documentation et de code.',
+      multicast:'Adresse de groupe : elle ne désigne pas un hôte unique.'
+    }[c.cat];
+    if(h)t+='<div class="iphint" style="margin-top:0">'+h+'</div>';
+    if(c.emb)t+='<div class="iphint">IPv4 embarquée dans cette adresse : '+chip(c.emb)+' (clique pour l’analyser)</div>';
+    return t;
+  }
+
+  function summaryHTML(S){
+    var pills=tg(S.kind==='v4'?'IPv4':'IPv6')+tg(S.cl.label,catCls(S.cl.cat));
+    if(KNOWN[S.text]&&S.pub)pills+=tg(KNOWN[S.text].split(',')[0]);
+    return '<div class="ipc wide ipsum"><div style="min-width:0"><div class="ipbig" id="ipbig" title="Cliquer pour copier">'+esc(S.text)+'</div><div class="pills" id="pills">'+pills+'</div></div>'
+      +'<div><button class="btn btn-ghost" id="cpjson">Copier le rapport JSON</button></div></div>';
+  }
+  function linksCard(S){
+    var ip=S.text, L=[
+      ['AbuseIPDB','https://www.abuseipdb.com/check/'+ip],['VirusTotal','https://www.virustotal.com/gui/ip-address/'+ip],
+      ['Shodan','https://www.shodan.io/host/'+ip],['Censys','https://search.censys.io/hosts/'+ip],
+      ['GreyNoise','https://viz.greynoise.io/ip/'+ip],['BGP.HE.net','https://bgp.he.net/ip/'+ip],
+      ['Robtex','https://www.robtex.com/ip-lookup/'+ip],['IPinfo','https://ipinfo.io/'+ip],
+      ['Cisco Talos','https://talosintelligence.com/reputation_center/lookup?search='+ip]
+    ];
+    return cardHTML('c-links','Investiguer plus loin','liens externes','<div class="links">'+L.map(function(x){return '<a href="'+esc(x[1])+'" target="_blank" rel="noopener noreferrer">'+esc(x[0])+' ↗</a>';}).join('')+'</div><div class="iphint">Ces liens n’envoient rien tant que tu ne cliques pas dessus.</div>','wide');
+  }
+
+  /* ============================== Réseau (fetch) ============================== */
+  function fetchJson(url,opts,ms){
+    var c=(typeof AbortController!=='undefined')?new AbortController():null, t=setTimeout(function(){if(c)c.abort();},ms||8000);
+    opts=opts||{}; if(c)opts.signal=c.signal;
+    return fetch(url,opts).then(function(r){clearTimeout(t); if(!r.ok)throw new Error('HTTP '+r.status); return r.json();},function(e){clearTimeout(t);throw e;});
+  }
+  function doh(name,type){
+    var q='name='+encodeURIComponent(name)+'&type='+type;
+    return fetchJson('https://cloudflare-dns.com/dns-query?'+q+'&ct=application/dns-json',{},6000).catch(function(){ return fetchJson('https://dns.google/resolve?'+q,{},6000); });
+  }
+  var CONT={AF:'Afrique',AN:'Antarctique',AS:'Asie',EU:'Europe',NA:'Amérique du Nord',OC:'Océanie',SA:'Amérique du Sud'};
+  function regionName(cc){ try{ return cc?new Intl.DisplayNames(['fr'],{type:'region'}).of(cc):null; }catch(e){return null;} }
+  function flagEmoji(cc){ if(!cc||cc.length!==2)return ''; try{ return String.fromCodePoint.apply(null,cc.toUpperCase().split('').map(function(c){return 127397+c.charCodeAt(0);})); }catch(e){return '';} }
+  function normWho(d){ var c=d.connection||{},t=d.timezone||{},cu=d.currency;
+    return {src:'ipwho.is',cc:d.country_code,country:d.country,continent:CONT[d.continent_code]||d.continent,flag:d.flag&&d.flag.emoji,region:d.region,city:d.city,postal:d.postal,lat:d.latitude,lon:d.longitude,eu:d.is_eu,call:d.calling_code,capital:d.capital,tz:t.id,cur:cu&&cu.name?(cu.name+(cu.code?' ('+cu.code+')':'')):null,asn:c.asn,org:c.org,isp:c.isp,domain:c.domain}; }
+  function normApi(d){ return {src:'ipapi.co',cc:d.country_code,country:d.country_name,continent:CONT[d.continent_code],region:d.region,city:d.city,postal:d.postal,lat:d.latitude,lon:d.longitude,eu:d.in_eu,call:d.country_calling_code,capital:d.country_capital,tz:d.timezone,cur:d.currency_name?(d.currency_name+' ('+d.currency+')'):d.currency,langs:d.languages,asn:d.asn,org:d.org}; }
+  function normInfo(d){ var loc=(d.loc||'').split(','), m=/^AS(\d+)\s+(.*)$/.exec(d.org||'');
+    return {src:'ipinfo.io',cc:d.country,region:d.region,city:d.city,postal:d.postal,lat:loc[0]?+loc[0]:null,lon:loc[1]?+loc[1]:null,tz:d.timezone,asn:m?m[1]:null,org:m?m[2]:d.org,hostname:d.hostname}; }
+  function geoLookup(ip){
+    return fetchJson('https://ipwho.is/'+ip,{},8000).then(function(d){ if(d.success===false)throw new Error(d.message||'ipwho.is'); return normWho(d); })
+    .catch(function(){ return fetchJson('https://ipapi.co/'+ip+'/json/',{},8000).then(function(d){ if(d.error)throw new Error(d.reason||'ipapi.co'); return normApi(d); }); })
+    .catch(function(){ return fetchJson('https://ipinfo.io/'+ip+'/json',{},8000).then(function(d){ if(d.error||d.bogon)throw new Error('ipinfo.io'); return normInfo(d); }); });
+  }
+
+  function tzOff(tz){ try{ var p=new Intl.DateTimeFormat('en-US',{timeZone:tz,timeZoneName:'shortOffset'}).formatToParts(new Date()); for(var i=0;i<p.length;i++)if(p[i].type==='timeZoneName')return p[i].value; }catch(e){} return null; }
+  function localTime(tz){ try{ return new Date().toLocaleString('fr-FR',{timeZone:tz,weekday:'short',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}); }catch(e){return null;} }
+  function sameOffset(a,b){ try{ var d=new Date(),o={hour:'2-digit',minute:'2-digit',hour12:false}; return d.toLocaleTimeString('en-GB',Object.assign({timeZone:a},o))===d.toLocaleTimeString('en-GB',Object.assign({timeZone:b},o)); }catch(e){return null;} }
+  function plot(lat,lon){
+    var g='',i; for(i=-180;i<=180;i+=30)g+='<line x1="'+(i+180)+'" y1="0" x2="'+(i+180)+'" y2="180"/>';
+    for(i=-90;i<=90;i+=30)g+='<line x1="0" y1="'+(90-i)+'" x2="360" y2="'+(90-i)+'"/>';
+    var x=(+lon+180).toFixed(2), y=(90-lat).toFixed(2);
+    return '<svg class="plot" viewBox="0 0 360 180" role="img" aria-label="Position sur une grille latitude / longitude"><g stroke="rgba(126,240,205,.14)" stroke-width=".5">'+g+'</g><line x1="0" y1="90" x2="360" y2="90" stroke="rgba(177,74,237,.35)" stroke-width=".6"/><circle class="ping" cx="'+x+'" cy="'+y+'" r="2.5"/><circle cx="'+x+'" cy="'+y+'" r="2.2" fill="#34f5c5"/></svg>';
+  }
+  var HOSTRE=/amazon|aws|google|microsoft|azure|ovh|hetzner|digitalocean|linode|akamai|vultr|scaleway|oracle|alibaba|tencent|contabo|leaseweb|cloudflare|fastly|ionos|rackspace|choopa|m247|datacamp|quadranet|psychz|colocrossing|hosting|datacenter|data center|cloud|vps|server/i;
+  var VPNRE=/\bvpn\b|mullvad|nordvpn|proton|expressvpn|surfshark|cyberghost|windscribe|private internet access/i;
+
+  function fillGeo(g,S,my){
+    if(my!==STATE.seq)return;
+    STATE.R.geo=g;
+    var country=g.country||regionName(g.cc)||null, flag=g.flag||flagEmoji(g.cc), r='', ok=isFinite(g.lat)&&g.lat!==null&&isFinite(g.lon)&&g.lon!==null;
+    r+=kv('Pays',(flag?flag+' ':'')+(country||'—')+(g.cc?' ('+g.cc+')':''));
+    r+=kv('Continent',g.continent); r+=kv('Région',g.region); r+=kv('Ville',g.city); r+=kv('Code postal',g.postal);
+    if(ok)r+=kv('Coordonnées',(+g.lat).toFixed(4)+', '+(+g.lon).toFixed(4));
+    if(g.tz)r+=kv('Fuseau horaire',g.tz+(tzOff(g.tz)?' ('+tzOff(g.tz)+')':''));
+    if(g.tz)r+=kv('Heure locale',localTime(g.tz));
+    if(g.eu!=null)r+=kv('Union européenne',g.eu?'Oui':'Non');
+    r+=kv('Capitale',g.capital); r+=kv('Indicatif téléphonique',g.call?('+'+String(g.call).replace('+','')):null);
+    r+=kv('Devise',g.cur); r+=kv('Langues',g.langs); r+=kv('Source',g.src);
+    var top=ok?plot(+g.lat,+g.lon):'';
+    var foot=ok?'<div class="iphint"><a href="https://www.openstreetmap.org/?mlat='+(+g.lat)+'&mlon='+(+g.lon)+'#map=9/'+(+g.lat)+'/'+(+g.lon)+'" target="_blank" rel="noopener noreferrer">Ouvrir dans OpenStreetMap ↗</a> · Localisation indicative : elle désigne en général la ville de l’opérateur, pas l’adresse d’un utilisateur.</div>':'<div class="iphint">Localisation indicative, souvent limitée à la ville de l’opérateur.</div>';
+    setCard('c-geo',top+wrap(r)+foot);
+    if(g.cc)addPill((flag?flag+' ':'')+g.cc);
+    // réseau
+    var n='', asn=g.asn?('AS'+String(g.asn).replace(/^AS/i,'')):null, txt=[g.org,g.isp].join(' ');
+    n+=kv('ASN',asn?'<a href="https://bgp.he.net/'+esc(asn)+'" target="_blank" rel="noopener noreferrer">'+esc(asn)+' ↗</a>':null,{html:true,nc:true});
+    n+=kv('Organisation',g.org); n+=kv('Fournisseur d’accès',g.isp&&g.isp!==g.org?g.isp:null); n+=kv('Domaine',g.domain); n+=kv('Nom d’hôte',g.hostname);
+    var flags=''; if(HOSTRE.test(txt))flags+=tg('Hébergeur ou cloud probable','warn')+' '; if(VPNRE.test(txt))flags+=tg('Nom évoquant un VPN / proxy','warn')+' ';
+    n+=kv('Indices (heuristique)',flags||tg('Rien de particulier'),{html:true,nc:true});
+    setCard('c-net',wrap(n)+'<div class="iphint">Les indices reposent uniquement sur le nom de l’organisation : ils orientent, ils ne prouvent rien.</div>');
+    if(asn)addPill(asn);
+    if(flags)addPill('Infrastructure d’hébergement','warn');
+    // cohérence fuseau (Mon IP)
+    if(STATE.mine&&$('tzcheck')){
+      var btz=''; try{btz=Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){}
+      var el=$('tzcheck');
+      if(!btz||!g.tz)el.textContent='Indéterminé';
+      else { var same=sameOffset(btz,g.tz); el.innerHTML=same===true?'<span class="ok">Cohérent</span> ('+esc(btz)+')':same===false?'<span class="warn">Écart</span> : navigateur '+esc(btz)+', IP '+esc(g.tz)+' (VPN, proxy ou géolocalisation approximative ?)':'Indéterminé'; }
+    }
+  }
+
+  function vget(e,k){ var vc=(e.vcardArray&&e.vcardArray[1])||[]; for(var i=0;i<vc.length;i++){ if(vc[i][0]===k){ var v=vc[i][3]; return Array.isArray(v)?v.filter(Boolean).join(' '):v; } } return null; }
+  function collectEnt(ents,out){ (ents||[]).forEach(function(e){ out.push({roles:e.roles||[],fn:vget(e,'fn')||vget(e,'org'),email:vget(e,'email'),handle:e.handle}); collectEnt(e.entities,out); }); }
+  function dt(x){ try{return new Date(x).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});}catch(e){return x;} }
+  function fillRdap(d,S,my){
+    if(my!==STATE.seq)return;
+    var r='', EV={'registration':'Enregistré le','last changed':'Dernière modification','reallocation':'Réallocation','transfer':'Transfert'};
+    r+=kv('Nom du bloc',d.name); r+=kv('Identifiant',d.handle);
+    if(d.startAddress&&d.endAddress)r+=kv('Plage',d.startAddress+' – '+d.endAddress);
+    var cidrs=(d.cidr0_cidrs||[]).map(function(c){return (c.v4prefix||c.v6prefix)+'/'+c.length;}); if(cidrs.length)r+=kv('CIDR',cidrs.join(', '));
+    r+=kv('Type',d.type); r+=kv('Pays (registre)',d.country); r+=kv('Parent',d.parentHandle);
+    if(d.status)r+=kv('Statut',d.status.join(', '));
+    (d.events||[]).forEach(function(e){ if(EV[e.eventAction])r+=kv(EV[e.eventAction],dt(e.eventDate)); });
+    var ents=[], seen={}, abuse=null; collectEnt(d.entities,ents);
+    ents.forEach(function(e){ if(e.roles.indexOf('abuse')>=0&&e.email&&!abuse)abuse=e.email; });
+    var shown=0; ents.forEach(function(e){ var k=(e.fn||e.handle||'')+e.roles.join(); if(seen[k]||shown>=6||!(e.fn||e.handle))return; seen[k]=1; shown++; r+=kv(esc(e.roles.join(', ')||'entité'),(e.fn||e.handle)+(e.email?' · '+e.email:''),{}); });
+    r+=kv('Contact abus',abuse);
+    var rem=(d.remarks||[]).map(function(x){return (x.description||[]).join(' ');}).filter(Boolean)[0]; r+=kv('Remarque',rem&&rem.slice(0,220));
+    r+=kv('Serveur WHOIS',d.port43);
+    STATE.R.rdap={name:d.name,handle:d.handle,range:[d.startAddress,d.endAddress],country:d.country,abuse:abuse};
+    setCard('c-rdap',wrap(r)+'<div class="iphint"><a href="https://rdap.org/ip/'+esc(S.text)+'" target="_blank" rel="noopener noreferrer">Réponse RDAP brute ↗</a></div>');
+  }
+  function runRdap(S,my){
+    fetchJson('https://rdap.org/ip/'+S.text,{},10000).then(function(d){ fillRdap(d,S,my); },function(e){
+      if(my!==STATE.seq)return;
+      setCard('c-rdap','<div class="bad">RDAP indisponible ('+esc(e.message)+').</div><div class="iphint"><a href="https://rdap.org/ip/'+esc(S.text)+'" target="_blank" rel="noopener noreferrer">Ouvrir la requête dans un onglet ↗</a></div>');
+    });
+  }
+
+  async function fcrdns(host,S){
+    var type=S.kind==='v4'?'A':'AAAA', code=S.kind==='v4'?1:28;
+    try{ var r=await doh(host,type); var ips=(r.Answer||[]).filter(function(x){return x.type===code;}).map(function(x){return canon(x.data);}); return ips.indexOf(S.text)>=0; }catch(e){ return null; }
+  }
+  async function runPtr(S,my){
+    var arpa=arpaName(S), r;
+    try{ r=await doh(arpa,'PTR'); }catch(e){ if(my!==STATE.seq)return; setCard('c-ptr','<div class="bad">Requête DNS over HTTPS impossible ('+esc(e.message)+').</div>'); return; }
+    if(my!==STATE.seq)return;
+    var names=(r.Answer||[]).filter(function(x){return x.type===12;}).map(function(x){return x.data.replace(/\.$/,'');});
+    var h=kv('Nom interrogé',arpa);
+    if(!names.length){ h+=kv('PTR',r.Status===3?'Aucun enregistrement (NXDOMAIN)':'Aucune réponse (statut '+r.Status+')'); setCard('c-ptr',wrap(h)); STATE.R.ptr=[]; return; }
+    names.slice(0,5).forEach(function(n,i){ h+=kv('PTR'+(names.length>1?' n° '+(i+1):''),n); });
+    setCard('c-ptr',wrap(h)+'<div class="iphint" id="fc">Vérification du DNS inverse confirmé (FCrDNS)…</div>');
+    var ok=await fcrdns(names[0],S); if(my!==STATE.seq)return;
+    var el=$('fc');
+    if(el)el.innerHTML=ok===true?'<span class="ok">✓ DNS inverse confirmé</span> : le nom résout bien vers cette adresse (signe d’un serveur configuré proprement).':ok===false?'<span class="warn">Non confirmé</span> : le nom renvoyé ne résout pas vers cette adresse (PTR générique ou usurpé).':'Vérification impossible.';
+    STATE.R.ptr={names:names,fcrdns:ok};
+    addPill(names[0].length>34?names[0].slice(0,32)+'…':names[0]);
+  }
+
+  var LISTS=[
+    {n:'Tor, nœuds de sortie',z:'dnsel.torproject.org',tor:1},
+    {n:'SpamCop',z:'bl.spamcop.net'},
+    {n:'DroneBL',z:'dnsbl.dronebl.org'},
+    {n:'Spamhaus ZEN',z:'zen.spamhaus.org'}
+  ];
+  async function checkList(l,rev){
+    try{
+      var r=await doh(rev+'.'+l.z,'A');
+      if(r.Status===3)return {v:'clean'};
+      if(r.Answer&&r.Answer.length){ var d=r.Answer[0].data||''; if(/^127\.255\.255\./.test(d))return {v:'unk',why:'résolveur public refusé'}; if(/^127\./.test(d))return {v:'listed',code:d}; return {v:'unk'}; }
+      if(r.Status===0)return {v:'clean'};
+      return {v:'unk'};
+    }catch(e){ return {v:'unk'}; }
+  }
+  async function runRep(S,my){
+    if(S.kind!=='v4'){ setCard('c-reput','<div class="iphint" style="margin:0">Les listes consultées (Tor DNSEL, SpamCop, DroneBL, Spamhaus) sont interrogées ici pour l’IPv4 uniquement.</div>'); return; }
+    var rev=S.a.slice().reverse().join('.');
+    var res=await Promise.all(LISTS.map(function(l){return checkList(l,rev);}));
+    if(my!==STATE.seq)return;
+    var h='',n=0,unk=0,tor=false;
+    LISTS.forEach(function(l,i){
+      var x=res[i], t;
+      if(x.v==='listed'){ n++; if(l.tor)tor=true; t=tg('Listée ('+x.code+')','bad'); }
+      else if(x.v==='clean')t=tg('Non listée','ok');
+      else { unk++; t=tg('Inconclusif'+(x.why?' : '+x.why:''),'warn'); }
+      h+=kv(l.n,t,{html:true,nc:true});
+    });
+    STATE.R.reputation=LISTS.map(function(l,i){return {list:l.z,result:res[i].v};});
+    var verdict=n?'<span class="bad">Présente sur '+n+' liste'+(n>1?'s':'')+'.</span>':(unk===LISTS.length?'<span class="warn">Aucune liste n’a pu être interrogée.</span>':'<span class="ok">Absente des listes qui ont répondu.</span>');
+    setCard('c-reput',wrap(h)+'<div class="iphint">'+verdict+' Résultat indicatif : une IP absente de ces listes n’est pas forcément saine, et certaines listes refusent les résolveurs publics.</div>');
+    if(tor)addPill('Nœud de sortie Tor','bad'); else if(n)addPill('Listée DNSBL','bad');
+  }
+
+  /* ---------- Ma connexion ---------- */
+  function meCard(pub){
+    var me=STATE.me||{}, r='', btz='';
+    try{btz=Intl.DateTimeFormat().resolvedOptions().timeZone;}catch(e){}
+    r+=kv('IPv4 publique',me.v4?chip(me.v4,' data-mine="1"'):'Non détectée',{html:true,nc:true});
+    r+=kv('IPv6 publique',me.v6?chip(me.v6,' data-mine="1"'):'Non détectée (pas d’IPv6, ou bloquée)',{html:true,nc:true});
+    r+=kv('Fuseau du navigateur',btz);
+    r+=kv('Langues du navigateur',(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language]).join(', '));
+    var cn=navigator.connection||navigator.mozConnection;
+    if(cn){ r+=kv('Type de connexion (estimé)',cn.effectiveType); r+=kv('Débit descendant estimé',cn.downlink!=null?cn.downlink+' Mb/s':null); r+=kv('Latence estimée',cn.rtt!=null?cn.rtt+' ms':null); }
+    r+='<div class="kv"><span class="k">Cohérence fuseau / IP</span><span class="v nc" id="tzcheck">'+(!pub?'non applicable (adresse non publique)':($('o-geo').checked?'en attente de la géolocalisation…':'géolocalisation désactivée'))+'</span></div>';
+    return cardHTML('c-me','Ma connexion','navigateur',wrap(r)+'<div class="btnrow"><button class="btn btn-ghost" id="rtc">Tester la fuite WebRTC</button></div><div id="rtcout" style="margin-top:10px"></div><div class="iphint">Le test WebRTC contacte un serveur STUN de Google pour voir quelles adresses ton navigateur expose aux sites web (utile pour vérifier un VPN).</div>','wide');
+  }
+  function isPub(ip){ var p=parseInput(ip); if(p.kind==='v4')return classifyV4(v4int(p.a),p.a).pub; if(p.kind==='v6')return classifyV6(p.w).pub; return false; }
+  function rtcTest(){
+    var out=$('rtcout'); if(!out)return;
+    if(!window.RTCPeerConnection){ out.innerHTML='<div class="warn">WebRTC n’est pas disponible dans ce navigateur.</div>'; return; }
+    out.innerHTML='<div class="ipload">Collecte des candidats ICE (4 s maximum)…</div>';
+    var seen={},list=[],done=false,pc;
+    function render(){
+      var h='';
+      list.forEach(function(o){ var lab={host:'Locale (host)',srflx:'Publique (via STUN)',prflx:'Publique (pair)',relay:'Relais (TURN)'}[o.typ]||o.typ; h+=kv(lab,o.addr+(o.port?':'+o.port:'')+' · '+String(o.proto).toUpperCase()); });
+      if(!list.length)h+='<div class="ok">Aucun candidat exposé : WebRTC est bloqué ou désactivé.</div>';
+      var pubs=list.filter(function(o){return !/\.local$/i.test(o.addr)&&isPub(o.addr);}).map(function(o){return canon(o.addr);});
+      var mine=[]; if(STATE.me){ if(STATE.me.v4)mine.push(canon(STATE.me.v4)); if(STATE.me.v6)mine.push(canon(STATE.me.v6)); }
+      var leaks=pubs.filter(function(x){return mine.indexOf(x)<0;});
+      var v;
+      if(!pubs.length)v='<span class="ok">Aucune IP publique exposée par WebRTC.</span>';
+      else if(mine.length&&leaks.length)v='<span class="warn">WebRTC expose une IP publique différente de celle vue en HTTP ('+esc(leaks.join(', '))+') : vérifie ton VPN ou tes réglages WebRTC.</span>';
+      else if(mine.length)v='<span class="ok">Cohérent avec l’IP vue en HTTP.</span>';
+      else v='IP publiques vues par WebRTC : '+esc(pubs.join(', '));
+      var hasLocal=list.some(function(o){return /\.local$/i.test(o.addr);});
+      out.innerHTML=(h?wrap(h):'')+'<div class="iphint">'+v+(hasLocal?' Les adresses en « .local » sont des noms mDNS : le navigateur masque volontairement l’IP locale.':'')+'</div>';
+    }
+    function finish(){ if(done)return; done=true; try{pc.close();}catch(e){} render(); }
+    try{ pc=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]}); }catch(e){ out.innerHTML='<div class="bad">Initialisation de WebRTC impossible.</div>'; return; }
+    pc.createDataChannel('tru');
+    pc.onicecandidate=function(e){
+      if(!e.candidate){ finish(); return; }
+      var c=e.candidate.candidate.split(' '), ti=c.indexOf('typ'), o={addr:c[4],port:c[5],proto:c[2],typ:ti>0?c[ti+1]:'?'}, k=o.typ+o.addr;
+      if(o.addr&&!seen[k]){ seen[k]=1; list.push(o); }
+    };
+    pc.createOffer().then(function(o){return pc.setLocalDescription(o);}).catch(finish);
+    setTimeout(finish,4000);
+  }
+
+  /* ---------- Domaine ---------- */
+  async function resolveDomain(h){
+    var r=await Promise.all([doh(h,'A').catch(nul),doh(h,'AAAA').catch(nul)]);
+    var a=[],aaaa=[],cn=[];
+    [[r[0],1,a],[r[1],28,aaaa]].forEach(function(t){ if(t[0]&&t[0].Answer)t[0].Answer.forEach(function(x){ if(x.type===t[1])t[2].push(t[1]===28?canon(x.data):x.data); else if(x.type===5&&cn.indexOf(x.data)<0)cn.push(x.data.replace(/\.$/,'')); }); });
+    return {a:a,aaaa:aaaa,cname:cn,fail:!r[0]&&!r[1]};
+  }
+  function dnsCard(dom,S){
+    var r=kv('Domaine',dom.host);
+    if(dom.res.cname.length)r+=kv('CNAME',dom.res.cname.join(' → '));
+    function list(a){return a.slice(0,8).map(function(x){return chip(x,' data-dom="1"'+(S&&x===S.text?' style="border-color:var(--menthe);color:var(--menthe)"':''));}).join('');}
+    r+=kv('Adresses IPv4 (A)',dom.res.a.length?list(dom.res.a):'Aucune',{html:true,nc:true});
+    r+=kv('Adresses IPv6 (AAAA)',dom.res.aaaa.length?list(dom.res.aaaa):'Aucune',{html:true,nc:true});
+    return cardHTML('c-dns','Résolution DNS','DoH',wrap(r)+'<div class="iphint">Clique sur une adresse pour l’analyser.</div>','wide');
+  }
+
+  /* ============================== Orchestration ============================== */
+  async function analyze(raw,opt){
+    opt=opt||{};
+    var my=++STATE.seq, out=$('out'); msg('');
+    STATE.mine=!!opt.mine;
+    var p=parseInput(raw), dom=null;
+    if(p.kind==='empty'){ out.innerHTML=''; return; }
+    if(p.kind==='invalid'){ out.innerHTML=''; msg('Entrée non reconnue. Attendu : adresse IPv4 ou IPv6, bloc CIDR ou nom de domaine (ex. 8.8.8.8, 2001:db8::1, 10.0.0.0/8, example.com).','bad'); return; }
+    if(p.kind==='domain'){
+      var res=opt.res;
+      if(!res&&!opt.online){ out.innerHTML=cardHTML('c-dns','Domaine détecté','',' <div class="ipload">Clique sur « Analyser » pour résoudre '+esc(p.host)+' (A et AAAA) puis analyser son adresse.</div>','wide'); return; }
+      if(!res){ out.innerHTML='<div class="ipc wide"><div class="ipload">Résolution DNS de '+esc(p.host)+'…</div></div>'; res=await resolveDomain(p.host); if(my!==STATE.seq)return; }
+      dom={host:p.host,res:res};
+      var first=res.a[0]||res.aaaa[0];
+      if(!first){ STATE.dom=dom; out.innerHTML=dnsCard(dom,null).replace('Clique sur une adresse pour l’analyser.',res.fail?'Requête DNS impossible (réseau ou service bloqué).':'Aucun enregistrement A ou AAAA pour ce domaine.'); return; }
+      p=parseInput(first);
+    } else if(opt.domain&&opt.res){ dom={host:opt.domain,res:opt.res}; }
+    STATE.dom=dom;
+    var S=buildState(p); STATE.S=S;
+    STATE.R={input:S.text,version:S.kind==='v4'?4:6,category:S.cl.cat,label:S.cl.label,public:S.pub,domain:dom?dom.host:undefined};
+    var online=!!opt.online, pub=S.pub;
+    var O={geo:$('o-geo').checked,ptr:$('o-ptr').checked,rdap:$('o-rdap').checked,rep:$('o-rep').checked};
+    var wait='<div class="ipload">'+(online?'Interrogation en cours…':'Clique sur « Analyser » pour lancer cette requête en ligne.')+'</div>';
+    var h=summaryHTML(S)+'<div class="ipgrid">';
+    if(dom)h+=dnsCard(dom,S);
+    h+=cardHTML('c-id','Identité et type','local',idRows(S));
+    h+=cardHTML('c-rep','Représentations','local',repRows(S));
+    h+=subnetCard(S);
+    if(pub){
+      if(O.geo){ h+=cardHTML('c-geo','Géolocalisation','en ligne',wait); h+=cardHTML('c-net','Réseau et opérateur','en ligne',wait); }
+      if(O.ptr)h+=cardHTML('c-ptr','DNS inverse (PTR)','DoH',wait);
+      if(O.rdap)h+=cardHTML('c-rdap','Registre RDAP (whois)','RDAP',wait);
+      if(O.rep)h+=cardHTML('c-reput','Réputation','DNSBL et Tor',wait);
+    } else h+=cardHTML('c-off','Enrichissement en ligne','non applicable',offText(S),'wide');
+    if(opt.mine)h+=meCard(pub);
+    if(pub)h+=linksCard(S);
+    h+='</div>';
+    out.innerHTML=h;
+    bindSubnet(S);
+    if(online&&pub){
+      if(O.geo)geoLookup(S.text).then(function(g){ fillGeo(g,S,my); },function(){ if(my!==STATE.seq)return; var m='<div class="bad">Aucun service de géolocalisation n’a répondu (limite de requêtes, blocage réseau ou bloqueur de publicités).</div>'; setCard('c-geo',m); setCard('c-net',m); var t=$('tzcheck'); if(t)t.textContent='Indéterminé'; });
+      if(O.ptr)runPtr(S,my);
+      if(O.rdap)runRdap(S,my);
+      if(O.rep)runRep(S,my);
+    }
+  }
+
+  async function myIp(){
+    var btn=$('me'), old=btn.textContent; btn.disabled=true; btn.textContent='Détection…'; msg('');
+    try{
+      var r=await Promise.all([fetchJson('https://api.ipify.org?format=json',{},6000).catch(nul),fetchJson('https://api6.ipify.org?format=json',{},6000).catch(nul)]);
+      var v4=r[0]&&r[0].ip, v6=r[1]&&r[1].ip;
+      if(v4&&v4.indexOf(':')>=0){ v6=v6||v4; v4=null; }
+      if(!v4&&!v6){ var w=await fetchJson('https://ipwho.is/',{},6000).catch(nul); if(w&&w.ip){ if(w.ip.indexOf(':')>=0)v6=w.ip; else v4=w.ip; } }
+      if(!v4&&!v6){ msg('Impossible de détecter ton IP publique (réseau ou service bloqué).','bad'); return; }
+      STATE.me={v4:v4,v6:v6}; $('q').value=v4||v6;
+      analyze(v4||v6,{online:true,mine:true});
+    } finally { btn.disabled=false; btn.textContent=old; }
+  }
+
+  /* ============================== Événements ============================== */
+  $('go').onclick=function(){ analyze($('q').value,{online:true}); };
+  $('me').onclick=myIp;
+  $('q').addEventListener('keydown',function(e){ if(e.key==='Enter')$('go').click(); });
+  var tmr=null;
+  $('q').addEventListener('input',function(){
+    clearTimeout(tmr);
+    tmr=setTimeout(function(){ var p=parseInput($('q').value); if(p.kind==='v4'||p.kind==='v6')analyze($('q').value,{online:false}); else msg(''); },250);
+  });
+  document.querySelectorAll('#presets button').forEach(function(b){ b.onclick=function(){ $('q').value=b.dataset.c; analyze(b.dataset.c,{online:true}); }; });
+  $('out').addEventListener('click',function(e){
+    var t=e.target, b=t.closest&&t.closest('[data-ip]');
+    if(b){ var d=b.getAttribute('data-dom')?STATE.dom:null; if(!b.getAttribute('data-mine'))STATE.mine=false; $('q').value=b.getAttribute('data-ip'); analyze(b.getAttribute('data-ip'),{online:true,mine:!!b.getAttribute('data-mine'),domain:d&&d.host,res:d&&d.res}); return; }
+    if(t.closest&&t.closest('#rtc')){ rtcTest(); return; }
+    if(t.closest&&t.closest('#cpjson')){ copy(JSON.stringify(STATE.R,null,2)); return; }
+    if(t.id==='ipbig'){ copy(t.textContent); return; }
+    if(t.closest&&t.closest('a,button'))return;
+    var v=t.closest&&t.closest('.kv .v'); if(v&&!v.classList.contains('nc'))copy(v.textContent);
+  });
+  $('out').addEventListener('keydown',function(e){ if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('v')&&!e.target.classList.contains('nc'))copy(e.target.textContent); });
+
+  analyze($('q').value,{online:false});
+})();
+</script>
+</body>
+</html>
