@@ -1,0 +1,53 @@
+TRUvector.dev — Visionneuse d'e-books protégée
+==============================================
+
+CONTENU DE CE PAQUET (à fusionner à la racine de ton dépôt)
+-----------------------------------------------------------
+  ebooks/index.html          Page E-books (présentation + démo + catalogue)
+  ebooks/lecteur.html        La visionneuse protégée
+  ebooks/proteger.html       Outil pour chiffrer un e-book en .trubook
+  ebooks/demo.trubook        E-book de démonstration (passphrase : truvector)
+  assets/js/tru-crypto.js    Socle AES-256-GCM du format .trubook
+  assets/js/tru-reader.js    Moteur de lecture multi-format
+  assets/vendor/pdfjs/*      PDF.js hébergé en local (pdf.min.js + worker)
+  assets/vendor/fflate.min.js  Décompression zip locale (EPUB/CBZ)
+
+INSTALLATION
+------------
+1. Copie les dossiers ebooks/ , assets/js/ et assets/vendor/ dans ton dépôt
+   (ils se fusionnent avec l'existant, rien n'est écrasé sauf ebooks/index.html).
+2. Commit + push. Aucune modification de _headers n'est nécessaire :
+   tout est hébergé en local et conforme à ta CSP actuelle.
+
+UTILISATION (vendre un e-book)
+------------------------------
+1. Ouvre  ebooks/proteger.html
+2. Glisse ton fichier (PDF, EPUB, CBZ, image, TXT, MD, HTML).
+3. Règle la politique : durée de lecture, pages d'aperçu, expiration,
+   quota d'ouvertures, filigrane.
+4. Renseigne l'ACHETEUR (nom/e-mail) -> son identité apparaît en filigrane.
+   Génère UN .trubook PAR acheteur.
+5. Choisis une passphrase et/ou un fichier-clé .trukey.
+6. Télécharge le .trubook (et le .trukey le cas échéant).
+7. Dépose le .trubook dans ebooks/ et donne à l'acheteur le lien :
+      ebooks/lecteur.html?src=NOM.trubook
+   ainsi que sa passphrase (ou son fichier-clé).
+
+FORMATS
+-------
+  PDF / images / CBZ  -> rendu sur canvas (pas de texte ni de fichier extractible)
+  EPUB / TXT / MD / HTML -> reflow, sélection désactivée, filigrane
+
+LES 4 COUCHES DE PROTECTION
+---------------------------
+  1. Fichier chiffré AES-256-GCM (jamais en clair sur le serveur)
+  2. Rendu verrouillé (canvas, clic droit/copie/impression désactivés,
+     masquage à la perte de focus)
+  3. Politique embarquée DANS la charge chiffrée (inviolable sans la clé)
+  4. Filigrane nominatif -> une fuite est traçable
+
+HONNÊTETÉ (important)
+---------------------
+Aucune visionneuse web ne peut empêcher une photo ou une capture d'écran.
+Ce système DISSUADE fortement la recopie et rend une fuite TRAÇABLE.
+Pour un contrôle d'accès strict côté serveur, combine-le avec Cloudflare Access.

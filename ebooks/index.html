@@ -10,7 +10,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/tokens.css?v=5">
-  <script src="../assets/js/assets.js?v=1"></script>
+<style>
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:6px 0 30px}
+.cta-row .btn{min-width:220px;justify-content:center}
+.eb-note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:12px;padding:14px 18px;margin:8px 0 30px;font-size:13.5px;color:var(--texte-2);max-width:760px}
+.eb-note b{color:var(--texte)}
+.eb-note code{font-family:var(--mono);color:var(--menthe-soft)}
+.sec-h{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--menthe);text-transform:uppercase;margin:10px 0 4px}
+.demo-card{background:var(--panneau-2);border:1px solid var(--bord-fort);border-radius:16px;padding:20px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:34px}
+.demo-card .t h3{margin:0 0 4px;font-size:18px}
+.demo-card .t p{margin:0;color:var(--texte-2);font-size:14px}
+.demo-card .t .k{font-family:var(--mono);font-size:12px;color:var(--ambre,#f4c56b);margin-top:8px}
+</style>
+<script src="../assets/js/assets.js?v=1"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -18,20 +30,49 @@
   <div class="nav-links"><a href="../index.html">Accueil</a><a href="../mentions-legales/">Légal</a></div>
 </div></nav>
 <header class="section-hero"><div class="aurora" aria-hidden="true"><span class="a1"></span><span class="a2"></span><span class="a3"></span></div>
-  <div class="wrap in"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><h1>E-books</h1><p>Publications numériques et guides.</p></div>
+  <div class="wrap in"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><h1>E-books</h1><p>Une visionneuse maison qui lit tous les formats et garde le contrôle : durée de lecture, pages, expiration, filigrane — sans jamais exposer le fichier.</p></div>
 </header>
-<main class="wrap"><div id="tv-content"><div class="empty"><span class="ic">✨</span>Contenu à venir.</div></div></main>
+
+<main class="wrap">
+  <div class="cta-row">
+    <a class="btn" href="lecteur.html">📖 Ouvrir la visionneuse</a>
+    <a class="btn btn-ghost" href="proteger.html">🔒 Protéger un e-book</a>
+  </div>
+
+  <p class="sec-h">Ce que fait la visionneuse</p>
+  <div class="sec-grid">
+    <div class="sec-card"><span class="badge">Multi-format</span><h3>Tous tes formats</h3><p>PDF, EPUB, CBZ (BD), images, TXT, Markdown et HTML — ouverts et rendus directement dans le navigateur, sans rien installer.</p></div>
+    <div class="sec-card"><span class="badge">Contrôle</span><h3>Lecture sous conditions</h3><p>Durée de lecture autorisée, nombre de pages/chapitres visibles, date d'expiration et quota d'ouvertures — appliqués à chaque session.</p></div>
+    <div class="sec-card"><span class="badge">Anti-copie</span><h3>Rendu verrouillé</h3><p>Rendu sur canvas (pas de texte sélectionnable ni de fichier extractible), clic droit / copie / impression désactivés, masquage à la perte de focus.</p></div>
+    <div class="sec-card"><span class="badge">Chiffré</span><h3>Fichier jamais en clair</h3><p>Chaque e-book est un <code>.trubook</code> chiffré AES-256-GCM, ouvert par passphrase ou fichier-clé <code>.trukey</code> — dans l'esprit d'IronLock.</p></div>
+    <div class="sec-card"><span class="badge">Traçable</span><h3>Filigrane acheteur</h3><p>Le nom et l'e-mail de l'acheteur s'affichent en filigrane sur chaque page : une capture qui fuite désigne d'elle-même sa source.</p></div>
+    <div class="sec-card"><span class="badge">Souverain</span><h3>Zéro serveur</h3><p>Tout tourne côté client, PDF.js et le moteur hébergés en local. Aucune donnée, aucun texte, aucune clé n'est envoyé où que ce soit.</p></div>
+  </div>
+
+  <p class="sec-h">Essayer</p>
+  <div class="demo-card">
+    <div class="t">
+      <h3>Aperçu de démonstration</h3>
+      <p>Un e-book protégé : 3 pages d'aperçu, 5 minutes de lecture, filigrane actif.</p>
+      <p class="k">passphrase : truvector</p>
+    </div>
+    <a class="btn" href="lecteur.html?src=demo.trubook">Lire la démo →</a>
+  </div>
+
+  <p class="sec-h">Catalogue</p>
+  <div class="sec-grid">
+    <div class="sec-card"><span class="badge">Démo</span><h3>Aperçu TRUvector</h3><p>L'e-book de démonstration ci-dessus, pour voir la visionneuse et ses protections à l'œuvre.</p><a class="go" href="lecteur.html?src=demo.trubook">Ouvrir ↗</a></div>
+    <div class="empty"><span class="ic">✨</span>Tes prochains e-books apparaîtront ici. Prépare-les avec l'outil « Protéger un e-book ».</div>
+  </div>
+
+  <div class="eb-note"><b>À dire à tes clients (honnêtement).</b> Aucune visionneuse web ne peut empêcher une photo ou une capture d'écran. Ce système <b>dissuade fortement</b> la recopie (fichier chiffré, rendu verrouillé, durée limitée) et rend toute fuite <b>traçable</b> grâce au filigrane nominatif. Pour un contrôle d'accès strict côté serveur, on peut le combiner avec Cloudflare Access.</div>
+</main>
+
 <footer class="site-foot"><div class="wrap"><div class="hr" style="margin-bottom:26px"></div>
   <p class="fm">$ truvector serve --section ebooks --public</p>
   <p>© 2026 TRUvector.dev — Tristan Ruard</p>
   <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
 </div></footer>
-<script>
-(function(){var content=document.getElementById('tv-content');if(!content)return;
-function lightbox(){var figs=content.querySelectorAll('.art .art-view');if(!figs.length)return;var lb=document.createElement('div');lb.style.cssText='position:fixed;inset:0;z-index:140;background:rgba(4,7,11,.92);display:none;align-items:center;justify-content:center;padding:24px';lb.innerHTML='<button aria-label="Fermer" style="position:absolute;top:16px;right:18px;width:42px;height:42px;border-radius:10px;background:none;border:1px solid rgba(126,240,205,.16);color:#9db2ae;font-size:20px;cursor:pointer">✕</button><img style="max-width:94vw;max-height:88vh;border-radius:12px;border:1px solid rgba(126,240,205,.16)" alt="">';document.body.appendChild(lb);function close(){lb.style.display='none';lb.querySelector('img').src='';}lb.querySelector('button').onclick=close;lb.addEventListener('click',function(e){if(e.target===lb)close();});document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});figs.forEach(function(b){b.addEventListener('click',function(){var im=b.querySelector('img');lb.querySelector('img').src=im.src;lb.style.display='flex';});});}
-function music(){var pl=content.querySelector('#tvpl');if(!pl)return;var srcs=[];try{srcs=JSON.parse(content.querySelector('#tvsrcs').textContent);}catch(e){srcs=[];}if(!srcs.length)return;var audio=content.querySelector('#tvaudio'),pp=content.querySelector('#tvpp'),tt=content.querySelector('#tvtt'),items=content.querySelectorAll('#tvlist li'),i=0;function mark(){for(var k=0;k<items.length;k++)items[k].classList.toggle('active',k===i);}function title(k){return items[k]?(items[k].getAttribute('data-title')||items[k].textContent):'';}function load(idx,play){i=((idx%srcs.length)+srcs.length)%srcs.length;audio.src=srcs[i];tt.textContent=title(i);mark();if(play){var q=audio.play();if(q&&q.catch)q.catch(function(){});}}function sp(on){pl.classList.toggle('playing',on);pp.textContent=on?'⏸':'▶';}audio.addEventListener('play',function(){sp(true);});audio.addEventListener('pause',function(){sp(false);});audio.addEventListener('ended',function(){load(i+1,true);});pp.addEventListener('click',function(){if(audio.paused)load(i,true);else audio.pause();});content.querySelector('#tvprev').addEventListener('click',function(){load(i-1,true);});content.querySelector('#tvnext').addEventListener('click',function(){load(i+1,true);});for(var k=0;k<items.length;k++){(function(k){items[k].style.cursor='pointer';items[k].addEventListener('click',function(){load(k,true);});})(k);}load(0,false);}
-lightbox();music();})();
-</script>
 <script src="../assets/js/nav.js?v=4"></script>
 <script src="../assets/js/player.js?v=2"></script>
 </body>
