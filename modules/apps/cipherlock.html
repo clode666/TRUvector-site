@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>CipherLock — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+.tool{max-width:900px;margin:0 auto;padding:8px 22px 64px}
+.tool.wide{max-width:1060px}
+.tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+.tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+.tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+.tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+.tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:54ch;font-size:15px}
+.back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.back:hover{color:var(--menthe);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.panel{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.hud .chip{background:var(--panneau);border:1px solid var(--bord);border-radius:999px;padding:6px 12px}
+.hud .chip b{color:var(--menthe-soft);font-weight:600}
+.hud .sp{margin-left:auto}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:12.5px;padding:8px 13px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+.seg button.on{border-color:var(--menthe);color:var(--menthe)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-family:var(--mono);font-size:12px;color:var(--texte-3);letter-spacing:.5px}
+textarea,input[type=text]{font-family:var(--mono);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:12px;padding:12px 14px;font-size:14px;width:100%;resize:vertical}
+select{font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px;font-size:14px}
+input[type=range]{width:100%;accent-color:var(--menthe)}
+.note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+.note code{font-family:var(--mono);color:var(--menthe-soft)}
+.gamewrap{display:flex;justify-content:center}
+.stagebox{position:relative;display:inline-block;max-width:100%}
+.stagebox.imm{display:block;width:100%}
+canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(--bord);background:#060a0f;display:block}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;background:rgba(4,7,11,.80);backdrop-filter:blur(3px);border-radius:16px;z-index:5;padding:20px}
+.overlay.hidden{display:none}
+.overlay h2{margin:0;font-size:22px}
+.overlay p{margin:0;color:var(--texte-2);font-size:14px;max-width:34ch}
+.stage{position:relative;width:100%;height:min(64vh,520px);border-radius:16px;overflow:hidden;border:1px solid var(--bord);background:#060a0f}
+.stage canvas{width:100%;height:100%;display:block;border:0;border-radius:0}
+.stage:fullscreen,.stage:-webkit-full-screen{height:100vh;border-radius:0}
+.ctrlbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:14px 16px}
+.ctrlbar label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;color:var(--texte-3);min-width:120px;flex:1}
+.ctrlbar .btn,.ctrlbar .seg{margin-left:auto}
+
+.clue{background:#060a0f;border:1px solid var(--bord-fort);border-radius:12px;padding:14px 16px;margin:0 0 14px}
+.clue .cph{font-family:var(--mono);font-size:16px;color:var(--menthe-soft);word-break:break-all;background:none;border:0;padding:0}
+.clue .tip{display:block;margin-top:8px;font-size:12.5px;color:var(--texte-3)}
+.dots{display:flex;gap:7px;margin:0 0 14px;flex-wrap:wrap}
+.dot{width:12px;height:12px;border-radius:50%;border:1px solid var(--bord-fort)}
+.dot.done{background:var(--menthe);border-color:var(--menthe)}
+.dot.cur{box-shadow:0 0 0 3px rgba(52,245,197,.18)}
+.ansrow{display:flex;gap:10px;margin-bottom:8px}.ansrow input{flex:1}
+.fb{min-height:20px;font-family:var(--mono);font-size:13px;margin:2px 0 10px}
+.fb.ok{color:var(--menthe)}.fb.no{color:#ff9c9c}
+.navrow{display:flex;justify-content:space-between;gap:10px}
+.navrow .btn{font-size:12.5px;padding:9px 14px}
+.wb{margin-top:16px}
+.wb-h{font-family:var(--mono);font-size:13px;color:var(--aurore-v-soft);margin-bottom:12px}
+.wb-grid{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}.wb-grid select{flex:1;min-width:150px}.wb-grid input{width:150px}
+.wout-box{margin-top:10px;background:#060a0f;border:1px solid var(--bord);border-radius:10px;padding:10px 12px}
+.wout-box span{font-family:var(--mono);font-size:11px;color:var(--texte-3);display:block;margin-bottom:4px}
+.wout-box code{font-family:var(--mono);font-size:15px;color:var(--menthe-soft);word-break:break-all}
+</style>
+<script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+<header class="tool-hero">
+<svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+<h1>Cipher<span class="dev">Lock</span></h1>
+<p>Une suite d'énigmes de chiffrement — César, binaire, morse, XOR, Vigenère — avec atelier de décodage intégré.</p>
+</header>
+<main class="tool">
+<a class="back" href="../">← Modules</a>
+
+<div class="hud"><span class="chip" id="lbadge">—</span><span class="sp"></span><span class="chip">Verrou <b id="ln">1 / 7</b></span></div>
+<div class="panel">
+ <h2 id="ltitle" style="font-size:18px;margin:0 0 10px"></h2>
+ <div id="lclue" class="clue"></div>
+ <div class="dots" id="dots"></div>
+ <div class="ansrow"><input id="answer" type="text" placeholder="mot déchiffré…" spellcheck="false"><button class="btn" id="validate">Valider</button></div>
+ <div class="fb" id="fb"></div>
+ <div class="navrow"><button class="btn btn-ghost" id="prev">← Précédent</button><button class="btn btn-ghost" id="next">Suivant →</button></div>
+</div>
+<div class="panel wb">
+ <div class="wb-h">🛠 Atelier de décodage</div>
+ <div class="wb-grid">
+  <select id="tool"><option value="cesar">César</option><option value="binaire">Binaire → texte</option><option value="morse">Morse → texte</option><option value="base64">Base64</option><option value="hex">Hex → texte</option><option value="xor">XOR (clé hex)</option><option value="vigenere">Vigenère</option></select>
+  <input id="wparam" type="text" placeholder="paramètre">
+ </div>
+ <textarea id="winp" rows="2" placeholder="colle le message chiffré ici…"></textarea>
+ <div class="wout-box"><span>Résultat</span><code id="wout">—</code></div>
+</div>
+<div style="text-align:right;margin-top:12px"><button class="btn btn-ghost" id="reset" style="font-size:12px">↺ réinitialiser la progression</button></div>
+<p class="note">Sers-toi de l'atelier pour tester tes hypothèses, puis saisis le mot en clair pour ouvrir le verrou suivant.</p>
+
+</main>
+<div class="toast" id="toast"></div>
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+
+(function(){
+var LV=[
+{b:'César',t:'Décalage caché',c:'Message intercepté :<br><code class="cph">PHQWKH</code><br><span class="tip">Astuce : chiffre de César. Fais varier le décalage dans l\u2019atelier.</span>',a:'MENTHE'},
+{b:'Binaire',t:'Octets bruts',c:'<code class="cph">01001110 01001111 01010110 01000001</code><br><span class="tip">8 bits = 1 caractère ASCII.</span>',a:'NOVA'},
+{b:'Morse',t:'Signaux',c:'<code class="cph">.- ..- .-. --- .-. .</code><br><span class="tip">Point / trait, séparés par une espace.</span>',a:'AURORE'},
+{b:'Base64',t:'Transport web',c:'<code class="cph">cXVhcnR6</code><br><span class="tip">Encodage base64 classique.</span>',a:'QUARTZ'},
+{b:'Hexadécimal',t:'Dump mémoire',c:'<code class="cph">70 72 69 73 6d 65</code><br><span class="tip">Chaque paire hexadécimale = 1 octet.</span>',a:'PRISME'},
+{b:'XOR',t:'Clé simple',c:'<code class="cph">45 44 53 52</code><br><span class="tip">XOR octet par octet, clé = <b>2A</b> (hex).</span>',a:'ONYX'},
+{b:'Vigenère',t:'Le coffre',c:'<code class="cph">TLZGBILY</code><br><span class="tip">Vigenère, clé = <b>AURORE</b>.</span>',a:'TRISKELE'}
+];
+var i=0,solved;
+try{solved=+localStorage.getItem('tv_cipher_solved')||0}catch(e){solved=0}
+var MORSE={'.-':'A','-...':'B','-.-.':'C','-..':'D','.':'E','..-.':'F','--.':'G','....':'H','..':'I','.---':'J','-.-':'K','.-..':'L','--':'M','-.':'N','---':'O','.--.':'P','--.-':'Q','.-.':'R','...':'S','-':'T','..-':'U','...-':'V','.--':'W','-..-':'X','-.--':'Y','--..':'Z'};
+function $(id){return document.getElementById(id);}
+function caesar(s,sh){return s.replace(/[a-z]/gi,function(c){var b=c<='Z'?65:97;return String.fromCharCode((c.charCodeAt(0)-b+(sh%26)+26)%26+b);});}
+function renderLevel(){var l=LV[i];$('lbadge').textContent=l.b;$('ltitle').textContent=(i+1)+'. '+l.t;$('lclue').innerHTML=l.c;$('answer').value='';$('fb').textContent='';$('fb').className='fb';
+var dots=$('dots');dots.innerHTML='';for(var k=0;k<LV.length;k++){var d=document.createElement('span');d.className='dot'+(k<solved?' done':'')+(k===i?' cur':'');dots.appendChild(d);}
+$('prev').disabled=i===0;$('next').disabled=i>=solved||i>=LV.length-1;$('ln').textContent=(i+1)+' / '+LV.length;}
+function check(){var v=$('answer').value.trim().toUpperCase().replace(/\s+/g,'');if(!v)return;
+if(v===LV[i].a){$('fb').textContent='\u2713 Déverrouillé';$('fb').className='fb ok';if(i+1>solved){solved=i+1;try{localStorage.setItem('tv_cipher_solved',solved)}catch(e){}}
+if(i>=LV.length-1){$('fb').textContent='\u2726 Tous les verrous sont ouverts — flag : TRU{c1ph3rl0ck}';renderLevel();}else{var ni=i+1;setTimeout(function(){i=ni;renderLevel();},600);renderLevel();}}
+else{$('fb').textContent='\u2717 Réessaie';$('fb').className='fb no';}}
+function work(){var tool=$('tool').value,inp=$('winp').value,p=$('wparam').value,o='';
+try{
+if(tool==='cesar'){o=caesar(inp,-(parseInt(p)||0));}
+else if(tool==='binaire'){o=inp.trim().split(/\s+/).map(function(x){return String.fromCharCode(parseInt(x,2));}).join('');}
+else if(tool==='morse'){o=inp.trim().split(/\s+/).map(function(x){return MORSE[x]||'?';}).join('');}
+else if(tool==='base64'){o=decodeURIComponent(escape(atob(inp.trim())));}
+else if(tool==='hex'){var h=inp.replace(/[^0-9a-fA-F]/g,'');o='';for(var q=0;q<h.length;q+=2)o+=String.fromCharCode(parseInt(h.substr(q,2),16));}
+else if(tool==='xor'){var key=parseInt(p,16)||0;o=inp.trim().split(/\s+/).map(function(x){return String.fromCharCode(parseInt(x,16)^key);}).join('');}
+else if(tool==='vigenere'){var vk=(p||'').toUpperCase().replace(/[^A-Z]/g,'');if(!vk){o='(clé requise)';}else{var ki=0;o=inp.replace(/[a-z]/gi,function(c){var b=c<='Z'?65:97;var kk=vk.charCodeAt(ki%vk.length)-65;ki++;return String.fromCharCode((c.charCodeAt(0)-b-kk+26)%26+b);});}}
+}catch(e){o='(entrée invalide)';}
+$('wout').textContent=o||'—';}
+function paramUI(){var t=$('tool').value;var need=(t==='cesar'||t==='xor'||t==='vigenere');$('wparam').style.display=need?'block':'none';$('wparam').placeholder=t==='cesar'?'décalage (ex: 3)':t==='xor'?'clé hex (ex: 2A)':t==='vigenere'?'clé (ex: aurore)':'';}
+$('validate').onclick=check;$('answer').addEventListener('keydown',function(e){if(e.key==='Enter')check();});
+$('prev').onclick=function(){if(i>0){i--;renderLevel();}};$('next').onclick=function(){if(i<solved&&i<LV.length-1){i++;renderLevel();}};
+$('tool').onchange=function(){paramUI();work();};['winp','wparam'].forEach(function(id){$(id).addEventListener('input',work);});
+$('reset').onclick=function(){solved=0;try{localStorage.removeItem('tv_cipher_solved')}catch(e){}i=0;renderLevel();};
+i=Math.min(solved,LV.length-1);paramUI();renderLevel();
+})();
+
+</script>
+</body>
+</html>

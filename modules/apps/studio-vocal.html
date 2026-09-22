@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Studio Vocal — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+.tool{max-width:900px;margin:0 auto;padding:8px 22px 64px}
+.tool.wide{max-width:1060px}
+.tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+.tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+.tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+.tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+.tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:54ch;font-size:15px}
+.back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.back:hover{color:var(--menthe);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.panel{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.hud .chip{background:var(--panneau);border:1px solid var(--bord);border-radius:999px;padding:6px 12px}
+.hud .chip b{color:var(--menthe-soft);font-weight:600}
+.hud .sp{margin-left:auto}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:12.5px;padding:8px 13px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+.seg button.on{border-color:var(--menthe);color:var(--menthe)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-family:var(--mono);font-size:12px;color:var(--texte-3);letter-spacing:.5px}
+textarea,input[type=text]{font-family:var(--mono);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:12px;padding:12px 14px;font-size:14px;width:100%;resize:vertical}
+select{font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px;font-size:14px}
+input[type=range]{width:100%;accent-color:var(--menthe)}
+.note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+.note code{font-family:var(--mono);color:var(--menthe-soft)}
+.gamewrap{display:flex;justify-content:center}
+.stagebox{position:relative;display:inline-block;max-width:100%}
+.stagebox.imm{display:block;width:100%}
+canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(--bord);background:#060a0f;display:block}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;background:rgba(4,7,11,.80);backdrop-filter:blur(3px);border-radius:16px;z-index:5;padding:20px}
+.overlay.hidden{display:none}
+.overlay h2{margin:0;font-size:22px}
+.overlay p{margin:0;color:var(--texte-2);font-size:14px;max-width:34ch}
+.stage{position:relative;width:100%;height:min(64vh,520px);border-radius:16px;overflow:hidden;border:1px solid var(--bord);background:#060a0f}
+.stage canvas{width:100%;height:100%;display:block;border:0;border-radius:0}
+.stage:fullscreen,.stage:-webkit-full-screen{height:100vh;border-radius:0}
+.ctrlbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:14px 16px}
+.ctrlbar label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;color:var(--texte-3);min-width:120px;flex:1}
+.ctrlbar .btn,.ctrlbar .seg{margin-left:auto}
+
+.sliders{background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:14px 16px;display:grid;gap:14px}
+.srow{display:grid;grid-template-columns:74px 1fr 46px;align-items:center;gap:12px}
+.srow label{font-family:var(--mono);font-size:12px;color:var(--texte-2)}
+.srow .v{font-family:var(--mono);font-size:12px;color:var(--menthe-soft);text-align:right}
+.pane-a{display:flex;gap:10px;flex-wrap:wrap}
+</style>
+<script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+<header class="tool-hero">
+<svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+<h1>Studio <span class="dev">Vocal</span></h1>
+<p>Synthèse vocale : tape un texte, choisis la voix et le débit, écoute-le prendre vie. Hors-ligne.</p>
+</header>
+<main class="tool">
+<a class="back" href="../">← Modules</a>
+
+<div class="field"><label>Texte à prononcer</label><textarea id="txt" rows="4" placeholder="Écris ton message…">Bienvenue chez TRUvector. Ceci est une démonstration de synthèse vocale, entièrement dans ton navigateur.</textarea></div>
+<div style="text-align:right;font-family:var(--mono);font-size:11px;color:var(--texte-3);margin:4px 0 12px"><span id="cc">0</span> caractères</div>
+<div class="seg" style="margin-bottom:14px"><button data-preset="TRUvector — des logiciels qui protègent, des outils qui accélèrent.">Slogan</button><button data-preset="Un, deux, trois… test du micro et de la voix.">Test</button><button data-preset="Il était une fois, dans un terminal lointain, une aurore de code.">Conte</button></div>
+<div class="field" style="margin-bottom:14px"><label>Voix</label><select id="voice"></select></div>
+<div class="sliders">
+ <div class="srow"><label>Débit</label><input id="rate" type="range" min="0.5" max="2" step="0.1" value="1"><span class="v" id="ratev">1.0</span></div>
+ <div class="srow"><label>Hauteur</label><input id="pitch" type="range" min="0" max="2" step="0.1" value="1"><span class="v" id="pitchv">1.0</span></div>
+ <div class="srow"><label>Volume</label><input id="vol" type="range" min="0" max="1" step="0.05" value="1"><span class="v" id="volv">1.00</span></div>
+</div>
+<div class="pane-a" style="margin-top:18px"><button class="btn" id="play">▶ Lire</button><button class="btn btn-ghost" id="pause">⏸ Pause</button></div>
+<p class="nots" id="nots" style="display:none;color:var(--ambre);font-family:var(--mono);font-size:12.5px;margin-top:10px">La synthèse vocale n'est pas disponible sur ce navigateur.</p>
+<p class="note"><b>100 % local & hors-ligne.</b> Les voix proviennent de ton système d'exploitation — leur nombre et leur langue varient selon l'appareil.</p>
+
+</main>
+<div class="toast" id="toast"></div>
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+
+(function(){
+function $(id){return document.getElementById(id);}
+var hasTTS=('speechSynthesis'in window);if(!hasTTS){$('nots').style.display='block';}
+var voices=[];
+function load(){voices=speechSynthesis.getVoices();var sel=$('voice');sel.innerHTML='';voices.forEach(function(v,i){var o=document.createElement('option');o.value=i;o.textContent=v.name+' — '+v.lang+(v.default?' (défaut)':'');sel.appendChild(o);});var fr=-1;for(var k=0;k<voices.length;k++){if(/fr/i.test(voices[k].lang)){fr=k;break;}}if(fr>=0)sel.value=fr;}
+if(hasTTS){speechSynthesis.onvoiceschanged=load;load();}
+function speak(){if(!hasTTS)return;speechSynthesis.cancel();var txt=$('txt').value.trim();if(!txt)return;var u=new SpeechSynthesisUtterance(txt);var v=voices[+$('voice').value];if(v){u.voice=v;u.lang=v.lang;}u.rate=+$('rate').value;u.pitch=+$('pitch').value;u.volume=+$('vol').value;u.onend=function(){$('play').textContent='▶ Lire';};u.onstart=function(){$('play').textContent='⏹ Stop';};speechSynthesis.speak(u);}
+$('play').onclick=function(){if(!hasTTS)return;if(speechSynthesis.speaking&&!speechSynthesis.paused){speechSynthesis.cancel();$('play').textContent='▶ Lire';}else speak();};
+$('pause').onclick=function(){if(!hasTTS||!speechSynthesis.speaking)return;if(speechSynthesis.paused){speechSynthesis.resume();$('pause').textContent='⏸ Pause';}else{speechSynthesis.pause();$('pause').textContent='▶ Reprendre';}};
+[['rate','ratev',1],['pitch','pitchv',1],['vol','volv',2]].forEach(function(a){$(a[0]).oninput=function(){$(a[1]).textContent=(+this.value).toFixed(a[2]);};});
+$('txt').addEventListener('input',function(){$('cc').textContent=this.value.length;});
+$('cc').textContent=$('txt').value.length;
+document.querySelectorAll('[data-preset]').forEach(function(b){b.onclick=function(){$('txt').value=b.dataset.preset;$('cc').textContent=b.dataset.preset.length;};});
+})();
+
+</script>
+</body>
+</html>

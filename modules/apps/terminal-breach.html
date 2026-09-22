@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Terminal Breach — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+.tool{max-width:900px;margin:0 auto;padding:8px 22px 64px}
+.tool.wide{max-width:1060px}
+.tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+.tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+.tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+.tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+.tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:54ch;font-size:15px}
+.back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.back:hover{color:var(--menthe);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.panel{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.hud .chip{background:var(--panneau);border:1px solid var(--bord);border-radius:999px;padding:6px 12px}
+.hud .chip b{color:var(--menthe-soft);font-weight:600}
+.hud .sp{margin-left:auto}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:12.5px;padding:8px 13px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+.seg button.on{border-color:var(--menthe);color:var(--menthe)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-family:var(--mono);font-size:12px;color:var(--texte-3);letter-spacing:.5px}
+textarea,input[type=text]{font-family:var(--mono);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:12px;padding:12px 14px;font-size:14px;width:100%;resize:vertical}
+select{font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px;font-size:14px}
+input[type=range]{width:100%;accent-color:var(--menthe)}
+.note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+.note code{font-family:var(--mono);color:var(--menthe-soft)}
+.gamewrap{display:flex;justify-content:center}
+.stagebox{position:relative;display:inline-block;max-width:100%}
+.stagebox.imm{display:block;width:100%}
+canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(--bord);background:#060a0f;display:block}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;background:rgba(4,7,11,.80);backdrop-filter:blur(3px);border-radius:16px;z-index:5;padding:20px}
+.overlay.hidden{display:none}
+.overlay h2{margin:0;font-size:22px}
+.overlay p{margin:0;color:var(--texte-2);font-size:14px;max-width:34ch}
+.stage{position:relative;width:100%;height:min(64vh,520px);border-radius:16px;overflow:hidden;border:1px solid var(--bord);background:#060a0f}
+.stage canvas{width:100%;height:100%;display:block;border:0;border-radius:0}
+.stage:fullscreen,.stage:-webkit-full-screen{height:100vh;border-radius:0}
+.ctrlbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:14px 16px}
+.ctrlbar label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;color:var(--texte-3);min-width:120px;flex:1}
+.ctrlbar .btn,.ctrlbar .seg{margin-left:auto}
+
+.term{background:#05080d;border:1px solid var(--bord-fort);border-radius:16px;overflow:hidden;box-shadow:0 0 30px rgba(52,245,197,.06)}
+.term .bar{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid var(--bord);background:rgba(52,245,197,.04)}
+.term .bar i{width:11px;height:11px;border-radius:50%;background:var(--texte-3)}
+.term .bar i:nth-child(1){background:#ff8b8b}.term .bar i:nth-child(2){background:var(--ambre)}.term .bar i:nth-child(3){background:var(--aurore-g)}
+.term .bar span{margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--texte-3)}
+.scr{font-family:var(--mono);font-size:13.5px;line-height:1.55;padding:14px 16px;height:min(56vh,440px);overflow-y:auto;color:var(--texte)}
+.scr .ln{white-space:pre-wrap;word-break:break-word;margin:1px 0}
+.scr .pmt{color:var(--aurore-v-soft)}
+.scr .ok{color:var(--menthe-soft)}
+.scr .warn{color:#ff9c9c}
+.scr .hint{color:var(--ambre)}
+.cform{display:flex;align-items:center;gap:8px;border-top:1px solid var(--bord);padding:10px 14px;background:rgba(6,10,15,.6)}
+.cform .ps{font-family:var(--mono);font-size:13px;color:var(--aurore-v-soft);white-space:nowrap}
+.cform input{flex:1;background:none;border:0;color:var(--menthe-soft);font-family:var(--mono);font-size:14px;outline:none;padding:4px 0}
+</style>
+<script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+<header class="tool-hero">
+<svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+<h1>Terminal <span class="dev">Breach</span></h1>
+<p>Simulateur d'intrusion : explore, décrypte et gagne l'accès au coffre, niveau par niveau.</p>
+</header>
+<main class="tool">
+<a class="back" href="../">← Modules</a>
+
+<div class="term">
+ <div class="bar"><i></i><i></i><i></i><span>breach — cible : nexus-7</span></div>
+ <div class="scr" id="scr"></div>
+ <form class="cform" id="cform" autocomplete="off"><span class="ps" id="ps">truvector@breach:~$</span><input id="cmd" type="text" spellcheck="false" aria-label="Commande" placeholder="tape une commande…"></form>
+</div>
+<p class="note"><b>Bac à sable.</b> Tout se joue en local dans ton navigateur — aucune vraie machine n'est contactée. Objectif : décoder les accès et déverrouiller le coffre. Coincé ? tape <code>hint</code>.</p>
+
+</main>
+<div class="toast" id="toast"></div>
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+
+(function(){
+var out=document.getElementById('scr'),inp=document.getElementById('cmd'),form=document.getElementById('cform'),ps=document.getElementById('ps');
+var host='truvector@breach',onNexus=false,stage=1;
+var LOCAL={'notes.txt':"Rappel: l'acces SSH de nexus-7 est stocke en base64 dans .cache/creds\nUtilise 'decode <texte>' pour le lire.",'.cache/creds':"cGhvdG9uLTQ0",'readme':"BREACH v1 — mission: penetrer nexus-7 et deverrouiller le coffre.\nTape 'help'. 'hint' si tu bloques."};
+var NEXUS={'log.txt':"[sys] coffre scelle.\n[sec] code d'acces (Cesar, decale de -7): AYPZRLSL\n[sec] astuce: decode -7 AYPZRLSL",'vault.enc':"<<< binaire chiffre — requiert: unlock <CODE> >>>"};
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function pr(t,cls){var d=document.createElement('div');d.className='ln'+(cls?' '+cls:'');d.innerHTML=t;out.appendChild(d);out.scrollTop=out.scrollHeight;}
+function line(cmd){pr('<span class="pmt">'+esc(host)+':~$</span> '+esc(cmd));}
+function setPrompt(){ps.textContent=host+':~$';}
+function b64d(s){try{return decodeURIComponent(escape(atob(s.trim())));}catch(e){return null;}}
+function caesar(s,sh){return s.replace(/[a-z]/gi,function(c){var b=c<='Z'?65:97;return String.fromCharCode((c.charCodeAt(0)-b+(sh%26)+26)%26+b);});}
+function files(){return onNexus?NEXUS:LOCAL;}
+var C={
+help:function(){pr("commandes : <b>ls</b>, <b>cat</b> &lt;fichier&gt;, <b>scan</b>, <b>decode</b> [décalage] &lt;texte&gt;, <b>connect</b> &lt;hôte&gt; &lt;mdp&gt;, <b>unlock</b> &lt;code&gt;, <b>whoami</b>, <b>hint</b>, <b>clear</b>");},
+whoami:function(){pr(onNexus?'root@nexus-7 (accès obtenu)':'truvector — opérateur BREACH');},
+clear:function(){out.innerHTML='';intro();},
+ls:function(){pr(Object.keys(files()).join('   '),'ok');},
+scan:function(){if(onNexus){pr('réseau interne : rien à scanner ici.');return;}pr('scan du sous-réseau…');pr('\u2192 10.7.0.13  <b>nexus-7</b>  port 22/ssh  <span class="warn">[verrouillé]</span>','ok');pr("indice: un fichier 'notes.txt' traîne en local. essaie 'cat notes.txt'.");if(stage<2)stage=2;},
+cat:function(a){var f=files(),name=a[0];if(!name){pr('usage: cat &lt;fichier&gt;','warn');return;}if(f[name]!=null){pr(esc(f[name]).replace(/\n/g,'<br>'));if(!onNexus&&name==='.cache/creds'&&stage<3)stage=3;if(onNexus&&name==='log.txt'&&stage<6)stage=6;}else pr('cat: '+esc(name)+': introuvable','warn');},
+decode:function(a){if(!a.length){pr('usage: decode &lt;texte&gt;  ou  decode &lt;décalage&gt; &lt;texte&gt;','warn');return;}
+if(a.length>=2&&/^-?\d+$/.test(a[0])){var r=caesar(a.slice(1).join(' '),parseInt(a[0]));pr('\u2192 '+esc(r),'ok');if(onNexus&&r.toUpperCase()==='TRISKELE'&&stage<7)stage=7;return;}
+var d=b64d(a.join(' '));if(d===null){pr('décodage impossible (base64 invalide).','warn');return;}pr('\u2192 '+esc(d),'ok');if(!onNexus&&stage<4)stage=4;},
+connect:function(a){if(onNexus){pr('déjà connecté à nexus-7.');return;}var h=a[0],p=a[1];if(h!=='nexus-7'&&h!=='10.7.0.13'){pr('hôte inconnu. (scan pour lister)','warn');return;}if(!p){pr('mot de passe requis : connect nexus-7 &lt;mdp&gt;','warn');return;}if(p==='photon-44'){onNexus=true;host='root@nexus-7';setPrompt();pr('connexion SSH…');pr('accès accordé \u2713 — bienvenue sur nexus-7.','ok');pr("un coffre 'vault.enc' est présent. 'ls' puis 'cat log.txt'.");if(stage<5)stage=5;}else pr('mot de passe refusé.','warn');},
+unlock:function(a){if(!onNexus){pr('connecte-toi à nexus-7 d\u2019abord.','warn');return;}var c=(a[0]||'').toUpperCase();if(c==='TRISKELE')win();else pr('code refusé.','warn');},
+hint:function(){var h=['','Commence par <b>scan</b>.',"Lis <b>cat notes.txt</b>.","Le mot de passe est en base64 : <b>cat .cache/creds</b>.","Décode-le : <b>decode &lt;texte&gt;</b>, puis connecte-toi.","<b>connect nexus-7 &lt;mdp décodé&gt;</b>.","Sur nexus-7, lis <b>cat log.txt</b>.","Décale de -7 : <b>decode -7 AYPZRLSL</b> puis <b>unlock &lt;code&gt;</b>."];pr('\ud83d\udca1 '+h[Math.min(stage,7)],'hint');}
+};
+function win(){pr('');pr('\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510','ok');pr('\u2502  COFFRE DÉVERROUILLÉ \u2726       \u2502','ok');pr('\u2502  flag: TRU{br3ach_c0mpl3t3} \u2502','ok');pr('\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518','ok');pr('Mission accomplie. Tape <b>clear</b> pour relancer une session.');}
+form.addEventListener('submit',function(e){e.preventDefault();var raw=inp.value.trim();inp.value='';if(!raw)return;line(raw);var parts=raw.split(/\s+/);var c=parts.shift().toLowerCase();if(C[c])C[c](parts);else pr('commande inconnue : '+esc(c)+" — tape 'help'.",'warn');});
+function intro(){pr("BREACH // terminal d'entraînement — cible : <b>nexus-7</b>.",'ok');pr("Tape <b>help</b> pour les commandes, <b>hint</b> pour un indice.");}
+setPrompt();intro();inp.focus();out.addEventListener('click',function(){inp.focus();});
+})();
+
+</script>
+</body>
+</html>

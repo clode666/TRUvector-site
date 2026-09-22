@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TRU 2048 — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=5">
+<style>
+.tool{max-width:900px;margin:0 auto;padding:8px 22px 64px}
+.tool.wide{max-width:1060px}
+.tool-hero{text-align:center;padding:44px 0 10px;position:relative;overflow:hidden}
+.tool-hero .triskele{width:56px;height:56px;margin:0 auto 12px}
+.tool-hero h1{font-size:clamp(24px,5vw,34px);margin:0;font-weight:700;letter-spacing:-.3px}
+.tool-hero h1 .dev{color:var(--aurore-v-soft);font-weight:500}
+.tool-hero p{color:var(--texte-2);margin:10px auto 0;max-width:54ch;font-size:15px}
+.back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.back:hover{color:var(--menthe);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);opacity:0;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.panel{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.hud{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:13px;color:var(--texte-2);margin:0 0 16px}
+.hud .chip{background:var(--panneau);border:1px solid var(--bord);border-radius:999px;padding:6px 12px}
+.hud .chip b{color:var(--menthe-soft);font-weight:600}
+.hud .sp{margin-left:auto}
+.seg{display:inline-flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--mono);font-size:12.5px;padding:8px 13px;border-radius:10px;border:1px solid var(--bord);background:var(--panneau);color:var(--texte-2);cursor:pointer}
+.seg button.on{border-color:var(--menthe);color:var(--menthe)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-family:var(--mono);font-size:12px;color:var(--texte-3);letter-spacing:.5px}
+textarea,input[type=text]{font-family:var(--mono);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:12px;padding:12px 14px;font-size:14px;width:100%;resize:vertical}
+select{font-family:var(--sans);background:var(--panneau);color:var(--texte);border:1px solid var(--bord-fort);border-radius:10px;padding:10px 12px;font-size:14px}
+input[type=range]{width:100%;accent-color:var(--menthe)}
+.note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:18px 0 0;font-size:13px;color:var(--texte-2)}
+.note code{font-family:var(--mono);color:var(--menthe-soft)}
+.gamewrap{display:flex;justify-content:center}
+.stagebox{position:relative;display:inline-block;max-width:100%}
+.stagebox.imm{display:block;width:100%}
+canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(--bord);background:#060a0f;display:block}
+.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;text-align:center;background:rgba(4,7,11,.80);backdrop-filter:blur(3px);border-radius:16px;z-index:5;padding:20px}
+.overlay.hidden{display:none}
+.overlay h2{margin:0;font-size:22px}
+.overlay p{margin:0;color:var(--texte-2);font-size:14px;max-width:34ch}
+.stage{position:relative;width:100%;height:min(64vh,520px);border-radius:16px;overflow:hidden;border:1px solid var(--bord);background:#060a0f}
+.stage canvas{width:100%;height:100%;display:block;border:0;border-radius:0}
+.stage:fullscreen,.stage:-webkit-full-screen{height:100vh;border-radius:0}
+.ctrlbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px;background:var(--panneau-2);border:1px solid var(--bord);border-radius:14px;padding:14px 16px}
+.ctrlbar label{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:11px;color:var(--texte-3);min-width:120px;flex:1}
+.ctrlbar .btn,.ctrlbar .seg{margin-left:auto}
+
+.board2048{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:min(92vw,440px);height:min(92vw,440px);background:var(--panneau);border:1px solid var(--bord);border-radius:16px;padding:10px}
+.tile{display:flex;align-items:center;justify-content:center;border-radius:10px;font-family:var(--mono);font-weight:700;font-size:clamp(16px,4.5vw,26px);background:rgba(126,240,205,.05);color:var(--texte);transition:transform .09s}
+.tile[data-v="0"]{color:transparent}
+.tile[data-v="2"]{background:rgba(52,245,197,.10);color:var(--menthe-soft)}
+.tile[data-v="4"]{background:rgba(52,245,197,.18);color:var(--menthe-soft)}
+.tile[data-v="8"]{background:rgba(89,227,154,.24);color:#daffe9}
+.tile[data-v="16"]{background:rgba(89,227,154,.4);color:#04120d}
+.tile[data-v="32"]{background:rgba(244,197,107,.34);color:#2a1c00}
+.tile[data-v="64"]{background:rgba(244,197,107,.62);color:#2a1c00}
+.tile[data-v="128"]{background:rgba(177,74,237,.34);color:#fff;font-size:clamp(14px,4vw,22px)}
+.tile[data-v="256"]{background:rgba(177,74,237,.52);color:#fff;font-size:clamp(14px,4vw,22px)}
+.tile[data-v="512"]{background:rgba(177,74,237,.74);color:#fff;font-size:clamp(14px,4vw,22px)}
+.tile[data-v="1024"]{background:linear-gradient(135deg,#b14aed,#34f5c5);color:#04120d;font-size:clamp(13px,3.6vw,20px)}
+.tile[data-v="2048"]{background:linear-gradient(135deg,#34f5c5,#8ff3d9);color:#04120d;box-shadow:0 0 24px rgba(52,245,197,.6);font-size:clamp(13px,3.6vw,20px)}
+</style>
+<script src="../../assets/js/assets.js?v=1"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+<header class="tool-hero">
+<svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+<h1>TRU <span class="dev">2048</span></h1>
+<p>Fais fusionner les tuiles jusqu'à 2048. Au clavier, aux flèches ou au glissé.</p>
+</header>
+<main class="tool">
+<a class="back" href="../">← Modules</a>
+
+<div class="hud"><span class="chip">Score <b id="score">0</b></span><span class="chip">Record <b id="best">0</b></span><span class="sp"></span><button class="btn btn-ghost" id="reset">↻ Nouvelle partie</button></div>
+<div class="gamewrap"><div class="stagebox"><div id="board" class="board2048"></div>
+<div class="overlay hidden" id="ov"><h2 id="ovt"></h2><p id="ovs"></p><button class="btn" id="ovbtn">↻ Rejouer</button></div></div></div>
+<p class="note">Glisse (ou flèches / WASD) pour empiler les tuiles. Deux tuiles égales fusionnent. Objectif : atteindre <code>2048</code>.</p>
+
+</main>
+<div class="toast" id="toast"></div>
+<script src="../../assets/js/nav.js?v=4"></script>
+<script src="../../assets/js/player.js?v=2"></script>
+<script>
+
+(function(){
+var N=4,grid,score,best,won,el=document.getElementById('board'),cells=[];
+try{best=+localStorage.getItem('tv_2048_best')||0}catch(e){best=0}
+document.getElementById('best').textContent=best;
+function build(){el.innerHTML='';cells=[];for(var i=0;i<N*N;i++){var c=document.createElement('div');c.className='tile';el.appendChild(c);cells.push(c);}}
+function empty(){var a=[];for(var i=0;i<N*N;i++)if(!grid[i])a.push(i);return a;}
+function spawn(){var e=empty();if(!e.length)return;var i=e[Math.floor(Math.random()*e.length)];grid[i]=Math.random()<0.9?2:4;}
+function reset(){grid=new Array(N*N).fill(0);score=0;won=false;spawn();spawn();render();document.getElementById('ov').classList.add('hidden');}
+function render(){for(var i=0;i<N*N;i++){var v=grid[i];cells[i].textContent=v?v:'';cells[i].setAttribute('data-v',v||0);}document.getElementById('score').textContent=score;}
+function line(arr){var f=arr.filter(function(x){return x;});var gain=0;for(var i=0;i<f.length-1;i++){if(f[i]===f[i+1]){f[i]*=2;gain+=f[i];if(f[i]===2048)won=true;f.splice(i+1,1);}}while(f.length<N)f.push(0);return {row:f,gain:gain};}
+function move(dir){var g=grid.slice(),gain=0;
+for(var k=0;k<N;k++){var arr=[];for(var j=0;j<N;j++){if(dir===0)arr.push(grid[k*N+j]);else if(dir===1)arr.push(grid[k*N+(N-1-j)]);else if(dir===2)arr.push(grid[j*N+k]);else arr.push(grid[(N-1-j)*N+k]);}
+var r=line(arr);gain+=r.gain;for(var j=0;j<N;j++){var v=r.row[j];if(dir===0)grid[k*N+j]=v;else if(dir===1)grid[k*N+(N-1-j)]=v;else if(dir===2)grid[j*N+k]=v;else grid[(N-1-j)*N+k]=v;}}
+var moved=false;for(var i=0;i<N*N;i++)if(g[i]!==grid[i])moved=true;
+if(moved){score+=gain;if(score>best){best=score;try{localStorage.setItem('tv_2048_best',best)}catch(e){}document.getElementById('best').textContent=best;}spawn();render();check();}}
+function canMove(){if(empty().length)return true;for(var r=0;r<N;r++)for(var c=0;c<N;c++){var v=grid[r*N+c];if(c<N-1&&grid[r*N+c+1]===v)return true;if(r<N-1&&grid[(r+1)*N+c]===v)return true;}return false;}
+function showOv(t,s){document.getElementById('ovt').textContent=t;document.getElementById('ovs').textContent=s;document.getElementById('ov').classList.remove('hidden');}
+function check(){if(won){showOv('2048 !','Tu as atteint la tuile légendaire. Continue ou rejoue.');won=false;}else if(!canMove()){showOv('Grille bloquée','Score '+score+' \u00b7 rejoue pour battre ton record.');}}
+document.addEventListener('keydown',function(e){var k=e.key.toLowerCase();var map={arrowleft:0,a:0,arrowright:1,d:1,arrowup:2,w:2,arrowdown:3,s:3};var d=map[k];if(d!==undefined){e.preventDefault();move(d);}});
+var tx=null,ty=null;el.addEventListener('touchstart',function(e){var t=e.touches[0];tx=t.clientX;ty=t.clientY;},{passive:true});
+el.addEventListener('touchend',function(e){if(tx==null)return;var t=e.changedTouches[0];var dx=t.clientX-tx,dy=t.clientY-ty;if(Math.abs(dx)<24&&Math.abs(dy)<24){tx=null;return;}if(Math.abs(dx)>Math.abs(dy))move(dx>0?1:0);else move(dy>0?3:2);tx=null;},{passive:true});
+document.getElementById('reset').onclick=reset;document.getElementById('ovbtn').onclick=reset;
+build();reset();
+})();
+
+</script>
+</body>
+</html>
