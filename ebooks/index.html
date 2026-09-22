@@ -13,14 +13,7 @@
 <style>
 .cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:6px 0 30px}
 .cta-row .btn{min-width:220px;justify-content:center}
-.eb-note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:12px;padding:14px 18px;margin:8px 0 30px;font-size:13.5px;color:var(--texte-2);max-width:760px}
-.eb-note b{color:var(--texte)}
-.eb-note code{font-family:var(--mono);color:var(--menthe-soft)}
 .sec-h{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--menthe);text-transform:uppercase;margin:10px 0 4px}
-.demo-card{background:var(--panneau-2);border:1px solid var(--bord-fort);border-radius:16px;padding:20px;display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:34px}
-.demo-card .t h3{margin:0 0 4px;font-size:18px}
-.demo-card .t p{margin:0;color:var(--texte-2);font-size:14px}
-.demo-card .t .k{font-family:var(--mono);font-size:12px;color:var(--ambre,#f4c56b);margin-top:8px}
 </style>
 <script src="../assets/js/assets.js?v=1"></script>
 </head>
@@ -49,23 +42,10 @@
     <div class="sec-card"><span class="badge">Souverain</span><h3>Zéro serveur</h3><p>Tout tourne côté client, PDF.js et le moteur hébergés en local. Aucune donnée, aucun texte, aucune clé n'est envoyé où que ce soit.</p></div>
   </div>
 
-  <p class="sec-h">Essayer</p>
-  <div class="demo-card">
-    <div class="t">
-      <h3>Aperçu de démonstration</h3>
-      <p>Un e-book protégé : 3 pages d'aperçu, 5 minutes de lecture, filigrane actif.</p>
-      <p class="k">passphrase : truvector</p>
-    </div>
-    <a class="btn" href="lecteur.html?src=demo.trubook">Lire la démo →</a>
-  </div>
-
   <p class="sec-h">Catalogue</p>
   <div class="sec-grid">
-    <div class="sec-card"><span class="badge">Démo</span><h3>Aperçu TRUvector</h3><p>L'e-book de démonstration ci-dessus, pour voir la visionneuse et ses protections à l'œuvre.</p><a class="go" href="lecteur.html?src=demo.trubook">Ouvrir ↗</a></div>
-    <div class="empty"><span class="ic">✨</span>Tes prochains e-books apparaîtront ici. Prépare-les avec l'outil « Protéger un e-book ».</div>
+    <div class="empty"><span class="ic">✨</span>Tes e-books apparaîtront ici. Prépare-les avec l'outil « Protéger un e-book ».</div>
   </div>
-
-  <div class="eb-note"><b>À dire à tes clients (honnêtement).</b> Aucune visionneuse web ne peut empêcher une photo ou une capture d'écran. Ce système <b>dissuade fortement</b> la recopie (fichier chiffré, rendu verrouillé, durée limitée) et rend toute fuite <b>traçable</b> grâce au filigrane nominatif. Pour un contrôle d'accès strict côté serveur, on peut le combiner avec Cloudflare Access.</div>
 </main>
 
 <footer class="site-foot"><div class="wrap"><div class="hr" style="margin-bottom:26px"></div>
