@@ -1,4 +1,4 @@
-/* TRUvector — filters.js (v1)
+/* TRUvector — filters.js (v3 : multi-sélection, fondu + glissement)
    Recherche + filtres par catégorie + tri, ajoutés automatiquement aux listes du site.
    Aucune modification du HTML des pages : le script repère les grilles connues.
    - Logiciels / Modules / Concours : .sec-grid > .sec-card   (catégorie = .badge)
@@ -27,7 +27,7 @@
   function setup(spec){
     var grid=document.querySelector(spec.grid); if(!grid || grid._tvf) return false;
     grid._tvf=1;
-    var state=readHash(), q=state.q||'', f=state.f||'', sort='default';
+    var state=readHash(), q=state.q||'', F=(state.f||'').split(',').filter(Boolean), sort='default';
     var ext=spec.existingSearch?document.querySelector(spec.existingSearch):null;
 
     var bar=el('div','tvf'); bar.setAttribute('role','search');
@@ -67,14 +67,15 @@
       if(order.length<2){ chips.style.display='none'; return; }
       chips.style.display='';
       order.sort(function(a,b){ return counts[b]-counts[a] || a.localeCompare(b,'fr'); });
-      var all=el('button','tvf-chip','Tout'); all.type='button'; all.setAttribute('aria-pressed',f?'false':'true');
-      all.onclick=function(){ f=''; apply(); }; chips.appendChild(all);
+      var all=el('button','tvf-chip','Tout'); all.type='button'; all.setAttribute('aria-pressed',F.length?'false':'true');
+      all.onclick=function(){ F=[]; apply(); }; chips.appendChild(all);
       var MAX=9, extra=[];
       order.forEach(function(c,k){
         var b=el('button','tvf-chip',c); b.type='button'; b.appendChild(el('span','n',String(counts[c])));
-        b.setAttribute('aria-pressed',f===c?'true':'false');
-        b.onclick=function(){ f=(f===c?'':c); apply(); };
-        if(k>=MAX && c!==f && !chips._open){ b.classList.add('tvf-hide'); extra.push(b); }
+        b.setAttribute('aria-pressed',F.indexOf(c)>=0?'true':'false');
+        b.title='Clic : ajouter/retirer · plusieurs catégories = l\u2019une OU l\u2019autre';
+        b.onclick=function(){ var j=F.indexOf(c); if(j>=0) F.splice(j,1); else F.push(c); apply(); };
+        if(k>=MAX && F.indexOf(c)<0 && !chips._open){ b.classList.add('tvf-hide'); extra.push(b); }
         chips.appendChild(b);
       });
       if(extra.length){
@@ -98,26 +99,37 @@
       applying=true;
       q=(ext?ext.value:input.value)||'';
       var nq=norm(q.trim()), list=items(), shown=0;
+      var before=new Map(); if(list.length<=80 && !(window.TVFX&&(TVFX.reduce||TVFX.off))) list.forEach(function(n){ if(!n.classList.contains('tvf-hide')) before.set(n,n.getBoundingClientRect()); });
+      var leaving=[];
       list.forEach(function(n){
-        var okC=!f || cats(n).indexOf(f)>=0;
+        var cs=cats(n), okC=!F.length || F.some(function(x){ return cs.indexOf(x)>=0; });
         var okQ=!nq || norm(n.textContent).indexOf(nq)>=0;
-        var ok=okC&&okQ; n.classList.toggle('tvf-hide',!ok); if(ok) shown++;
+        var ok=okC&&okQ, was=!n.classList.contains('tvf-hide');
+        if(!ok&&was&&before.size){ leaving.push(n); } else n.classList.toggle('tvf-hide',!ok);
+        if(ok) shown++;
       });
       applySort(list);
+      /* les exclus s'effacent en fondu, les restants glissent vers leur nouvelle place (FLIP) */
+      var pend=leaving.length; leaving.forEach(function(n){ var r=before.get(n); if(!r){ n.classList.add('tvf-hide'); if(--pend===0) flip(); return; }
+        n.animate([{opacity:1,transform:'scale(1)'},{opacity:0,transform:'scale(.92)'}],{duration:180,easing:'ease-in'}).onfinish=function(){ n.classList.add('tvf-hide'); if(--pend===0) flip(); }; });
+      function flip(){ list.forEach(function(n){ if(n.classList.contains('tvf-hide')) return; var a=before.get(n), b=n.getBoundingClientRect();
+        if(!a){ n.animate([{opacity:0,transform:'scale(.94)'},{opacity:1,transform:'none'}],{duration:260,easing:'ease-out'}); return; }
+        var dx=a.left-b.left, dy=a.top-b.top; if(Math.abs(dx)+Math.abs(dy)>1) n.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'none'}],{duration:380,easing:'cubic-bezier(.2,.8,.2,1)'}); }); before=new Map(); }
+      if(before.size && !leaving.length) flip();
       count.textContent=shown+' / '+list.length+' '+spec.label+(list.length>1?'s':'');
       empty.classList.toggle('tvf-hide',shown>0 || !list.length);
       Array.prototype.forEach.call(chips.querySelectorAll('.tvf-chip'),function(b){
         if(b.classList.contains('tvf-more')) return;
-        var val=b.firstChild?b.firstChild.nodeValue:''; b.setAttribute('aria-pressed', (val==='Tout'?!f:val===f)?'true':'false');
+        var val=b.firstChild?b.firstChild.nodeValue:''; b.setAttribute('aria-pressed', (val==='Tout'?!F.length:F.indexOf(val)>=0)?'true':'false');
       });
-      writeHash(q.trim(),f);
+      writeHash(q.trim(),F.join(','));
       if(mo) mo.takeRecords();       /* nos propres déplacements (tri) ne doivent pas relancer l'observateur */
       applying=false;
     }
 
     (ext||input).addEventListener('input',function(){ setTimeout(apply,0); });
     if(sel) sel.addEventListener('change',function(){ sort=sel.value; apply(); });
-    reset.onclick=function(){ f=''; if(ext) ext.value=''; else input.value=''; apply(); if(ext) ext.dispatchEvent(new Event('input')); };
+    reset.onclick=function(){ F=[]; if(ext) ext.value=''; else input.value=''; apply(); if(ext) ext.dispatchEvent(new Event('input')); };
 
     /* grilles rendues en JS (Articles) : on se ré-applique quand le contenu change */
     if(window.MutationObserver){
@@ -141,5 +153,5 @@
       var box=document.querySelector('.tvf-search input, #q'); if(box){ e.preventDefault(); box.focus(); }
     });
   }
-  if(document.readyState!=='loading') init(); else document.addEventListener('DOMContentLoaded',init);
+  (window.TVReady||new Promise(function(r){ if(document.readyState!=='loading') r(); else document.addEventListener('DOMContentLoaded',r); })).then(init);
 })();

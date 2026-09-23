@@ -1,9 +1,10 @@
 {
-  "version": 4,
+  "version": 8,
   "status": "auto",
   "launchDate": "2026-09-21T00:00:00+02:00",
   "theme": {
-    "accent": "#34f5c5"
+    "accent": "#34f5c5",
+    "violet": "#b14aed"
   },
   "license": "Usage personnel et non commercial, avec mention de TRUvector.dev.",
   "access": {
@@ -67,267 +68,753 @@
   "catalog": {
     "logiciels": [
       {
+        "slug": "growvault",
         "title": "GrowVault",
+        "badge": "Logiciel",
         "desc": "Suivi de croissance d'organismes vivants — le projet phare TRUvector.",
-        "url": "https://github.com/clode666",
-        "badge": "Logiciel"
+        "lead": "Suivi de croissance d'organismes vivants — le projet phare TRUvector.",
+        "features": [
+          "Suivi de croissance d'organismes vivants",
+          "Relevés réguliers et courbes d'évolution",
+          "Version d'essai dans le navigateur : GrowVault Lite"
+        ],
+        "commands": [
+          [
+            "growvault track --organism basilic --daily",
+            "✓ courbe de croissance mise à jour"
+          ],
+          [
+            "growvault report --month",
+            "✓ rapport mensuel généré"
+          ]
+        ],
+        "keywords": [
+          "growvault"
+        ],
+        "links": [
+          {
+            "label": "Essayer GrowVault Lite",
+            "url": "../modules/apps/growvault-lite.html"
+          }
+        ],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "atlas",
         "title": "ATLAS",
+        "badge": "Logiciel",
         "desc": "Plateforme d'intelligence documentaire.",
-        "url": "https://github.com/clode666",
-        "badge": "Logiciel"
+        "lead": "Plateforme d'intelligence documentaire.",
+        "features": [
+          "Exploitation intelligente de fonds documentaires"
+        ],
+        "commands": [
+          [
+            "atlas index ./documents",
+            "✓ documents indexés"
+          ],
+          [
+            "atlas ask \"procédures de sauvegarde\"",
+            "✓ réponses avec sources"
+          ]
+        ],
+        "keywords": [
+          "atlas",
+          "document"
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "ironlock",
         "title": "IronLock",
+        "badge": "Sécurité",
         "desc": "Système de licence et de liaison machine pour protéger tes logiciels.",
-        "url": "https://github.com/clode666",
-        "badge": "Sécurité"
+        "lead": "Système de licence et de liaison machine pour protéger tes logiciels Python distribués.",
+        "features": [
+          "Empreinte matérielle combinant 8 sources (fingerprint machine)",
+          "Chiffrement AES-256-GCM et chargeur chiffré",
+          "Licences signées ECDSA P-384, dérivation de clés Argon2id",
+          "Anti-debug Windows / Linux et détection de machines virtuelles",
+          "Licences flottantes par poste, expiration et renouvellement",
+          "Activation hors ligne, déploiement Docker / Kubernetes",
+          "Guide de migration depuis PyArmor"
+        ],
+        "commands": [
+          [
+            "ironlock encrypt app.py --bind machine",
+            "✓ 8 sources de fingerprint · AES-256-GCM"
+          ],
+          [
+            "ironlock license --fingerprint CLIENT_HASH --expires 2027-01-01",
+            "✓ licence signée ECDSA P-384"
+          ],
+          [
+            "ironlock verify licence.ilk",
+            "✓ licence valide pour cette machine"
+          ]
+        ],
+        "keywords": [
+          "ironlock",
+          "licence",
+          "licensing",
+          "fingerprint",
+          "anti-debug",
+          "obfuscation",
+          "pyarmor",
+          "vm "
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "universal-installer",
         "title": "Universal Installer",
+        "badge": "Outil",
         "desc": "Gestionnaire d'archives avec moteur de compression UXC (.uxc).",
-        "url": "https://github.com/clode666",
-        "badge": "Outil"
+        "lead": "Gestionnaire d'archives et d'installation bâti sur son propre moteur de compression UXC (.uxc).",
+        "features": [
+          "Moteur de compression UXC et archives .uxc réparables",
+          "Archives auto-extractibles (SFX) et multi-volumes",
+          "Génération de paquets MSI, conversion entre formats d'archives",
+          "Mises à jour par delta binaire",
+          "Plugins, intégration GitLab CI, fonctionne sur Raspberry Pi",
+          "Déploiement Linux (snap, deb, AppImage), cloud (S3, Azure, GCS) et hors réseau"
+        ],
+        "commands": [
+          [
+            "uxc pack ./release -o setup.uxc --level max",
+            "✓ archive créée · intégrité SHA-256"
+          ],
+          [
+            "uxc sfx setup.uxc -o installer.exe",
+            "✓ exécutable auto-extractible"
+          ],
+          [
+            "uxc repair archive.uxc",
+            "✓ blocs vérifiés et réparés"
+          ]
+        ],
+        "keywords": [
+          "uxc",
+          "installer",
+          "archive",
+          "msi",
+          "sfx",
+          "delta",
+          "deploi",
+          "raspberry",
+          "gitlab"
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "universal-pdf-converter",
         "title": "Universal PDF Converter",
+        "badge": "Outil",
         "desc": "Conversion de 32+ formats depuis et vers le PDF.",
-        "url": "https://github.com/clode666",
-        "badge": "Outil"
+        "lead": "Conversion de 32+ formats de fichiers depuis et vers le PDF.",
+        "features": [
+          "Plus de 32 formats pris en charge, dans les deux sens",
+          "Interface graphique au style rétro",
+          "Utilisation en ligne de commande pour l'automatiser"
+        ],
+        "commands": [
+          [
+            "pdfconvert rapport.docx --to pdf",
+            "✓ rapport.pdf"
+          ],
+          [
+            "pdfconvert scan.pdf --to png",
+            "✓ pages exportées en images"
+          ]
+        ],
+        "keywords": [
+          "pdf",
+          "convert"
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "automationsequence",
         "title": "AutomationSequence",
+        "badge": "Outil",
         "desc": "Automatisation d'actions Windows (clics, OCR, SSH) avec tableau de bord web.",
-        "url": "https://github.com/clode666",
-        "badge": "Outil"
+        "lead": "Automatisation d'actions Windows (clics, OCR, SSH) pilotée par des séquences, avec tableau de bord web.",
+        "features": [
+          "Séquences de clics, saisie, OCR et commandes SSH",
+          "Variables, conditions, boucles, gestion d'erreurs et reprises",
+          "Tableau de bord web, déclenchement par cron et webhooks",
+          "Débogueur avec points d'arrêt, système de plugins",
+          "Séquences JSON chiffrées AES-256",
+          "Intégration Ollama (IA locale), Excel / Word, scraping, orchestration multi-machine"
+        ],
+        "commands": [
+          [
+            "automation run sequence.json --headless",
+            "✓ séquence exécutée · OCR + SSH"
+          ],
+          [
+            "automation schedule backup.json --cron \"0 2 * * *\"",
+            "✓ tâche planifiée"
+          ],
+          [
+            "automation serve --dashboard",
+            "✓ tableau de bord sur :8080"
+          ]
+        ],
+        "keywords": [
+          "automation",
+          "sequence",
+          "séquence",
+          "ollama",
+          "cron",
+          "webhook",
+          "plugin",
+          "scraping",
+          "orchestration",
+          "debugger"
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       },
       {
+        "slug": "universalcasting",
         "title": "UniversalCasting",
+        "badge": "Média",
         "desc": "MediaCenter open-source pour diffuser vers TV et navigateurs.",
-        "url": "https://github.com/clode666",
-        "badge": "Média"
+        "lead": "MediaCenter open source pour diffuser tes médias vers des TV et des navigateurs.",
+        "features": [
+          "Diffusion vers téléviseurs et navigateurs",
+          "Application Python open source"
+        ],
+        "commands": [
+          [
+            "universalcasting scan",
+            "✓ appareils détectés sur le réseau"
+          ],
+          [
+            "universalcasting play film.mp4 --to salon",
+            "✓ diffusion en cours"
+          ]
+        ],
+        "keywords": [
+          "casting",
+          "mediacenter",
+          "média"
+        ],
+        "links": [],
+        "github": "https://github.com/clode666",
+        "visible": true
       }
     ],
-    "ebooks": [],
+    "ebooks": [
+      {
+        "slug": "le-dernier-octet",
+        "title": "Le Dernier Octet",
+        "genre": "SF · anticipation",
+        "blurb": "Un archiviste doit choisir quels souvenirs de l’humanité sauver avant l’effacement d’un monde.",
+        "visible": true
+      },
+      {
+        "slug": "signal-perdu",
+        "title": "Signal Perdu",
+        "genre": "SF · anticipation",
+        "blurb": "Une sonde revient deux siècles trop tard, porteuse d’un message que plus personne ne sait lire.",
+        "visible": true
+      },
+      {
+        "slug": "root-at-nuit",
+        "title": "root@nuit",
+        "genre": "Cyberpunk",
+        "blurb": "Une hackeuse découvre que son propre cerveau tourne sous licence — et qu’elle est en retard de paiement.",
+        "visible": true
+      },
+      {
+        "slug": "le-contrat-fantome",
+        "title": "Le Contrat Fantôme",
+        "genre": "Techno-thriller",
+        "blurb": "Un dev freelance accepte une mission trop bien payée, pour un client qui n’existe pas.",
+        "visible": true
+      },
+      {
+        "slug": "chambre-404",
+        "title": "Chambre 404",
+        "genre": "Polar · noir",
+        "blurb": "Une disparition dans un hôtel dont une chambre ne figure sur aucun plan.",
+        "visible": true
+      },
+      {
+        "slug": "encre-noire",
+        "title": "Encre Noire",
+        "genre": "Polar · noir",
+        "blurb": "Un tatoueur reconnaît, sur la peau d’un client, le dessin d’un crime jamais résolu.",
+        "visible": true
+      },
+      {
+        "slug": "ce-qui-pousse-la-nuit",
+        "title": "Ce qui pousse la nuit",
+        "genre": "Fantastique",
+        "blurb": "Une plante offerte se met à réclamer bien plus que de l’eau.",
+        "visible": true
+      },
+      {
+        "slug": "le-treizieme-etage",
+        "title": "Le Treizième Étage",
+        "genre": "Horreur",
+        "blurb": "L’ascenseur s’arrête à un étage que l’immeuble ne possède pas.",
+        "visible": true
+      },
+      {
+        "slug": "la-forge-des-noms",
+        "title": "La Forge des Noms",
+        "genre": "Fantasy",
+        "blurb": "Dans un royaume où nommer une chose la crée, un forgeron oublie son propre nom.",
+        "visible": true
+      },
+      {
+        "slug": "le-cartographe-aveugle",
+        "title": "Le Cartographe Aveugle",
+        "genre": "Fantasy",
+        "blurb": "Il dessine des cartes de pays qu’il n’a jamais vus — et qui finissent par exister.",
+        "visible": true
+      },
+      {
+        "slug": "l-horloger-et-le-temps",
+        "title": "L’Horloger et le Temps",
+        "genre": "Conte philosophique",
+        "blurb": "Celui qui répare les montres du village n’a jamais eu le temps de vivre.",
+        "visible": true
+      },
+      {
+        "slug": "la-fille-qui-comptait-les-etoiles",
+        "title": "La Fille qui Comptait les Étoiles",
+        "genre": "Conte poétique",
+        "blurb": "Sur ce qu’on cesse de voir, un à un, en grandissant.",
+        "visible": true
+      },
+      {
+        "slug": "cafe-table-3",
+        "title": "Café, table 3",
+        "genre": "Tranche de vie",
+        "blurb": "Deux inconnus, le même café chaque matin, sans un mot — jusqu’au jour où l’un manque.",
+        "visible": true
+      },
+      {
+        "slug": "vingt-minutes-de-retard",
+        "title": "Vingt Minutes de Retard",
+        "genre": "Réalisme",
+        "blurb": "Comment un train raté redessine une vie entière.",
+        "visible": true
+      },
+      {
+        "slug": "correspondances",
+        "title": "Correspondances",
+        "genre": "Romance épistolaire",
+        "blurb": "Deux personnes s’écrivent par erreur sur une vieille adresse — et n’arrêtent plus.",
+        "visible": true
+      },
+      {
+        "slug": "reunion-obligatoire",
+        "title": "Réunion Obligatoire",
+        "genre": "Satire",
+        "blurb": "La chronique d’une réunion qui ne finit jamais.",
+        "visible": true
+      },
+      {
+        "slug": "mise-a-jour-requise",
+        "title": "Mise à Jour Requise",
+        "genre": "Humour",
+        "blurb": "Un homme dont la vie refuse de fonctionner tant qu’il n’a pas installé la v2.0.",
+        "visible": true
+      },
+      {
+        "slug": "lettre-de-1914",
+        "title": "Lettre de 1914",
+        "genre": "Historique",
+        "blurb": "Une lettre du front qui arrive à destination cent ans trop tard.",
+        "visible": true
+      },
+      {
+        "slug": "si-ada-avait-continue",
+        "title": "Si Ada Avait Continué",
+        "genre": "Uchronie",
+        "blurb": "Et si Ada Lovelace avait achevé sa machine à penser ?",
+        "visible": true
+      },
+      {
+        "slug": "le-dernier-wagon",
+        "title": "Le Dernier Wagon",
+        "genre": "Huis clos",
+        "blurb": "Un train qui ne s’arrête plus, des passagers qui ne se souviennent pas d’être montés.",
+        "visible": true
+      },
+      {
+        "slug": "le-jardin-sous-la-cendre",
+        "title": "Le Jardin sous la Cendre",
+        "genre": "Post-apo lumineux",
+        "blurb": "Après la fin du monde, une communauté fait éclore la première fleur.",
+        "visible": true
+      }
+    ],
     "modules": [
       {
         "title": "TRU Keyforge",
+        "badge": "Sécurité",
         "desc": "Générateur de mots de passe, passphrases et clés 256 bits, avec indicateur de robustesse.",
         "url": "apps/keyforge.html",
-        "badge": "Sécurité"
+        "visible": true
       },
       {
         "title": "Aurora Weaver",
+        "badge": "Créatif",
         "desc": "Compose ton aurore romantico·geek et télécharge-la en fond d'écran.",
         "url": "apps/aurora.html",
-        "badge": "Créatif"
+        "visible": true
       },
       {
         "title": "GrowVault Lite",
+        "badge": "Démo",
         "desc": "Un mini suivi de croissance — l'esprit du projet phare, dans ton navigateur.",
         "url": "apps/growvault-lite.html",
-        "badge": "Démo"
+        "visible": true
       },
       {
         "title": "TRU Hasher",
+        "badge": "Sécurité",
         "desc": "Empreintes SHA-1 à SHA-512 d'un texte ou d'un fichier, calculées en local.",
         "url": "apps/hasher.html",
-        "badge": "Sécurité"
+        "visible": true
       },
       {
         "title": "Base64 · Hex Studio",
+        "badge": "Dev",
         "desc": "Encode et décode texte, Base64, hexadécimal et URL, dans les deux sens.",
         "url": "apps/base64-studio.html",
-        "badge": "Dev"
+        "visible": true
       },
       {
         "title": "Regex Lab",
+        "badge": "Dev",
         "desc": "Teste tes expressions régulières en direct : correspondances, drapeaux et groupes.",
         "url": "apps/regex-lab.html",
-        "badge": "Dev"
+        "visible": true
       },
       {
         "title": "JSON Forge",
+        "badge": "Dev",
         "desc": "Formate, minifie et valide ton JSON, avec statistiques de structure.",
         "url": "apps/json-forge.html",
-        "badge": "Dev"
+        "visible": true
       },
       {
         "title": "UXC Estimator",
+        "badge": "Outil",
         "desc": "Estime le gain de compression : entropie de Shannon et ratio gzip réel.",
         "url": "apps/uxc-estimator.html",
-        "badge": "Outil"
+        "visible": true
       },
       {
         "title": "License Forge",
+        "badge": "Sécurité",
         "desc": "Génère des clés de licence de démonstration au format segmenté, façon IronLock.",
         "url": "apps/license-forge.html",
-        "badge": "Sécurité"
+        "visible": true
       },
       {
         "title": "Cron Décodeur",
+        "badge": "Outil",
         "desc": "Traduis une expression cron et prévois ses prochaines exécutions.",
         "url": "apps/cron-decoder.html",
-        "badge": "Outil"
+        "visible": true
       },
       {
         "title": "Color Aurora",
+        "badge": "Créatif",
         "desc": "Compose des dégradés et des palettes TRUvector, puis exporte le CSS.",
         "url": "apps/color-aurora.html",
-        "badge": "Créatif"
+        "visible": true
       },
       {
         "title": "Markdown Live",
+        "badge": "Dev",
         "desc": "Écris en Markdown et vois le rendu HTML en direct.",
         "url": "apps/markdown-live.html",
-        "badge": "Dev"
+        "visible": true
+      },
+      {
+        "title": "Neon Serpent",
+        "badge": "Jeu",
+        "desc": "Le serpent revisité : traînée néon, vitesse croissante et meilleur score gardé en local.",
+        "url": "apps/neon-serpent.html",
+        "visible": true
+      },
+      {
+        "title": "TRU 2048",
+        "badge": "Jeu",
+        "desc": "Fais fusionner les tuiles jusqu'à 2048. Au clavier, aux flèches ou au glissé du doigt.",
+        "url": "apps/tru-2048.html",
+        "visible": true
+      },
+      {
+        "title": "Photon Break",
+        "badge": "Jeu",
+        "desc": "Casse-brique néon avec particules, niveaux et vies. Souris, tactile ou flèches.",
+        "url": "apps/photon-break.html",
+        "visible": true
+      },
+      {
+        "title": "Mémoire Aurore",
+        "badge": "Jeu",
+        "desc": "Jeu de paires cosmiques : retrouve les symboles et bats ton chrono.",
+        "url": "apps/memoire-aurore.html",
+        "visible": true
+      },
+      {
+        "title": "Terminal Breach",
+        "badge": "Hack",
+        "desc": "Simulateur d'intrusion : explore, décrypte et gagne l'accès, niveau par niveau.",
+        "url": "apps/terminal-breach.html",
+        "visible": true
+      },
+      {
+        "title": "CipherLock",
+        "badge": "Hack",
+        "desc": "Une suite d'énigmes de chiffrement — César, binaire, morse, XOR — avec atelier de décodage.",
+        "url": "apps/cipherlock.html",
+        "visible": true
+      },
+      {
+        "title": "Datamine",
+        "badge": "Hack",
+        "desc": "Démineur revisité : cartographie le réseau et isole les nœuds compromis.",
+        "url": "apps/datamine.html",
+        "visible": true
+      },
+      {
+        "title": "Hyperspace",
+        "badge": "Immersif",
+        "desc": "Plonge dans un tunnel stellaire plein écran, réactif à la souris. Vitesse et teinte réglables.",
+        "url": "apps/hyperspace.html",
+        "visible": true
+      },
+      {
+        "title": "Fractal Dive",
+        "badge": "Immersif",
+        "desc": "Zoom infini animé au cœur d'une fractale, palettes aurore. Clique pour recentrer.",
+        "url": "apps/fractal-dive.html",
+        "visible": true
+      },
+      {
+        "title": "Matrix Aurore",
+        "badge": "Immersif",
+        "desc": "Pluie de code cyber personnalisable, plein écran, capture PNG.",
+        "url": "apps/matrix-aurore.html",
+        "visible": true
+      },
+      {
+        "title": "Voix Vecteur",
+        "badge": "Traduction",
+        "desc": "Parle, et ta phrase est transcrite, traduite puis prononcée. FR · EN · ES · DE · IT…",
+        "url": "apps/voix-vecteur.html",
+        "visible": true
+      },
+      {
+        "title": "Studio Vocal",
+        "badge": "Voix",
+        "desc": "Synthèse vocale : tape un texte, choisis la voix et le débit, écoute-le prendre vie.",
+        "url": "apps/studio-vocal.html",
+        "visible": true
       }
     ],
     "musique": [
       {
         "title": "Rétrowave Néon",
-        "src": "01-retrowave-neon.mp3"
+        "src": "01-retrowave-neon.mp3",
+        "visible": true
       },
       {
         "title": "Lo-Fi Pluie",
-        "src": "02-lofi-pluie.mp3"
+        "src": "02-lofi-pluie.mp3",
+        "visible": true
       },
       {
         "title": "Chiptune Turbo",
-        "src": "03-chiptune-turbo.mp3"
+        "src": "03-chiptune-turbo.mp3",
+        "visible": true
       },
       {
         "title": "Deep House Minuit",
-        "src": "04-deep-house.mp3"
+        "src": "04-deep-house.mp3",
+        "visible": true
       },
       {
         "title": "Techno Souterrain",
-        "src": "05-techno.mp3"
+        "src": "05-techno.mp3",
+        "visible": true
       },
       {
         "title": "Trance Aurore",
-        "src": "06-trance-aurore.mp3"
+        "src": "06-trance-aurore.mp3",
+        "visible": true
       },
       {
         "title": "Drum & Bass Orage",
-        "src": "07-dnb-orage.mp3"
+        "src": "07-dnb-orage.mp3",
+        "visible": true
       },
       {
         "title": "Trap Cristal",
-        "src": "08-trap-cristal.mp3"
+        "src": "08-trap-cristal.mp3",
+        "visible": true
       },
       {
         "title": "Ambient Nébuleuse",
-        "src": "09-ambient-nebuleuse.mp3"
+        "src": "09-ambient-nebuleuse.mp3",
+        "visible": true
       },
       {
         "title": "Trip-Hop Fumée",
-        "src": "10-triphop-fumee.mp3"
+        "src": "10-triphop-fumee.mp3",
+        "visible": true
       },
       {
         "title": "Funk Galactique",
-        "src": "11-funk-galactique.mp3"
+        "src": "11-funk-galactique.mp3",
+        "visible": true
       },
       {
         "title": "Disco Miroir",
-        "src": "12-disco-miroir.mp3"
+        "src": "12-disco-miroir.mp3",
+        "visible": true
       },
       {
         "title": "Reggae Dub Soleil",
-        "src": "13-reggae-dub.mp3"
+        "src": "13-reggae-dub.mp3",
+        "visible": true
       },
       {
         "title": "Bossa Café",
-        "src": "14-bossa-cafe.mp3"
+        "src": "14-bossa-cafe.mp3",
+        "visible": true
       },
       {
         "title": "Jazz de Minuit",
-        "src": "15-jazz-minuit.mp3"
+        "src": "15-jazz-minuit.mp3",
+        "visible": true
       },
       {
         "title": "Blues Ruelle",
-        "src": "16-blues-ruelle.mp3"
+        "src": "16-blues-ruelle.mp3",
+        "visible": true
       },
       {
         "title": "Rock Circuit",
-        "src": "17-rock-circuit.mp3"
+        "src": "17-rock-circuit.mp3",
+        "visible": true
       },
       {
         "title": "Cinéma Épique",
-        "src": "18-cinema-epique.mp3"
+        "src": "18-cinema-epique.mp3",
+        "visible": true
       },
       {
         "title": "Clavecin Baroque",
-        "src": "19-clavecin-baroque.mp3"
+        "src": "19-clavecin-baroque.mp3",
+        "visible": true
       },
       {
         "title": "Valse des Circuits",
-        "src": "20-valse-circuits.mp3"
+        "src": "20-valse-circuits.mp3",
+        "visible": true
       },
       {
         "title": "Vaporwave Mirage",
-        "src": "21-vaporwave-mirage.mp3"
+        "src": "21-vaporwave-mirage.mp3",
+        "visible": true
       },
       {
         "title": "Future Bass Éclat",
-        "src": "22-future-bass.mp3"
+        "src": "22-future-bass.mp3",
+        "visible": true
       },
       {
         "title": "Route de la Soie",
-        "src": "23-route-soie.mp3"
+        "src": "23-route-soie.mp3",
+        "visible": true
       },
       {
         "title": "Pizzicato Espiègle",
-        "src": "24-pizzicato-espiegle.mp3"
+        "src": "24-pizzicato-espiegle.mp3",
+        "visible": true
       },
       {
         "title": "Néon & Rosée",
-        "src": "neon-rosee.mp3"
+        "src": "neon-rosee.mp3",
+        "visible": true
       },
       {
         "title": "Triskèle au clair de lune",
-        "src": "triskele-clair-lune.mp3"
+        "src": "triskele-clair-lune.mp3",
+        "visible": true
       },
       {
         "title": "Cœur Cathode",
-        "src": "coeur-cathode.mp3"
+        "src": "coeur-cathode.mp3",
+        "visible": true
       },
       {
         "title": "Aurore 8-bit",
-        "src": "aurore-8bit.mp3"
+        "src": "aurore-8bit.mp3",
+        "visible": true
       },
       {
         "title": "Pixel d'Or",
-        "src": "pixel-dor.mp3"
+        "src": "pixel-dor.mp3",
+        "visible": true
       },
       {
         "title": "Dérive Stellaire",
-        "src": "derive-stellaire.mp3"
+        "src": "derive-stellaire.mp3",
+        "visible": true
       },
       {
         "title": "Slow Modem",
-        "src": "slow-modem.mp3"
+        "src": "slow-modem.mp3",
+        "visible": true
       },
       {
         "title": "Lettre en ASCII",
-        "src": "lettre-ascii.mp3"
+        "src": "lettre-ascii.mp3",
+        "visible": true
       },
       {
         "title": "Comète de Velours",
-        "src": "comete-velours.mp3"
+        "src": "comete-velours.mp3",
+        "visible": true
       },
       {
         "title": "Aube Arcade",
-        "src": "aube-arcade.mp3"
+        "src": "aube-arcade.mp3",
+        "visible": true
       },
       {
         "title": "Aurora Pad",
-        "src": "aurora-pad.mp3"
+        "src": "aurora-pad.mp3",
+        "visible": true
       },
       {
         "title": "Nébuleuse",
-        "src": "nebuleuse.mp3"
+        "src": "nebuleuse.mp3",
+        "visible": true
       }
     ],
     "articles": [
@@ -338,7 +825,8 @@
           "Sécurité",
           "Python"
         ],
-        "url": "posts/proteger-python-reverse-engineering.html"
+        "url": "posts/proteger-python-reverse-engineering.html",
+        "visible": true
       },
       {
         "title": "Fingerprint hardware : 8 sources d'entropie expliquées",
@@ -347,7 +835,8 @@
           "Cryptographie",
           "Licensing"
         ],
-        "url": "posts/fingerprint-hardware-8-sources.html"
+        "url": "posts/fingerprint-hardware-8-sources.html",
+        "visible": true
       },
       {
         "title": "AES-256-GCM vs ChaCha20-Poly1305 pour le licensing",
@@ -356,7 +845,8 @@
           "Cryptographie",
           "Licensing"
         ],
-        "url": "posts/aes-gcm-vs-chacha20.html"
+        "url": "posts/aes-gcm-vs-chacha20.html",
+        "visible": true
       },
       {
         "title": "HMAC-SHA256 vs ECDSA pour l'intégrité de fichiers : matrice de décision",
@@ -365,7 +855,8 @@
           "Cryptographie",
           "Comparatif"
         ],
-        "url": "posts/hmac-vs-ecdsa-integrite.html"
+        "url": "posts/hmac-vs-ecdsa-integrite.html",
+        "visible": true
       },
       {
         "title": "Variables, conditions et boucles dans AutomationSequence V8",
@@ -374,7 +865,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/variables-conditions-boucles.html"
+        "url": "posts/variables-conditions-boucles.html",
+        "visible": true
       },
       {
         "title": "Automatiser le scraping web avec des séquences JSON",
@@ -383,7 +875,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/scraping-web-sequences.html"
+        "url": "posts/scraping-web-sequences.html",
+        "visible": true
       },
       {
         "title": "Surveiller des dossiers avec Watch Mode V8 : 4 stratégies",
@@ -392,7 +885,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/watch-mode-dossiers.html"
+        "url": "posts/watch-mode-dossiers.html",
+        "visible": true
       },
       {
         "title": "Intégrer AutomationSequence dans un pipeline GitHub Actions",
@@ -402,7 +896,8 @@
           "Python",
           "CI/CD"
         ],
-        "url": "posts/github-actions-automation.html"
+        "url": "posts/github-actions-automation.html",
+        "visible": true
       },
       {
         "title": "Générer un MSI signé avec Python en 2026",
@@ -412,7 +907,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/generer-msi-python-2026.html"
+        "url": "posts/generer-msi-python-2026.html",
+        "visible": true
       },
       {
         "title": "Implémenter un système d'auto-update complet pour une application Python",
@@ -421,7 +917,8 @@
           "Déploiement",
           "Python"
         ],
-        "url": "posts/auto-update-python.html"
+        "url": "posts/auto-update-python.html",
+        "visible": true
       },
       {
         "title": "Réparer une archive UXC corrompue : techniques et limites",
@@ -430,7 +927,8 @@
           "Déploiement",
           "Maintenance"
         ],
-        "url": "posts/reparer-archive-uxc.html"
+        "url": "posts/reparer-archive-uxc.html",
+        "visible": true
       },
       {
         "title": "Sécuriser une archive UXC : AES-256, ECDSA, manifest SHA-256",
@@ -440,7 +938,8 @@
           "Cryptographie",
           "Deep dive"
         ],
-        "url": "posts/securiser-archive-uxc.html"
+        "url": "posts/securiser-archive-uxc.html",
+        "visible": true
       },
       {
         "title": "Déploiement Python sur Linux : Snap vs DEB vs AppImage en 2026",
@@ -450,7 +949,8 @@
           "Linux",
           "Comparatif"
         ],
-        "url": "posts/deploiement-linux-snap-deb-appimage.html"
+        "url": "posts/deploiement-linux-snap-deb-appimage.html",
+        "visible": true
       },
       {
         "title": "Cas réel : mise à jour OTA d'un parc de 500 postes avec Universal Installer",
@@ -460,7 +960,8 @@
           "Déploiement",
           "OTA"
         ],
-        "url": "posts/cas-reel-ota-500-postes.html"
+        "url": "posts/cas-reel-ota-500-postes.html",
+        "visible": true
       },
       {
         "title": "Créer une archive auto-extractible (SFX) avec Universal Installer V2",
@@ -470,7 +971,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/creer-archive-sfx.html"
+        "url": "posts/creer-archive-sfx.html",
+        "visible": true
       },
       {
         "title": "Convertir entre formats d'archives : ZIP, TAR.GZ, 7z, UXC",
@@ -479,7 +981,8 @@
           "Déploiement",
           "Python"
         ],
-        "url": "posts/convertir-formats-archives.html"
+        "url": "posts/convertir-formats-archives.html",
+        "visible": true
       },
       {
         "title": "Cas réel : migration d'un parc logiciel legacy vers UXC en entreprise",
@@ -488,7 +991,8 @@
           "Cas d'usage",
           "Déploiement"
         ],
-        "url": "posts/migration-legacy-uxc.html"
+        "url": "posts/migration-legacy-uxc.html",
+        "visible": true
       },
       {
         "title": "Implémenter un système d'activation réseau offline-first",
@@ -497,7 +1001,8 @@
           "Licensing",
           "Python"
         ],
-        "url": "posts/activation-reseau-offline.html"
+        "url": "posts/activation-reseau-offline.html",
+        "visible": true
       },
       {
         "title": "Anatomie d'un fichier de licence IronLock .lic",
@@ -506,7 +1011,8 @@
           "Cryptographie",
           "Licensing"
         ],
-        "url": "posts/anatomie-fichier-licence-lic.html"
+        "url": "posts/anatomie-fichier-licence-lic.html",
+        "visible": true
       },
       {
         "title": "Anti-debug : 12 techniques sur Windows et Linux",
@@ -515,7 +1021,8 @@
           "Sécurité",
           "Python"
         ],
-        "url": "posts/anti-debug-windows-linux.html"
+        "url": "posts/anti-debug-windows-linux.html",
+        "visible": true
       },
       {
         "title": "Archives multi-volumes : découper, distribuer et reconstruire",
@@ -524,7 +1031,8 @@
           "Déploiement",
           "Deep dive"
         ],
-        "url": "posts/archives-multi-volumes.html"
+        "url": "posts/archives-multi-volumes.html",
+        "visible": true
       },
       {
         "title": "Argon2id vs PBKDF2 vs bcrypt pour la dérivation de clé",
@@ -533,7 +1041,8 @@
           "Cryptographie",
           "KDF"
         ],
-        "url": "posts/argon2id-vs-pbkdf2-bcrypt.html"
+        "url": "posts/argon2id-vs-pbkdf2-bcrypt.html",
+        "visible": true
       },
       {
         "title": "Audit de sécurité d'un système de licensing : checklist 2026",
@@ -542,7 +1051,8 @@
           "Sécurité",
           "Audit"
         ],
-        "url": "posts/audit-securite-licensing.html"
+        "url": "posts/audit-securite-licensing.html",
+        "visible": true
       },
       {
         "title": "Automatiser sous EDR : comment éviter les faux positifs avec AutomationSequence",
@@ -551,7 +1061,8 @@
           "Sécurité",
           "Automatisation"
         ],
-        "url": "posts/automation-edr-cortex.html"
+        "url": "posts/automation-edr-cortex.html",
+        "visible": true
       },
       {
         "title": "AutomationSequence V8 : 145+ actions Python pour les environnements pros",
@@ -561,7 +1072,8 @@
           "Python",
           "IA/LLM"
         ],
-        "url": "posts/automation-sequence-v8-guide.html"
+        "url": "posts/automation-sequence-v8-guide.html",
+        "visible": true
       },
       {
         "title": "AutomationSequence vs n8n vs UiPath : lequel choisir en 2026 ?",
@@ -570,7 +1082,8 @@
           "Automatisation",
           "Comparatif"
         ],
-        "url": "posts/automation-vs-n8n-uipath.html"
+        "url": "posts/automation-vs-n8n-uipath.html",
+        "visible": true
       },
       {
         "title": "Automatiser Excel et Word avec des séquences JSON",
@@ -580,7 +1093,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/automatiser-excel-word-sequences.html"
+        "url": "posts/automatiser-excel-word-sequences.html",
+        "visible": true
       },
       {
         "title": "Automatiser Oracle avec des séquences JSON",
@@ -590,7 +1104,8 @@
           "Python",
           "Oracle"
         ],
-        "url": "posts/automatiser-oracle-sequences-json.html"
+        "url": "posts/automatiser-oracle-sequences-json.html",
+        "visible": true
       },
       {
         "title": "Benchmark compression : UXC v3 vs Zstd vs Brotli vs LZ4 sur données réelles",
@@ -599,7 +1114,8 @@
           "Déploiement",
           "Comparatif"
         ],
-        "url": "posts/benchmark-compression-uxc.html"
+        "url": "posts/benchmark-compression-uxc.html",
+        "visible": true
       },
       {
         "title": "Cas réel : automatiser un SI hospitalier avec AutomationSequence V8",
@@ -609,7 +1125,8 @@
           "Automatisation",
           "HDS"
         ],
-        "url": "posts/cas-reel-chu-automation.html"
+        "url": "posts/cas-reel-chu-automation.html",
+        "visible": true
       },
       {
         "title": "Cas réel : automatiser la gestion des incidents IT avec V8 + Ollama",
@@ -619,7 +1136,8 @@
           "Automatisation",
           "IA/LLM"
         ],
-        "url": "posts/cas-reel-incidents-it-ollama.html"
+        "url": "posts/cas-reel-incidents-it-ollama.html",
+        "visible": true
       },
       {
         "title": "Cas réel : protéger un SaaS Python avec IronLock v2",
@@ -628,7 +1146,8 @@
           "Cas d'usage",
           "Python"
         ],
-        "url": "posts/cas-reel-saas-python-ironlock.html"
+        "url": "posts/cas-reel-saas-python-ironlock.html",
+        "visible": true
       },
       {
         "title": "Chiffrer ses séquences JSON avec AES-256-GCM",
@@ -638,7 +1157,8 @@
           "Cryptographie",
           "Sécurité"
         ],
-        "url": "posts/chiffrer-sequences-json-aes256.html"
+        "url": "posts/chiffrer-sequences-json-aes256.html",
+        "visible": true
       },
       {
         "title": "Créer un plugin AutomationSequence V8 : guide complet",
@@ -648,7 +1168,8 @@
           "Python",
           "Plugin API"
         ],
-        "url": "posts/creer-plugin-automation-sequence.html"
+        "url": "posts/creer-plugin-automation-sequence.html",
+        "visible": true
       },
       {
         "title": "Planification CRON et déclencheurs WebhookListen dans V8",
@@ -657,7 +1178,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/cron-webhook-v8.html"
+        "url": "posts/cron-webhook-v8.html",
+        "visible": true
       },
       {
         "title": "Dashboard Web temps réel pour vos séquences AutomationSequence V8",
@@ -666,7 +1188,8 @@
           "Automatisation",
           "Web API"
         ],
-        "url": "posts/dashboard-web-sequences.html"
+        "url": "posts/dashboard-web-sequences.html",
+        "visible": true
       },
       {
         "title": "Déboguer une séquence V8 : Debugger V3 et breakpoints conditionnels",
@@ -675,7 +1198,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/debugger-v3-breakpoints.html"
+        "url": "posts/debugger-v3-breakpoints.html",
+        "visible": true
       },
       {
         "title": "Compression delta binaire : UXC v3 vs xdelta3 vs bsdiff4",
@@ -684,7 +1208,8 @@
           "Déploiement",
           "Comparatif"
         ],
-        "url": "posts/delta-binaire-uxc-xdelta-bsdiff.html"
+        "url": "posts/delta-binaire-uxc-xdelta-bsdiff.html",
+        "visible": true
       },
       {
         "title": "Déployer sur un réseau offline avec Universal Installer V2",
@@ -693,7 +1218,8 @@
           "Déploiement",
           "Sécurité"
         ],
-        "url": "posts/deploiement-offline-airgap.html"
+        "url": "posts/deploiement-offline-airgap.html",
+        "visible": true
       },
       {
         "title": "Déployer sur S3, Azure Blob et GCS avec la même API Python",
@@ -703,7 +1229,8 @@
           "Python",
           "Déploiement"
         ],
-        "url": "posts/deployer-s3-azure-gcs-api.html"
+        "url": "posts/deployer-s3-azure-gcs-api.html",
+        "visible": true
       },
       {
         "title": "Distribuer un EXE Python sécurisé avec IronLock",
@@ -712,7 +1239,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/distribuer-exe-python-ironlock.html"
+        "url": "posts/distribuer-exe-python-ironlock.html",
+        "visible": true
       },
       {
         "title": "ECDSA P-384 vs RSA-2048 pour la signature de licences",
@@ -721,7 +1249,8 @@
           "Cryptographie",
           "Licensing"
         ],
-        "url": "posts/ecdsa-p384-vs-rsa-licences.html"
+        "url": "posts/ecdsa-p384-vs-rsa-licences.html",
+        "visible": true
       },
       {
         "title": "Gérer les erreurs et les reprises dans une séquence d'automatisation",
@@ -730,7 +1259,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/gerer-erreurs-reprises.html"
+        "url": "posts/gerer-erreurs-reprises.html",
+        "visible": true
       },
       {
         "title": "IA ONNX pour la compression prédictive : comment ça marche vraiment",
@@ -739,7 +1269,8 @@
           "IA/ONNX",
           "Deep dive"
         ],
-        "url": "posts/ia-onnx-compression-predictive.html"
+        "url": "posts/ia-onnx-compression-predictive.html",
+        "visible": true
       },
       {
         "title": "Intégrer Ollama dans une séquence d'automatisation",
@@ -749,7 +1280,8 @@
           "IA/LLM",
           "Python"
         ],
-        "url": "posts/integrer-ollama-sequence.html"
+        "url": "posts/integrer-ollama-sequence.html",
+        "visible": true
       },
       {
         "title": "Cas réel : IronLock dans un environnement Docker / Kubernetes",
@@ -758,7 +1290,8 @@
           "Cas d'usage",
           "Licensing"
         ],
-        "url": "posts/ironlock-docker-kubernetes.html"
+        "url": "posts/ironlock-docker-kubernetes.html",
+        "visible": true
       },
       {
         "title": "IronLock vs PyArmor vs Themida : comparatif 2026",
@@ -767,7 +1300,8 @@
           "Licensing",
           "Comparatif"
         ],
-        "url": "posts/ironlock-vs-pyarmor-vs-themida.html"
+        "url": "posts/ironlock-vs-pyarmor-vs-themida.html",
+        "visible": true
       },
       {
         "title": "Licences à durée limitée : expiration, grâce et renouvellement automatique",
@@ -776,7 +1310,8 @@
           "Licensing",
           "Cryptographie"
         ],
-        "url": "posts/licences-expiration-renouvellement.html"
+        "url": "posts/licences-expiration-renouvellement.html",
+        "visible": true
       },
       {
         "title": "Licences flottantes vs par poste : architecture et implémentation",
@@ -785,7 +1320,8 @@
           "Licensing",
           "Python"
         ],
-        "url": "posts/licences-flottantes-par-poste.html"
+        "url": "posts/licences-flottantes-par-poste.html",
+        "visible": true
       },
       {
         "title": "Migrer de PyArmor 7 vers IronLock v2 : guide pratique",
@@ -794,7 +1330,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/migrer-pyarmor-ironlock.html"
+        "url": "posts/migrer-pyarmor-ironlock.html",
+        "visible": true
       },
       {
         "title": "Obfuscation AST avancée : CFG flattening, inlining et string splitting",
@@ -803,7 +1340,8 @@
           "Sécurité",
           "Python"
         ],
-        "url": "posts/obfuscation-ast-avancee.html"
+        "url": "posts/obfuscation-ast-avancee.html",
+        "visible": true
       },
       {
         "title": "Orchestration multi-machine avec AutomationSequence V8",
@@ -812,7 +1350,8 @@
           "Automatisation",
           "Multi-machine"
         ],
-        "url": "posts/orchestration-multi-machine.html"
+        "url": "posts/orchestration-multi-machine.html",
+        "visible": true
       },
       {
         "title": "Créer un plugin Universal Installer : guide complet Plugin API V1.2",
@@ -822,7 +1361,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/plugin-universal-installer.html"
+        "url": "posts/plugin-universal-installer.html",
+        "visible": true
       },
       {
         "title": "Protéger un package Python distribué via PyPI avec IronLock",
@@ -832,7 +1372,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/proteger-package-pypi.html"
+        "url": "posts/proteger-package-pypi.html",
+        "visible": true
       },
       {
         "title": "Automatiser l'envoi d'emails et notifications SMTP / Teams / Slack",
@@ -841,7 +1382,8 @@
           "Automatisation",
           "Python"
         ],
-        "url": "posts/smtp-teams-slack-automation.html"
+        "url": "posts/smtp-teams-slack-automation.html",
+        "visible": true
       },
       {
         "title": "Intégrer Universal Installer dans un pipeline GitLab CI",
@@ -851,7 +1393,8 @@
           "Python",
           "Tutoriel"
         ],
-        "url": "posts/universal-installer-gitlab-ci.html"
+        "url": "posts/universal-installer-gitlab-ci.html",
+        "visible": true
       },
       {
         "title": "Universal Installer sur Raspberry Pi et ARM : contraintes et solutions",
@@ -860,7 +1403,8 @@
           "Déploiement",
           "ARM"
         ],
-        "url": "posts/universal-installer-raspberry-pi.html"
+        "url": "posts/universal-installer-raspberry-pi.html",
+        "visible": true
       },
       {
         "title": "Universal Installer V2 : déploiement Python avec IA prédictive et delta UXC v3",
@@ -870,7 +1414,8 @@
           "IA/ONNX",
           "Python"
         ],
-        "url": "posts/universal-installer-v2-guide.html"
+        "url": "posts/universal-installer-v2-guide.html",
+        "visible": true
       },
       {
         "title": "Universal Installer vs Inno Setup vs NSIS vs Squirrel : comparatif 2026",
@@ -879,7 +1424,8 @@
           "Déploiement",
           "Comparatif"
         ],
-        "url": "posts/universal-installer-vs-inno-nsis.html"
+        "url": "posts/universal-installer-vs-inno-nsis.html",
+        "visible": true
       },
       {
         "title": "Détecter les VMs avec IronLock : VMware, VBox, Hyper-V, QEMU",
@@ -888,13 +1434,297 @@
           "Sécurité",
           "Anti-VM"
         ],
-        "url": "posts/vm-detection-ironlock.html"
+        "url": "posts/vm-detection-ironlock.html",
+        "visible": true
       }
     ]
   },
-  "concours": [],
+  "concours": [
+    {
+      "title": "Aurora Fan-Art #1",
+      "desc": "Crée une scène romantico·geek sous les aurores. Le plus beau visuel rejoint la galerie et gagne une licence de ton choix.",
+      "url": "#",
+      "label": "Participer ↗",
+      "visible": true
+    }
+  ],
   "dons": {
     "intro": "TRUvector est un projet indépendant. Ton soutien aide à créer de nouveaux logiciels, e-books et créations libres.",
-    "links": []
+    "links": [
+      {
+        "label": "☕ Offrir un café",
+        "url": "https://ko-fi.com/truvector"
+      },
+      {
+        "label": "❤ GitHub Sponsors",
+        "url": "https://github.com/sponsors/clode666"
+      },
+      {
+        "label": "🔁 Don régulier",
+        "url": "https://liberapay.com/truvector"
+      }
+    ]
+  },
+  "site": {
+    "name": "TRUvector.dev",
+    "tagline": "Where Code Meets Creativity",
+    "author": "Tristan Ruard",
+    "github": "https://github.com/clode666",
+    "email": ""
+  },
+  "home": {
+    "kicker": "WHERE CODE MEETS CREATIVITY",
+    "lede": "Un atelier romantico·geek où le code rencontre l'art : créations graphiques, logiciels, e-books, musique, articles et modules interactifs — sous des aurores et des univers fantastiques.",
+    "cta1": {
+      "label": "✨ Explorer l'univers",
+      "url": "#sections"
+    },
+    "cta2": {
+      "label": "Voir la galerie",
+      "url": "galerie/"
+    },
+    "marquee": [
+      "aurores",
+      "code",
+      "créations libres",
+      "triskèle",
+      "musique",
+      "logiciels",
+      "sécurité",
+      "e-books",
+      "modules interactifs",
+      "romantico·geek",
+      "open source",
+      "pixels & néons"
+    ],
+    "sectionsTitle": "Huit espaces, un seul univers",
+    "sectionsSub": "Explore, télécharge, écoute, joue, participe.",
+    "cards": [
+      {
+        "url": "galerie/",
+        "badge": "créations",
+        "icon": "🎨",
+        "title": "Galerie",
+        "desc": "Créations graphiques romantico·geek en libre téléchargement, en haute définition.",
+        "go": "Entrer →",
+        "visible": true
+      },
+      {
+        "url": "logiciels/",
+        "badge": "apps",
+        "icon": "💾",
+        "title": "Logiciels",
+        "desc": "Mes applications et outils, proposés sous licence d'utilisation.",
+        "go": "Découvrir →",
+        "visible": true
+      },
+      {
+        "url": "ebooks/",
+        "badge": "lecture",
+        "icon": "📖",
+        "title": "E-books",
+        "desc": "{ebooks} nouvelles en édition limitée, à lire en ligne jusqu’au {date}.",
+        "go": "Feuilleter →",
+        "visible": true
+      },
+      {
+        "url": "musique/",
+        "badge": "audio",
+        "icon": "🎵",
+        "title": "Musique",
+        "desc": "{pistes} créations audio à écouter, tout en douceur.",
+        "go": "Écouter →",
+        "visible": true
+      },
+      {
+        "url": "articles/",
+        "badge": "blog",
+        "icon": "📝",
+        "title": "Articles",
+        "desc": "Le carnet technique : licensing, sécurité, automatisation… {articles} articles.",
+        "go": "Lire →",
+        "visible": true
+      },
+      {
+        "url": "modules/",
+        "badge": "interactif",
+        "icon": "🧩",
+        "title": "Modules",
+        "desc": "Keyforge, Aurora Weaver, GrowVault Lite… {modules} outils à manipuler.",
+        "go": "Jouer →",
+        "visible": true
+      },
+      {
+        "url": "concours/",
+        "badge": "défis",
+        "icon": "🏆",
+        "title": "Concours",
+        "desc": "Jeux-concours et défis créatifs pour la communauté.",
+        "go": "Participer →",
+        "visible": true
+      },
+      {
+        "url": "dons/",
+        "badge": "soutien",
+        "icon": "💚",
+        "title": "Soutenir",
+        "desc": "Un coup de pouce pour faire grandir le projet TRUvector.",
+        "go": "Soutenir →",
+        "visible": true
+      }
+    ],
+    "blocks": {
+      "news": true,
+      "stats": true,
+      "listen": true,
+      "ebooks": true,
+      "software": true,
+      "modules": true,
+      "why": true,
+      "maker": true,
+      "cta": true
+    },
+    "newsCount": 4,
+    "featuredSoftware": [
+      "IronLock",
+      "Universal Installer",
+      "AutomationSequence"
+    ],
+    "featuredModules": [
+      "TRU Keyforge",
+      "Aurora Weaver",
+      "Neon Serpent"
+    ],
+    "why": {
+      "title": "L'esprit romantico·geek",
+      "sub": "Du code, de l'art, et une âme.",
+      "items": [
+        {
+          "icon": "🌌",
+          "title": "Un univers cohérent",
+          "text": "Aurores, triskèle néon, guirlandes : une direction artistique soignée de bout en bout."
+        },
+        {
+          "icon": "⬇️",
+          "title": "Créations en libre accès",
+          "text": "Des œuvres à télécharger librement, en haute définition."
+        },
+        {
+          "icon": "🧩",
+          "title": "Des modules à manipuler",
+          "text": "Générateur de clés, aurore générative, mini‑tracker : le code qui s'utilise."
+        },
+        {
+          "icon": "🔐",
+          "title": "Chiffré à la demande",
+          "text": "Les sections peuvent passer en coffres AES‑256‑GCM, sans dépendre de personne."
+        }
+      ]
+    },
+    "maker": {
+      "title": "TRUvector",
+      "text": "Développeur le jour, créateur d'univers la nuit. TRUvector réunit le code et la créativité sous un même toit — logiciels, e-books, musique et créations graphiques.",
+      "image": "assets/img/createur.webp",
+      "links": [
+        {
+          "label": "↗ github.com/clode666",
+          "url": "https://github.com/clode666"
+        },
+        {
+          "label": "↗ Mentions légales",
+          "url": "mentions-legales/"
+        }
+      ]
+    },
+    "cta": {
+      "title": "Bienvenue dans l'atelier ✨",
+      "text": "Plonge dans l'univers TRUvector — huit espaces à explorer.",
+      "label": "Explorer l'univers",
+      "url": "#sections"
+    }
+  },
+  "announcement": {
+    "visible": false,
+    "text": "Nouveau : 21 nouvelles à lire jusqu'au 21 octobre !",
+    "label": "Lire",
+    "url": "ebooks/",
+    "everywhere": false,
+    "until": ""
+  },
+  "nav": {
+    "tabs": [
+      {
+        "path": "",
+        "label": "Accueil",
+        "visible": true
+      },
+      {
+        "path": "galerie/",
+        "label": "Galerie",
+        "visible": true
+      },
+      {
+        "path": "logiciels/",
+        "label": "Logiciels",
+        "visible": true
+      },
+      {
+        "path": "ebooks/",
+        "label": "E-books",
+        "visible": true
+      },
+      {
+        "path": "musique/",
+        "label": "Musique",
+        "visible": true
+      },
+      {
+        "path": "articles/",
+        "label": "Articles",
+        "visible": true
+      },
+      {
+        "path": "modules/",
+        "label": "Modules",
+        "visible": true
+      },
+      {
+        "path": "concours/",
+        "label": "Concours",
+        "visible": true
+      },
+      {
+        "path": "dons/",
+        "label": "Soutenir",
+        "visible": true
+      }
+    ]
+  },
+  "fx": {
+    "level": "auto",
+    "sky": true,
+    "stars": true,
+    "shooting": true,
+    "lights": true,
+    "cards3d": true,
+    "magnetic": true,
+    "halo": true,
+    "reveal": true,
+    "konami": true,
+    "palette": true,
+    "sounds": false,
+    "pwa": true,
+    "skyByHour": true
+  },
+  "ebooks": {
+    "until": "2026-10-21",
+    "passphrase": "truvector",
+    "note": "Édition à durée limitée — ces nouvelles restent disponibles jusqu’au {date}. Passé cette date, l’accès se verrouille automatiquement."
+  },
+  "publish": {
+    "owner": "clode666",
+    "repo": "TRUvector-site",
+    "branch": "main",
+    "path": "config.json"
   }
 }

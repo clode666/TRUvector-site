@@ -15,6 +15,7 @@
   function ss(k){ try{return sessionStorage.getItem(k);}catch(e){return null;} }
   function set(k,v){ try{sessionStorage.setItem(k,v);}catch(e){} }
   if(ss('tv_music_on')!=='1') return;
+  if(document.querySelector('.mini-player')) return;
 
   /* Candidats d'URL pour une piste, du plus probable au repli. */
   function candidates(file){
@@ -27,9 +28,9 @@
 
   function tracksThen(cb){
     var out=[];
-    function withLocal(){ try{ var l=JSON.parse(localStorage.getItem('tv_config')||'null'); if(l&&l.catalog&&l.catalog.musique&&l.catalog.musique.length) out=l.catalog.musique; }catch(e){} cb(out); }
+    function withLocal(){ try{ var l=JSON.parse(localStorage.getItem('tv_config')||'null'); if(l&&l.catalog&&l.catalog.musique&&l.catalog.musique.length) out=l.catalog.musique.filter(function(x){ return x&&x.visible!==false; }); }catch(e){} cb(out); }
     fetch(root+'config.json',{cache:'no-cache'}).then(function(r){return r.ok?r.json():null;})
-      .then(function(j){ if(j&&j.catalog&&j.catalog.musique) out=j.catalog.musique; withLocal(); })
+      .then(function(j){ if(j&&j.catalog&&j.catalog.musique) out=j.catalog.musique.filter(function(x){ return x&&x.visible!==false; }); withLocal(); })
       .catch(withLocal);
   }
 
@@ -41,10 +42,11 @@
     var wantPlay=ss('tv_music_playing')!=='0';
     var cand=[], ci=0, fails=0, restoreT=t;
 
-    var audio=new Audio(); audio.preload='auto'; audio.volume=vol;
+    var audio=new Audio(); audio.preload='auto'; audio.volume=vol; audio.crossOrigin='anonymous';
+    var cors=true, actx=null, an=null, bins=null;  /* v5 : mini-onde branchée sur le vrai son (CORS jsDelivr) */
 
     var box=document.createElement('div'); box.className='mini-player';
-    box.innerHTML='<div class="mp-disc"></div><div class="mp-tt"></div>'+
+    box.innerHTML='<div class="mp-disc"></div><span class="mp-wave" aria-hidden="true"><i></i><i></i><i></i></span><div class="mp-tt"></div>'+
       '<button class="mp-b mp-pp" aria-label="Lecture/pause">▶</button>'+
       '<button class="mp-b mp-next" aria-label="Suivant">⏭</button>'+
       '<a class="mp-b mp-go" aria-label="Ouvrir la page Musique" title="Page Musique">♫</a>'+
@@ -67,12 +69,22 @@
       if(restoreT>0){ try{ if(restoreT<audio.duration) audio.currentTime=restoreT; }catch(e){} restoreT=0; }
     });
     audio.addEventListener('error',function(){
+      if(cors&&!actx){ cors=false; audio.removeAttribute('crossorigin'); var pc=!audio.paused||wantPlay; setSrc(); if(pc) audio.play().catch(function(){}); return; }  /* hébergeur sans CORS : lecture simple */
       if(ci<cand.length-1){ ci++; var p=!audio.paused||wantPlay; setSrc(); if(p) audio.play().catch(function(){}); return; }
       fails++;
       if(fails>=3){ tt.textContent='Musique indisponible'; setPlay(false); return; }   /* anti-boucle */
       setTimeout(function(){ go(i+1,true); },600);
     });
     audio.addEventListener('play',function(){setPlay(true);});
+    var waves=box.querySelectorAll('.mp-wave i');
+    audio.addEventListener('playing',function(){
+      if(!cors||actx||(window.TVFX&&TVFX.off)) return;
+      try{ var AC=window.AudioContext||window.webkitAudioContext; actx=new AC(); var s=actx.createMediaElementSource(audio); an=actx.createAnalyser(); an.fftSize=64; s.connect(an); an.connect(actx.destination); bins=new Uint8Array(an.frequencyBinCount); box.classList.add('mp-live');
+        (function loop(){ requestAnimationFrame(loop); if(audio.paused) return; an.getByteFrequencyData(bins);
+          for(var k=0;k<waves.length;k++){ var v=bins[2+k*5]/255; waves[k].style.height=Math.max(15,v*100)+'%'; }
+          if(window.TVFX) TVFX.bass=Math.max(0,bins[1]/255-.4)*1.4; })();
+        if(actx.state==='suspended') actx.resume();
+      }catch(e){ actx=null; } });
     audio.addEventListener('pause',function(){setPlay(false);});
     audio.addEventListener('ended',function(){ go(i+1,true); });
     audio.addEventListener('timeupdate',function(){ set('tv_music_t',String(audio.currentTime||0)); });

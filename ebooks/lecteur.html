@@ -9,7 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="../assets/css/fx.css?v=3">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
 <style>
 .reader-wrap{max-width:1100px;margin:0 auto;padding:10px 16px 42px}
 .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2)}
@@ -40,6 +43,10 @@
 .tr-flow .sep{text-align:center;color:var(--aurore-v-soft);letter-spacing:.4em;margin:22px 0}
 .tr-flow{font-family:Georgia,'Times New Roman',serif;font-size:17.5px}
 .tr-flow h1,.tr-flow h2,.tr-flow h3{font-family:var(--sans)}
+.tr-view.tr-turn-n{animation:trTurnN .5s cubic-bezier(.2,.8,.2,1)}
+.tr-view.tr-turn-p{animation:trTurnP .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes trTurnN{from{transform:perspective(1400px) rotateY(-24deg);transform-origin:left center;opacity:.2}to{transform:none;opacity:1}}
+@keyframes trTurnP{from{transform:perspective(1400px) rotateY(24deg);transform-origin:right center;opacity:.2}to{transform:none;opacity:1}}
 .tr-pre{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:13.5px;color:var(--texte);margin:0}
 .tr-wm{position:absolute;inset:0;pointer-events:none;z-index:6;display:none}
 .tr-hide .tr-view{filter:blur(24px)}
@@ -70,6 +77,8 @@
 @media print{body{display:none!important}}
 </style>
 <script src="../assets/js/assets.js?v=2"></script>
+<script src="../assets/js/config.js?v=2"></script>
+<script src="../assets/js/render.js?v=1"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -127,8 +136,9 @@
 <script src="../assets/vendor/pdfjs/pdf.min.js"></script>
 <script src="../assets/vendor/fflate.min.js"></script>
 <script src="../assets/js/tru-crypto.js?v=1"></script>
-<script src="../assets/js/tru-reader.js?v=2"></script>
+<script src="../assets/js/tru-reader.js?v=3"></script>
 <script src="../assets/js/nav.js?v=5"></script>
-<script src="../assets/js/player.js?v=3"></script>
+<script src="../assets/js/player.js?v=6"></script>
+<script src="../assets/js/fx.js?v=3"></script>
 </body>
 </html>

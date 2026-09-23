@@ -205,8 +205,9 @@
   /* ---------- navigation & rendu ---------- */
   function render(){ if(mode==='paged'){ if(pdfDoc)renderPDF(idx); else if(imgBlobs)renderImage(idx); } else renderFlow(idx); updateBars(); }
   function gotoPage(i){ if(i<0)i=0; var max=totalPages()-1; if(i>max)i=max; if(i>allowedIdx)i=allowedIdx; idx=i; render(); }
-  function next(){ if(idx>=allowedIdx && allowedIdx<totalPages()-1){ return softLock('Aperçu limité','Limite de '+(allowedIdx+1)+' page(s) atteinte pour cet aperçu. Procure-toi la version complète pour lire la suite.'); } if(idx<totalPages()-1) gotoPage(idx+1); }
-  function prev(){ if(idx>0) gotoPage(idx-1); }
+  function turn(d){ if(!view||(window.TVFX&&(TVFX.reduce||TVFX.off))) return; view.classList.remove('tr-turn-n','tr-turn-p'); void view.offsetWidth; view.classList.add(d>0?'tr-turn-n':'tr-turn-p'); }
+  function next(){ if(idx<totalPages()-1&&!(idx>=allowedIdx&&allowedIdx<totalPages()-1)) turn(1); if(idx>=allowedIdx && allowedIdx<totalPages()-1){ return softLock('Aperçu limité','Limite de '+(allowedIdx+1)+' page(s) atteinte pour cet aperçu. Procure-toi la version complète pour lire la suite.'); } if(idx<totalPages()-1) gotoPage(idx+1); }
+  function prev(){ if(idx>0){ turn(-1); gotoPage(idx-1); } }
   function updateBars(){ var t=totalPages(); var pi=$('tr-pageinfo'); if(pi) pi.textContent=(idx+1)+' / '+t+((allowedIdx!==Infinity&&allowedIdx<t-1)?'  · aperçu '+(allowedIdx+1):''); var bar=$('tr-bar'); if(bar) bar.style.width=(t>1?(idx/(t-1))*100:100)+'%'; }
 
   /* ---------- filigrane dynamique ---------- */

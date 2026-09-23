@@ -1,0 +1,293 @@
+/* ============================================================
+   TRUvector.dev — FX v1 (roadmap visuelle, phases 1 → 6)
+   Chargé sur toutes les pages après tokens.css. Piloté par
+   assets/js/fx.js via <html data-fx="full|lite|off">.
+   ============================================================ */
+:root{
+  --ease-out:cubic-bezier(.2,.8,.2,1);
+  --ease-spring:cubic-bezier(.2,.9,.3,1.25);
+  --glow-menthe:0 0 22px rgba(52,245,197,.35);
+}
+
+/* ---------- PHASE 1 · transitions entre pages (View Transitions, sans JS) ---------- */
+@view-transition{navigation:auto}
+.site-nav .brand svg{view-transition-name:tv-logo}
+.site-nav{view-transition-name:tv-nav}
+.section-hero h1,.art-hero h1,.legal h1{view-transition-name:tv-title}
+::view-transition-old(root){animation:tvfx-out .28s var(--ease-out) both}
+::view-transition-new(root){animation:tvfx-in .42s var(--ease-out) both}
+::view-transition-group(tv-title){animation-duration:.5s;animation-timing-function:var(--ease-spring)}
+@keyframes tvfx-out{to{opacity:0;filter:blur(6px);transform:scale(.985)}}
+@keyframes tvfx-in{from{opacity:0;filter:blur(8px);transform:scale(1.015)}}
+
+/* ---------- PHASE 1 · typo vivante ---------- */
+html[data-fx="full"] .section-hero h1,
+html[data-fx="full"] .art-hero h1{
+  background:linear-gradient(92deg,var(--texte) 0%,var(--texte) 38%,var(--menthe-soft) 55%,var(--aurore-v-soft) 72%,var(--texte) 90%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:tvfx-shimmer 14s ease-in-out infinite alternate}
+@keyframes tvfx-shimmer{from{background-position:0 0}to{background-position:100% 0}}
+
+/* ---------- PHASE 2 · aurore WebGL plein écran ---------- */
+#tvfx-sky{position:fixed;inset:0;width:100vw;height:100vh;z-index:-1;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+html.fx-gl #tvfx-sky{opacity:.85}
+html.fx-gl .aurora,html.fx-gl #aurora-cv{display:none!important}
+html.fx-gl body{background:transparent}
+html.fx-gl{background:var(--nuit)}
+/* voile de lisibilité sous le contenu principal */
+html.fx-gl main{position:relative}
+/* étoile filante */
+.tvfx-shoot{position:fixed;z-index:-1;width:140px;height:2px;pointer-events:none;border-radius:2px;
+  background:linear-gradient(90deg,transparent,rgba(232,242,238,.95));filter:drop-shadow(0 0 6px rgba(143,243,217,.9));
+  animation:tvfx-shoot 1.1s ease-in forwards}
+@keyframes tvfx-shoot{from{opacity:0;transform:translate(0,0) rotate(-24deg)}15%{opacity:1}to{opacity:0;transform:translate(-520px,230px) rotate(-24deg)}}
+
+/* ---------- PHASE 2 · triskèle qui se dessine ---------- */
+.tvfx-draw path{stroke-dasharray:1;stroke-dashoffset:1;animation:tvfx-draw 2.1s var(--ease-out) forwards}
+.tvfx-draw path:nth-of-type(2){animation-delay:.3s}.tvfx-draw path:nth-of-type(3){animation-delay:.6s}
+.tvfx-draw circle{opacity:0;animation:tvfx-pop .45s 2.1s forwards}
+@keyframes tvfx-draw{to{stroke-dashoffset:0}}
+@keyframes tvfx-pop{to{opacity:1}}
+
+/* ---------- PHASE 3 · cartes 3D + projecteur ---------- */
+.tvfx-card{position:relative;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0));transition:transform .35s var(--ease-out),border-color .2s,box-shadow .3s;will-change:transform}
+.tvfx-card.tvfx-on{transition:transform .08s linear,border-color .2s,box-shadow .3s;--ty:-2px}
+.tvfx-card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;z-index:1;
+  background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),var(--menthe),rgba(177,74,237,.7) 42%,transparent 72%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  opacity:0;transition:opacity .25s}
+.tvfx-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.07),transparent 62%);opacity:0;transition:opacity .25s}
+.tvfx-card.tvfx-on::before,.tvfx-card.tvfx-on::after{opacity:1}
+.tvfx-card.tvfx-on{box-shadow:0 18px 40px rgba(0,0,0,.4),0 0 26px rgba(52,245,197,.10)}
+
+/* ---------- PHASE 3 · boutons magnétiques + onde ---------- */
+.btn{position:relative;overflow:hidden;transition:transform .2s var(--ease-out),box-shadow .2s}
+.tvfx-rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:tvfx-rip .6s ease-out forwards;pointer-events:none}
+@keyframes tvfx-rip{to{transform:scale(4);opacity:0}}
+
+/* ---------- PHASE 3 · apparitions au scroll (natif, sans JS) ---------- */
+@supports (animation-timeline:view()){
+  html[data-fx="full"] .tvfx-reveal{animation:tvfx-rise linear both;animation-timeline:view();animation-range:entry 0% entry 55%}
+}
+@keyframes tvfx-rise{from{opacity:0;transform:translateY(26px) scale(.98)}to{opacity:1;transform:none}}
+
+/* ---------- PHASE 3 · halo curseur ---------- */
+#tvfx-halo{position:fixed;left:0;top:0;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;pointer-events:none;z-index:9999;
+  border:1.5px solid rgba(52,245,197,.75);box-shadow:0 0 18px rgba(52,245,197,.35);transition:width .2s,height .2s,margin .2s,background .2s,opacity .3s;opacity:0}
+#tvfx-halo.on{opacity:1}
+#tvfx-halo.big{width:46px;height:46px;margin:-23px 0 0 -23px;background:rgba(52,245,197,.08)}
+
+/* ---------- PHASE 4 · musique : visualiseur ---------- */
+.tvfx-viz{display:block;width:100%;height:110px;margin-top:14px;border-radius:12px;background:rgba(5,8,13,.5);border:1px solid var(--bord)}
+.player{position:relative}
+.player .disc{box-shadow:0 0 calc(var(--lvl,0) * 60px) rgba(177,74,237,.85),0 0 calc(var(--lvl,0) * 26px) rgba(52,245,197,.6);transition:box-shadow .08s}
+.mini-player.playing .mp-disc{box-shadow:0 0 12px rgba(177,74,237,.8)}
+.mini-player .mp-wave{display:none;gap:2px;align-items:flex-end;height:14px;width:18px;flex:0 0 auto}
+.mini-player.playing .mp-wave{display:flex}
+.mini-player .mp-wave i{flex:1;background:var(--menthe);border-radius:1px;animation:tvfx-eq .9s ease-in-out infinite alternate}
+.mini-player .mp-wave i:nth-child(2){animation-delay:.25s}.mini-player .mp-wave i:nth-child(3){animation-delay:.5s}
+@keyframes tvfx-eq{from{height:20%}to{height:100%}}
+
+/* ---------- PHASE 4 · e-books : couvertures 3D ---------- */
+.eb-grid{perspective:1200px}
+.eb-cover{display:block;transform-style:preserve-3d;transition:transform .6s var(--ease-out),box-shadow .4s}
+.eb-cover img{transform:rotateY(-14deg);transform-origin:left center;transition:transform .6s var(--ease-out),box-shadow .5s;box-shadow:10px 12px 26px rgba(0,0,0,.55),inset 6px 0 10px rgba(0,0,0,.3);border-radius:3px 8px 8px 3px}
+.eb-card:hover .eb-cover img{transform:rotateY(0deg) translateZ(18px) scale(1.02);box-shadow:0 22px 48px rgba(0,0,0,.6),0 0 30px rgba(177,74,237,.25)}
+
+/* ---------- PHASE 4 · galerie ---------- */
+.gallery .art{transition:transform .5s var(--ease-out)}
+.gallery .art img{transition:transform .8s var(--ease-out),filter .5s}
+.gallery .art:hover img{transform:scale(1.045);filter:saturate(1.15)}
+
+/* ---------- PHASE 4 · logiciels : terminal ---------- */
+.tvfx-term{margin:0 0 18px;background:#05080d;border:1px solid var(--bord-fort);border-radius:14px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.4)}
+.tvfx-term .bar{display:flex;gap:6px;align-items:center;padding:9px 12px;border-bottom:1px solid var(--bord);font-family:var(--mono);font-size:11px;color:var(--texte-3)}
+.tvfx-term .bar i{width:10px;height:10px;border-radius:50%;background:#ff6b6b}.tvfx-term .bar i:nth-child(2){background:var(--ambre)}.tvfx-term .bar i:nth-child(3){background:var(--aurore-g)}
+.tvfx-term .bar span{margin-left:8px}
+.tvfx-term pre{margin:0;padding:14px 16px;min-height:132px;font-family:var(--mono);font-size:13px;line-height:1.65;color:var(--menthe-soft);white-space:pre-wrap}
+.tvfx-term .p{color:var(--aurore-v-soft)}.tvfx-term .ok{color:var(--aurore-g)}.tvfx-term .dim{color:var(--texte-3)}
+.tvfx-term .cur{display:inline-block;width:8px;height:15px;background:var(--menthe);vertical-align:-2px;animation:tvfx-blink 1s steps(1) infinite}
+@keyframes tvfx-blink{50%{opacity:0}}
+
+/* ---------- PHASE 4 · articles ---------- */
+#tvfx-progress{position:fixed;left:0;top:0;height:3px;width:100%;z-index:80;transform-origin:0 50%;transform:scaleX(var(--p,0));
+  background:linear-gradient(90deg,var(--aurore-v),var(--menthe));box-shadow:0 0 12px rgba(52,245,197,.6);pointer-events:none}
+.tvfx-rt{display:inline-block;font-family:var(--mono);font-size:12px;color:var(--texte-3);margin-top:10px}
+.article pre{position:relative}
+.tvfx-copy{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:11px;color:var(--texte-2);background:rgba(11,18,26,.9);border:1px solid var(--bord-fort);border-radius:7px;padding:3px 9px;cursor:pointer;opacity:0;transition:opacity .2s}
+.article pre:hover .tvfx-copy,.tvfx-copy:focus{opacity:1}
+.tvfx-copy.done{color:#04120d;background:var(--menthe);border-color:var(--menthe)}
+
+/* ---------- PHASE 4 · modules : borne d'arcade ---------- */
+html[data-fx="full"] body.tvfx-arcade::before{content:"";position:fixed;left:-50%;right:-50%;bottom:-10vh;height:55vh;z-index:-1;pointer-events:none;
+  background:linear-gradient(transparent 0 94%,rgba(52,245,197,.35) 94%) 0 0/100% 44px,linear-gradient(90deg,transparent 0 97%,rgba(177,74,237,.35) 97%) 0 0/44px 100%;
+  transform:perspective(420px) rotateX(62deg);-webkit-mask:linear-gradient(transparent,#000 70%);mask:linear-gradient(transparent,#000 70%);animation:tvfx-grid 3.5s linear infinite}
+@keyframes tvfx-grid{to{background-position:0 44px,0 0}}
+body.tvfx-arcade .sec-card h3{text-shadow:0 0 14px rgba(52,245,197,.25)}
+
+/* ---------- PHASE 5 · palette Ctrl+K ---------- */
+.tvfx-kbtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;color:var(--texte-2);background:rgba(11,18,26,.7);border:1px solid var(--bord-fort);border-radius:9px;padding:5px 9px;cursor:pointer;margin-left:10px}
+.tvfx-kbtn:hover{color:var(--menthe);border-color:var(--menthe)}
+.tvfx-kbtn kbd{font-family:inherit;font-size:10.5px;opacity:.75}
+@media (max-width:760px){.tvfx-kbtn kbd{display:none}.tvfx-kbtn{padding:5px 8px;margin-left:6px}}
+#tvfx-pal{position:fixed;inset:0;z-index:300;background:rgba(3,6,10,.72);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:11vh 16px 16px}
+#tvfx-pal.on{display:flex;animation:tvfx-fade .16s ease-out}
+@keyframes tvfx-fade{from{opacity:0}}
+#tvfx-pal .box{width:min(640px,100%);background:#0b121a;border:1px solid var(--bord-fort);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 40px rgba(52,245,197,.12);animation:tvfx-risebox .22s var(--ease-spring)}
+@keyframes tvfx-risebox{from{transform:translateY(14px) scale(.98)}}
+#tvfx-pal input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--bord);padding:18px 20px;color:var(--texte);font-family:var(--sans);font-size:17px}
+#tvfx-pal input:focus{outline:none}
+#tvfx-pal .list{max-height:52vh;overflow:auto;padding:8px}
+#tvfx-pal .grp{font-family:var(--mono);font-size:10.5px;color:var(--texte-3);padding:10px 12px 4px}
+#tvfx-pal .it{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:10px;cursor:pointer;font-size:14.5px;color:var(--texte);text-decoration:none}
+#tvfx-pal .it .ic{width:24px;text-align:center;flex:0 0 auto}
+#tvfx-pal .it .t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#tvfx-pal .it .k{font-family:var(--mono);font-size:10.5px;color:var(--texte-3);flex:0 0 auto}
+#tvfx-pal .it.sel{background:rgba(52,245,197,.10);color:var(--menthe)}
+#tvfx-pal .it mark{background:none;color:var(--menthe);font-weight:600}
+#tvfx-pal .foot{border-top:1px solid var(--bord);padding:9px 14px;font-family:var(--mono);font-size:11px;color:var(--texte-3);display:flex;gap:14px;flex-wrap:wrap}
+#tvfx-pal .empty{padding:22px;text-align:center;color:var(--texte-2)}
+
+/* ---------- PHASE 5 · favoris ---------- */
+.tvfx-fav{position:absolute;top:10px;right:10px;z-index:3;width:32px;height:32px;border-radius:50%;border:1px solid var(--bord-fort);background:rgba(7,11,17,.75);color:var(--texte-3);font-size:15px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s var(--ease-spring),color .2s}
+.tvfx-fav:hover{transform:scale(1.12);color:var(--rose,#ff7ab6)}
+.tvfx-fav[aria-pressed="true"]{color:#ff7ab6;border-color:rgba(255,122,182,.6);text-shadow:0 0 10px rgba(255,122,182,.7)}
+
+/* ---------- PHASE 6 · Matrix aurore (Konami) ---------- */
+#tvfx-matrix{position:fixed;inset:0;z-index:400;pointer-events:none;opacity:0;transition:opacity .6s}
+#tvfx-matrix.on{opacity:.92}
+.tvfx-toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(14px);opacity:0;z-index:500;background:var(--menthe);color:#04120d;font-family:var(--mono);font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;transition:.25s;pointer-events:none}
+.tvfx-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ---------- garde-fous ---------- */
+html[data-fx="off"] #tvfx-sky,html[data-fx="off"] #tvfx-halo{display:none!important}
+html[data-fx="off"] .tvfx-card::before,html[data-fx="off"] .tvfx-card::after{display:none}
+@media (pointer:coarse){#tvfx-halo{display:none}}
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}
+  .tvfx-draw path{animation:none;stroke-dashoffset:0}.tvfx-draw circle{animation:none;opacity:1}
+  .tvfx-card{transform:none!important}
+  html[data-fx] .section-hero h1,html[data-fx] .art-hero h1{animation:none}
+  body.tvfx-arcade::before{animation:none}
+}
+@media print{#tvfx-sky,#tvfx-halo,#tvfx-progress,.tvfx-kbtn{display:none!important}}
+
+/* ============================================================
+   FX v2 — compléments (roadmap intégrale)
+   ============================================================ */
+
+/* ---------- garde-fou lisibilité : voile sous le texte courant ---------- */
+html.fx-gl .article-wrap,html.fx-gl .legal,html.fx-gl .fi-feat{background-color:var(--voile);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:var(--r-xl)}
+html.fx-gl .article-wrap{padding-top:var(--sp-4);box-shadow:0 0 0 1px var(--bord)}
+html.fx-gl .section-hero .in,html.fx-gl .art-hero .in,html.fx-gl .hero-inner,html.fx-gl .fi-hero .in{text-shadow:0 1px 18px rgba(7,11,17,.95),0 0 2px rgba(7,11,17,.9)}
+html.fx-gl .section-hero p,html.fx-gl .fi-hero .lead,html.fx-gl .hero-inner p{color:#c4d4d0}
+html.fx-gl .sec-card,html.fx-gl .post-card,html.fx-gl .eb-card,html.fx-gl .player,html.fx-gl .playlist li{background-color:var(--surface-2)}
+
+/* ---------- constellation des guirlandes ---------- */
+.tvfx-const{position:absolute;left:0;top:0;width:100%;z-index:1;pointer-events:none}
+.section-hero .lights,.art-hero .lights{z-index:2}
+
+/* ---------- musique : anneau autour du disque ---------- */
+.player .disc{overflow:visible}
+.tvfx-ring{position:absolute;left:50%;top:50%;width:160%;height:160%;transform:translate(-50%,-50%);pointer-events:none}
+.player .now{padding:8px 0 8px 8px}
+.tvfx-noviz .tvfx-viz{display:none}
+.mini-player.mp-live .mp-wave i{animation:none;transition:height .06s linear}
+
+/* ---------- galerie : lightbox morph + mosaïque + profondeur ---------- */
+#tvfx-lb{position:fixed;inset:0;z-index:250;display:none;align-items:center;justify-content:center;padding:clamp(12px,4vw,40px);background:rgba(3,6,10,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+#tvfx-lb.on{display:flex}
+#tvfx-lb figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;max-width:100%}
+#tvfx-lb img{max-width:min(94vw,1400px);max-height:82vh;border-radius:var(--r-md);box-shadow:var(--elev-3),var(--glow-aurore)}
+#tvfx-lb figcaption{font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+#tvfx-lb button{position:absolute;background:var(--surface-2);border:1px solid var(--bord-fort);color:var(--texte);border-radius:var(--r-sm);width:46px;height:46px;font-size:20px;cursor:pointer}
+#tvfx-lb button:hover{border-color:var(--menthe);color:var(--menthe)}
+#tvfx-lb .x{top:16px;right:16px}#tvfx-lb .p{left:14px;top:50%;margin-top:-23px}#tvfx-lb .n{right:14px;top:50%;margin-top:-23px}
+::view-transition-group(tv-art){animation-duration:.5s;animation-timing-function:var(--ease-out)}
+.gallery.tvfx-mosaic{grid-auto-flow:dense}
+.gallery.tvfx-depth .art img{transform:translate(var(--gx,0),var(--gy,0)) scale(1.06);transition:transform .2s linear}
+.tvfx-gyro{margin:0 0 14px}
+
+/* ---------- modules : aperçu live + records ---------- */
+.sec-card .tvfx-pv{position:relative;height:0;overflow:hidden;border-radius:var(--r-sm);margin:0 0 0;transition:height var(--dur-3) var(--ease-out),margin var(--dur-3)}
+.sec-card.tvfx-pv-on .tvfx-pv{height:150px;margin:0 0 6px;border:1px solid var(--bord)}
+.tvfx-pv iframe{position:absolute;left:0;top:0;width:400%;height:600px;border:0;transform:scale(.25);transform-origin:0 0;pointer-events:none;background:var(--nuit)}
+.tvfx-rec{font-family:var(--mono);font-size:11.5px;color:var(--ambre);margin-top:2px}
+.tvfx-rec.zero{color:var(--texte-3)}
+
+/* ---------- articles : sommaire + tu aimeras aussi ---------- */
+.tvfx-toc{margin:0 0 var(--sp-5);font-family:var(--mono);font-size:12.5px}
+.tvfx-toc summary{cursor:pointer;color:var(--menthe-soft);padding:var(--sp-2) 0}
+.tvfx-toc ol{margin:var(--sp-2) 0 0;padding-left:20px;display:grid;gap:4px}
+.tvfx-toc a{color:var(--texte-2);text-decoration:none;display:block;padding:2px 0;border-left:2px solid transparent;padding-left:8px;margin-left:-10px;transition:color var(--dur-1),border-color var(--dur-1)}
+.tvfx-toc a:hover{color:var(--menthe)}
+.tvfx-toc a.on{color:var(--menthe);border-left-color:var(--menthe)}
+@media (min-width:1180px){
+  .tvfx-toc{position:fixed;left:max(16px,calc(50% - 410px - 250px));top:110px;width:220px;max-height:calc(100vh - 150px);overflow:auto;margin:0;z-index:5}
+  .tvfx-toc summary{pointer-events:none;list-style:none}
+  .tvfx-toc summary::-webkit-details-marker{display:none}
+}
+.tvfx-rel{margin:var(--sp-7) 0 var(--sp-5)}
+.tvfx-rel h2{font-size:21px;margin:0 0 var(--sp-4)}
+.tvfx-rel .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:var(--sp-4)}
+.tvfx-rel a{display:flex;flex-direction:column;gap:6px;background:var(--surface-2);border:1px solid var(--bord);border-radius:var(--r-md);padding:var(--sp-4);color:var(--texte)!important;text-decoration:none!important}
+.tvfx-rel a h3{margin:0;font-size:15px;line-height:1.3}
+.tvfx-rel a p{margin:0;font-size:13px;color:var(--texte-2)}
+.tvfx-rel .tg{font-family:var(--mono);font-size:10px;color:var(--aurore-v-soft)}
+
+@media (prefers-reduced-motion:reduce){ .gallery.tvfx-depth .art img{transform:none} .sec-card .tvfx-pv{transition:none} }
+#tvfx-lb.on{animation:tvfx-fade .22s ease-out}
+
+/* titres en dégradé : l'ombre texte passerait à travers le remplissage transparent → on utilise un filtre */
+html.fx-gl .section-hero h1,html.fx-gl .art-hero h1,html.fx-gl .fi-hero h1{text-shadow:none;filter:drop-shadow(0 2px 14px rgba(7,11,17,.9))}
+
+/* ============================================================
+   v8 — composants rendus depuis config.json (render.js)
+   ============================================================ */
+/* bandeau d'annonce */
+.tv-annonce{position:relative;z-index:39;background:linear-gradient(90deg,rgba(177,74,237,.22),rgba(52,245,197,.16));border-bottom:1px solid var(--bord-fort)}
+.tv-annonce .wrap{display:flex;align-items:center;gap:14px;min-height:42px;font-size:14px;padding-top:6px;padding-bottom:6px}
+.tv-annonce .t{flex:1;color:var(--texte)}
+.tv-annonce .l{font-family:var(--mono);font-size:12.5px;color:var(--menthe);white-space:nowrap}
+.tv-annonce button{background:none;border:0;color:var(--texte-2);cursor:pointer;font-size:15px;width:30px;height:30px;border-radius:8px}
+.tv-annonce button:hover{color:var(--menthe);background:rgba(52,245,197,.08)}
+/* pastille aperçu admin */
+.tv-preview-pill{position:fixed;left:14px;bottom:14px;z-index:70;display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;color:#1a1205;background:var(--ambre);border-radius:999px;padding:6px 6px 6px 12px;box-shadow:var(--elev-2)}
+.tv-preview-pill button{font:inherit;font-weight:600;border:0;border-radius:999px;background:#1a1205;color:var(--ambre);padding:4px 10px;cursor:pointer}
+
+/* accueil enrichi */
+.tvh-stats{padding-top:10px!important;padding-bottom:10px!important}
+.tvh-stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));border:1px solid var(--bord);border-radius:var(--r-lg);overflow:hidden;background:var(--surface-2)}
+.tvh-stat{padding:20px 16px;text-align:center;border-right:1px solid var(--bord)}
+.tvh-stat:last-child{border-right:0}
+.tvh-stat b{display:block;font-family:var(--mono);font-size:clamp(28px,4.5vw,40px);font-weight:700;color:var(--menthe);text-shadow:0 0 22px rgba(52,245,197,.35);line-height:1.1}
+.tvh-stat span{font-size:13px;color:var(--texte-2)}
+.tvh-link{color:var(--texte)!important;text-decoration:none!important}
+.tvh-more{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:14px 0 0;font-family:var(--mono);font-size:13px}
+.tvh-k{font:inherit;color:var(--texte-2);background:var(--surface-1);border:1px solid var(--bord-fort);border-radius:10px;padding:6px 10px;cursor:pointer}
+.tvh-k:hover{color:var(--menthe);border-color:var(--menthe)}
+.tvh-k kbd{font-family:inherit;font-size:10.5px;opacity:.7;margin-left:4px}
+.tvh-listen-card{display:flex;align-items:center;gap:clamp(18px,4vw,40px);flex-wrap:wrap;padding:clamp(20px,4vw,34px);border-radius:var(--r-xl);border:1px solid var(--bord-fort);
+  background:radial-gradient(600px 240px at 0% 50%,rgba(177,74,237,.22),transparent 70%),var(--surface-2);position:relative;overflow:hidden}
+.tvh-disc{width:clamp(110px,18vw,160px);aspect-ratio:1;border-radius:50%;flex:0 0 auto;position:relative;
+  background:repeating-radial-gradient(circle,#0c1016 0 3px,#121a22 3px 5px),#0c1016;border:1px solid var(--bord-fort);box-shadow:0 0 40px rgba(177,74,237,.35)}
+.tvh-disc::before{content:"";position:absolute;inset:32%;border-radius:50%;background:radial-gradient(circle,var(--menthe) 0 18%,var(--aurore-v) 19% 100%)}
+.tvh-listen-card.on .tvh-disc{animation:tvspin 3.2s linear infinite}
+.tvh-lt{flex:1;min-width:240px}
+.tvh-lt h2{font-size:clamp(24px,4vw,36px);margin:4px 0 6px;letter-spacing:-.02em}
+.tvh-lt p{color:var(--texte-2);margin:0 0 16px}
+.tvh-lb{display:flex;gap:10px;flex-wrap:wrap}
+.tvh-eb{display:grid;grid-template-columns:minmax(260px,1fr) 1.2fr;gap:28px;align-items:center}
+@media(max-width:820px){.tvh-eb{grid-template-columns:1fr}}
+.tvh-count{display:flex;gap:10px;margin:16px 0 20px}
+.tvh-count span{flex:0 0 auto;min-width:78px;text-align:center;border:1px solid var(--bord-fort);border-radius:var(--r-md);padding:10px 8px;background:var(--surface-2);font-size:12px;color:var(--texte-2)}
+.tvh-count b{display:block;font-family:var(--mono);font-size:26px;color:var(--ambre)}
+.tvh-covers{display:flex;justify-content:center;perspective:1200px;min-height:210px;padding:10px 0}
+.tvh-covers a{display:block;width:clamp(86px,13vw,124px);margin-left:calc(clamp(86px,13vw,124px) * -.32);transform:rotateY(-24deg) translateZ(calc(var(--i) * -8px));transition:transform .5s var(--ease-out),margin .5s var(--ease-out);z-index:calc(10 - var(--i))}
+.tvh-covers a:first-child{margin-left:0}
+.tvh-covers img{width:100%;height:auto;border-radius:3px 8px 8px 3px;box-shadow:12px 14px 28px rgba(0,0,0,.6);background:linear-gradient(160deg,#1a2530,#0b121a);aspect-ratio:2/3}
+.tvh-covers:hover a{margin-left:6px}.tvh-covers:hover a:first-child{margin-left:0}
+.tvh-covers a:hover{transform:rotateY(0) translateY(-10px) scale(1.06);z-index:20}
+.sec-card .date{font-family:var(--mono);font-size:11px;color:var(--texte-3)}
+@media (prefers-reduced-motion:reduce){.tvh-listen-card.on .tvh-disc{animation:none}.tvh-covers a{transition:none}}

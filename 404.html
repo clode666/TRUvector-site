@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Page perdue — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#070b11">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="/assets/css/fx.css?v=3">
+<script src="/assets/js/assets.js?v=2"></script>
+<script src="/assets/js/config.js?v=2"></script>
+<script src="/assets/js/render.js?v=1"></script>
+<style>
+.lost{max-width:760px;margin:0 auto;padding:36px 22px 60px;text-align:center}
+.lost .code{font-family:var(--mono);font-size:clamp(64px,16vw,132px);font-weight:700;line-height:1;margin:0;color:transparent;-webkit-text-stroke:2px var(--menthe);text-shadow:0 0 40px rgba(52,245,197,.25)}
+.lost h1{font-size:clamp(22px,4vw,30px);margin:10px 0 6px}
+.lost p{color:var(--texte-2);margin:0 auto 20px;max-width:52ch}
+.game{position:relative;margin:0 auto 18px;width:min(100%,480px);aspect-ratio:1;border:1px solid var(--bord-fort);border-radius:16px;overflow:hidden;background:#04070b;box-shadow:0 0 40px rgba(52,245,197,.08)}
+.game canvas{width:100%;height:100%;display:block}
+.game .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(4,7,11,.82);font-family:var(--mono);font-size:13px;color:var(--texte-2)}
+.game .ov.hidden{display:none}
+.hud{display:flex;justify-content:space-between;width:min(100%,480px);margin:0 auto 10px;font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+.hud b{color:var(--menthe)}
+.pad{display:none;grid-template-columns:repeat(3,56px);gap:6px;justify-content:center;margin:0 auto 18px}
+.pad button{height:48px;border-radius:12px;border:1px solid var(--bord-fort);background:var(--panneau);color:var(--texte);font-size:18px}
+.pad button:nth-child(1){grid-column:2}.pad button:nth-child(2){grid-column:1}.pad button:nth-child(3){grid-column:3}.pad button:nth-child(4){grid-column:2}
+@media (pointer:coarse){.pad{display:grid}}
+.go{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="/" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="/">Accueil</a></div>
+</div></nav>
+
+<main class="lost">
+  <p class="code">404</p>
+  <h1>Cette page s'est perdue dans l'aurore</h1>
+  <p>Le lien est peut-être ancien, ou la page a déménagé. Pendant que tu cherches : guide le serpent néon jusqu'aux fragments de triskèle.</p>
+  <div class="hud"><span>Score <b id="sc">0</b></span><span>Record <b id="hi">0</b></span></div>
+  <div class="game"><canvas id="cv" width="480" height="480" aria-label="Jeu Neon Serpent"></canvas>
+    <div class="ov" id="ov"><span style="font-size:15px;color:var(--texte)">Neon Serpent</span><span>Flèches ou ZQSD · Espace pour démarrer</span><button class="btn" id="start" type="button">Jouer</button></div></div>
+  <div class="pad" aria-label="Commandes tactiles"><button data-d="u" aria-label="Haut">↑</button><button data-d="l" aria-label="Gauche">←</button><button data-d="r" aria-label="Droite">→</button><button data-d="d" aria-label="Bas">↓</button></div>
+  <div class="go"><a class="btn" href="/">Retour à l'accueil</a><button class="btn btn-ghost" type="button" onclick="window.TVFX&&TVFX.openPalette&&TVFX.openPalette()">Rechercher (Ctrl+K)</button></div>
+</main>
+
+<script>
+(function(){
+  var cv=document.getElementById('cv'),g=cv.getContext('2d'),N=20,S=cv.width/N,ov=document.getElementById('ov'),scEl=document.getElementById('sc'),hiEl=document.getElementById('hi');
+  var snake,dir,nd,food,score,timer,hi=0; try{hi=+localStorage.getItem('tv404_hi')||0;}catch(e){} hiEl.textContent=hi;
+  function place(){ do{ food={x:(Math.random()*N)|0,y:(Math.random()*N)|0}; }while(snake.some(function(p){return p.x===food.x&&p.y===food.y;})); }
+  function reset(){ snake=[{x:8,y:10},{x:7,y:10},{x:6,y:10}]; dir={x:1,y:0}; nd=dir; score=0; scEl.textContent=0; place(); }
+  function draw(){ g.fillStyle='#04070b'; g.fillRect(0,0,cv.width,cv.height);
+    g.strokeStyle='rgba(126,240,205,.05)'; for(var i=1;i<N;i++){ g.beginPath(); g.moveTo(i*S,0); g.lineTo(i*S,cv.height); g.moveTo(0,i*S); g.lineTo(cv.width,i*S); g.stroke(); }
+    g.shadowBlur=18; g.shadowColor='#c98bf5'; g.fillStyle='#c98bf5'; g.beginPath(); g.arc(food.x*S+S/2,food.y*S+S/2,S*.32,0,7); g.fill();
+    g.shadowColor='#34f5c5'; snake.forEach(function(p,i){ g.fillStyle=i?'rgba(52,245,197,'+(1-i/(snake.length+4))+')':'#e8fff7'; g.fillRect(p.x*S+2,p.y*S+2,S-4,S-4); }); g.shadowBlur=0; }
+  function step(){ dir=nd; var h={x:(snake[0].x+dir.x+N)%N,y:(snake[0].y+dir.y+N)%N};
+    if(snake.some(function(p){return p.x===h.x&&p.y===h.y;})) return over();
+    snake.unshift(h); if(h.x===food.x&&h.y===food.y){ score++; scEl.textContent=score; if(window.TVFX&&TVFX.blip) TVFX.blip(700+score*20,.06,'square'); place(); } else snake.pop();
+    draw(); }
+  function over(){ clearInterval(timer); timer=null; if(score>hi){ hi=score; hiEl.textContent=hi; try{localStorage.setItem('tv404_hi',hi);}catch(e){} }
+    ov.querySelector('span').textContent='Perdu — score '+score; ov.classList.remove('hidden'); }
+  function start(){ reset(); draw(); ov.classList.add('hidden'); clearInterval(timer); timer=setInterval(step,110); }
+  function turn(d){ var m={u:{x:0,y:-1},d:{x:0,y:1},l:{x:-1,y:0},r:{x:1,y:0}}[d]; if(m&&(m.x!==-dir.x||m.y!==-dir.y)) nd=m; }
+  document.getElementById('start').onclick=start;
+  addEventListener('keydown',function(e){ var k=e.key.toLowerCase(), map={arrowup:'u',z:'u',w:'u',arrowdown:'d',s:'d',arrowleft:'l',q:'l',a:'l',arrowright:'r',d:'r'};
+    if(k===' '&&!timer){ e.preventDefault(); start(); return; } if(map[k]&&timer){ e.preventDefault(); turn(map[k]); } });
+  document.querySelectorAll('.pad button').forEach(function(b){ b.addEventListener('click',function(){ if(!timer) start(); turn(b.getAttribute('data-d')); }); });
+  reset(); draw();
+})();
+</script>
+<script src="/assets/js/nav.js?v=5"></script>
+<script src="/assets/js/fx.js?v=3"></script>
+</body>
+</html>
