@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manuel du site — TRUvector.dev v6</title>
+<meta name="description" content="Manuel complet du site TRUvector.dev v6 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme:dark;
+    --nuit:#070b11;--nuit-2:#0b121a;
+    --panneau:rgba(17,27,37,.6);--panneau-2:rgba(13,21,29,.74);
+    --bord:rgba(126,240,205,.16);--bord-fort:rgba(126,240,205,.34);
+    --menthe:#34f5c5;--menthe-soft:#8ff3d9;
+    --aurore-v:#b14aed;--aurore-v-soft:#c98bf5;--aurore-g:#59e39a;--ambre:#f4c56b;
+    --texte:#e8f2ee;--texte-2:#9db2ae;--texte-3:#6f8582;
+    --sans:'Space Grotesk',system-ui,-apple-system,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+    --maxw:900px;
+  }
+  :root:not([data-theme="light"]),:root[data-theme="dark"]{color-scheme:dark}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--texte);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background:
+      radial-gradient(1000px 560px at 50% -14%,rgba(177,74,237,.18),transparent 60%),
+      radial-gradient(820px 480px at 86% 3%,rgba(52,245,197,.10),transparent 58%),
+      var(--nuit);}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  a{color:var(--menthe);text-decoration:none}
+  a:hover{text-decoration:underline}
+  :focus-visible{outline:2px solid var(--menthe);outline-offset:3px;border-radius:6px}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);background:rgba(7,11,17,.7);border-bottom:1px solid var(--bord)}
+  .nav .row{display:flex;align-items:center;gap:10px;height:56px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px}
+  .brand svg{width:24px;height:24px;filter:drop-shadow(0 0 8px rgba(52,245,197,.7))}
+  .brand .tru{color:var(--menthe)}.brand .dev{color:var(--aurore-v-soft);font-weight:500}
+  .nav .badge{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--texte-3);border:1px solid var(--bord);border-radius:999px;padding:4px 10px}
+
+  /* header */
+  header.top{position:relative;padding:52px 0 26px;overflow:hidden}
+  .aur{position:absolute;inset:-40% -20% auto -20%;height:150%;z-index:0;filter:blur(46px);opacity:.4;pointer-events:none}
+  .aur span{position:absolute;border-radius:50%;mix-blend-mode:screen}
+  .aur .x1{width:52%;height:52%;left:6%;top:-8%;background:radial-gradient(circle,var(--aurore-g),transparent 62%)}
+  .aur .x2{width:50%;height:50%;right:4%;top:-4%;background:radial-gradient(circle,var(--aurore-v),transparent 62%)}
+  header.top .in{position:relative;z-index:2}
+  header.top .triskele{width:58px;height:58px;margin-bottom:14px}
+  header.top h1{font-size:clamp(26px,5.4vw,38px);margin:0;font-weight:700;letter-spacing:-.4px}
+  header.top .sub{color:var(--texte-2);margin:8px 0 0;font-size:15px}
+  header.top .meta{font-family:var(--mono);font-size:12px;color:var(--texte-3);margin-top:10px}
+
+  .triskele path{fill:none;stroke:var(--menthe);stroke-width:7;stroke-linecap:round}
+  .triskele{filter:drop-shadow(0 0 9px rgba(52,245,197,.8))}
+
+  /* sommaire */
+  .toc{background:var(--panneau-2);border:1px solid var(--bord);border-radius:16px;padding:18px 20px;margin:22px 0 8px}
+  .toc h2{font-size:13px;font-family:var(--mono);letter-spacing:2px;color:var(--menthe);margin:0 0 12px;text-transform:uppercase}
+  .toc ol{margin:0;padding-left:20px;columns:2;column-gap:26px}
+  .toc li{margin:0 0 7px;break-inside:avoid}
+  .toc a{color:var(--texte-2);font-size:14px}
+  .toc a:hover{color:var(--menthe)}
+  @media(max-width:560px){.toc ol{columns:1}}
+
+  /* sections */
+  section{padding:30px 0;border-top:1px solid rgba(126,240,205,.08)}
+  section:first-of-type{border-top:0}
+  h2.s{font-size:clamp(20px,4.2vw,26px);margin:0 0 4px;font-weight:600;letter-spacing:-.3px;display:flex;gap:12px;align-items:baseline;scroll-margin-top:70px}
+  h2.s .n{font-family:var(--mono);font-size:14px;color:var(--menthe);font-weight:700}
+  h3{font-size:16.5px;margin:22px 0 8px;font-weight:600;color:var(--menthe-soft)}
+  p{margin:0 0 12px;color:var(--texte)}
+  p.lead{color:var(--texte-2);font-size:15px}
+  ul,ol.steps{margin:0 0 14px;padding-left:22px}
+  li{margin:0 0 7px}
+  li::marker{color:var(--menthe)}
+  strong{color:#fff;font-weight:600}
+  code{font-family:var(--mono);font-size:.88em;background:rgba(52,245,197,.09);border:1px solid var(--bord);border-radius:6px;padding:1px 6px;color:var(--menthe-soft)}
+
+  .block{background:#060a0f;border:1px solid var(--bord);border-radius:12px;overflow-x:auto;margin:0 0 16px}
+  .block .lbl{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--texte-3);padding:9px 16px 0;text-transform:uppercase}
+  .block pre{margin:0;padding:12px 16px 16px;font-family:var(--mono);font-size:12.7px;line-height:1.7;color:var(--menthe-soft);white-space:pre}
+  .block .c{color:var(--texte-3)} .block .p{color:var(--aurore-v-soft)} .block .g{color:var(--aurore-g)}
+
+  .note{border-left:3px solid var(--aurore-v);background:var(--panneau-2);border-radius:10px;padding:12px 15px;margin:0 0 16px;font-size:14px;color:var(--texte-2)}
+  .note.warn{border-left-color:var(--ambre)}
+  .note.ok{border-left-color:var(--aurore-g)}
+  .note b{color:var(--texte)}
+
+  .tw{overflow-x:auto;margin:0 0 16px}
+  table{border-collapse:collapse;width:100%;font-size:13.8px;min-width:420px}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--bord)}
+  th{font-family:var(--mono);font-size:11.5px;letter-spacing:1px;color:var(--texte-3);text-transform:uppercase;font-weight:500}
+  td code{background:none;border:0;padding:0}
+  .sw{display:inline-block;width:13px;height:13px;border-radius:4px;vertical-align:-2px;margin-right:8px;border:1px solid rgba(255,255,255,.15)}
+
+  footer{padding:34px 0 60px;text-align:center;color:var(--texte-3);font-size:13px;border-top:1px solid var(--bord);margin-top:20px}
+  footer .fm{font-family:var(--mono);color:var(--menthe-soft);margin-bottom:8px}
+  .hr{height:1px;background:linear-gradient(90deg,transparent,var(--bord-fort),transparent)}
+  @media(prefers-reduced-motion:no-preference){.triskele{animation:spin 44s linear infinite}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav class="nav"><div class="wrap row">
+  <span class="brand">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <span><span class="tru">TRU</span>vector<span class="dev">.dev</span></span>
+  </span>
+  <span class="badge">MANUEL v6</span>
+</div></nav>
+
+<header class="top">
+  <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
+  <div class="wrap in">
+    <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+    <h1>Manuel du site — TRUvector.dev v6</h1>
+    <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
+    <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section id="s0ck">
+    <h2 class="s"><span class="n">★</span> Cockpit d'administration (/admin)</h2>
+    <p class="lead"><code>/admin</code> est le poste de pilotage complet (protégé par code) : il édite <strong>tout le contenu</strong> et exporte un <code>config.json</code>.</p>
+    <div class="block"><div class="lbl">workflow</div><pre>1. /admin  (code par défaut : truvector-admin)
+2. Importer config.json  ← _v5-build/src/config.json
+3. Éditer (galerie, articles, concours, dons… + upload images/audio)
+4. Exporter config.json  → remplace _v5-build/src/config.json
+5. <span class="g">node _v5-build/build.mjs open</span>   (public)  |  <span class="g">node _v5-build/build.mjs</span> (coffres)
+6. committer / déployer truvector.dev/</pre></div>
+    <p>Un nouvel <strong>article</strong> (avec contenu) est généré en <code>articles/posts/&lt;slug&gt;.html</code>. Les images/audios uploadés sont intégrés au <code>config.json</code> (base64).</p>
+  </section>
+  <section id="s0v5">
+    <h2 class="s"><span class="n">v5</span> Accès : deux modes (sans Cloudflare)</h2>
+    <p class="lead">Le site se génère en deux modes via <code>_v5-build/build.mjs</code>.</p>
+    <ul>
+      <li><strong>PUBLIC (build livré)</strong> — <code>node _v5-build/build.mjs open</code> : les 7 sections sont accessibles <strong>sans code</strong> ; seule <code>/admin</code> est protégée par code.</li>
+      <li><strong>COFFRES chiffrés</strong> — <code>node _v5-build/build.mjs</code> : les 7 sections sont chiffrées (AES-256-GCM), déverrouillage par passphrase ou fichier-clé <code>.trukey</code>.</li>
+    </ul>
+    <p>Le blog (articles) et les pages légales restent publics dans les deux cas. <strong>Code admin</strong> : <code>truvector-admin</code> (modifiable dans <code>config.json → access.adminCode</code>).</p>
+    <h3>Modifier le contenu</h3>
+    <div class="block"><div class="lbl">atelier privé</div><pre>1. éditer  _v5-build/src/config.json  (+ assets dans _v5-build/src/…)
+2. build   <span class="g">node _v5-build/build.mjs open</span>   <span class="c"># public (actuel)</span>
+       ou  <span class="g">node _v5-build/build.mjs</span>        <span class="c"># coffres chiffrés</span>
+3. déployer UNIQUEMENT truvector.dev/  (jamais _v5-build/)</pre></div>
+    <div class="note ok"><b>Aucune dépendance Cloudflare</b> pour les droits. En mode PUBLIC, le contenu est en clair (accès sans code) ; seule l'admin exige un code.</div>
+  </section>
+
+  <section>
+    <h2 class="s"><span class="n">CDN</span> Déploiement léger — médias sur un 2ᵉ dépôt (jsDelivr)</h2>
+    <p>Pour garder <strong>Cloudflare tout petit</strong> (~3&nbsp;Mo), les médias lourds sont <strong>déportés</strong> sur un second dépôt GitHub servi par le CDN gratuit <strong>jsDelivr</strong>. Deux livrables&nbsp;:</p>
+    <ul>
+      <li><code>truvector-site</code> (~3&nbsp;Mo) → <strong>Cloudflare Pages</strong> : HTML, CSS, JS, <code>config.json</code>, mini-images d'interface. Aucun MP3, aucune image de galerie, plus de <code>vault.json</code>.</li>
+      <li><code>truvector-assets</code> (~33&nbsp;Mo) → <strong>nouveau dépôt GitHub public</strong> <code>clode666/truvector-assets</code> : <code>musique/</code> (36 MP3) + <code>galerie/</code> (<code>.webp</code> + <code>.png</code>) + <code>ebooks/</code> (<code>.trubook</code>, <code>covers/*.svg</code>, <code>manifest.json</code>).</li>
+    </ul>
+    <p>Le <strong>seul réglage</strong> est dans <code>assets/js/assets.js</code>&nbsp;:</p>
+    <pre><code>window.TRU_ASSET_BASE = "https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main";</code></pre>
+    <p>Le lecteur audio, le mini-lecteur global, la galerie et les liens e-books construisent leurs URLs à partir de cette base. Depuis la v6, le mini-lecteur connaît aussi l'adresse jsDelivr par défaut : il fonctionne même si <code>assets.js</code> manque ou est périmé en cache. <strong>Chaîne vide (<code>""</code>)</strong> = médias servis en local (mode monolithique) — le site marche dans les deux cas.</p>
+    <h3>Mise en place (une fois)</h3>
+    <ol>
+      <li>Crée un dépôt GitHub <strong>public</strong> <code>truvector-assets</code>, pousse-y le contenu de <code>truvector-assets/</code>.</li>
+      <li>Renseigne <code>TRU_ASSET_BASE</code> dans <code>assets/js/assets.js</code> (ton user + branche, <strong>sans slash final</strong>).</li>
+      <li>Déploie <code>truvector-site/</code> sur Cloudflare Pages (Git ou <code>wrangler pages deploy</code>).</li>
+    </ol>
+    <h3>Mettre à jour un média</h3>
+    <p>Remplace le fichier dans <code>truvector-assets</code> + <code>git push</code>. jsDelivr met <code>@main</code> en cache ~24&nbsp;h–7&nbsp;j&nbsp;; pour forcer&nbsp;: purge <code>https://purge.jsdelivr.net/gh/clode666/truvector-assets@main/&lt;chemin&gt;</code>, ou crée un tag (<code>v1</code>…) et pointe <code>TRU_ASSET_BASE</code> sur <code>@v1</code>.</p>
+    <div class="note"><b>Alternative « pro » (facultatif).</b> Stocke les médias sur <strong>Cloudflare R2</strong> (10 Go gratuits, egress gratuit) exposé sur <code>media.truvector.dev</code>, et mets cette URL dans <code>TRU_ASSET_BASE</code>. Même mécanisme, sur ton propre domaine.</div>
+    <div class="note"><b>⚠️ CSP (important).</b> Le fichier <code>_headers</code> définit une Content-Security-Policy stricte. C'est déjà réglé pour <code>https://cdn.jsdelivr.net</code> (dans <code>img-src</code>, <code>media-src</code> <strong>et <code>connect-src</code></strong> — ce dernier est indispensable au lecteur d'e-books, qui télécharge les .trubook par <code>fetch</code>) et pour l'analytics Cloudflare (<code>static.cloudflareinsights.com</code> / <code>cloudflareinsights.com</code>). Si tu changes d'hébergement de médias, ajoute son domaine à <code>img-src</code>, <code>media-src</code> et <code>connect-src</code> dans <code>_headers</code>.</div>
+    <div class="note ok"><b>Pourquoi c'était lourd&nbsp;:</b> la galerie encodait ses images en base64 dans la page (4&nbsp;Mo) et chaque section gardait un <code>vault.json</code> chiffré inutile en mode public (~6,6&nbsp;Mo). Supprimés de la structure&nbsp;; la galerie pointe désormais vers des fichiers.</div>
+  </section>
+
+
+  <nav class="toc" aria-label="Sommaire">
+    <h2>Sommaire</h2>
+    <ol>
+      <li><a href="#s1">Vue d'ensemble</a></li>
+      <li><a href="#s2">Contenu du site</a></li>
+      <li><a href="#s3">Arborescence</a></li>
+      <li><a href="#s4">Charte &amp; design</a></li>
+      <li><a href="#s5">Installation &amp; déploiement</a></li>
+      <li><a href="#s6">Authentification</a></li>
+      <li><a href="#s7">Compte à rebours</a></li>
+      <li><a href="#s8">Maintenance</a></li>
+      <li><a href="#s9">Aspects légaux</a></li>
+      <li><a href="#s10">Dépannage</a></li>
+      <li><a href="#s11">Référence rapide</a></li>
+      <li><a href="#s12">Configuration (config.json)</a></li>
+      <li><a href="#s13">Panneau d'administration</a></li>
+      <li><a href="#s14">E-books protégés</a></li>
+      <li><a href="#s15">Filtres &amp; recherche</a></li>
+      <li><a href="#s16">Cache &amp; versions</a></li>
+      <li><a href="#s17">Journal des versions</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1 -->
+  <section id="s1">
+    <h2 class="s"><span class="n">01</span> Vue d'ensemble</h2>
+    <p class="lead">TRUvector.dev v6 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
+    <p>Il réunit une page d'accueil, neuf sections (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir) et un pôle légal, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Les médias lourds (musique, images, e-books) sont servis par un second dépôt via jsDelivr. Ses objectifs&nbsp;:</p>
+    <ul>
+      <li>présenter la marque (le <strong>compte à rebours</strong> a atteint l'ouverture le 21/09/2026 : le site est ouvert)&nbsp;;</li>
+      <li>publier des <strong>e-books protégés</strong> (.trubook chiffrés) en édition limitée — actuellement <strong>jusqu'au 21/10/2026</strong>&nbsp;;</li>
+      <li>diffuser des <strong>créations graphiques en libre téléchargement</strong>&nbsp;;</li>
+      <li>offrir un <strong>accès simple par authentification</strong>&nbsp;;</li>
+      <li>afficher des <strong>mentions légales</strong> conformes.</li>
+    </ul>
+    <div class="note ok"><b>Aucune dépendance à installer.</b> Tu peux ouvrir chaque page directement dans un navigateur, ou tout pousser sur GitHub pour un déploiement automatique.</div>
+  </section>
+
+  <!-- 2 -->
+  <section id="s2">
+    <h2 class="s"><span class="n">02</span> Contenu du site</h2>
+
+    <h3>Accueil — <code>index.html</code> (public)</h3>
+    <ul>
+      <li>Héros : triskèle animé, logo néon, baseline <em>« Where Code Meets Creativity »</em>.</li>
+      <li><strong>Compte à rebours</strong> vers le 21/09/2026, mis à jour chaque seconde.</li>
+      <li><strong>Porte de lancement</strong> : le bouton « Entrer dans la galerie » reste caché jusqu'au jour J, puis apparaît automatiquement quand le décompte atteint zéro.</li>
+      <li><strong>Vitrine des sections</strong> : grandes cartes vers les 8 espaces, bande « points forts », section créateur et bandeau final, avec apparitions au scroll.</li>
+      <li>Bloc « ce qui t'attend » + carte « le créateur » (avatar + liens).</li>
+    </ul>
+
+    <h3>Galerie — <code>galerie/index.html</code> (protégée)</h3>
+    <ul>
+      <li><strong>Porte d'accès</strong> (code) affichée au chargement — voir §06.</li>
+      <li>Grille responsive de <strong>6 créations</strong>, chacune en <code>.webp</code> (affichage léger) et <code>.png</code> HD (téléchargement).</li>
+      <li><strong>Visionneuse</strong> plein écran (clic sur une image, fermeture par ✕ ou Échap).</li>
+      <li>Encart <strong>licence</strong> d'utilisation.</li>
+    </ul>
+
+    <h3>Pôle légal &amp; conformité</h3>
+    <p>Quatre pages complètes, renseignées avec l'identité réelle de l'entreprise et reliées entre elles (et depuis le pied de page)&nbsp;:</p>
+    <ul>
+      <li><code>mentions-legales/</code> — éditeur, directeur de publication, hébergeur, propriété intellectuelle.</li>
+      <li><code>cgv/</code> — conditions générales de vente / d'utilisation (vente = licence d'œuvre, pas prestation de service).</li>
+      <li><code>confidentialite/</code> — politique de confidentialité (RGPD).</li>
+      <li><code>cookies/</code> — politique de cookies (strictement nécessaires uniquement).</li>
+      <li><code>securite/</code> — politique de sécurité (SSI) + divulgation responsable, avec <code>/.well-known/security.txt</code>.</li>
+    </ul>
+    <h3>Sections thématiques</h3>
+    <p>Accessibles depuis les <strong>onglets de la barre de navigation</strong> (en haut à droite, sur toutes les pages)&nbsp;: <em>Accueil · Galerie · Logiciels · E-books · Musique · Articles · Modules · Concours · Soutenir</em>. L'onglet de la page courante est surligné ; sur mobile la rangée défile horizontalement. En <strong>build PUBLIC</strong> (celui livré), les sections sont ouvertes sans code ; en <strong>build COFFRES</strong>, chacune peut recevoir son propre code (<code>config.access.sections</code>, sauf <code>articles/</code> qui reste public)&nbsp;:</p>
+    <ul>
+      <li><code>logiciels/</code> — catalogue (pré-rempli, éditable via <code>config.catalog.logiciels</code>).</li>
+      <li><code>ebooks/</code> — <strong>21 nouvelles protégées</strong> (.trubook) lues dans la visionneuse <code>ebooks/lecteur.html</code>, édition limitée jusqu'au 21/10/2026. Outil de chiffrement : <code>ebooks/proteger.html</code>. Voir la section <a href="#s14">14</a>.</li>
+      <li><code>musique/</code> — <strong>lecteur audio</strong> ; fichiers dans <code>truvector-assets/musique/</code> (ou <code>musique/assets/</code> en mode monolithique), déclarés dans <code>config.catalog.musique</code> <em>et</em> dans la liste de <code>musique/index.html</code> (mêmes noms, même ordre). La case <strong>« Écouter en navigant »</strong> (lecture en fond) transmet la piste et la position au <strong>mini-lecteur global</strong> (<code>assets/js/player.js</code>), qui reprend la musique <strong>de page en page</strong> en bas à droite (un clic sur ▶ parfois nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs). <strong>36 titres</strong> : <strong>24 créations originales dans des styles radicalement différents</strong> (rétrowave, lo-fi, chiptune, deep house, techno, trance, drum &amp; bass, trap, ambient, trip-hop, funk, disco, reggae/dub, bossa nova, jazz, blues, rock, cinématique, baroque, valse, vaporwave, future bass, world/oriental, pizzicato) + les 10 pistes <em>romantico·geek</em> + les 2 démos d'origine. La playlist lit les fichiers directement (<code>assets/&lt;nom&gt;.mp3</code>).</li>
+      <li><code>articles/</code> — <strong>blog public</strong> (60 articles, recherche, indexable) ; billets dans <code>articles/posts/</code>. Réintégrés de l'ancien site, ré-habillés v4.</li>
+      <li><code>dons/</code> — page de soutien (<code>config.dons.links</code>).</li>
+      <li><code>concours/</code> — jeux-concours (<code>config.concours</code>).</li>
+      <li><code>modules/</code> — <strong>modules interactifs</strong> : petites applications autonomes, 100&nbsp;% côté client, rangées dans <code>modules/apps/</code> et listées dans <code>config.catalog.modules</code>. <strong>12 modules</strong> livrés — <em>Sécurité</em> : TRU Keyforge, TRU Hasher, License Forge ; <em>Dev</em> : Base64 · Hex Studio, Regex Lab, JSON Forge, Markdown Live ; <em>Outil</em> : UXC Estimator, Cron Décodeur ; <em>Créatif</em> : Aurora Weaver, Color Aurora ; <em>Démo</em> : GrowVault Lite. Pour en ajouter un&nbsp;: dépose <code>modules/apps/&lt;nom&gt;.html</code>, ajoute une entrée <code>{ "title", "desc", "url": "apps/&lt;nom&gt;.html", "badge" }</code> dans <code>config.catalog.modules</code>, et une carte dans <code>modules/index.html</code>.</li>
+    </ul>
+
+    <h3>Roadmaps (bonus)</h3>
+    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
+  </section>
+
+  <!-- 3 -->
+  <section id="s3">
+    <h2 class="s"><span class="n">03</span> Arborescence des fichiers</h2>
+    <div class="block"><div class="lbl">structure</div><pre>truvector.dev/
+├── index.html                 <span class="c"># accueil : teaser + compte à rebours (public)</span>
+├── galerie/
+│   ├── index.html             <span class="c"># galerie + porte d'accès + téléchargements</span>
+│   └── assets/                <span class="c"># créas : .webp (affichage) + .png HD (download)</span>
+├── mentions-legales/
+│   └── index.html             <span class="c"># mentions légales (identité, hébergeur, PI)</span>
+├── cgv/
+│   └── index.html             <span class="c"># conditions générales de vente / d'utilisation</span>
+├── confidentialite/
+│   └── index.html             <span class="c"># politique de confidentialité (RGPD)</span>
+├── cookies/
+│   └── index.html             <span class="c"># politique de cookies</span>
+├── securite/
+│   └── index.html             <span class="c"># politique de sécurité (SSI)</span>
+├── logiciels/ ebooks/ musique/ articles/ dons/ concours/ modules/
+│   ├── index.html × 7         <span class="c"># 1 page par section (+ vault.json chiffré, utilisé en mode COFFRES)</span>
+│   ├── musique/assets/        <span class="c"># fichiers audio .mp3 (config.catalog.musique)</span>
+│   ├── modules/apps/          <span class="c"># 12 modules interactifs autonomes (keyforge, hasher, …)</span>
+│   └── articles/posts/        <span class="c"># 60 articles publics (blog indexable)</span>
+├── admin/
+│   └── index.html             <span class="p"># panneau d'administration (paramètres + droits)</span>
+├── assets/
+│   ├── css/tokens.css         <span class="p"># design system : couleurs, typo, composants</span>
+│   ├── js/config.js           <span class="p"># configuration partagée (defaults + fusion)</span>
+│   ├── js/gate.js             <span class="c"># (legacy v4) portail à code</span>
+│   ├── js/unlock.js           <span class="p"># v5 : déverrouillage chiffré (passphrase / fichier-clé)</span>
+│   ├── js/player.js           <span class="p"># mini-lecteur global — musique sur toutes les pages (sauf page Musique)</span>
+│   ├── js/filters.js          <span class="p"># v6 : recherche + catégories + tri sur les listes</span>
+│   ├── js/tru-reader.js       <span class="p"># visionneuse e-books (PDF, EPUB, CBZ, HTML, .trubook)</span>
+│   ├── js/tru-crypto.js       <span class="p"># chiffrement .trubook (AES-256-GCM + PBKDF2)</span>
+│   ├── js/assets.js           <span class="p"># TRU_ASSET_BASE : adresse du CDN des médias</span>
+│   ├── vendor/                <span class="c"># pdf.js + fflate (lecture PDF / zip)</span>
+│   ├── js/nav.js              <span class="p"># onglets de sections DIRECTS dans la barre de nav (v4)</span>
+│   ├── js/countdown.js        <span class="c"># compte à rebours (piloté par la config)</span>
+│   └── img/                   <span class="c"># triskele.svg, createur.webp, og-banner.*</span>
+├── config.json                <span class="p"># ★ source de vérité : paramètres, droits, galerie</span>
+├── favicon.svg                <span class="c"># triskèle néon</span>
+├── roadmap.html               <span class="c"># feuille de route (bonus)</span>
+├── roadmap-effets.html        <span class="c"># v6 : roadmap visuelle avec démos</span>
+├── _headers                   <span class="c"># sécurité + cache (Cloudflare Pages)</span>
+├── _redirects                 <span class="c"># redirections optionnelles</span>
+├── wrangler.toml              <span class="p"># déploiement Cloudflare statique (sans build)</span>
+├── BingSiteAuth.xml           <span class="c"># vérification Bing Webmaster</span>
+├── .well-known/security.txt   <span class="c"># contact sécurité (RFC 9116)</span>
+├── robots.txt · sitemap.xml
+└── README.md</pre></div>
+    <div class="note"><b>Chemins relatifs.</b> Les pages en sous-dossier (galerie, mentions) remontent d'un cran avec <code>../</code> pour atteindre <code>assets/</code>. Ne déplace pas un fichier sans ajuster ses liens.</div>
+  </section>
+
+  <!-- 4 -->
+  <section id="s4">
+    <h2 class="s"><span class="n">04</span> Charte &amp; design system</h2>
+    <p>Tout est centralisé dans <code>assets/css/tokens.css</code> (variables CSS). Change une couleur ici, elle change partout.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Rôle</th><th>Variable</th><th>Hex</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sw" style="background:#34f5c5"></span>Menthe néon (signature)</td><td><code>--menthe</code></td><td><code>#34F5C5</code></td></tr>
+        <tr><td><span class="sw" style="background:#b14aed"></span>Aurore violette</td><td><code>--aurore-v</code></td><td><code>#B14AED</code></td></tr>
+        <tr><td><span class="sw" style="background:#59e39a"></span>Aurore verte</td><td><code>--aurore-g</code></td><td><code>#59E39A</code></td></tr>
+        <tr><td><span class="sw" style="background:#f4c56b"></span>Ambre (guirlandes)</td><td><code>--ambre</code></td><td><code>#F4C56B</code></td></tr>
+        <tr><td><span class="sw" style="background:#0b121a"></span>Nuit (fond)</td><td><code>--nuit-2</code></td><td><code>#0B121A</code></td></tr>
+        <tr><td><span class="sw" style="background:#e8f2ee"></span>Texte clair</td><td><code>--texte</code></td><td><code>#E8F2EE</code></td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Typographie :</strong> <code>Space Grotesk</code> (titres &amp; texte) + <code>JetBrains Mono</code> (accents « terminal », chemins, code), chargées depuis Google Fonts.</p>
+    <p><strong>Composants fournis :</strong> barre de navigation, boutons néon (<code>.btn</code>, <code>.btn-ghost</code>), cartes « verre » (<code>.card</code>), fond aurore (<code>.aurora</code>) + guirlandes (<code>.lights</code>), pied de page.</p>
+  </section>
+
+  <!-- 5 -->
+  <section id="s5">
+    <h2 class="s"><span class="n">05</span> Installation &amp; déploiement</h2>
+
+    <h3>Prérequis</h3>
+    <ul>
+      <li>Un compte <strong>GitHub</strong> (ton pseudo : <code>clode666</code>).</li>
+      <li>Un compte <strong>Cloudflare</strong> avec le domaine <code>truvector.dev</code> déjà géré.</li>
+      <li><code>git</code> installé en local (facultatif : tu peux aussi glisser les fichiers dans l'interface GitHub).</li>
+    </ul>
+
+    <h3>Étape 1 — Pousser sur GitHub</h3>
+    <p>Place <strong>le contenu du dossier <code>truvector.dev/</code> à la racine</strong> d'un nouveau dépôt.</p>
+    <div class="block"><div class="lbl">terminal</div><pre>git init
+git add .
+git commit -m "TRUvector.dev v6"
+git branch -M main
+git remote add origin https://github.com/clode666/truvector-dev.git
+git push -u origin main</pre></div>
+
+    <h3>Étape 2 — Créer le projet Cloudflare Pages</h3>
+    <ol class="steps">
+      <li>Dashboard Cloudflare → <strong>Workers &amp; Pages → Create → Pages → Connect to Git</strong>.</li>
+      <li>Sélectionne le dépôt <code>truvector-dev</code>.</li>
+      <li><strong>Framework preset :</strong> <code>None</code>.</li>
+      <li><strong>Build command :</strong> <em>(laisser vide)</em>.</li>
+      <li><strong>Build output directory :</strong> <code>/</code> (racine).</li>
+      <li>Clique <strong>Save and Deploy</strong>.</li>
+    </ol>
+
+    <div class="note warn"><b>Le site n'a AUCUN build.</b> Si Cloudflare tente <code>npx hugo</code> (ou un autre build) et échoue, c'est une auto-détection erronée. Correctifs&nbsp;: <b>Pages</b> → preset <code>None</code> + <b>Build command vide</b> ; ou <b>Workers</b> (<code>npx wrangler deploy</code>) → le fichier <code>wrangler.toml</code> fourni (à la racine du dépôt) désactive l'auto-détection et sert le dossier tel quel. Vérifie que le <b>contenu</b> de <code>truvector.dev/</code> est à la <b>racine</b> du dépôt (index.html et wrangler.toml tout en haut).</div>
+    <h3>Étape 3 — Brancher le domaine</h3>
+    <ol class="steps">
+      <li>Ton projet Pages → <strong>Custom domains → Set up a custom domain</strong>.</li>
+      <li>Saisis <code>truvector.dev</code> (et éventuellement <code>www</code>).</li>
+      <li>DNS + HTTPS se configurent automatiquement (domaine déjà chez Cloudflare).</li>
+    </ol>
+    <div class="note ok"><b>Mises à jour automatiques.</b> Chaque <code>git push</code> sur <code>main</code> redéploie le site tout seul.</div>
+  </section>
+
+  <!-- 6 -->
+  <section id="s6">
+    <h2 class="s"><span class="n">06</span> Authentification</h2>
+    <p class="lead">Deux façons de protéger la galerie. La première est la vraie sécurité ; la seconde est fournie prête à l'emploi mais légère.</p>
+
+    <h3>Option A — Cloudflare Access (recommandé)</h3>
+    <p>Gratuit jusqu'à 50 utilisateurs, aucune ligne de code, connexion par code e-mail à usage unique ou Google.</p>
+    <ol class="steps">
+      <li>Cloudflare → <strong>Zero Trust → Access → Applications → Add an application → Self-hosted</strong>.</li>
+      <li>Domaine : <code>truvector.dev</code> · Chemin : <code>/galerie</code>.</li>
+      <li>Ajoute une <strong>policy</strong> <em>Allow</em> → règle « Emails » (les tiens / autorisés) ou « One-time PIN ».</li>
+      <li>Enregistre. La galerie demande désormais une connexion en amont du site.</li>
+    </ol>
+    <div class="note ok">Avec Access, tu peux <b>retirer la porte JS</b> (voir plus bas) : la protection est gérée par Cloudflare.</div>
+
+    <h3>Option B — Porte d'accès légère (incluse)</h3>
+    <p>Un verrou par code, déjà en place dans <code>galerie/index.html</code>. Change le code ici :</p>
+    <div class="block"><div class="lbl">galerie/index.html</div><pre>var ACCESS_CODE = <span class="g">"truvector2026"</span>;   <span class="c">// ← mets ton propre code</span></pre></div>
+    <div class="note warn"><b>Limite.</b> Le code est visible dans la source de la page : c'est un filtre « doux », pas une sécurité réelle. Pour du sérieux, utilise l'option A.</div>
+
+    <h3>Retirer la porte JS (si tu passes sur Access)</h3>
+    <p>Dans <code>galerie/index.html</code>, supprime le bloc <code>&lt;div class="gate" id="gate"&gt;…&lt;/div&gt;</code> ainsi que le script commenté « PORTE D'ACCÈS ».</p>
+    <h3>Codes par section</h3>
+    <p>Chaque section (logiciels, e-books, musique, articles, dons, concours, modules) a son propre code dans <code>config.access.sections</code>, modifiable depuis le panneau d'admin (bloc « Sections &amp; codes »). Chaque accès est mémorisé indépendamment le temps de la session.</p>
+    <h3>Protéger aussi l'admin</h3>
+    <p>La page <code>/admin</code> a sa propre porte (code <code>adminCode</code> dans <code>config.json</code>). Protège <strong>/admin</strong> et <strong>/galerie</strong> avec Cloudflare Access ; les <strong>rôles</strong> (admin / éditeur / lecteur) définis dans le panneau se transposent en règles Access (liste d'e-mails exportable depuis l'admin).</p>
+  </section>
+
+  <!-- 7 -->
+  <section id="s7">
+    <h2 class="s"><span class="n">07</span> Compte à rebours</h2>
+    <p>La date d'ouverture et le statut du site sont définis dans <code>config.json</code> (modifiables depuis le panneau d'admin). <code>assets/js/countdown.js</code> les lit ; une valeur de repli identique reste inscrite dans <code>assets/js/config.js</code>.</p>
+    <div class="block"><div class="lbl">config.json</div><pre>"status": <span class="g">"auto"</span>,          <span class="c">// "soon" (bientôt) | "open" (ouvert) | "auto" (par date)</span>
+"launchDate": <span class="g">"2026-09-21T00:00:00+02:00"</span></pre></div>
+    <ul>
+      <li><code>+02:00</code> = heure de Paris (CEST). Garde ce décalage pour viser minuit à Paris.</li>
+      <li><strong>Avant la date :</strong> l'accueil affiche le décompte et « reviens le 21/09 ».</li>
+      <li><strong>À échéance :</strong> le décompte affiche « le site est ouvert » et le bouton <strong>Entrer dans la galerie</strong> apparaît automatiquement. Rien à faire le jour J.</li>
+    </ul>
+    <div class="note">Le même script pilote l'accueil ; il ne s'exécute que si les éléments <code>#cd-grid</code> / <code>#launch-gate</code> sont présents, donc inutile sur les autres pages.</div>
+  </section>
+
+  <!-- 8 -->
+  <section id="s8">
+    <h2 class="s"><span class="n">08</span> Maintenance &amp; évolutions</h2>
+
+    <h3>Ajouter une nouvelle créa</h3>
+    <ol class="steps">
+      <li>Dépose deux versions dans <code>galerie/assets/</code> :<br><code>mon-oeuvre.webp</code> (affichage) et <code>mon-oeuvre.png</code> (téléchargement HD).</li>
+      <li>Duplique un bloc <code>&lt;figure class="art"&gt;…&lt;/figure&gt;</code> dans <code>galerie/index.html</code> et adapte :</li>
+    </ol>
+    <div class="block"><div class="lbl">galerie/index.html</div><pre>&lt;figure class="art <span class="p">square</span>" data-full="assets/mon-oeuvre.webp"
+        data-dl="assets/mon-oeuvre.png" data-title="Mon œuvre"&gt;
+  &lt;button class="art-view" aria-label="Agrandir « Mon œuvre »"&gt;
+    &lt;img src="assets/mon-oeuvre.webp" width="1024" height="1024"
+         loading="lazy" alt="<span class="c">description de l'image</span>"&gt;
+  &lt;/button&gt;
+  &lt;figcaption&gt;&lt;span class="art-title"&gt;Mon œuvre&lt;/span&gt;
+    &lt;a class="dl" href="assets/mon-oeuvre.png" download&gt;↓ PNG HD&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;</pre></div>
+    <p>Classes utiles : <code>square</code> (format carré) ou <code>wide</code> (bannière large, occupe 2 colonnes).</p>
+
+    <h3>Générer les WebP (optimisation)</h3>
+    <p>Pour alléger l'affichage tout en gardant le PNG HD au téléchargement :</p>
+    <div class="block"><div class="lbl">exemple (ImageMagick)</div><pre><span class="c"># WebP d'affichage, largeur max 1600px</span>
+magick mon-oeuvre.png -resize 1600x> -quality 82 mon-oeuvre.webp</pre></div>
+
+    <h3>Modifier une page ou le style</h3>
+    <ul>
+      <li>Texte / structure : édite le <code>index.html</code> concerné.</li>
+      <li>Couleurs, espacements, composants : <code>assets/css/tokens.css</code>.</li>
+    </ul>
+
+    <h3>Publier une mise à jour</h3>
+    <div class="block"><div class="lbl">terminal</div><pre>git add .
+git commit -m "maj : nouvelle créa + textes"
+git push</pre></div>
+    <p>Cloudflare Pages redéploie automatiquement en quelques secondes.</p>
+
+    <h3>Mesure d'audience (sans cookies)</h3>
+    <ol class="steps">
+      <li>Cloudflare → <strong>Web Analytics → Add a site → <code>truvector.dev</code></strong>.</li>
+      <li>Colle le petit snippet fourni juste avant <code>&lt;/body&gt;</code> des pages à suivre.</li>
+    </ol>
+  </section>
+
+  <!-- 9 -->
+  <section id="s9">
+    <h2 class="s"><span class="n">09</span> Aspects légaux</h2>
+    <p>Le pôle légal est renseigné avec l'identité officielle (attestation INPI)&nbsp;:</p>
+    <ul>
+      <li><strong>Éditeur</strong> : Ruard Tristan, entrepreneur individuel (artiste-auteur), nom commercial TRUvector.</li>
+      <li><strong>Siège</strong> : 18 E rue des Ovides, 42100 Saint-Étienne.</li>
+      <li><strong>SIREN</strong> 108 978 180 · <strong>SIRET</strong> 108 978 180 00017 · <strong>APE</strong> 9003B · RNE 21/08/2026.</li>
+      <li><strong>Hébergeur</strong> : Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, USA.</li>
+      <li><strong>Pages</strong> : mentions légales, <strong>CGV/CGU</strong>, confidentialité (RGPD), cookies, sécurité (SSI) + <code>security.txt</code>.</li>
+      <li><strong>TVA</strong> : <em>TVA non applicable, art. 293 B du CGI</em> (conforme à ta documentation).</li>
+      <li><strong>Vente</strong> = concession de <strong>licence d'œuvre</strong> (pas une prestation de service) — cohérent avec ton statut d'agent public.</li>
+    </ul>
+    <div class="note"><b>À prévoir côté domaine.</b> Créer les boîtes e-mail <code>contact@truvector.dev</code> et <code>security@truvector.dev</code>.</div>
+  </section>
+
+  <!-- 10 -->
+  <section id="s10">
+    <h2 class="s"><span class="n">10</span> Dépannage</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Symptôme</th><th>Cause probable &amp; solution</th></tr></thead>
+      <tbody>
+        <tr><td>Les polices ne s'affichent pas</td><td>Pas de connexion à Google Fonts (hors-ligne) ou CSP trop stricte. En ligne, vérifie que <code>_headers</code> autorise <code>fonts.googleapis.com</code> / <code>fonts.gstatic.com</code>. Sinon, les polices système prennent le relais (normal).</td></tr>
+        <tr><td>Images en 404</td><td>Chemin cassé après un déplacement de fichier. Vérifie les <code>../</code> depuis <code>galerie/</code> et <code>mentions-legales/</code>, et que les fichiers sont bien dans <code>galerie/assets/</code>.</td></tr>
+        <tr><td>La porte d'accès ne s'ouvre pas</td><td>Code saisi ≠ code d'accès. Vérifie <code>access.code</code> dans <code>config.json</code> (ou le panneau /admin). L'accès est mémorisé le temps de la session (onglet).</td></tr>
+        <tr><td>Mes changements admin n'apparaissent pas pour les autres</td><td>« Aperçu » n'écrit que dans ton navigateur. Clique <code>Exporter config.json</code> puis committe le fichier.</td></tr>
+        <tr><td><code>config.json</code> ignoré en local (file://)</td><td>Le <code>fetch</code> échoue sur <code>file://</code> : teste via un petit serveur local ou sur Cloudflare Pages. Les valeurs par défaut de <code>config.js</code> prennent le relais.</td></tr>
+        <tr><td>Le compte à rebours reste figé</td><td>JavaScript bloqué, ou date mal formée. Garde le format <code>2026-09-21T00:00:00+02:00</code> dans <code>countdown.js</code>.</td></tr>
+        <tr><td>Le bouton « Entrer » n'apparaît pas</td><td>Normal avant le 21/09 : il ne se révèle qu'à échéance du décompte.</td></tr>
+        <tr><td>Un script est bloqué en prod</td><td>La CSP de <code>_headers</code> autorise <code>'self'</code> et l'inline. Si tu ajoutes un outil externe, ajoute son domaine à la directive concernée.</td></tr>
+        <tr><td>La musique ne repart pas en changeant de page</td><td>Politique d'autoplay du navigateur : clique une fois sur ▶ du mini-lecteur, ensuite la lecture suit d'une page à l'autre.</td></tr>
+        <tr><td>Build échoue sur <code>npx hugo</code> / « could not determine executable »</td><td>Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une <b>Build command vide</b> (Pages), ou committe le <code>wrangler.toml</code> fourni à la racine (Workers).</td></tr>
+        <tr><td>Cloudflare Pages sert une vieille version</td><td>Cache. Force un nouveau déploiement (nouveau commit) ou purge le cache dans le dashboard. Pour un JS/CSS modifié, <strong>incrémente son <code>?v=</code></strong> dans toutes les pages (voir <a href="#s16">16</a>).</td></tr>
+        <tr><td>E-book : « Impossible de charger le fichier » + erreur <em>Content Security Policy</em> en console</td><td><code>connect-src</code> de <code>_headers</code> doit contenir <code>https://cdn.jsdelivr.net</code>. Redéploie puis Ctrl+F5.</td></tr>
+        <tr><td>E-book : « pas encore en ligne »</td><td>Le <code>.trubook</code> n'existe pas dans <code>truvector-assets/ebooks/</code> (404). Pousse-le ; la carte passe automatiquement de « Bientôt en ligne » à « Lire ».</td></tr>
+        <tr><td>E-book : « Clé incorrecte »</td><td>La passphrase publique est <code>truvector</code> (pré-remplie via <code>&amp;k=truvector</code> dans le lien). Si tu as chiffré avec une autre, mets-la dans le lien.</td></tr>
+        <tr><td>E-book : « Accès expiré »</td><td>La date d'échéance est <strong>inscrite dans le fichier chiffré</strong> (<code>policy.expires</code>). La changer sur la page ne suffit pas : re-chiffre le livre avec <code>ebooks/proteger.html</code>.</td></tr>
+        <tr><td>Le mini-lecteur affiche « Musique indisponible »</td><td>3 pistes d'affilée introuvables : vérifie les noms dans <code>config.catalog.musique</code> et leur présence dans <code>truvector-assets/musique/</code>.</td></tr>
+        <tr><td>Texte d'un bouton invisible (même couleur que le fond)</td><td>Une règle de contenu (<code>.article a</code>…) écrase <code>.btn</code>. Déjà verrouillé dans <code>tokens.css</code> v6 pour <code>a.btn</code>, <code>.btn-ghost</code>, <code>.btn-outline</code>.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 11 -->
+  <section id="s11">
+    <h2 class="s"><span class="n">11</span> Référence rapide</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Pour…</th><th>Fichier / réglage</th></tr></thead>
+      <tbody>
+        <tr><td>Changer une couleur / la typo</td><td><code>assets/css/tokens.css</code></td></tr>
+        <tr><td>Changer la date / le statut</td><td><code>config.json</code> → <code>launchDate</code> / <code>status</code> (ou /admin)</td></tr>
+        <tr><td>Changer le code d'accès galerie</td><td><code>config.json</code> → <code>access.code</code> (ou /admin)</td></tr>
+        <tr><td>Changer le code admin</td><td><code>config.json</code> → <code>access.adminCode</code></td></tr>
+        <tr><td>Tout piloter sans coder</td><td>Panneau <code>/admin</code></td></tr>
+        <tr><td>Ajouter une créa</td><td><code>galerie/assets/</code> + bloc <code>&lt;figure class="art"&gt;</code></td></tr>
+        <tr><td>Éditer les mentions légales</td><td><code>mentions-legales/index.html</code></td></tr>
+        <tr><td>Sécurité / cache</td><td><code>_headers</code></td></tr>
+        <tr><td>Déployer une mise à jour</td><td><code>git push</code> (redéploiement auto)</td></tr>
+        <tr><td>Vraie authentification</td><td>Cloudflare Zero Trust → Access → <code>/galerie</code></td></tr>
+        <tr><td>Changer le code d'une section</td><td><code>config.json</code> → <code>access.sections.&lt;nom&gt;</code> (ou /admin)</td></tr>
+        <tr><td>Ajouter logiciel / e-book</td><td><code>config.catalog.&lt;nom&gt;</code></td></tr>
+        <tr><td>Ajouter un module interactif</td><td><code>modules/apps/&lt;nom&gt;.html</code> + <code>config.catalog.modules</code> + carte dans <code>modules/index.html</code></td></tr>
+        <tr><td>Ajouter un morceau de musique</td><td>MP3 dans <code>truvector-assets/musique/</code> + <code>config.catalog.musique</code> + ligne dans <code>musique/index.html</code></td></tr>
+        <tr><td>Publier un e-book</td><td>Chiffrer via <code>ebooks/proteger.html</code> → pousser le <code>.trubook</code> dans <code>truvector-assets/ebooks/</code> → carte dans <code>ebooks/index.html</code></td></tr>
+        <tr><td>Changer la date limite des e-books</td><td>Re-chiffrer les .trubook + <code>GLOBAL_UNTIL</code> et <code>data-until</code> dans <code>ebooks/index.html</code> + carte E-books de <code>index.html</code> + <code>manifest.json</code></td></tr>
+        <tr><td>Filtres d'une liste</td><td><code>assets/js/filters.js</code> (automatique, voir <a href="#s15">15</a>)</td></tr>
+        <tr><td>Modifier un JS / CSS partagé</td><td>+1 sur son <code>?v=</code> dans toutes les pages</td></tr>
+        <tr><td>Musique sur tout le site</td><td>page Musique → cocher <strong>« Écouter en navigant »</strong></td></tr>
+        <tr><td>Onglets de navigation</td><td><code>assets/js/nav.js</code> (rangée d'onglets, sur toutes les pages)</td></tr>
+        <tr><td>Configurer les dons</td><td><code>config.dons.links</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- 12 -->
+  <section id="s12">
+    <h2 class="s"><span class="n">12</span> Configuration (config.json)</h2>
+    <p class="lead"><code>config.json</code>, à la racine, est la <strong>source de vérité unique</strong> du site : statut, date d'ouverture, accès, droits, licence, couleur d'accent et galerie. Les pages le lisent au chargement.</p>
+    <div class="block"><div class="lbl">config.json (extrait)</div><pre>{
+  "status": <span class="g">"auto"</span>,
+  "launchDate": <span class="g">"2026-09-21T00:00:00+02:00"</span>,
+  "access": {
+    "method": <span class="g">"soft"</span>,             <span class="c">// "soft" | "cloudflare-access"</span>
+    "code": <span class="g">"truvector2026"</span>,       <span class="c">// porte galerie</span>
+    "adminCode": <span class="g">"truvector-admin"</span>,  <span class="c">// porte admin</span>
+    "users": [ { "email": "tristan@truvector.dev", "role": <span class="g">"admin"</span> } ]
+  },
+  "theme": { "accent": <span class="g">"#34f5c5"</span> },
+  "license": "…",
+  "gallery": [ { "slug": "coeur-aurore", "title": "Cœur d'aurore",
+                 "format": "square", "visible": true, "download": true } ]
+}</pre></div>
+    <p><strong>Priorité de lecture :</strong> valeurs par défaut (<code>assets/js/config.js</code>) &lt; <code>config.json</code> (committé) &lt; aperçu local (localStorage du panneau d'admin).</p>
+    <div class="note ok"><b>Le site marche même sans <code>config.json</code>.</b> Les valeurs par défaut sont inscrites dans <code>config.js</code> : ouvert en local (file://), <code>config.json</code> prend le relais une fois en ligne.</div>
+  </section>
+
+  <!-- 13 -->
+  <section id="s13">
+    <h2 class="s"><span class="n">13</span> Panneau d'administration</h2>
+    <p class="lead">Accessible sur <code>/admin</code>, il édite <code>config.json</code> sans toucher au code : paramètres, accès, droits, galerie, licence.</p>
+    <h3>Ce qu'on y règle</h3>
+    <ul>
+      <li><strong>Paramètres</strong> : statut (bientôt / ouvert / auto), date d'ouverture, couleur d'accent.</li>
+      <li><strong>Accès</strong> : méthode (Cloudflare Access ou porte JS), code galerie, code admin.</li>
+      <li><strong>Droits</strong> : liste d'utilisateurs + rôles (admin / éditeur / lecteur).</li>
+      <li><strong>Galerie</strong> : titre, format, visibilité, téléchargement et ordre de chaque créa.</li>
+      <li><strong>Licence</strong> : texte affiché sous la galerie.</li>
+    </ul>
+    <h3>Le flux de travail</h3>
+    <ol class="steps">
+      <li><strong>Aperçu (local)</strong> — enregistre dans ton navigateur pour voir le rendu tout de suite.</li>
+      <li><strong>Exporter config.json</strong> — télécharge le fichier ; remplace celui du dépôt et committe pour appliquer à tout le monde.</li>
+      <li><strong>Emails (Access)</strong> — exporte la liste d'e-mails à coller dans une policy Cloudflare Access.</li>
+      <li><strong>Réinitialiser l'aperçu</strong> — efface l'aperçu local et recharge <code>config.json</code>.</li>
+    </ol>
+    <div class="note warn"><b>Sécurité.</b> La porte du panneau est un verrou léger (code visible dans la source). Pour une vraie protection, place <strong>/admin</strong> derrière <strong>Cloudflare Access</strong>. Les droits sont appliqués <em>à la porte</em> par Access, pas par le JavaScript.</div>
+
+  <!-- 14 -->
+  <section id="s14">
+    <h2 class="s"><span class="n">14</span> E-books protégés (.trubook)</h2>
+    <p class="lead">Un <code>.trubook</code> est un fichier JSON chiffré en AES-256-GCM. Il contient le livre (HTML, PDF, EPUB, CBZ, image ou texte) <strong>et sa politique</strong> : date d'expiration, pages max, durée, filigrane. Tout se déchiffre dans le navigateur du lecteur.</p>
+    <h3>Le parcours d'un lecteur</h3>
+    <ol class="steps">
+      <li>Il clique « Lire » sur <code>ebooks/</code> → <code>lecteur.html?src=&lt;url du .trubook&gt;&amp;k=truvector</code>.</li>
+      <li>La visionneuse télécharge le fichier depuis jsDelivr, affiche la fenêtre de clé (passphrase pré-remplie).</li>
+      <li>« Déverrouiller » → déchiffrement local ; un livre HTML est découpé <strong>une page par chapitre</strong> (<code>&lt;h2&gt;</code>).</li>
+    </ol>
+    <h3>Publier une nouvelle</h3>
+    <ol class="steps">
+      <li>Ouvre <code>ebooks/proteger.html</code>, charge le fichier source, passphrase <code>truvector</code>, date d'expiration.</li>
+      <li>Pousse le <code>.trubook</code> dans <code>truvector-assets/ebooks/&lt;slug&gt;.trubook</code> (+ couverture dans <code>covers/</code>).</li>
+      <li>Le nom doit correspondre <strong>exactement</strong> au lien de la carte dans <code>ebooks/index.html</code>.</li>
+    </ol>
+    <div class="note warn"><b>Date d'expiration = dans le fichier.</b> Les .trubook actuels expirent le <strong>21/10/2026</strong>. La page e-books, la carte d'accueil et <code>manifest.json</code> affichent cette même date. Pour prolonger, il faut <strong>re-chiffrer</strong> chaque livre avec la nouvelle date, puis mettre à jour les 4 endroits.</div>
+    <div class="note ok"><b>Disponibilité automatique.</b> La page e-books vérifie chaque fichier sur le CDN : un .trubook absent affiche « Bientôt en ligne » au lieu d'un lecteur vide. État au 23/09/2026 : 3 fichiers publiés sur 21.</div>
+    <p><strong>Rappel honnête :</strong> aucune visionneuse web n'empêche une capture d'écran. Filigrane, flou quand la fenêtre perd le focus et limites de lecture <em>dissuadent</em> et rendent une fuite traçable.</p>
+  </section>
+
+  <!-- 15 -->
+  <section id="s15">
+    <h2 class="s"><span class="n">15</span> Filtres &amp; recherche</h2>
+    <p class="lead"><code>assets/js/filters.js</code> ajoute automatiquement une barre de recherche, des catégories cliquables et un tri A→Z aux listes du site. Aucune modification du HTML n'est nécessaire.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Page</th><th>Liste</th><th>Catégorie lue dans</th></tr></thead>
+      <tbody>
+        <tr><td>Logiciels, Modules, Concours</td><td><code>.sec-grid &gt; .sec-card</code></td><td><code>.badge</code> (activé à partir de 5 cartes)</td></tr>
+        <tr><td>E-books</td><td><code>.eb-grid &gt; .eb-card</code></td><td><code>.eb-badge</code> (genre)</td></tr>
+        <tr><td>Articles</td><td><code>#posts &gt; .post-card</code></td><td><code>.tg</code> (tags de <code>config.catalog.articles</code>)</td></tr>
+        <tr><td>Musique</td><td><code>#tvlist &gt; li</code></td><td>recherche seule (à partir de 8 pistes)</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>Recherche <strong>insensible aux accents</strong>, touche <code>/</code> pour y placer le curseur.</li>
+      <li>L'état est gardé dans l'URL (<code>#q=…&amp;f=…</code>) : un lien filtré se partage.</li>
+      <li>Au-delà de 9 catégories, les autres sont repliées derrière « + N autres ».</li>
+      <li>Pour qu'une nouvelle carte soit filtrable, il suffit qu'elle garde la même structure (badge inclus).</li>
+    </ul>
+  </section>
+
+  <!-- 16 -->
+  <section id="s16">
+    <h2 class="s"><span class="n">16</span> Cache &amp; versions (<code>?v=</code>)</h2>
+    <p class="lead">Les pages chargent les fichiers partagés avec un numéro de version (<code>tokens.css?v=6</code>, <code>player.js?v=3</code>…). Changer ce numéro force tous les navigateurs à reprendre le nouveau fichier.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Fichiers</th><th>Cache (dans <code>_headers</code>)</th></tr></thead>
+      <tbody>
+        <tr><td><code>/assets/js/*</code>, <code>/assets/css/*</code></td><td>5 minutes + revalidation (ils changent souvent)</td></tr>
+        <tr><td><code>/assets/img/*</code>, <code>/assets/vendor/*</code>, <code>/galerie/assets/*</code></td><td>1 an, <code>immutable</code> (ils ne changent jamais)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
+    <div class="block"><div class="lbl">versions en vigueur (v6)</div><pre>tokens.css?v=6   assets.js?v=2   nav.js?v=5   player.js?v=3
+tru-reader.js?v=2   filters.js?v=1</pre></div>
+    <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
+    <div class="block"><div class="lbl">bash</div><pre>grep -rl "player.js?v=3" --include=*.html . | xargs sed -i 's/player\.js?v=3/player.js?v=4/g'</pre></div>
+  </section>
+
+  <!-- 17 -->
+  <section id="s17">
+    <h2 class="s"><span class="n">17</span> Journal des versions</h2>
+    <h3>v6 — 23/09/2026</h3>
+    <ul>
+      <li><strong>E-books</strong> : CSP <code>connect-src</code> ouverte à jsDelivr ; fenêtre de clé qui passait derrière la zone de dépôt ; livres HTML/EPUB/texte qui restaient vides ; pagination par chapitre ; passphrase pré-remplie ; messages d'erreur clairs ; badge « Bientôt en ligne ».</li>
+      <li><strong>Dates</strong> : édition limitée alignée sur le <strong>21/10/2026</strong> (page e-books, accueil, <code>manifest.json</code>).</li>
+      <li><strong>Musique</strong> : mini-lecteur robuste (CDN par défaut, repli, anti-boucle, bouton ♫), reprise de la piste sur la page Musique, présent aussi sur les pages e-books.</li>
+      <li><strong>Lisibilité</strong> : boutons des 60 articles (texte menthe sur fond menthe), variables de couleur manquantes (<code>--acc4</code>, <code>--textd</code>…) rétablies en alias, cartes plus contrastées.</li>
+      <li><strong>Filtres</strong> : nouveau <code>filters.js</code> sur Logiciels, Modules, Articles, E-books, Musique.</li>
+      <li><strong>Cache</strong> : règles <code>_headers</code> séparées JS/CSS vs binaires, versions incrémentées partout.</li>
+      <li><strong>Bonus</strong> : <code>roadmap-effets.html</code>.</li>
+    </ul>
+    <h3>v5</h3>
+    <p>Cockpit d'administration, accès en deux modes, médias déportés sur <code>truvector-assets</code> (jsDelivr).</p>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="hr" style="margin-bottom:26px"></div>
+    <p class="fm">$ truvector docs --version 6 --host cloudflare</p>
+    <p>© 2026 TRUvector.dev · Manuel du site v6 · Where Code Meets Creativity 🌌</p>
+  </div>
+</footer>
+
+</body>
+</html>
