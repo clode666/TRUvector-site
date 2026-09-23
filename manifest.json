@@ -1,0 +1,326 @@
+{
+  "version": 1,
+  "generated": "2026-09-23",
+  "cdn": "https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks",
+  "window": {
+    "from": "2026-09-22",
+    "until": "2026-10-21"
+  },
+  "books": [
+    {
+      "n": 1,
+      "slug": "le-dernier-octet",
+      "title": "Le Dernier Octet",
+      "genre": "SF · anticipation",
+      "blurb": "Un archiviste doit choisir quels souvenirs de l’humanité sauver avant l’effacement d’un monde.",
+      "cover": "covers/le-dernier-octet.svg",
+      "trubook": "le-dernier-octet.trubook",
+      "words_target": 1650,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 2,
+      "slug": "signal-perdu",
+      "title": "Signal Perdu",
+      "genre": "SF · anticipation",
+      "blurb": "Une sonde revient deux siècles trop tard, porteuse d’un message que plus personne ne sait lire.",
+      "cover": "covers/signal-perdu.svg",
+      "trubook": "signal-perdu.trubook",
+      "words_target": 1500,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 3,
+      "slug": "root-at-nuit",
+      "title": "root@nuit",
+      "genre": "Cyberpunk",
+      "blurb": "Une hackeuse découvre que son propre cerveau tourne sous licence — et qu’elle est en retard de paiement.",
+      "cover": "covers/root-at-nuit.svg",
+      "trubook": "root-at-nuit.trubook",
+      "words_target": 1700,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 4,
+      "slug": "le-contrat-fantome",
+      "title": "Le Contrat Fantôme",
+      "genre": "Techno-thriller",
+      "blurb": "Un dev freelance accepte une mission trop bien payée, pour un client qui n’existe pas.",
+      "cover": "covers/le-contrat-fantome.svg",
+      "trubook": "le-contrat-fantome.trubook",
+      "words_target": 1600,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 5,
+      "slug": "chambre-404",
+      "title": "Chambre 404",
+      "genre": "Polar · noir",
+      "blurb": "Une disparition dans un hôtel dont une chambre ne figure sur aucun plan.",
+      "cover": "covers/chambre-404.svg",
+      "trubook": "chambre-404.trubook",
+      "words_target": 1600,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 6,
+      "slug": "encre-noire",
+      "title": "Encre Noire",
+      "genre": "Polar · noir",
+      "blurb": "Un tatoueur reconnaît, sur la peau d’un client, le dessin d’un crime jamais résolu.",
+      "cover": "covers/encre-noire.svg",
+      "trubook": "encre-noire.trubook",
+      "words_target": 1550,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 7,
+      "slug": "ce-qui-pousse-la-nuit",
+      "title": "Ce qui pousse la nuit",
+      "genre": "Fantastique",
+      "blurb": "Une plante offerte se met à réclamer bien plus que de l’eau.",
+      "cover": "covers/ce-qui-pousse-la-nuit.svg",
+      "trubook": "ce-qui-pousse-la-nuit.trubook",
+      "words_target": 1600,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 8,
+      "slug": "le-treizieme-etage",
+      "title": "Le Treizième Étage",
+      "genre": "Horreur",
+      "blurb": "L’ascenseur s’arrête à un étage que l’immeuble ne possède pas.",
+      "cover": "covers/le-treizieme-etage.svg",
+      "trubook": "le-treizieme-etage.trubook",
+      "words_target": 1550,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 9,
+      "slug": "la-forge-des-noms",
+      "title": "La Forge des Noms",
+      "genre": "Fantasy",
+      "blurb": "Dans un royaume où nommer une chose la crée, un forgeron oublie son propre nom.",
+      "cover": "covers/la-forge-des-noms.svg",
+      "trubook": "la-forge-des-noms.trubook",
+      "words_target": 1750,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 10,
+      "slug": "le-cartographe-aveugle",
+      "title": "Le Cartographe Aveugle",
+      "genre": "Fantasy",
+      "blurb": "Il dessine des cartes de pays qu’il n’a jamais vus — et qui finissent par exister.",
+      "cover": "covers/le-cartographe-aveugle.svg",
+      "trubook": "le-cartographe-aveugle.trubook",
+      "words_target": 1700,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 11,
+      "slug": "l-horloger-et-le-temps",
+      "title": "L’Horloger et le Temps",
+      "genre": "Conte philosophique",
+      "blurb": "Celui qui répare les montres du village n’a jamais eu le temps de vivre.",
+      "cover": "covers/l-horloger-et-le-temps.svg",
+      "trubook": "l-horloger-et-le-temps.trubook",
+      "words_target": 1450,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 12,
+      "slug": "la-fille-qui-comptait-les-etoiles",
+      "title": "La Fille qui Comptait les Étoiles",
+      "genre": "Conte poétique",
+      "blurb": "Sur ce qu’on cesse de voir, un à un, en grandissant.",
+      "cover": "covers/la-fille-qui-comptait-les-etoiles.svg",
+      "trubook": "la-fille-qui-comptait-les-etoiles.trubook",
+      "words_target": 1400,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 13,
+      "slug": "cafe-table-3",
+      "title": "Café, table 3",
+      "genre": "Tranche de vie",
+      "blurb": "Deux inconnus, le même café chaque matin, sans un mot — jusqu’au jour où l’un manque.",
+      "cover": "covers/cafe-table-3.svg",
+      "trubook": "cafe-table-3.trubook",
+      "words_target": 1500,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 14,
+      "slug": "vingt-minutes-de-retard",
+      "title": "Vingt Minutes de Retard",
+      "genre": "Réalisme",
+      "blurb": "Comment un train raté redessine une vie entière.",
+      "cover": "covers/vingt-minutes-de-retard.svg",
+      "trubook": "vingt-minutes-de-retard.trubook",
+      "words_target": 1500,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 15,
+      "slug": "correspondances",
+      "title": "Correspondances",
+      "genre": "Romance épistolaire",
+      "blurb": "Deux personnes s’écrivent par erreur sur une vieille adresse — et n’arrêtent plus.",
+      "cover": "covers/correspondances.svg",
+      "trubook": "correspondances.trubook",
+      "words_target": 1650,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 16,
+      "slug": "reunion-obligatoire",
+      "title": "Réunion Obligatoire",
+      "genre": "Satire",
+      "blurb": "La chronique d’une réunion qui ne finit jamais.",
+      "cover": "covers/reunion-obligatoire.svg",
+      "trubook": "reunion-obligatoire.trubook",
+      "words_target": 1400,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 17,
+      "slug": "mise-a-jour-requise",
+      "title": "Mise à Jour Requise",
+      "genre": "Humour",
+      "blurb": "Un homme dont la vie refuse de fonctionner tant qu’il n’a pas installé la v2.0.",
+      "cover": "covers/mise-a-jour-requise.svg",
+      "trubook": "mise-a-jour-requise.trubook",
+      "words_target": 1450,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 18,
+      "slug": "lettre-de-1914",
+      "title": "Lettre de 1914",
+      "genre": "Historique",
+      "blurb": "Une lettre du front qui arrive à destination cent ans trop tard.",
+      "cover": "covers/lettre-de-1914.svg",
+      "trubook": "lettre-de-1914.trubook",
+      "words_target": 1600,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 19,
+      "slug": "si-ada-avait-continue",
+      "title": "Si Ada Avait Continué",
+      "genre": "Uchronie",
+      "blurb": "Et si Ada Lovelace avait achevé sa machine à penser ?",
+      "cover": "covers/si-ada-avait-continue.svg",
+      "trubook": "si-ada-avait-continue.trubook",
+      "words_target": 1700,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 20,
+      "slug": "le-dernier-wagon",
+      "title": "Le Dernier Wagon",
+      "genre": "Huis clos",
+      "blurb": "Un train qui ne s’arrête plus, des passagers qui ne se souviennent pas d’être montés.",
+      "cover": "covers/le-dernier-wagon.svg",
+      "trubook": "le-dernier-wagon.trubook",
+      "words_target": 1650,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    },
+    {
+      "n": 21,
+      "slug": "le-jardin-sous-la-cendre",
+      "title": "Le Jardin sous la Cendre",
+      "genre": "Post-apo lumineux",
+      "blurb": "Après la fin du monde, une communauté fait éclore la première fleur.",
+      "cover": "covers/le-jardin-sous-la-cendre.svg",
+      "trubook": "le-jardin-sous-la-cendre.trubook",
+      "words_target": 1750,
+      "window": {
+        "from": "2026-09-22",
+        "until": "2026-10-21"
+      },
+      "passphrase_public": "truvector"
+    }
+  ]
+}

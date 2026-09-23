@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manuel du site — TRUvector.dev v5</title>
-<meta name="description" content="Manuel complet du site TRUvector.dev v4 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
+<title>Manuel du site — TRUvector.dev v6</title>
+<meta name="description" content="Manuel complet du site TRUvector.dev v6 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -111,14 +111,14 @@
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <span><span class="tru">TRU</span>vector<span class="dev">.dev</span></span>
   </span>
-  <span class="badge">MANUEL v4</span>
+  <span class="badge">MANUEL v6</span>
 </div></nav>
 
 <header class="top">
   <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
   <div class="wrap in">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <h1>Manuel du site — TRUvector.dev v5</h1>
+    <h1>Manuel du site — TRUvector.dev v6</h1>
     <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
     <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
   </div>
@@ -158,11 +158,11 @@
     <p>Pour garder <strong>Cloudflare tout petit</strong> (~3&nbsp;Mo), les médias lourds sont <strong>déportés</strong> sur un second dépôt GitHub servi par le CDN gratuit <strong>jsDelivr</strong>. Deux livrables&nbsp;:</p>
     <ul>
       <li><code>truvector-site</code> (~3&nbsp;Mo) → <strong>Cloudflare Pages</strong> : HTML, CSS, JS, <code>config.json</code>, mini-images d'interface. Aucun MP3, aucune image de galerie, plus de <code>vault.json</code>.</li>
-      <li><code>truvector-assets</code> (~33&nbsp;Mo) → <strong>nouveau dépôt GitHub public</strong> <code>clode666/truvector-assets</code> : <code>musique/</code> (12 MP3) + <code>galerie/</code> (<code>.webp</code> + <code>.png</code>).</li>
+      <li><code>truvector-assets</code> (~33&nbsp;Mo) → <strong>nouveau dépôt GitHub public</strong> <code>clode666/truvector-assets</code> : <code>musique/</code> (36 MP3) + <code>galerie/</code> (<code>.webp</code> + <code>.png</code>) + <code>ebooks/</code> (<code>.trubook</code>, <code>covers/*.svg</code>, <code>manifest.json</code>).</li>
     </ul>
     <p>Le <strong>seul réglage</strong> est dans <code>assets/js/assets.js</code>&nbsp;:</p>
     <pre><code>window.TRU_ASSET_BASE = "https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main";</code></pre>
-    <p>Le lecteur audio, le mini-lecteur global et la galerie construisent leurs URLs à partir de cette base. <strong>Chaîne vide (<code>""</code>)</strong> = médias servis en local (mode monolithique) — le site marche dans les deux cas.</p>
+    <p>Le lecteur audio, le mini-lecteur global, la galerie et les liens e-books construisent leurs URLs à partir de cette base. Depuis la v6, le mini-lecteur connaît aussi l'adresse jsDelivr par défaut : il fonctionne même si <code>assets.js</code> manque ou est périmé en cache. <strong>Chaîne vide (<code>""</code>)</strong> = médias servis en local (mode monolithique) — le site marche dans les deux cas.</p>
     <h3>Mise en place (une fois)</h3>
     <ol>
       <li>Crée un dépôt GitHub <strong>public</strong> <code>truvector-assets</code>, pousse-y le contenu de <code>truvector-assets/</code>.</li>
@@ -172,7 +172,7 @@
     <h3>Mettre à jour un média</h3>
     <p>Remplace le fichier dans <code>truvector-assets</code> + <code>git push</code>. jsDelivr met <code>@main</code> en cache ~24&nbsp;h–7&nbsp;j&nbsp;; pour forcer&nbsp;: purge <code>https://purge.jsdelivr.net/gh/clode666/truvector-assets@main/&lt;chemin&gt;</code>, ou crée un tag (<code>v1</code>…) et pointe <code>TRU_ASSET_BASE</code> sur <code>@v1</code>.</p>
     <div class="note"><b>Alternative « pro » (facultatif).</b> Stocke les médias sur <strong>Cloudflare R2</strong> (10 Go gratuits, egress gratuit) exposé sur <code>media.truvector.dev</code>, et mets cette URL dans <code>TRU_ASSET_BASE</code>. Même mécanisme, sur ton propre domaine.</div>
-    <div class="note"><b>⚠️ CSP (important).</b> Le fichier <code>_headers</code> définit une Content-Security-Policy stricte. C'est déjà réglé pour <code>https://cdn.jsdelivr.net</code> (dans <code>img-src</code> et <code>media-src</code>) et pour l'analytics Cloudflare (<code>static.cloudflareinsights.com</code> / <code>cloudflareinsights.com</code>). Si tu changes d'hébergement de médias, ajoute son domaine à <code>img-src</code> et <code>media-src</code> dans <code>_headers</code>.</div>
+    <div class="note"><b>⚠️ CSP (important).</b> Le fichier <code>_headers</code> définit une Content-Security-Policy stricte. C'est déjà réglé pour <code>https://cdn.jsdelivr.net</code> (dans <code>img-src</code>, <code>media-src</code> <strong>et <code>connect-src</code></strong> — ce dernier est indispensable au lecteur d'e-books, qui télécharge les .trubook par <code>fetch</code>) et pour l'analytics Cloudflare (<code>static.cloudflareinsights.com</code> / <code>cloudflareinsights.com</code>). Si tu changes d'hébergement de médias, ajoute son domaine à <code>img-src</code>, <code>media-src</code> et <code>connect-src</code> dans <code>_headers</code>.</div>
     <div class="note ok"><b>Pourquoi c'était lourd&nbsp;:</b> la galerie encodait ses images en base64 dans la page (4&nbsp;Mo) et chaque section gardait un <code>vault.json</code> chiffré inutile en mode public (~6,6&nbsp;Mo). Supprimés de la structure&nbsp;; la galerie pointe désormais vers des fichiers.</div>
   </section>
 
@@ -193,16 +193,21 @@
       <li><a href="#s11">Référence rapide</a></li>
       <li><a href="#s12">Configuration (config.json)</a></li>
       <li><a href="#s13">Panneau d'administration</a></li>
+      <li><a href="#s14">E-books protégés</a></li>
+      <li><a href="#s15">Filtres &amp; recherche</a></li>
+      <li><a href="#s16">Cache &amp; versions</a></li>
+      <li><a href="#s17">Journal des versions</a></li>
     </ol>
   </nav>
 
   <!-- 1 -->
   <section id="s1">
     <h2 class="s"><span class="n">01</span> Vue d'ensemble</h2>
-    <p class="lead">TRUvector.dev v4 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
-    <p>Il tient sur trois pages plus une galerie protégée, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Ses objectifs&nbsp;:</p>
+    <p class="lead">TRUvector.dev v6 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
+    <p>Il réunit une page d'accueil, neuf sections (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir) et un pôle légal, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Les médias lourds (musique, images, e-books) sont servis par un second dépôt via jsDelivr. Ses objectifs&nbsp;:</p>
     <ul>
-      <li>présenter la marque avec un <strong>compte à rebours</strong> jusqu'à l'ouverture (21/09/2026)&nbsp;;</li>
+      <li>présenter la marque (le <strong>compte à rebours</strong> a atteint l'ouverture le 21/09/2026 : le site est ouvert)&nbsp;;</li>
+      <li>publier des <strong>e-books protégés</strong> (.trubook chiffrés) en édition limitée — actuellement <strong>jusqu'au 21/10/2026</strong>&nbsp;;</li>
       <li>diffuser des <strong>créations graphiques en libre téléchargement</strong>&nbsp;;</li>
       <li>offrir un <strong>accès simple par authentification</strong>&nbsp;;</li>
       <li>afficher des <strong>mentions légales</strong> conformes.</li>
@@ -244,16 +249,16 @@
     <p>Accessibles depuis les <strong>onglets de la barre de navigation</strong> (en haut à droite, sur toutes les pages)&nbsp;: <em>Accueil · Galerie · Logiciels · E-books · Musique · Articles · Modules · Concours · Soutenir</em>. L'onglet de la page courante est surligné ; sur mobile la rangée défile horizontalement. En <strong>build PUBLIC</strong> (celui livré), les sections sont ouvertes sans code ; en <strong>build COFFRES</strong>, chacune peut recevoir son propre code (<code>config.access.sections</code>, sauf <code>articles/</code> qui reste public)&nbsp;:</p>
     <ul>
       <li><code>logiciels/</code> — catalogue (pré-rempli, éditable via <code>config.catalog.logiciels</code>).</li>
-      <li><code>ebooks/</code> — e-books et publications.</li>
-      <li><code>musique/</code> — <strong>lecteur audio</strong> ; fichiers dans <code>musique/assets/</code>, déclarés dans <code>config.catalog.musique</code>. La case <strong>« Écouter en navigant »</strong> (lecture en fond) transmet la piste et la position au <strong>mini-lecteur global</strong> (<code>assets/js/player.js</code>), qui reprend la musique <strong>de page en page</strong> en bas à droite (un clic sur ▶ parfois nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs). <strong>36 titres</strong> : <strong>24 créations originales dans des styles radicalement différents</strong> (rétrowave, lo-fi, chiptune, deep house, techno, trance, drum &amp; bass, trap, ambient, trip-hop, funk, disco, reggae/dub, bossa nova, jazz, blues, rock, cinématique, baroque, valse, vaporwave, future bass, world/oriental, pizzicato) + les 10 pistes <em>romantico·geek</em> + les 2 démos d'origine. La playlist lit les fichiers directement (<code>assets/&lt;nom&gt;.mp3</code>).</li>
+      <li><code>ebooks/</code> — <strong>21 nouvelles protégées</strong> (.trubook) lues dans la visionneuse <code>ebooks/lecteur.html</code>, édition limitée jusqu'au 21/10/2026. Outil de chiffrement : <code>ebooks/proteger.html</code>. Voir la section <a href="#s14">14</a>.</li>
+      <li><code>musique/</code> — <strong>lecteur audio</strong> ; fichiers dans <code>truvector-assets/musique/</code> (ou <code>musique/assets/</code> en mode monolithique), déclarés dans <code>config.catalog.musique</code> <em>et</em> dans la liste de <code>musique/index.html</code> (mêmes noms, même ordre). La case <strong>« Écouter en navigant »</strong> (lecture en fond) transmet la piste et la position au <strong>mini-lecteur global</strong> (<code>assets/js/player.js</code>), qui reprend la musique <strong>de page en page</strong> en bas à droite (un clic sur ▶ parfois nécessaire après la 1re navigation, à cause de l'autoplay des navigateurs). <strong>36 titres</strong> : <strong>24 créations originales dans des styles radicalement différents</strong> (rétrowave, lo-fi, chiptune, deep house, techno, trance, drum &amp; bass, trap, ambient, trip-hop, funk, disco, reggae/dub, bossa nova, jazz, blues, rock, cinématique, baroque, valse, vaporwave, future bass, world/oriental, pizzicato) + les 10 pistes <em>romantico·geek</em> + les 2 démos d'origine. La playlist lit les fichiers directement (<code>assets/&lt;nom&gt;.mp3</code>).</li>
       <li><code>articles/</code> — <strong>blog public</strong> (60 articles, recherche, indexable) ; billets dans <code>articles/posts/</code>. Réintégrés de l'ancien site, ré-habillés v4.</li>
       <li><code>dons/</code> — page de soutien (<code>config.dons.links</code>).</li>
       <li><code>concours/</code> — jeux-concours (<code>config.concours</code>).</li>
       <li><code>modules/</code> — <strong>modules interactifs</strong> : petites applications autonomes, 100&nbsp;% côté client, rangées dans <code>modules/apps/</code> et listées dans <code>config.catalog.modules</code>. <strong>12 modules</strong> livrés — <em>Sécurité</em> : TRU Keyforge, TRU Hasher, License Forge ; <em>Dev</em> : Base64 · Hex Studio, Regex Lab, JSON Forge, Markdown Live ; <em>Outil</em> : UXC Estimator, Cron Décodeur ; <em>Créatif</em> : Aurora Weaver, Color Aurora ; <em>Démo</em> : GrowVault Lite. Pour en ajouter un&nbsp;: dépose <code>modules/apps/&lt;nom&gt;.html</code>, ajoute une entrée <code>{ "title", "desc", "url": "apps/&lt;nom&gt;.html", "badge" }</code> dans <code>config.catalog.modules</code>, et une carte dans <code>modules/index.html</code>.</li>
     </ul>
 
-    <h3>Roadmap — <code>roadmap.html</code> (bonus)</h3>
-    <p>La feuille de route v4, autonome, aux mêmes couleurs.</p>
+    <h3>Roadmaps (bonus)</h3>
+    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
   </section>
 
   <!-- 3 -->
@@ -287,12 +292,18 @@
 │   ├── js/gate.js             <span class="c"># (legacy v4) portail à code</span>
 │   ├── js/unlock.js           <span class="p"># v5 : déverrouillage chiffré (passphrase / fichier-clé)</span>
 │   ├── js/player.js           <span class="p"># mini-lecteur global — musique sur toutes les pages (sauf page Musique)</span>
+│   ├── js/filters.js          <span class="p"># v6 : recherche + catégories + tri sur les listes</span>
+│   ├── js/tru-reader.js       <span class="p"># visionneuse e-books (PDF, EPUB, CBZ, HTML, .trubook)</span>
+│   ├── js/tru-crypto.js       <span class="p"># chiffrement .trubook (AES-256-GCM + PBKDF2)</span>
+│   ├── js/assets.js           <span class="p"># TRU_ASSET_BASE : adresse du CDN des médias</span>
+│   ├── vendor/                <span class="c"># pdf.js + fflate (lecture PDF / zip)</span>
 │   ├── js/nav.js              <span class="p"># onglets de sections DIRECTS dans la barre de nav (v4)</span>
 │   ├── js/countdown.js        <span class="c"># compte à rebours (piloté par la config)</span>
 │   └── img/                   <span class="c"># triskele.svg, createur.webp, og-banner.*</span>
 ├── config.json                <span class="p"># ★ source de vérité : paramètres, droits, galerie</span>
 ├── favicon.svg                <span class="c"># triskèle néon</span>
 ├── roadmap.html               <span class="c"># feuille de route (bonus)</span>
+├── roadmap-effets.html        <span class="c"># v6 : roadmap visuelle avec démos</span>
 ├── _headers                   <span class="c"># sécurité + cache (Cloudflare Pages)</span>
 ├── _redirects                 <span class="c"># redirections optionnelles</span>
 ├── wrangler.toml              <span class="p"># déploiement Cloudflare statique (sans build)</span>
@@ -337,7 +348,7 @@
     <p>Place <strong>le contenu du dossier <code>truvector.dev/</code> à la racine</strong> d'un nouveau dépôt.</p>
     <div class="block"><div class="lbl">terminal</div><pre>git init
 git add .
-git commit -m "TRUvector.dev v4"
+git commit -m "TRUvector.dev v6"
 git branch -M main
 git remote add origin https://github.com/clode666/truvector-dev.git
 git push -u origin main</pre></div>
@@ -480,7 +491,13 @@ git push</pre></div>
         <tr><td>Un script est bloqué en prod</td><td>La CSP de <code>_headers</code> autorise <code>'self'</code> et l'inline. Si tu ajoutes un outil externe, ajoute son domaine à la directive concernée.</td></tr>
         <tr><td>La musique ne repart pas en changeant de page</td><td>Politique d'autoplay du navigateur : clique une fois sur ▶ du mini-lecteur, ensuite la lecture suit d'une page à l'autre.</td></tr>
         <tr><td>Build échoue sur <code>npx hugo</code> / « could not determine executable »</td><td>Cloudflare a mal deviné un framework (Hugo). Le site n'a pas de build : garde une <b>Build command vide</b> (Pages), ou committe le <code>wrangler.toml</code> fourni à la racine (Workers).</td></tr>
-        <tr><td>Cloudflare Pages sert une vieille version</td><td>Cache. Force un nouveau déploiement (nouveau commit) ou purge le cache dans le dashboard.</td></tr>
+        <tr><td>Cloudflare Pages sert une vieille version</td><td>Cache. Force un nouveau déploiement (nouveau commit) ou purge le cache dans le dashboard. Pour un JS/CSS modifié, <strong>incrémente son <code>?v=</code></strong> dans toutes les pages (voir <a href="#s16">16</a>).</td></tr>
+        <tr><td>E-book : « Impossible de charger le fichier » + erreur <em>Content Security Policy</em> en console</td><td><code>connect-src</code> de <code>_headers</code> doit contenir <code>https://cdn.jsdelivr.net</code>. Redéploie puis Ctrl+F5.</td></tr>
+        <tr><td>E-book : « pas encore en ligne »</td><td>Le <code>.trubook</code> n'existe pas dans <code>truvector-assets/ebooks/</code> (404). Pousse-le ; la carte passe automatiquement de « Bientôt en ligne » à « Lire ».</td></tr>
+        <tr><td>E-book : « Clé incorrecte »</td><td>La passphrase publique est <code>truvector</code> (pré-remplie via <code>&amp;k=truvector</code> dans le lien). Si tu as chiffré avec une autre, mets-la dans le lien.</td></tr>
+        <tr><td>E-book : « Accès expiré »</td><td>La date d'échéance est <strong>inscrite dans le fichier chiffré</strong> (<code>policy.expires</code>). La changer sur la page ne suffit pas : re-chiffre le livre avec <code>ebooks/proteger.html</code>.</td></tr>
+        <tr><td>Le mini-lecteur affiche « Musique indisponible »</td><td>3 pistes d'affilée introuvables : vérifie les noms dans <code>config.catalog.musique</code> et leur présence dans <code>truvector-assets/musique/</code>.</td></tr>
+        <tr><td>Texte d'un bouton invisible (même couleur que le fond)</td><td>Une règle de contenu (<code>.article a</code>…) écrase <code>.btn</code>. Déjà verrouillé dans <code>tokens.css</code> v6 pour <code>a.btn</code>, <code>.btn-ghost</code>, <code>.btn-outline</code>.</td></tr>
       </tbody>
     </table></div>
   </section>
@@ -504,7 +521,11 @@ git push</pre></div>
         <tr><td>Changer le code d'une section</td><td><code>config.json</code> → <code>access.sections.&lt;nom&gt;</code> (ou /admin)</td></tr>
         <tr><td>Ajouter logiciel / e-book</td><td><code>config.catalog.&lt;nom&gt;</code></td></tr>
         <tr><td>Ajouter un module interactif</td><td><code>modules/apps/&lt;nom&gt;.html</code> + <code>config.catalog.modules</code> + carte dans <code>modules/index.html</code></td></tr>
-        <tr><td>Ajouter un morceau de musique</td><td>fichier dans <code>musique/assets/</code> + <code>config.catalog.musique</code></td></tr>
+        <tr><td>Ajouter un morceau de musique</td><td>MP3 dans <code>truvector-assets/musique/</code> + <code>config.catalog.musique</code> + ligne dans <code>musique/index.html</code></td></tr>
+        <tr><td>Publier un e-book</td><td>Chiffrer via <code>ebooks/proteger.html</code> → pousser le <code>.trubook</code> dans <code>truvector-assets/ebooks/</code> → carte dans <code>ebooks/index.html</code></td></tr>
+        <tr><td>Changer la date limite des e-books</td><td>Re-chiffrer les .trubook + <code>GLOBAL_UNTIL</code> et <code>data-until</code> dans <code>ebooks/index.html</code> + carte E-books de <code>index.html</code> + <code>manifest.json</code></td></tr>
+        <tr><td>Filtres d'une liste</td><td><code>assets/js/filters.js</code> (automatique, voir <a href="#s15">15</a>)</td></tr>
+        <tr><td>Modifier un JS / CSS partagé</td><td>+1 sur son <code>?v=</code> dans toutes les pages</td></tr>
         <tr><td>Musique sur tout le site</td><td>page Musique → cocher <strong>« Écouter en navigant »</strong></td></tr>
         <tr><td>Onglets de navigation</td><td><code>assets/js/nav.js</code> (rangée d'onglets, sur toutes les pages)</td></tr>
         <tr><td>Configurer les dons</td><td><code>config.dons.links</code></td></tr>
@@ -554,6 +575,82 @@ git push</pre></div>
       <li><strong>Réinitialiser l'aperçu</strong> — efface l'aperçu local et recharge <code>config.json</code>.</li>
     </ol>
     <div class="note warn"><b>Sécurité.</b> La porte du panneau est un verrou léger (code visible dans la source). Pour une vraie protection, place <strong>/admin</strong> derrière <strong>Cloudflare Access</strong>. Les droits sont appliqués <em>à la porte</em> par Access, pas par le JavaScript.</div>
+
+  <!-- 14 -->
+  <section id="s14">
+    <h2 class="s"><span class="n">14</span> E-books protégés (.trubook)</h2>
+    <p class="lead">Un <code>.trubook</code> est un fichier JSON chiffré en AES-256-GCM. Il contient le livre (HTML, PDF, EPUB, CBZ, image ou texte) <strong>et sa politique</strong> : date d'expiration, pages max, durée, filigrane. Tout se déchiffre dans le navigateur du lecteur.</p>
+    <h3>Le parcours d'un lecteur</h3>
+    <ol class="steps">
+      <li>Il clique « Lire » sur <code>ebooks/</code> → <code>lecteur.html?src=&lt;url du .trubook&gt;&amp;k=truvector</code>.</li>
+      <li>La visionneuse télécharge le fichier depuis jsDelivr, affiche la fenêtre de clé (passphrase pré-remplie).</li>
+      <li>« Déverrouiller » → déchiffrement local ; un livre HTML est découpé <strong>une page par chapitre</strong> (<code>&lt;h2&gt;</code>).</li>
+    </ol>
+    <h3>Publier une nouvelle</h3>
+    <ol class="steps">
+      <li>Ouvre <code>ebooks/proteger.html</code>, charge le fichier source, passphrase <code>truvector</code>, date d'expiration.</li>
+      <li>Pousse le <code>.trubook</code> dans <code>truvector-assets/ebooks/&lt;slug&gt;.trubook</code> (+ couverture dans <code>covers/</code>).</li>
+      <li>Le nom doit correspondre <strong>exactement</strong> au lien de la carte dans <code>ebooks/index.html</code>.</li>
+    </ol>
+    <div class="note warn"><b>Date d'expiration = dans le fichier.</b> Les .trubook actuels expirent le <strong>21/10/2026</strong>. La page e-books, la carte d'accueil et <code>manifest.json</code> affichent cette même date. Pour prolonger, il faut <strong>re-chiffrer</strong> chaque livre avec la nouvelle date, puis mettre à jour les 4 endroits.</div>
+    <div class="note ok"><b>Disponibilité automatique.</b> La page e-books vérifie chaque fichier sur le CDN : un .trubook absent affiche « Bientôt en ligne » au lieu d'un lecteur vide. État au 23/09/2026 : 3 fichiers publiés sur 21.</div>
+    <p><strong>Rappel honnête :</strong> aucune visionneuse web n'empêche une capture d'écran. Filigrane, flou quand la fenêtre perd le focus et limites de lecture <em>dissuadent</em> et rendent une fuite traçable.</p>
+  </section>
+
+  <!-- 15 -->
+  <section id="s15">
+    <h2 class="s"><span class="n">15</span> Filtres &amp; recherche</h2>
+    <p class="lead"><code>assets/js/filters.js</code> ajoute automatiquement une barre de recherche, des catégories cliquables et un tri A→Z aux listes du site. Aucune modification du HTML n'est nécessaire.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Page</th><th>Liste</th><th>Catégorie lue dans</th></tr></thead>
+      <tbody>
+        <tr><td>Logiciels, Modules, Concours</td><td><code>.sec-grid &gt; .sec-card</code></td><td><code>.badge</code> (activé à partir de 5 cartes)</td></tr>
+        <tr><td>E-books</td><td><code>.eb-grid &gt; .eb-card</code></td><td><code>.eb-badge</code> (genre)</td></tr>
+        <tr><td>Articles</td><td><code>#posts &gt; .post-card</code></td><td><code>.tg</code> (tags de <code>config.catalog.articles</code>)</td></tr>
+        <tr><td>Musique</td><td><code>#tvlist &gt; li</code></td><td>recherche seule (à partir de 8 pistes)</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li>Recherche <strong>insensible aux accents</strong>, touche <code>/</code> pour y placer le curseur.</li>
+      <li>L'état est gardé dans l'URL (<code>#q=…&amp;f=…</code>) : un lien filtré se partage.</li>
+      <li>Au-delà de 9 catégories, les autres sont repliées derrière « + N autres ».</li>
+      <li>Pour qu'une nouvelle carte soit filtrable, il suffit qu'elle garde la même structure (badge inclus).</li>
+    </ul>
+  </section>
+
+  <!-- 16 -->
+  <section id="s16">
+    <h2 class="s"><span class="n">16</span> Cache &amp; versions (<code>?v=</code>)</h2>
+    <p class="lead">Les pages chargent les fichiers partagés avec un numéro de version (<code>tokens.css?v=6</code>, <code>player.js?v=3</code>…). Changer ce numéro force tous les navigateurs à reprendre le nouveau fichier.</p>
+    <div class="tw"><table>
+      <thead><tr><th>Fichiers</th><th>Cache (dans <code>_headers</code>)</th></tr></thead>
+      <tbody>
+        <tr><td><code>/assets/js/*</code>, <code>/assets/css/*</code></td><td>5 minutes + revalidation (ils changent souvent)</td></tr>
+        <tr><td><code>/assets/img/*</code>, <code>/assets/vendor/*</code>, <code>/galerie/assets/*</code></td><td>1 an, <code>immutable</code> (ils ne changent jamais)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
+    <div class="block"><div class="lbl">versions en vigueur (v6)</div><pre>tokens.css?v=6   assets.js?v=2   nav.js?v=5   player.js?v=3
+tru-reader.js?v=2   filters.js?v=1</pre></div>
+    <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
+    <div class="block"><div class="lbl">bash</div><pre>grep -rl "player.js?v=3" --include=*.html . | xargs sed -i 's/player\.js?v=3/player.js?v=4/g'</pre></div>
+  </section>
+
+  <!-- 17 -->
+  <section id="s17">
+    <h2 class="s"><span class="n">17</span> Journal des versions</h2>
+    <h3>v6 — 23/09/2026</h3>
+    <ul>
+      <li><strong>E-books</strong> : CSP <code>connect-src</code> ouverte à jsDelivr ; fenêtre de clé qui passait derrière la zone de dépôt ; livres HTML/EPUB/texte qui restaient vides ; pagination par chapitre ; passphrase pré-remplie ; messages d'erreur clairs ; badge « Bientôt en ligne ».</li>
+      <li><strong>Dates</strong> : édition limitée alignée sur le <strong>21/10/2026</strong> (page e-books, accueil, <code>manifest.json</code>).</li>
+      <li><strong>Musique</strong> : mini-lecteur robuste (CDN par défaut, repli, anti-boucle, bouton ♫), reprise de la piste sur la page Musique, présent aussi sur les pages e-books.</li>
+      <li><strong>Lisibilité</strong> : boutons des 60 articles (texte menthe sur fond menthe), variables de couleur manquantes (<code>--acc4</code>, <code>--textd</code>…) rétablies en alias, cartes plus contrastées.</li>
+      <li><strong>Filtres</strong> : nouveau <code>filters.js</code> sur Logiciels, Modules, Articles, E-books, Musique.</li>
+      <li><strong>Cache</strong> : règles <code>_headers</code> séparées JS/CSS vs binaires, versions incrémentées partout.</li>
+      <li><strong>Bonus</strong> : <code>roadmap-effets.html</code>.</li>
+    </ul>
+    <h3>v5</h3>
+    <p>Cockpit d'administration, accès en deux modes, médias déportés sur <code>truvector-assets</code> (jsDelivr).</p>
   </section>
 
 </main>
@@ -561,8 +658,8 @@ git push</pre></div>
 <footer>
   <div class="wrap">
     <div class="hr" style="margin-bottom:26px"></div>
-    <p class="fm">$ truvector docs --version 4 --host cloudflare</p>
-    <p>© 2026 TRUvector.dev · Manuel du site v4 · Where Code Meets Creativity 🌌</p>
+    <p class="fm">$ truvector docs --version 6 --host cloudflare</p>
+    <p>© 2026 TRUvector.dev · Manuel du site v6 · Where Code Meets Creativity 🌌</p>
   </div>
 </footer>
 
