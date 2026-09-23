@@ -12,7 +12,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="../assets/css/fx.css?v=3">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
 <style>
   .section-hero{position:relative;padding:52px 0 18px;text-align:center;overflow:hidden}
   .section-hero .in{position:relative;z-index:2}
@@ -36,6 +39,8 @@
   .empty{text-align:center;color:var(--texte-2);border:1px dashed var(--bord-fort);border-radius:var(--r);padding:40px 20px;background:var(--panneau);margin:8px 0 34px}
 </style>
   <script src="../assets/js/assets.js?v=2"></script>
+<script src="../assets/js/config.js?v=2"></script>
+<script src="../assets/js/render.js?v=1"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -97,8 +102,9 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return
   else { render([]); }
 })();
 </script>
-<script src="../assets/js/player.js?v=3"></script>
+<script src="../assets/js/player.js?v=6"></script>
 <script src="../assets/js/nav.js?v=5"></script>
-<script src="../assets/js/filters.js?v=1"></script>
+<script src="../assets/js/filters.js?v=4"></script>
+<script src="../assets/js/fx.js?v=3"></script>
 </body>
 </html>

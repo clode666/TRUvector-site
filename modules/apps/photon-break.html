@@ -9,7 +9,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/tokens.css?v=6">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=3">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
 <style>
 .tool{max-width:900px;margin:0 auto;padding:8px 22px 64px}
 .tool.wide{max-width:1060px}
@@ -54,6 +57,8 @@ canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(
 
 </style>
 <script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=1"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -76,7 +81,7 @@ canvas{max-width:100%;touch-action:none;border-radius:16px;border:1px solid var(
 </main>
 <div class="toast" id="toast"></div>
 <script src="../../assets/js/nav.js?v=5"></script>
-<script src="../../assets/js/player.js?v=3"></script>
+<script src="../../assets/js/player.js?v=6"></script>
 <script>
 
 (function(){
@@ -84,7 +89,7 @@ var cv=document.getElementById('cv'),ctx=cv.getContext('2d');var W=cv.width,H=cv
 var paddle,ball,bricks,score,lives,level,running=false;var parts=[];
 var COLS=['rgba(52,245,197,','rgba(89,227,154,','rgba(244,197,107,','rgba(201,139,245,','rgba(177,74,237,'];
 var ov=document.getElementById('ov');
-function upd(){document.getElementById('score').textContent=score;document.getElementById('lives').textContent=lives;document.getElementById('level').textContent=level;}
+function upd(){try{var bb=+localStorage.getItem('tv_photon_best')||0;if(score>bb)localStorage.setItem('tv_photon_best',score);}catch(e){}document.getElementById('score').textContent=score;document.getElementById('lives').textContent=lives;document.getElementById('level').textContent=level;}
 function newBricks(){bricks=[];var rows=4+Math.min(level,4),cols=9,bw=(W-40)/cols,bh=20,ox=20,oy=56;for(var r=0;r<rows;r++)for(var c=0;c<cols;c++)bricks.push({x:ox+c*bw,y:oy+r*bh*1.4,w:bw-6,h:bh,c:COLS[r%COLS.length],a:1});}
 function serve(){ball={x:W/2,y:H-60,vx:3.2*(Math.random()<.5?1:-1),vy:-3.6,r:7};}
 function reset(full){paddle={w:96,h:12,x:W/2-48};serve();parts=[];if(full){score=0;lives=3;level=1;}newBricks();running=false;upd();}
@@ -115,5 +120,6 @@ reset(true);loop();
 })();
 
 </script>
+<script src="../../assets/js/fx.js?v=3"></script>
 </body>
 </html>
