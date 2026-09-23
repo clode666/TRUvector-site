@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier 2FA (TOTP) — TRUvector.dev</title>
+<meta name="description" content="Codes à 6 chiffres à partir d’une clé ou d’un QR code otpauth://, vérification de la synchronisation d’une appli d’authentification, et création de clés de test. Rien n’est stocké.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Atelier <span class="dev">2FA (TOTP)</span></h1>
+  <p>Codes à 6 chiffres à partir d’une clé ou d’un QR code otpauth://, vérification de la synchronisation d’une appli d’authentification, et création de clés de test. Rien n’est stocké.</p>
+  <span class="kb loc">100 % local — rien ne quitte ta page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-t="read">Lire une clé</button><button role="tab" aria-selected="false" data-t="new">Créer une clé de test</button></div>
+  <section id="p-read"><div class="ctl">
+    <div class="krow"><div><label class="fl" for="sec">Clé secrète (base32) ou lien otpauth://</label><input id="sec" type="password" class="mono" autocomplete="off" spellcheck="false" placeholder="JBSWY3DPEHPK3PXP"></div></div>
+    <div class="krow"><label class="btn btn-ghost" style="cursor:pointer">📷 Lire un QR code (image)<input id="img" type="file" accept="image/*" hidden></label><button class="btn btn-ghost" id="demo" type="button">Clé de démonstration</button></div>
+    <div id="qrmsg" class="dim" style="font-size:12.5px"></div></div>
+    <div id="codes"></div>
+    <div class="ksec"><h2>✅ Mon appli est-elle synchronisée ?</h2><div class="ctl"><div class="krow"><div><label class="fl" for="chk">Code affiché par ton appli</label><input id="chk" type="text" class="mono" inputmode="numeric" maxlength="8" placeholder="123456"></div></div><div id="vres"></div></div></div>
+  </section>
+  <section id="p-new" hidden><div class="ctl"><div class="krow"><div><label class="fl" for="iss">Service</label><input id="iss" type="text" value="TRUvector"></div><div><label class="fl" for="acc">Compte</label><input id="acc" type="text" value="test@exemple.fr"></div></div>
+    <div class="krow"><button class="btn" id="mk" type="button">Générer une clé</button></div></div><div id="newout"></div></section>
+  <div class="note"><b>Tout est local</b> : le calcul HMAC se fait avec la cryptographie de ton navigateur, et la clé n’est ni envoyée ni enregistrée. Ne colle jamais la clé d’un compte réel sur un appareil qui n’est pas le tien.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script src="../../assets/vendor/qrcode/qrcode.js"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var tabs=document.querySelectorAll('[role=tab]'); tabs.forEach(function(b){ b.onclick=function(){ tabs.forEach(function(x){ x.setAttribute('aria-selected',x===b?'true':'false'); }); $('p-read').hidden=b.dataset.t!=='read'; $('p-new').hidden=b.dataset.t!=='new'; }; });
+var A='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+function b32d(s){ s=s.toUpperCase().replace(/[\s=-]/g,''); var bits='',out=[]; for(var i=0;i<s.length;i++){ var v=A.indexOf(s[i]); if(v<0) throw new Error('caractère invalide « '+s[i]+' » (base32 : A-Z et 2-7)'); bits+=('00000'+v.toString(2)).slice(-5); } for(var j=0;j+8<=bits.length;j+=8) out.push(parseInt(bits.substr(j,8),2)); return new Uint8Array(out); }
+function b32e(u){ var bits='',s=''; u.forEach(function(b){ bits+=('0000000'+b.toString(2)).slice(-8); }); for(var i=0;i<bits.length;i+=5) s+=A[parseInt((bits.substr(i,5)+'0000').slice(0,5),2)]; return s; }
+function parse(v){ v=v.trim(); var o={secret:v,digits:6,period:30,algo:'SHA-1',issuer:'',account:''};
+  if(/^otpauth:\/\//i.test(v)){ var u=new URL(v); if(u.host.toLowerCase()!=='totp') throw new Error('seuls les liens otpauth://totp sont pris en charge'); var q=u.searchParams, lab=decodeURIComponent(u.pathname.slice(1));
+    o.secret=q.get('secret')||''; o.digits=+q.get('digits')||6; o.period=+q.get('period')||30; o.algo={SHA1:'SHA-1',SHA256:'SHA-256',SHA512:'SHA-512'}[(q.get('algorithm')||'SHA1').toUpperCase()]||'SHA-1';
+    o.issuer=q.get('issuer')||(lab.indexOf(':')>0?lab.split(':')[0]:''); o.account=lab.indexOf(':')>0?lab.split(':').slice(1).join(':'):lab; } return o; }
+function totp(o,step){ var key=b32d(o.secret); if(key.length<10) return Promise.reject(new Error('clé trop courte (au moins 16 caractères base32)'));
+  var buf=new ArrayBuffer(8), dv=new DataView(buf); dv.setUint32(0,Math.floor(step/4294967296)); dv.setUint32(4,step>>>0);
+  return crypto.subtle.importKey('raw',key,{name:'HMAC',hash:o.algo},false,['sign']).then(function(k){ return crypto.subtle.sign('HMAC',k,buf); }).then(function(sig){ var s=new Uint8Array(sig), off=s[s.length-1]&15;
+    var n=((s[off]&127)<<24)|(s[off+1]<<16)|(s[off+2]<<8)|s[off+3]; return ('0'.repeat(10)+(n%Math.pow(10,o.digits))).slice(-o.digits); }); }
+var cur=null, timer=null;
+function show(){ clearInterval(timer); var v=$('sec').value; if(!v){ $('codes').innerHTML=''; cur=null; return; }
+  try{ cur=parse(v); b32d(cur.secret); }catch(e){ K.error($('codes'),e.message); cur=null; return; }
+  function tick(){ var now=Date.now()/1000, st=Math.floor(now/cur.period), left=Math.ceil(cur.period-now%cur.period);
+    Promise.all([totp(cur,st-1),totp(cur,st),totp(cur,st+1)]).then(function(c){ K.cards($('codes'),[['Code actuel','<b style="font-size:34px;letter-spacing:6px;color:#34f5c5">'+c[1].replace(/(\d{3})(?=\d)/,'$1 ')+'</b><div class="meter"><i style="width:'+(left/cur.period*100)+'%;background:'+(left<6?'#ff8b8b':'#34f5c5')+'"></i></div><span class="dim">encore '+left+' s</span>','wide',c[1]],
+      ['Précédent',c[0]],['Suivant',c[2]],['Service',esc(cur.issuer||'—')],['Compte',esc(cur.account||'—')],['Paramètres',cur.digits+' chiffres · '+cur.period+' s · '+cur.algo]]); }).catch(function(e){ K.error($('codes'),e.message); clearInterval(timer); }); }
+  tick(); timer=setInterval(tick,1000); }
+$('sec').addEventListener('input',K.debounce(show,200));
+$('demo').onclick=function(){ $('sec').value='JBSWY3DPEHPK3PXP'; $('sec').type='text'; show(); };
+$('chk').addEventListener('input',function(){ var c=$('chk').value.replace(/\D/g,''); if(!cur||c.length<6){ $('vres').innerHTML=''; return; } var st=Math.floor(Date.now()/1000/cur.period), tries=[];
+  for(var d=-3;d<=3;d++) tries.push(totp(cur,st+d)); Promise.all(tries).then(function(r){ var i=r.indexOf(c);
+    K.cards($('vres'),[['Résultat',i===3?'<span class="ok">✓ Parfaitement synchronisé</span>':i>=0?'<span class="wa">Accepté mais décalé de '+((i-3)*cur.period)+' s : vérifie l’heure de ton téléphone (réglage automatique).</span>':'<span class="ko">✗ Aucun code ne correspond (±90 s) : mauvaise clé ou heure très décalée.</span>','wide']]); }); });
+$('img').onchange=function(){ var f=this.files[0]; if(!f) return; if(!('BarcodeDetector' in window)){ $('qrmsg').innerHTML='<span class="wa">Ton navigateur ne sait pas lire les QR codes (Chrome, Edge ou Android le peuvent). Copie plutôt la clé texte affichée sous le QR code.</span>'; return; }
+  createImageBitmap(f).then(function(bmp){ return new BarcodeDetector({formats:['qr_code']}).detect(bmp); }).then(function(r){ if(!r.length){ $('qrmsg').innerHTML='<span class="ko">Aucun QR code détecté.</span>'; return; }
+    $('sec').value=r[0].rawValue; $('qrmsg').innerHTML='<span class="ok">✓ QR code lu.</span>'; show(); }).catch(function(){ $('qrmsg').innerHTML='<span class="ko">Lecture impossible.</span>'; }); this.value=''; };
+$('mk').onclick=function(){ var k=new Uint8Array(20); crypto.getRandomValues(k); var s=b32e(k), iss=$('iss').value.trim()||'TRUvector', acc=$('acc').value.trim()||'compte';
+  var uri='otpauth://totp/'+encodeURIComponent(iss)+':'+encodeURIComponent(acc)+'?secret='+s+'&issuer='+encodeURIComponent(iss)+'&algorithm=SHA1&digits=6&period=30';
+  var qr=qrcode(0,'M'); qr.addData(uri); qr.make();
+  K.cards($('newout'),[['QR code à scanner','<div style="background:#fff;display:inline-block;padding:10px;border-radius:10px">'+qr.createSvgTag({cellSize:5,margin:2,scalable:false})+'</div>','wide'],['Clé secrète',s.replace(/(.{4})/g,'$1 ').trim(),'wide',s],['Lien otpauth',esc(uri),'wide',uri],
+    ['Tester','<button class="btn btn-ghost" type="button" id="use">Lire cette clé dans l’onglet 1</button>','wide']]);
+  $('use').onclick=function(){ $('sec').value=uri; tabs[0].click(); show(); }; };
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

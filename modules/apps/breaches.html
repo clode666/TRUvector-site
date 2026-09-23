@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registre des fuites de services — TRUvector.dev</title>
+<meta name="description" content="Le service que tu utilises a-t-il subi une fuite de données ? Date, ampleur, données exposées et que faire, d’après la liste publique de Have I Been Pwned.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Registre des <span class="dev">fuites de services</span></h1>
+  <p>Le service que tu utilises a-t-il subi une fuite de données ? Date, ampleur, données exposées et que faire, d’après la liste publique de Have I Been Pwned.</p>
+  <span class="kb srv">via le serveur du site — aucun service tiers dans la page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><div class="krow"><div><label class="fl" for="q">Rechercher un service</label><input id="q" type="text" placeholder="LinkedIn, Canva, Deezer…" spellcheck="false"></div>
+    <div style="flex:0 1 190px"><label class="fl" for="tri">Trier par</label><select id="tri"><option value="date">Plus récentes</option><option value="n">Plus grosses</option><option value="a">Nom</option></select></div></div></div>
+  <div id="sum"></div><div id="out"></div>
+  <div class="note"><b>Et mon adresse e-mail ?</b> Pour savoir si <i>ton</i> adresse figure dans ces fuites, utilise directement le site officiel <a href="https://haveibeenpwned.com" target="_blank" rel="noopener">haveibeenpwned.com</a> (gratuit). Cet outil n’envoie aucune adresse : il consulte seulement la liste publique des fuites, mise en cache 24 h.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var FR={'Email addresses':'adresses e-mail','Passwords':'mots de passe','Usernames':'identifiants','Names':'noms','Phone numbers':'téléphones','Physical addresses':'adresses postales','Dates of birth':'dates de naissance','IP addresses':'adresses IP','Genders':'genres','Geographic locations':'localisations','Credit cards':'cartes bancaires','Partial credit card data':'données partielles de carte','Bank account numbers':'comptes bancaires','Security questions and answers':'questions secrètes','Job titles':'postes','Employers':'employeurs','Social media profiles':'profils sociaux','Website activity':'activité sur le site','Private messages':'messages privés','Government issued IDs':'pièces d’identité','Passport numbers':'numéros de passeport','Auth tokens':'jetons de connexion','Device information':'infos appareil','Purchases':'achats','Salutations':'civilités','Spoken languages':'langues','Browser user agent details':'navigateurs','Time zones':'fuseaux','Avatars':'avatars','Education levels':'niveaux d’études','Income levels':'revenus','Health insurance information':'assurance santé','Sexual orientations':'orientations sexuelles','Religions':'religions','Political views':'opinions politiques'};
+var ALL=[];
+function dataHtml(d){ var sens=/Passwords|Credit|Bank|Security questions|Passport|Government|Health|Sexual|Religions|Political|Auth tokens/; return d.map(function(x){ return '<span class="'+(sens.test(x)?'ko':'')+'">'+esc(FR[x]||x)+'</span>'; }).join(', '); }
+function advice(d){ var a=[]; if(d.some(function(x){ return /Passwords/.test(x); })) a.push('change ce mot de passe partout où il servait'); if(d.some(function(x){ return /Credit|Bank/.test(x); })) a.push('surveille tes relevés bancaires'); if(d.some(function(x){ return /Phone/.test(x); })) a.push('méfie-toi des SMS et appels « de ton service »'); if(d.some(function(x){ return /Email/.test(x); })) a.push('attends-toi à de l’hameçonnage ciblé'); a.push('active la 2FA'); return a.join(' · '); }
+function render(){ var q=$('q').value.trim().toLowerCase(), t=$('tri').value;
+  var L=ALL.filter(function(b){ return !b.spam&&(!q||(b.t+' '+b.d+' '+b.n).toLowerCase().indexOf(q)>=0); });
+  L.sort(t==='n'?function(a,b){ return b.comptes-a.comptes; }:t==='a'?function(a,b){ return a.t.localeCompare(b.t); }:function(a,b){ return b.date<a.date?-1:1; });
+  if(!L.length){ $('out').innerHTML='<p class="ok">✓ Aucune fuite connue ne correspond à « '+esc(q)+' ». <span class="dim">Cela ne garantit rien : toutes les fuites ne sont pas publiques.</span></p>'; return; }
+  $('out').innerHTML=L.slice(0,q?60:24).map(function(b){ return '<div class="ksec" style="border:1px solid var(--bord);border-radius:14px;padding:14px;background:rgba(10,16,23,.6)"><h2 style="margin:0 0 4px">'+esc(b.t)+(b.verifiee?'':' <span class="wa" style="font-size:11px">non vérifiée</span>')+(b.sensible?' <span class="ko" style="font-size:11px">sensible</span>':'')+'</h2>'+
+    '<div class="dim" style="font-family:var(--mono);font-size:12px">'+esc(b.d||'—')+' · fuite du '+new Date(b.date).toLocaleDateString('fr-FR')+' · '+b.comptes.toLocaleString('fr-FR')+' comptes</div>'+
+    '<p style="margin:8px 0 4px;font-size:14px"><b>Données exposées :</b> '+dataHtml(b.donnees)+'</p><p style="margin:0;font-size:13.5px" class="wa">➜ '+esc(advice(b.donnees))+'</p></div>'; }).join('')+(L.length>(q?60:24)?'<p class="dim">… et '+(L.length-(q?60:24))+' autres : affine la recherche.</p>':''); }
+K.loading($('out'),'Chargement du registre public');
+K.api('breaches',null,{timeout:20000}).then(function(d){ ALL=d.fuites||[]; var tot=ALL.reduce(function(a,b){ return a+b.comptes; },0), pw=ALL.filter(function(b){ return b.donnees.indexOf('Passwords')>=0; }).length;
+  K.cards($('sum'),[['Fuites répertoriées',ALL.length.toLocaleString('fr-FR')],['Comptes concernés',(tot/1e9).toFixed(1).replace('.',',')+' milliards'],['Avec mots de passe',pw.toLocaleString('fr-FR')+' fuites']]); render(); K.state(['q'],render);
+}).catch(function(e){ K.error($('out'),e.message); });
+$('q').addEventListener('input',K.debounce(render,200)); $('tri').onchange=render;
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

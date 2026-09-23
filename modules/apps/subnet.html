@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateur de sous-réseaux — TRUvector.dev</title>
+<meta name="description" content="IPv4 et IPv6 : masque, plage, broadcast, nombre d’hôtes, découpage VLSM et test d’appartenance.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Calculateur de <span class="dev">sous-réseaux</span></h1>
+  <p>IPv4 et IPv6 : masque, plage, broadcast, nombre d’hôtes, découpage VLSM et test d’appartenance.</p>
+  <span class="kb loc">100 % local — rien ne quitte ta page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><div class="krow"><div><label class="fl" for="cidr">Adresse et préfixe (CIDR)</label><input id="cidr" type="text" class="mono" value="192.168.10.37/26" spellcheck="false"></div>
+    <div style="flex:0 1 160px"><label class="fl" for="test">Contient l’IP ?</label><input id="test" type="text" class="mono" placeholder="192.168.10.50" spellcheck="false"></div></div>
+    <div class="chips"><button type="button" data-c="10.0.0.0/8">10.0.0.0/8</button><button type="button" data-c="172.16.5.9/20">172.16.5.9/20</button><button type="button" data-c="192.168.1.0/24">/24</button><button type="button" data-c="2001:db8:abcd:12::1/64">IPv6 /64</button></div></div>
+  <div id="res"></div>
+  <div class="ksec"><h2>✂️ Découpage VLSM</h2><div class="ctl"><div class="krow"><div><label class="fl" for="vlsm">Besoins en hôtes (séparés par des virgules)</label><input id="vlsm" type="text" class="mono" value="50, 20, 10, 2" spellcheck="false"></div></div></div><div id="vres"></div></div>
+  <div id="bar"></div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+function toInt(a){ return ((a[0]<<24)>>>0)+(a[1]<<16)+(a[2]<<8)+a[3]; }
+function toIp(n){ return [n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.'); }
+function bin(n){ return ('0'.repeat(32)+(n>>>0).toString(2)).slice(-32).replace(/(.{8})(?!$)/g,'$1.'); }
+function cls(a){ return a[0]<128?'A':a[0]<192?'B':a[0]<224?'C':a[0]<240?'D (multicast)':'E'; }
+function v6expand(s){ var p=s.split('::'), h=p[0]?p[0].split(':'):[], t=p.length>1&&p[1]?p[1].split(':'):[]; if(p.length===1) t=[]; var f=h.concat(Array(8-h.length-t.length).fill('0'),t); return f.map(function(x){ return BigInt('0x'+(x||'0')); }); }
+function v6str(big){ var g=[]; for(var i=7;i>=0;i--) g.push(((big>>BigInt(i*16))&0xffffn).toString(16)); var s=g.join(':'); return s.replace(/(^|:)0(:0)+(:|$)/,'::').replace(/:{3,}/,'::'); }
+var state={};
+function run(){ var v=$('cidr').value.trim(), m=v.match(/^([^/]+)(?:\/(\d{1,3}))?$/), out=[];
+  if(!m){ K.error($('res'),'Format attendu : 192.168.1.10/24 ou 2001:db8::1/64'); return; }
+  var a=K.ipv4(m[1]);
+  if(a){ var p=m[2]==null?24:+m[2]; if(p>32){ K.error($('res'),'Préfixe IPv4 : de 0 à 32.'); return; }
+    var ip=toInt(a), mask=p===0?0:(0xFFFFFFFF<<(32-p))>>>0, net=(ip&mask)>>>0, bc=(net|(~mask>>>0))>>>0, hosts=p>=31?(p===32?1:2):Math.pow(2,32-p)-2;
+    state={v:4,net:net,mask:mask,p:p,bc:bc};
+    K.cards($('res'),[['Réseau',toIp(net)+'/'+p,'',toIp(net)+'/'+p],['Masque',toIp(mask),'',toIp(mask)],['Wildcard',toIp((~mask)>>>0)],['Première adresse',toIp(p>=31?net:net+1)],['Dernière adresse',toIp(p>=31?bc:bc-1)],
+      ['Broadcast',p>=31?'—':toIp(bc)],['Hôtes utilisables',hosts.toLocaleString('fr-FR')],['Adresses totales',Math.pow(2,32-p).toLocaleString('fr-FR')],['Classe historique',cls(a)],
+      ['Masque en binaire','<span style="font-size:12px">'+bin(mask)+'</span>','wide'],['IP en binaire','<span style="font-size:12px">'+bin(ip)+'</span>','wide']].concat(testRow()));
+  } else if(K.isIPv6(m[1])){ var p6=m[2]==null?64:+m[2]; if(p6>128){ K.error($('res'),'Préfixe IPv6 : de 0 à 128.'); return; }
+    var g=v6expand(m[1]), big=g.reduce(function(acc,x){ return (acc<<16n)|x; },0n), all=(1n<<128n)-1n, mk=p6===0?0n:(all<<BigInt(128-p6))&all, n6=big&mk, last=n6|(~mk&all);
+    state={v:6};
+    K.cards($('res'),[['Réseau',v6str(n6)+'/'+p6,'wide',v6str(n6)+'/'+p6],['Première adresse',v6str(n6),'wide'],['Dernière adresse',v6str(last),'wide'],
+      ['Adresses',p6>=64?(2n**BigInt(128-p6)).toLocaleString('fr-FR'):'2^'+(128-p6)],['Sous-réseaux /64',p6<=64?(2n**BigInt(64-p6)).toLocaleString('fr-FR'):'—'],['Forme complète',g.map(function(x){ return ('0000'+x.toString(16)).slice(-4); }).join(':'),'wide']]);
+  } else { K.error($('res'),'Adresse invalide.'); return; }
+  vlsm(); }
+function testRow(){ var t=K.ipv4($('test').value.trim()); if(!t||state.v!==4) return []; var n=toInt(t); var inn=((n&state.mask)>>>0)===state.net;
+  return [['Test d’appartenance',esc($('test').value.trim())+' : '+(inn?'<span class="ok">✓ dans ce réseau</span>':'<span class="ko">✗ hors de ce réseau</span>'),'wide']]; }
+function vlsm(){ var host=$('vres'); if(state.v!==4){ host.innerHTML='<p class="dim">Le découpage VLSM s’applique aux réseaux IPv4.</p>'; return; }
+  var needs=$('vlsm').value.split(/[,; ]+/).map(Number).filter(function(x){ return x>0; }).map(function(n,i){ return {i:i+1,n:n}; }).sort(function(a,b){ return b.n-a.n; });
+  var cur=state.net, end=state.bc, rows=[], ok=true;
+  needs.forEach(function(r){ var bits=Math.ceil(Math.log2(r.n+2)), size=Math.pow(2,bits), p=32-bits; if(cur%size) cur=Math.ceil(cur/size)*size;
+    if(cur+size-1>end){ ok=false; rows.push(['#'+r.i+' ('+r.n+' hôtes)','<span class="ko">plus de place</span>','','','']); return; }
+    rows.push(['#'+r.i+' ('+r.n+' hôtes)',toIp(cur)+'/'+p,toIp(cur+1)+' – '+toIp(cur+size-2),toIp(cur+size-1),(size-2)+' ('+Math.round(r.n/(size-2)*100)+' %)']); cur+=size; });
+  host.innerHTML=K.table(['Besoin','Sous-réseau','Plage utilisable','Broadcast','Capacité (usage)'],rows)+(ok?'':'<p class="ko">Le réseau de départ est trop petit pour tous les besoins.</p>'); }
+['cidr','test','vlsm'].forEach(function(id){ $(id).addEventListener('input',K.debounce(run,150)); });
+document.querySelectorAll('[data-c]').forEach(function(b){ b.onclick=function(){ $('cidr').value=b.dataset.c; run(); }; });
+K.exportBar($('bar'),'Calcul de sous-réseau',function(){ return $('tool'); });
+K.state(['cidr','test','vlsm']); run();
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

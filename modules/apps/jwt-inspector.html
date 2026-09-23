@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspecteur de jetons JWT — TRUvector.dev</title>
+<meta name="description" content="Décode en-tête et contenu, traduit les dates, signale les faiblesses et vérifie localement une signature HMAC ou RSA/ECDSA.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Inspecteur de <span class="dev">jetons JWT</span></h1>
+  <p>Décode en-tête et contenu, traduit les dates, signale les faiblesses et vérifie localement une signature HMAC ou RSA/ECDSA.</p>
+  <span class="kb loc">100 % local — rien ne quitte ta page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><label class="fl" for="tok">Jeton JWT</label><textarea id="tok" rows="4" spellcheck="false" placeholder="eyJhbGciOi…"></textarea><div class="krow"><button class="btn btn-ghost" id="ex" type="button">Exemple</button></div></div>
+  <div id="out"></div>
+  <div class="ksec"><h2>🔏 Vérifier la signature</h2><div class="ctl"><label class="fl" for="key">Secret HMAC, ou clé publique PEM (RSA / ECDSA)</label><textarea id="key" rows="3" spellcheck="false" placeholder="mon-secret  ou  -----BEGIN PUBLIC KEY-----…"></textarea><div class="krow"><button class="btn" id="ver" type="button">Vérifier</button></div><div id="vres"></div></div></div>
+  <div class="note"><b>100 % local.</b> Évite de coller le jeton d’un compte de production actif : c’est l’équivalent d’un mot de passe temporaire.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+function b64u(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; return atob(s); }
+function bytes(s){ return Uint8Array.from(b64u(s),function(c){ return c.charCodeAt(0); }); }
+function j(o){ return '<pre style="margin:0;white-space:pre-wrap;font-family:var(--mono);font-size:12.5px;color:var(--menthe-soft)">'+esc(JSON.stringify(o,null,2))+'</pre>'; }
+var TIME={exp:'Expire',iat:'Émis le',nbf:'Valide à partir de',auth_time:'Authentifié le'}, H=null, P=null, parts=null;
+function run(){ var t=$('tok').value.trim().replace(/^Bearer\s+/i,''); parts=t.split('.'); if(!t){ $('out').innerHTML=''; return; }
+  if(parts.length<2){ K.error($('out'),'Un JWT contient 3 parties séparées par des points.'); return; }
+  try{ H=JSON.parse(new TextDecoder().decode(bytes(parts[0]))); P=JSON.parse(new TextDecoder().decode(bytes(parts[1]))); }catch(e){ K.error($('out'),'Décodage impossible : ce n’est pas un JWT valide.'); return; }
+  var w=[], now=Date.now()/1000;
+  if(/^none$/i.test(H.alg)) w.push(['ko','Algorithme « none » : aucune signature, n’importe qui peut forger ce jeton.']);
+  if(/^HS/.test(H.alg)) w.push(['wa','Signature HMAC : la même clé sert à signer et vérifier. Elle doit être longue et aléatoire (32 octets ou plus).']);
+  if(P.exp==null) w.push(['wa','Pas d’expiration (exp) : ce jeton reste valide indéfiniment.']); else if(P.exp<now) w.push(['ko','Jeton expiré depuis '+Math.round((now-P.exp)/60)+' min.']); else if(P.exp-now>86400*30) w.push(['wa','Durée de vie longue (plus de 30 jours).']);
+  if(P.nbf&&P.nbf>now) w.push(['wa','Pas encore valide (nbf dans le futur).']);
+  if(parts.length<3||!parts[2]) w.push(['ko','Aucune signature présente.']);
+  ['password','pwd','secret','card','iban'].forEach(function(k){ if(JSON.stringify(P).toLowerCase().indexOf('"'+k)>=0) w.push(['ko','Le contenu semble contenir une donnée sensible (« '+k+' ») : un JWT est lisible par tous.']); });
+  var times=Object.keys(TIME).filter(function(k){ return typeof P[k]==='number'; }).map(function(k){ return [TIME[k]+' ('+k+')',new Date(P[k]*1000).toLocaleString('fr-FR')]; });
+  var box=document.createElement('div');
+  K.cards(box,[['Algorithme',esc(H.alg||'?')],['Type',esc(H.typ||'—')],['Émetteur (iss)',esc(P.iss||'—')],['Sujet (sub)',esc(P.sub||'—')],['Audience (aud)',esc([].concat(P.aud||'—').join(', '))]].concat(times,[
+    ['En-tête',j(H),'wide'],['Contenu (payload)',j(P),'wide']]));
+  $('out').innerHTML=(w.length?'<div class="ksec"><h2>🔎 Points d’attention</h2><ul>'+w.map(function(x){ return '<li class="'+x[0]+'">'+esc(x[1])+'</li>'; }).join('')+'</ul></div>':'<p class="ok">✓ Aucun point d’attention évident.</p>');
+  $('out').appendChild(box); $('vres').innerHTML=''; }
+function pem(k){ var b=k.replace(/-----[^-]+-----/g,'').replace(/\s+/g,''); return Uint8Array.from(atob(b),function(c){ return c.charCodeAt(0); }); }
+$('ver').onclick=function(){ if(!H||!parts||parts.length<3){ K.error($('vres'),'Colle d’abord un jeton signé.'); return; } var k=$('key').value.trim(), alg=H.alg||'', hash={'256':'SHA-256','384':'SHA-384','512':'SHA-512'}[alg.slice(2)];
+  var data=new TextEncoder().encode(parts[0]+'.'+parts[1]), sig=bytes(parts[2]), p;
+  if(!hash){ K.error($('vres'),'Algorithme non vérifiable ici : '+alg); return; }
+  if(/^HS/.test(alg)) p=crypto.subtle.importKey('raw',new TextEncoder().encode(k),{name:'HMAC',hash:hash},false,['verify']).then(function(key){ return crypto.subtle.verify('HMAC',key,sig,data); });
+  else if(/^RS/.test(alg)) p=crypto.subtle.importKey('spki',pem(k),{name:'RSASSA-PKCS1-v1_5',hash:hash},false,['verify']).then(function(key){ return crypto.subtle.verify('RSASSA-PKCS1-v1_5',key,sig,data); });
+  else if(/^PS/.test(alg)) p=crypto.subtle.importKey('spki',pem(k),{name:'RSA-PSS',hash:hash},false,['verify']).then(function(key){ return crypto.subtle.verify({name:'RSA-PSS',saltLength:+alg.slice(2)/8},key,sig,data); });
+  else if(/^ES/.test(alg)) p=crypto.subtle.importKey('spki',pem(k),{name:'ECDSA',namedCurve:{'256':'P-256','384':'P-384','512':'P-521'}[alg.slice(2)]},false,['verify']).then(function(key){ return crypto.subtle.verify({name:'ECDSA',hash:hash},key,sig,data); });
+  else { K.error($('vres'),'Algorithme non pris en charge : '+alg); return; }
+  p.then(function(ok){ K.cards($('vres'),[['Signature',ok?'<span class="ok" style="font-size:16px">✓ Valide avec cette clé</span>':'<span class="ko" style="font-size:16px">✗ Invalide avec cette clé</span>','wide']]); }).catch(function(e){ K.error($('vres'),'Clé illisible : '+(e.message||e)); }); };
+$('ex').onclick=function(){ var h={alg:'HS256',typ:'JWT'}, pl={sub:'1234',name:'Ada Lovelace',role:'admin',iat:Math.floor(Date.now()/1000)-600,exp:Math.floor(Date.now()/1000)+3000};
+  var enc=function(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/=+$/,'').replace(/\+/g,'-').replace(/\//g,'_'); }, body=enc(h)+'.'+enc(pl);
+  crypto.subtle.importKey('raw',new TextEncoder().encode('secret-de-demo'),{name:'HMAC',hash:'SHA-256'},false,['sign']).then(function(k){ return crypto.subtle.sign('HMAC',k,new TextEncoder().encode(body)); }).then(function(s){
+    $('tok').value=body+'.'+btoa(String.fromCharCode.apply(null,new Uint8Array(s))).replace(/=+$/,'').replace(/\+/g,'-').replace(/\//g,'_'); $('key').value='secret-de-demo'; run(); }); };
+$('tok').addEventListener('input',K.debounce(run,200));
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

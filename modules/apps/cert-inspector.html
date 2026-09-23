@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspecteur de certificats — TRUvector.dev</title>
+<meta name="description" content="Émetteur, validité, domaines couverts et historique des certificats TLS d’un domaine, d’après les journaux publics Certificate Transparency.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Inspecteur de <span class="dev">certificats</span></h1>
+  <p>Émetteur, validité, domaines couverts et historique des certificats TLS d’un domaine, d’après les journaux publics Certificate Transparency.</p>
+  <span class="kb srv">via le serveur du site — aucun service tiers dans la page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><div class="krow"><div><label class="fl" for="domain">Nom de domaine</label><input id="domain" type="text" class="mono" placeholder="truvector.dev" spellcheck="false"></div><button class="btn" id="go" type="button">Inspecter</button></div>
+    <div class="chips"><button type="button" data-d="truvector.dev">truvector.dev</button><button type="button" data-d="wikipedia.org">wikipedia.org</button><button type="button" data-d="laposte.fr">laposte.fr</button></div></div>
+  <div id="out"></div><div id="bar"></div>
+  <div class="note"><b>Certificate Transparency</b> : chaque certificat émis par une autorité reconnue est inscrit dans des journaux publics. Y chercher son domaine permet de repérer un certificat émis à son insu.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var last=null;
+function days(d){ return Math.round((new Date(d+'Z')-new Date())/864e5); }
+function run(){ var d=K.domain($('domain').value||$('domain').placeholder); if(!d){ K.error($('out'),'Nom de domaine invalide.'); return; } $('domain').value=d;
+  K.loading($('out'),'Lecture des journaux Certificate Transparency (jusqu’à 10 s)');
+  K.api('cert',{domain:d},{timeout:20000}).then(function(r){ last=r; var L=r.certificats||[];
+    if(!L.length){ K.error($('out'),'Aucun certificat valide trouvé pour ce domaine.'); return; }
+    var cur=L.filter(function(c){ return c.noms.some(function(n){ return n===d||n==='*.'+d.split('.').slice(1).join('.')||n==='*.'+d; }); })[0]||L[0], j=days(cur.fin);
+    var box=document.createElement('div');
+    K.cards(box,[['Certificat le plus récent',esc(cur.cn),'wide'],['Émetteur',esc(cur.emetteur)],['Émis le',esc(cur.debut.slice(0,10))],['Expire le',esc(cur.fin.slice(0,10))],
+      ['Reste',(j<0?'<span class="ko">expiré</span>':'<span class="'+(j<15?'ko':j<30?'wa':'ok')+'">'+j+' jours</span>')],['Domaines couverts',cur.noms.map(esc).join('<br>'),'wide'],
+      ['Détail officiel','<a href="https://crt.sh/?id='+cur.id+'" target="_blank" rel="noopener">crt.sh #'+cur.id+' ↗</a>']]);
+    var iss={}; L.forEach(function(c){ iss[c.emetteur]=(iss[c.emetteur]||0)+1; });
+    $('out').innerHTML=''; $('out').appendChild(box);
+    $('out').insertAdjacentHTML('beforeend','<div class="ksec"><h2>🏛️ Autorités utilisées</h2><p>'+Object.keys(iss).map(function(k){ return esc(k)+' <span class="dim">×'+iss[k]+'</span>'; }).join(' · ')+'</p><p class="dim">Une autorité inattendue dans cette liste mérite une vérification.</p></div>'+
+      '<div class="ksec"><h2>🗂️ Certificats valides ('+L.length+')</h2>'+K.table(['Nom principal','Émetteur','Du','Au','Reste'],L.map(function(c){ var k=days(c.fin); return ['<a href="https://crt.sh/?id='+c.id+'" target="_blank" rel="noopener">'+esc(c.cn)+'</a>',esc(c.emetteur),c.debut.slice(0,10),c.fin.slice(0,10),'<span class="'+(k<15?'ko':k<30?'wa':'ok')+'">'+k+' j</span>']; }))+'</div>');
+  }).catch(function(e){ K.error($('out'),e.message); }); }
+$('go').onclick=run; $('domain').onkeydown=function(e){ if(e.key==='Enter') run(); };
+document.querySelectorAll('[data-d]').forEach(function(b){ b.onclick=function(){ $('domain').value=b.dataset.d; run(); }; });
+K.exportBar($('bar'),'Certificats',function(){ return $('out'); },function(){ return last; });
+K.state(['domain'],run);
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

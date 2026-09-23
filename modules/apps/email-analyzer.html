@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyseur d’adresse e-mail — TRUvector.dev</title>
+<meta name="description" content="Syntaxe, fautes de frappe, alias, adresse jetable, capacité du domaine à recevoir du courrier et protection contre l’usurpation (SPF, DMARC), sans jamais écrire au destinataire.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Analyseur <span class="dev">d’adresse e-mail</span></h1>
+  <p>Syntaxe, fautes de frappe, alias, adresse jetable, capacité du domaine à recevoir du courrier et protection contre l’usurpation (SPF, DMARC), sans jamais écrire au destinataire.</p>
+  <span class="kb loc">calculs locaux</span> <span class="kb srv">+ serveur du site pour le réseau</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><div class="krow"><div><label class="fl" for="em">Adresse e-mail</label><input id="em" type="text" class="mono" placeholder="jean.dupont+factures@gmial.com" spellcheck="false" autocomplete="off"></div><button class="btn" id="go" type="button">Analyser</button></div></div>
+  <div id="out"></div>
+  <div class="ksec"><h2>🛠️ Créer SPF et DMARC pour ton domaine</h2><div class="ctl">
+    <div class="krow"><div><label class="fl" for="sdom">Ton domaine</label><input id="sdom" type="text" class="mono" placeholder="mondomaine.fr"></div><div><label class="fl" for="sprov">Qui envoie tes e-mails ?</label>
+      <select id="sprov"><option value="include:_spf.google.com">Google Workspace</option><option value="include:spf.protection.outlook.com">Microsoft 365</option><option value="include:_spf.protonmail.ch">Proton</option><option value="include:spf.mailjet.com">Mailjet</option><option value="include:sendgrid.net">SendGrid</option><option value="mx">Mes propres serveurs MX</option></select></div>
+      <div><label class="fl" for="spol">Politique DMARC</label><select id="spol"><option value="none">none (observer d’abord)</option><option value="quarantine" selected>quarantine (spam)</option><option value="reject">reject (refus)</option></select></div></div>
+    <div class="krow"><div><label class="fl" for="srua">Adresse pour les rapports DMARC (facultatif)</label><input id="srua" type="text" class="mono" placeholder="dmarc@mondomaine.fr"></div></div></div><div id="gen"></div></div>
+  <div id="bar"></div>
+  <div class="note"><b>Pas de sondage SMTP</b> : vérifier qu’une boîte « existe » en contactant son serveur est peu fiable et assimilable à du spam. On vérifie seulement ce que le domaine publie dans le DNS.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var KNOWN={'gmail.com':'Google','googlemail.com':'Google','outlook.com':'Microsoft','outlook.fr':'Microsoft','hotmail.com':'Microsoft','hotmail.fr':'Microsoft','live.fr':'Microsoft','live.com':'Microsoft','msn.com':'Microsoft','yahoo.com':'Yahoo','yahoo.fr':'Yahoo','orange.fr':'Orange','wanadoo.fr':'Orange','free.fr':'Free','sfr.fr':'SFR','neuf.fr':'SFR','laposte.net':'La Poste','icloud.com':'Apple','me.com':'Apple','proton.me':'Proton','protonmail.com':'Proton','gmx.fr':'GMX','gmx.com':'GMX','bbox.fr':'Bouygues','aol.com':'AOL','zoho.com':'Zoho','tutanota.com':'Tuta','yandex.com':'Yandex'};
+var DISP=['yopmail.com','yopmail.fr','yopmail.net','mailinator.com','guerrillamail.com','guerrillamail.info','sharklasers.com','10minutemail.com','temp-mail.org','tempmail.com','trashmail.com','trashmail.fr','jetable.org','getnada.com','dispostable.com','maildrop.cc','mailnesia.com','mintemail.com','mohmal.com','spamgourmet.com','throwawaymail.com','fakeinbox.com','emailondeck.com','tempr.email','discard.email','mytemp.email','burnermail.io','33mail.com','spam4.me','inboxkitten.com'];
+var ROLE=['admin','contact','info','support','noreply','no-reply','postmaster','abuse','webmaster','sales','commercial','rh','compta','facturation','secretariat','accueil'];
+function lev(a,b){ var m=[],i,j; for(i=0;i<=b.length;i++) m[i]=[i]; for(j=0;j<=a.length;j++) m[0][j]=j; for(i=1;i<=b.length;i++) for(j=1;j<=a.length;j++) m[i][j]=Math.min(m[i-1][j-1]+(b[i-1]===a[j-1]?0:1),m[i][j-1]+1,m[i-1][j]+1); return m[b.length][a.length]; }
+var last=null;
+function run(){ var v=($('em').value||$('em').placeholder).trim(), m=v.match(/^(.+)@([^@\s]+)$/), items=[];
+  if(!m||/\s/.test(v)){ K.error($('out'),'Il faut une adresse de la forme nom@domaine.fr, sans espace.'); return; }
+  var local=m[1], dom=m[2].toLowerCase(), okL=/^[A-Za-z0-9!#$%&'*+\/=?^_`{|}~.-]+$/.test(local)&&!/^\.|\.$|\.\./.test(local)&&local.length<=64, okD=!!K.domain(dom)||/^xn--/.test(dom);
+  var best=null; Object.keys(KNOWN).forEach(function(k){ var d=lev(dom,k); if(d>0&&d<=2&&(!best||d<best[1])) best=[k,d]; });
+  var canon=local.split('+')[0]; if(/^(gmail|googlemail)\.com$/.test(dom)) canon=canon.replace(/\./g,'');
+  items.push(['Syntaxe',okL&&okD?'<span class="ok">✓ valide</span>':'<span class="ko">✗ '+(okL?'domaine invalide':'partie locale invalide')+'</span>'],['Partie locale',esc(local)+(local.indexOf('+')>0?' <span class="wa">· alias « +'+esc(local.split('+').slice(1).join('+'))+' »</span>':'')],
+    ['Boîte réelle',esc(canon.toLowerCase()+'@'+dom),'',canon.toLowerCase()+'@'+dom],['Domaine',esc(dom)+(/^xn--|\.xn--/.test(dom)?' <span class="wa">⚠ nom internationalisé (punycode) : vérifie qu’il n’imite pas un autre</span>':'')+(best?'<br><span class="wa">⚠ faute de frappe ? → <b>'+esc(best[0])+'</b></span>':'')],
+    ['Fournisseur',KNOWN[dom]?'<span class="ok">'+KNOWN[dom]+'</span> <span class="dim">(grand public)</span>':'domaine personnel ou professionnel'],['Adresse jetable',DISP.indexOf(dom)>=0?'<span class="ko">✗ adresse temporaire</span>':'<span class="ok">✓ non listée</span>'],
+    ['Adresse de fonction',ROLE.indexOf(canon.toLowerCase())>=0?'<span class="wa">oui (générique, souvent partagée)</span>':'non']);
+  K.cards($('out'),items.concat([['Courrier (MX)','<span class="dim">vérification…</span>'],['SPF','…'],['DMARC','…']]));
+  last={adresse:v,local:local,domaine:dom,valide:okL&&okD,faute:best&&best[0],jetable:DISP.indexOf(dom)>=0};
+  if(!okD) return;
+  Promise.all([K.api('dns',{name:dom,type:'MX'}),K.api('dns',{name:dom,type:'TXT'}),K.api('dns',{name:'_dmarc.'+dom,type:'TXT'}).catch(function(){ return {answers:[]}; })]).then(function(r){
+    var mx=(r[0].answers||[]).map(function(a){ return a.data; }), txt=(r[1].answers||[]).map(function(a){ return String(a.data).replace(/"/g,''); }), spf=txt.filter(function(t){ return /^v=spf1/i.test(t); })[0], dm=(r[2].answers||[]).map(function(a){ return String(a.data).replace(/"/g,''); }).filter(function(t){ return /^v=DMARC1/i.test(t); })[0];
+    var pol=dm&&(dm.match(/p=(\w+)/i)||[])[1];
+    last.mx=mx; last.spf=spf||null; last.dmarc=dm||null;
+    K.cards($('out'),items.concat([['Courrier (MX)',mx.length?'<span class="ok">✓ '+mx.length+' serveur(s)</span><br><span class="dim">'+mx.slice(0,3).map(esc).join('<br>')+'</span>':'<span class="ko">✗ aucun MX : ce domaine ne reçoit pas d’e-mails</span>','wide'],
+      ['SPF',spf?(/-all/.test(spf)?'<span class="ok">✓ strict</span>':/~all/.test(spf)?'<span class="wa">souple (~all)</span>':'<span class="ko">faible</span>'):'<span class="ko">✗ absent</span>'],
+      ['DMARC',dm?(pol==='reject'?'<span class="ok">✓ reject</span>':pol==='quarantine'?'<span class="ok">✓ quarantine</span>':'<span class="wa">none (observation)</span>'):'<span class="ko">✗ absent</span>'],
+      ['Usurpation du domaine',spf&&dm&&pol!=='none'?'<span class="ok">difficile</span>':'<span class="wa">possible : des tiers peuvent envoyer des e-mails « de » ce domaine</span>','wide']]));
+  }).catch(function(e){ K.cards($('out'),items.concat([['DNS','<span class="wa">'+esc(e.message)+'</span>','wide']])); }); }
+function gen(){ var d=K.domain($('sdom').value)||'mondomaine.fr', pr=$('sprov').value, pol=$('spol').value, rua=$('srua').value.trim();
+  var spf='v=spf1 '+(pr==='mx'?'mx':pr)+' -all', dmarc='v=DMARC1; p='+pol+'; adkim=s; aspf=s'+(rua?'; rua=mailto:'+rua:'')+'; pct=100';
+  K.cards($('gen'),[['Enregistrement SPF — TXT sur '+esc(d),'<code>'+esc(spf)+'</code>','wide',spf],['Enregistrement DMARC — TXT sur _dmarc.'+esc(d),'<code>'+esc(dmarc)+'</code>','wide',dmarc],
+    ['Conseil','Commence par <b>p=none</b> quelques semaines avec des rapports, vérifie que tous tes envois légitimes passent, puis durcis. Active aussi <b>DKIM</b> chez ton fournisseur.','wide']]); }
+$('go').onclick=run; $('em').onkeydown=function(e){ if(e.key==='Enter') run(); };
+['sdom','sprov','spol','srua'].forEach(function(id){ $(id).addEventListener('input',gen); }); gen();
+K.exportBar($('bar'),'Analyse d’adresse e-mail',function(){ return $('out'); },function(){ return last; });
+K.state(['em'],run);
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

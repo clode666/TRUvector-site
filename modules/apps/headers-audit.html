@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit d’en-têtes — TRUvector.dev</title>
+<meta name="description" content="La note de sécurité d’un site, de A à F : CSP, HSTS, anti-clickjacking, cookies… avec l’explication et le correctif de chaque point.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Audit <span class="dev">d’en-têtes</span></h1>
+  <p>La note de sécurité d’un site, de A à F : CSP, HSTS, anti-clickjacking, cookies… avec l’explication et le correctif de chaque point.</p>
+  <span class="kb srv">via le serveur du site — aucun service tiers dans la page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl"><div class="krow"><div><label class="fl" for="url">Adresse du site</label><input id="url" type="text" class="mono" placeholder="https://truvector.dev" spellcheck="false"></div><button class="btn" id="go" type="button">Auditer</button></div>
+    <div class="chips"><button type="button" data-u="truvector.dev">truvector.dev</button><button type="button" data-u="github.com">github.com</button><button type="button" data-u="www.impots.gouv.fr">impots.gouv.fr</button></div></div>
+  <div id="out"></div><div id="bar"></div>
+  <div class="note"><b>Protection anti-SSRF</b> : le serveur du site ne visite que des domaines publics, en http/https sur les ports 80 et 443, sans jamais suivre une redirection vers un réseau interne.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var last=null;
+function run(){ var u=($('url').value||$('url').placeholder).trim(); K.loading($('out'),'Visite de '+u);
+  K.api('headers',{url:u}).then(function(d){ last=d;
+    var col={A:'#59e39a',B:'#8ff3d9',C:'#f4c56b',D:'#f4a36b',E:'#ff8b8b',F:'#ff6b6b'}[d.grade];
+    var head='<div class="ksec" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="grade" style="color:'+col+';border-color:'+col+'">'+d.grade+'</span><div><b style="font-size:17px">'+esc(d.url)+'</b><br><span class="dim">HTTP '+d.status+' · score '+d.score+'/100 · '+(d.https?'<span class="ok">HTTPS</span>':'<span class="ko">sans HTTPS</span>')+'</span>'+
+      (d.chaine.length>1?'<br><span class="dim">redirections : '+d.chaine.map(function(c){ return c.status; }).join(' → ')+'</span>':'')+'</div></div>';
+    var rows=d.checks.map(function(c){ return [(c.ok?'<span class="ok">✓</span> ':'<span class="ko">✗</span> ')+'<b>'+esc(c.k)+'</b><br><span class="dim">'+esc(c.why)+'</span>',c.ok?'<span class="ok">+'+c.pts+'</span>':'<span class="ko">0 / '+c.max+'</span>',c.ok?esc(c.val||'').slice(0,160):'<span class="wa">'+esc(c.fix)+'</span>']; });
+    $('out').innerHTML=head+'<div class="ksec"><h2>🧪 Contrôles</h2>'+K.table(['Contrôle','Points','Valeur / correctif conseillé'],rows)+'</div>'+
+      (d.leak?'<div class="ksec"><h2>🔎 Informations divulguées</h2><p class="wa">'+esc(d.leak)+' — mieux vaut ne pas annoncer le serveur et sa version.</p></div>':'')+
+      '<div class="ksec"><h2>📄 Tous les en-têtes reçus</h2>'+K.table(['En-tête','Valeur'],d.entetes.map(function(h){ return ['<b>'+esc(h[0])+'</b>',esc(h[1])]; }))+'</div>';
+  }).catch(function(e){ K.error($('out'),e.message); }); }
+$('go').onclick=run; $('url').onkeydown=function(e){ if(e.key==='Enter') run(); };
+document.querySelectorAll('[data-u]').forEach(function(b){ b.onclick=function(){ $('url').value=b.dataset.u; run(); }; });
+K.exportBar($('bar'),'Audit des en-têtes',function(){ return $('out'); },function(){ return last; });
+K.state(['url'],run);
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

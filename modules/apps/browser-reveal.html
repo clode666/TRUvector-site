@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ce que ton navigateur révèle — TRUvector.dev</title>
+<meta name="description" content="Ton « compte invisible » : tout ce qu’un site peut lire sur ton appareil sans te demander, une estimation d’unicité, et comment réduire ton empreinte.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Ce que ton <span class="dev">navigateur révèle</span></h1>
+  <p>Ton « compte invisible » : tout ce qu’un site peut lire sur ton appareil sans te demander, une estimation d’unicité, et comment réduire ton empreinte.</p>
+  <span class="kb loc">100 % local — rien ne quitte ta page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div id="score"></div><div id="out"></div>
+  <div class="ksec"><h2>🛡️ Réduire ton empreinte</h2><ul>
+    <li><b>Firefox</b> : Paramètres → Vie privée → Protection renforcée « Stricte » ; ou activer <code>privacy.resistFingerprinting</code>.</li>
+    <li><b>Brave</b> et <b>Tor Browser</b> brouillent ou uniformisent l’empreinte par défaut.</li>
+    <li>Active <b>Global Privacy Control</b> (Brave, Firefox, DuckDuckGo) pour signaler ton refus du pistage.</li>
+    <li>Moins d’extensions = moins de signes distinctifs ; un navigateur à jour ressemble à beaucoup d’autres.</li></ul></div>
+  <div id="bar"></div>
+  <div class="note"><b>Rien n’est envoyé</b> : tout est lu et calculé dans cette page. L’« unicité » est une estimation pédagogique, pas une mesure sur une base de visiteurs.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+function sha(t){ return crypto.subtle.digest('SHA-256',new TextEncoder().encode(t)).then(function(b){ return [].map.call(new Uint8Array(b),function(x){ return ('0'+x.toString(16)).slice(-2); }).join('').slice(0,16); }); }
+function fonts(){ var list=['Arial','Calibri','Cambria','Comic Sans MS','Consolas','Courier New','Georgia','Helvetica','Impact','Lucida Console','Segoe UI','Tahoma','Times New Roman','Trebuchet MS','Verdana','Ubuntu','DejaVu Sans','Liberation Sans','Noto Sans','Roboto','Open Sans','San Francisco','Menlo','Monaco','Avenir','Futura','Garamond','Palatino','Fira Code','JetBrains Mono','Source Code Pro','Cantarell','Oxygen'];
+  var c=document.createElement('canvas').getContext('2d'), s='mmmmmmmmmmlli10OO', base={}; ['monospace','serif','sans-serif'].forEach(function(b){ c.font='72px '+b; base[b]=c.measureText(s).width; });
+  return list.filter(function(f){ return ['monospace','serif','sans-serif'].some(function(b){ c.font='72px "'+f+'",'+b; return c.measureText(s).width!==base[b]; }); }); }
+function gl(){ try{ var c=document.createElement('canvas').getContext('webgl'); if(!c) return ['—','—']; var e=c.getExtension('WEBGL_debug_renderer_info'); return e?[c.getParameter(e.UNMASKED_VENDOR_WEBGL),c.getParameter(e.UNMASKED_RENDERER_WEBGL)]:[c.getParameter(c.VENDOR),c.getParameter(c.RENDERER)]; }catch(e){ return ['—','—']; } }
+function canvasFP(){ var c=document.createElement('canvas'); c.width=240; c.height=60; var g=c.getContext('2d'); g.textBaseline='top'; g.font='16px Arial'; g.fillStyle='#f60'; g.fillRect(100,1,62,20); g.fillStyle='#069'; g.fillText('TRUvector ✦ 🌌 empreinte',2,15); g.fillStyle='rgba(102,204,0,.7)'; g.fillText('TRUvector ✦ 🌌 empreinte',4,17); return c.toDataURL(); }
+var data={};
+(async function(){ var n=navigator, s=screen, ua=n.userAgentData, hi=null;
+  try{ if(ua&&ua.getHighEntropyValues) hi=await ua.getHighEntropyValues(['platformVersion','architecture','model','fullVersionList']); }catch(e){}
+  var f=fonts(), g=gl(), cfp=await sha(canvasFP()), st=null; try{ st=n.storage&&n.storage.estimate?await n.storage.estimate():null; }catch(e){}
+  var tz=Intl.DateTimeFormat().resolvedOptions().timeZone, rtc=await new Promise(function(res){ try{ var pc=new RTCPeerConnection({iceServers:[]}), got=[]; pc.createDataChannel('x'); pc.onicecandidate=function(e){ if(!e.candidate){ res(got); return; } var m=/candidate:\S+ \d \S+ \d+ (\S+)/.exec(e.candidate.candidate); if(m) got.push(m[1]); }; pc.createOffer().then(function(o){ return pc.setLocalDescription(o); }); setTimeout(function(){ res(got); },2000); }catch(e){ res([]); } });
+  data={navigateur:n.userAgent,plateforme:(ua&&ua.platform)||n.platform,langues:(n.languages||[n.language]).join(', '),fuseau:tz,ecran:s.width+'×'+s.height+' · '+s.colorDepth+' bits · ×'+devicePixelRatio,fenetre:innerWidth+'×'+innerHeight,
+    coeurs:n.hardwareConcurrency,memoire:n.deviceMemory,tactile:n.maxTouchPoints,gpu:g[1],gpuVendeur:g[0],polices:f.length,canvas:cfp,dnt:n.doNotTrack,gpc:n.globalPrivacyControl,cookies:n.cookieEnabled,webrtc:rtc,stockage:st&&st.quota};
+  /* estimation (très approximative) des bits d'information apportés par chaque attribut */
+  var bits=[['Navigateur et version',10],['Système',3],['Langues',(n.languages||[]).length>2?6:3],['Fuseau horaire',tz==='Europe/Paris'?3:6],['Écran',5],['Processeur et mémoire',4],['Carte graphique',g[1]==='—'?0:8],['Polices installées',Math.min(10,Math.round(f.length/2))],['Empreinte canvas',8]];
+  var total=bits.reduce(function(a,b){ return a+b[1]; },0), one=Math.pow(2,Math.min(total,40));
+  K.cards($('score'),[['Estimation d’unicité','<b style="font-size:20px">≈ '+total+' bits</b><br>ton navigateur ressemble à environ 1 sur '+(one>1e9?'plus d’un milliard':Math.round(one).toLocaleString('fr-FR'))+' <span class="dim">(ordre de grandeur)</span>','wide'],
+    ['Respect de ta vie privée',(n.globalPrivacyControl?'<span class="ok">✓ GPC activé</span>':'<span class="wa">GPC non activé</span>')+' · '+(n.doNotTrack==='1'?'<span class="ok">DNT activé</span>':'<span class="dim">DNT non activé</span>'),'wide']]);
+  K.cards($('out'),[['Navigateur (User-Agent)',esc(n.userAgent),'wide'],['Plateforme',esc(data.plateforme||'—')+(hi&&hi.architecture?' · '+esc(hi.architecture):'')],['Langues',esc(data.langues)],['Fuseau horaire',esc(tz)],
+    ['Écran',esc(data.ecran)],['Fenêtre',esc(data.fenetre)],['Processeur',(n.hardwareConcurrency||'?')+' cœurs'],['Mémoire',n.deviceMemory?'≈ '+n.deviceMemory+' Go':'non communiquée'],['Écran tactile',n.maxTouchPoints?'oui ('+n.maxTouchPoints+' points)':'non'],
+    ['Carte graphique',esc(g[1])+'<br><span class="dim">'+esc(g[0])+'</span>','wide'],['Polices détectées',f.length+' <span class="dim">— '+esc(f.slice(0,12).join(', '))+(f.length>12?'…':'')+'</span>','wide'],['Empreinte canvas',cfp],
+    ['Cookies',n.cookieEnabled?'activés':'désactivés'],['IP locale (WebRTC)',rtc.some(function(x){ return K.ipv4(x); })?'<span class="ko">exposée : '+esc(rtc.filter(function(x){ return K.ipv4(x); }).join(', '))+'</span>':'<span class="ok">masquée</span>'],
+    ['Espace de stockage',st&&st.quota?'≈ '+Math.round(st.quota/1e9)+' Go disponibles pour les sites':'—'],['Contributions à l’empreinte',bits.map(function(b){ return esc(b[0])+' <span class="dim">≈ '+b[1]+' bits</span>'; }).join('<br>'),'wide']]);
+})();
+K.exportBar($('bar'),'Ce que mon navigateur révèle',function(){ return $('tool'); },function(){ return data; });
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>

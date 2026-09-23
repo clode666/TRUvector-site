@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test de débit — TRUvector.dev</title>
+<meta name="description" content="Latence, gigue, débit descendant et montant jusqu’au datacenter Cloudflare le plus proche, avec un graphique en direct.">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
+<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#070b11">
+
+<script src="../../assets/js/assets.js?v=2"></script>
+<script src="../../assets/js/config.js?v=2"></script>
+<script src="../../assets/js/render.js?v=2"></script>
+</head>
+<body>
+<nav class="site-nav"><div class="wrap row">
+  <a class="brand" href="../../index.html" aria-label="Accueil TRUvector"><svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg><span><span class="tru">TRU</span><span class="vec">vector</span><span class="dev">.dev</span></span></a>
+  <div class="nav-links"><a href="../../index.html">Accueil</a><a href="../">Modules</a><a href="../../mentions-legales/">Légal</a></div>
+</div></nav>
+
+<header class="tool-hero">
+  <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
+  <h1>Test de <span class="dev">débit</span></h1>
+  <p>Latence, gigue, débit descendant et montant jusqu’au datacenter Cloudflare le plus proche, avec un graphique en direct.</p>
+  <span class="kb srv">via le serveur du site — aucun service tiers dans la page</span>
+</header>
+
+<main class="tool" id="tool">
+  <a class="back" href="../">← Modules</a>
+
+  <div class="ctl" style="text-align:center"><button class="btn btn-xl" id="go" type="button">▶ Lancer le test</button><p class="dim" style="margin:0">≈ 20 secondes · environ 60 Mo échangés au maximum (pense à ton forfait mobile).</p></div>
+  <div id="res"></div>
+  <div class="ksec"><h2>📈 En direct</h2><canvas id="cv" height="160" style="width:100%;height:160px;background:rgba(10,16,23,.7);border:1px solid var(--bord);border-radius:12px" aria-label="Graphique du débit"></canvas></div>
+  <div id="bar"></div>
+  <div class="note"><b>Ce que mesure le test</b> : la liaison entre ton appareil et le serveur Cloudflare le plus proche, pas un débit « garanti » par ton opérateur. Le Wi-Fi, les autres appareils du foyer et le navigateur influencent le résultat : refais-le deux ou trois fois.</div>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="_kit/kit.js?v=1"></script>
+<script>
+(function(){ 'use strict'; var $=K.$, esc=K.esc;
+
+var cv=$('cv'), g=cv.getContext('2d'), pts=[], last=null;
+function size(){ cv.width=cv.clientWidth*(devicePixelRatio>1?2:1); cv.height=160*(devicePixelRatio>1?2:1); draw(); } addEventListener('resize',size);
+function draw(){ g.clearRect(0,0,cv.width,cv.height); if(!pts.length) return; var mx=Math.max.apply(null,pts.map(function(p){ return p.v; }).concat([10])), w=cv.width, h=cv.height;
+  ['down','up'].forEach(function(k,ki){ var P=pts.filter(function(p){ return p.k===k; }); if(!P.length) return; g.beginPath(); g.lineWidth=2*(devicePixelRatio>1?2:1); g.strokeStyle=ki?'#c98bf5':'#34f5c5';
+    P.forEach(function(p,i){ var x=i/(Math.max(P.length-1,1))*w, y=h-(p.v/mx)*h*.9-4; i?g.lineTo(x,y):g.moveTo(x,y); }); g.stroke(); }); }
+function cards(o){ K.cards($('res'),[['Latence (ping)',o.ping!=null?'<b style="font-size:20px">'+o.ping+'</b> ms':'…'],['Gigue',o.jitter!=null?o.jitter+' ms':'…'],['Descendant','<b style="font-size:20px;color:#34f5c5">'+(o.down!=null?o.down:'…')+'</b> Mb/s'],['Montant','<b style="font-size:20px;color:#c98bf5">'+(o.up!=null?o.up:'…')+'</b> Mb/s'],['Serveur',esc(o.pop||'…')],['Verdict',o.verdict||'…','wide']]); }
+function verdict(o){ var d=o.down||0; return d>=300?'<span class="ok">Très haut débit : vidéo 4K, visio et gros téléchargements sans souci.</span>':d>=50?'<span class="ok">Bon débit : streaming HD et visio confortables.</span>':d>=10?'<span class="wa">Correct : la vidéo HD peut ralentir si plusieurs appareils l’utilisent.</span>':'<span class="ko">Faible : privilégie la vidéo en basse qualité.</span>'; }
+async function run(){ var b=$('go'); b.disabled=true; b.textContent='Test en cours…'; pts=[]; size(); var o={};
+  try{ var p=[]; for(var i=0;i<8;i++){ var t=performance.now(); var r=await K.api('speed'); p.push(performance.now()-t); o.pop=r.pop; }
+    p.sort(function(a,b){ return a-b; }); o.ping=Math.round(p[1]); o.jitter=Math.round(p.slice(1,7).reduce(function(a,x,i,arr){ return i?a+Math.abs(x-arr[i-1]):a; },0)/5); cards(o);
+    var bytes=2e6, best=0, t0=performance.now();
+    while(performance.now()-t0<9000&&bytes<=25e6){ var s=performance.now(), r2=await fetch(K.root+'api/tools/speed?bytes='+bytes,{cache:'no-store'}); if(!r2.ok) throw new Error('Outil serveur indisponible.');
+      var rd=r2.body.getReader(), got=0, ts=performance.now(); for(;;){ var x=await rd.read(); if(x.done) break; got+=x.value.length; var el=(performance.now()-ts)/1000; if(el>.2){ pts.push({k:'down',v:got*8/el/1e6}); draw(); } }
+      var mbps=bytes*8/((performance.now()-s)/1000)/1e6; best=Math.max(best,mbps); o.down=Math.round(best*10)/10; cards(o); if(performance.now()-s<1500) bytes*=2; }
+    var upB=1e6, bestU=0, t1=performance.now(), blob=new Uint8Array(8e6); for(var k=0;k<blob.length;k+=65536) crypto.getRandomValues(blob.subarray(k,Math.min(k+65536,blob.length)));
+    while(performance.now()-t1<8000&&upB<=8e6){ var s2=performance.now(); var rr=await fetch(K.root+'api/tools/speed',{method:'POST',body:blob.subarray(0,upB),cache:'no-store'}); if(!rr.ok) throw new Error('Envoi refusé.');
+      var up=upB*8/((performance.now()-s2)/1000)/1e6; pts.push({k:'up',v:up}); draw(); bestU=Math.max(bestU,up); o.up=Math.round(bestU*10)/10; cards(o); if(performance.now()-s2<1500) upB*=2; }
+    o.verdict=verdict(o); cards(o); last=o;
+  }catch(e){ K.error($('res'),e.message||'Test interrompu.'); }
+  b.disabled=false; b.textContent='↻ Relancer le test'; }
+$('go').onclick=run; cards({}); size();
+K.exportBar($('bar'),'Test de débit',function(){ return $('res'); },function(){ return last; });
+
+})();
+</script>
+<script src="../../assets/js/nav.js?v=5"></script>
+<script src="../../assets/js/player.js?v=6"></script>
+<script src="../../assets/js/fx.js?v=7"></script>
+</body>
+</html>
