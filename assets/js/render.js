@@ -101,6 +101,10 @@
       if(B.stats!==false){
         var S=[['articles','articles'],['modules','modules'],['pistes','pistes'],['ebooks','nouvelles'],['logiciels','logiciels'],['creations','créations']].filter(function(s){ return counts[s[0]]; });
         add('<section class="blk wrap tvh-stats" aria-label="En chiffres"><div class="tvh-stat-row">'+S.map(function(s){ return '<div class="tvh-stat"><b data-n="'+counts[s[0]]+'">0</b><span>'+s[1]+'</span></div>'; }).join('')+'</div></section>'); }
+      if(B.ip===true){
+        add('<section class="blk wrap tvh-ip"><div class="tvh-ipc"><span class="tvh-ipi" aria-hidden="true">🌐</span><div><div class="eyebrow">// ta connexion</div><b class="tvh-ipv">…</b><span class="tvh-ipd"></span></div><a class="btn btn-ghost" href="'+rel('modules/apps/ip-analyzer.html')+'">Analyser →</a></div></section>');
+        fetch(ROOT+'api/tools/whoami',{cache:'no-store'}).then(function(r){ return r.ok?r.json():null; }).then(function(d){ var el=$('.tvh-ipv'); if(!el) return; if(!d||!d.ip){ el.closest('.tvh-ip').hidden=true; return; }
+          el.textContent=d.ip; $('.tvh-ipd').textContent=' · '+[d.fai,d.ville,d.pays].filter(Boolean).join(' · '); }).catch(function(){ var el=$('.tvh-ip'); if(el) el.hidden=true; }); }
       if(B.news!==false&&vis(C.articles).length){
         var arts=vis(C.articles), dated=arts.filter(function(a){ return a.date; });
         var latest=(dated.length?dated.slice().sort(function(a,b){ return a.date<b.date?1:-1; }):arts.slice().reverse()).slice(0,H.newsCount||4);

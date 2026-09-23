@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roadmap chatbot — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--nuit:#060a10;--nuit-2:#0a1119;--verre:rgba(14,23,32,.78);--bord:rgba(126,240,205,.14);--bord-fort:rgba(126,240,205,.34);
+  --menthe:#34f5c5;--menthe-soft:#8ff3d9;--aurore-v:#b14aed;--aurore-v-soft:#c98bf5;--aurore-g:#59e39a;--ambre:#f4c56b;--rose:#ff7ab6;
+  --texte:#e8f2ee;--texte-2:#a3b8b4;--texte-3:#6f8582;--sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,rgba(177,74,237,.18),transparent 60%),radial-gradient(1000px 600px at 90% 0%,rgba(52,245,197,.12),transparent 60%),var(--nuit);color:var(--texte);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--menthe)}:focus-visible{outline:2px solid var(--menthe);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+code{font-family:var(--mono);font-size:.88em;color:var(--menthe-soft);background:rgba(52,245,197,.08);border:1px solid var(--bord);border-radius:5px;padding:1px 5px}
+header{padding:80px 0 40px;text-align:center}
+.bubble-ic{width:84px;height:84px;margin:0 auto;border-radius:26px;display:grid;place-items:center;font-size:40px;background:linear-gradient(145deg,rgba(52,245,197,.2),rgba(177,74,237,.25));border:1px solid var(--bord-fort);box-shadow:0 0 40px rgba(52,245,197,.2)}
+h1{font-size:clamp(38px,7.5vw,82px);line-height:.98;letter-spacing:-.04em;margin:24px 0 0}
+h1 span{background:linear-gradient(92deg,var(--menthe),var(--aurore-v-soft),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{max-width:62ch;margin:20px auto 0;color:var(--texte-2);font-size:17.5px}
+.meta{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+.meta span{border:1px solid var(--bord-fort);border-radius:999px;padding:6px 13px}
+section{padding:54px 0}
+.h2{font-size:clamp(26px,4.2vw,42px);letter-spacing:-.03em;line-height:1.08;margin:0 0 12px}
+.lead{color:var(--texte-2);max-width:66ch;font-size:16.5px;margin:0 0 28px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.box{background:var(--verre);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.box h3{margin:0 0 6px;font-size:17px}.box p{margin:0;color:var(--texte-2);font-size:14.5px}
+.flow{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+.flow .n{flex:1 1 150px;background:var(--verre);border:1px solid var(--bord-fort);border-radius:14px;padding:14px;text-align:center;font-size:14px}
+.flow .n b{display:block;font-size:22px;margin-bottom:4px}
+.flow .n small{display:block;font-family:var(--mono);font-size:11px;color:var(--texte-3);margin-top:4px}
+.flow .ar{align-self:center;color:var(--menthe);font-family:var(--mono)}
+.phase{display:grid;grid-template-columns:110px 1fr;gap:26px;padding:0 0 50px;position:relative}
+.phase::before{content:"";position:absolute;left:54px;top:86px;bottom:0;width:1px;background:linear-gradient(var(--bord-fort),transparent)}
+.phase:last-child::before{display:none}
+.pn{font-family:var(--mono);font-size:62px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:1.4px var(--c,var(--menthe));text-align:center;position:sticky;top:20px;align-self:start}
+.pn small{display:block;-webkit-text-stroke:0;color:var(--c,var(--menthe));font-size:11px;margin-top:8px;font-weight:500}
+.phase h3{font-size:clamp(22px,3.2vw,30px);margin:2px 0 6px;letter-spacing:-.02em}
+.phase>div>p{margin:0 0 14px;color:var(--texte-2);max-width:66ch}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.tag{font-family:var(--mono);font-size:11.5px;padding:4px 10px;border-radius:8px;border:1px solid var(--bord);color:var(--texte-2)}.tag b{color:var(--texte)}
+.tag.free{border-color:rgba(89,227,154,.5);color:var(--aurore-g)}
+ul.l{margin:0;padding-left:20px}ul.l li{margin:0 0 7px}ul.l li::marker{color:var(--menthe)}
+.code{font-family:var(--mono);font-size:12.5px;background:#05080d;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;white-space:pre;color:var(--menthe-soft);margin:14px 0 0}
+.code .c{color:var(--texte-3)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--bord);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;color:var(--texte-3);font-weight:500}
+td.ok{color:var(--aurore-g)}td.no{color:#ff9b9b}td.mid{color:var(--ambre)}
+tr.best td:first-child{color:var(--menthe);font-weight:600}
+.warn{border-left:3px solid var(--ambre);background:rgba(244,197,107,.06);padding:12px 16px;border-radius:0 12px 12px 0;color:var(--texte-2);font-size:14.5px;margin:16px 0 0}
+.warn b{color:var(--texte)}
+footer{padding:30px 0 90px;text-align:center;color:var(--texte-3);font-family:var(--mono);font-size:12.5px}
+/* ---------- démo : widget assistant (phase 1) ---------- */
+#tb-fab{position:fixed;right:20px;bottom:20px;z-index:50;width:60px;height:60px;border-radius:20px;border:1px solid var(--bord-fort);cursor:pointer;font-size:26px;
+  background:linear-gradient(145deg,#12382f,#2a1640);box-shadow:0 12px 30px rgba(0,0,0,.5),0 0 26px rgba(52,245,197,.25);color:#fff;transition:transform .2s}
+#tb-fab:hover{transform:translateY(-3px) scale(1.04)}
+#tb-fab .dot{position:absolute;top:8px;right:8px;width:10px;height:10px;border-radius:50%;background:var(--menthe);box-shadow:0 0 10px var(--menthe)}
+#tb{position:fixed;right:20px;bottom:92px;z-index:51;width:min(380px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));display:none;flex-direction:column;
+  background:#0b121a;border:1px solid var(--bord-fort);border-radius:20px;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 40px rgba(52,245,197,.1);overflow:hidden}
+#tb.on{display:flex;animation:tbin .25s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes tbin{from{opacity:0;transform:translateY(14px) scale(.97)}}
+#tb .hd{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--bord);background:linear-gradient(90deg,rgba(52,245,197,.08),rgba(177,74,237,.08))}
+#tb .hd .av{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:rgba(52,245,197,.12);font-size:18px}
+#tb .hd b{display:block;font-size:14.5px}#tb .hd small{font-family:var(--mono);font-size:10.5px;color:var(--aurore-g)}
+#tb .hd button{margin-left:auto;background:none;border:0;color:var(--texte-2);font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:8px}
+#tb .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+#tb .m{max-width:86%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.5}
+#tb .m.bot{background:rgba(255,255,255,.05);border:1px solid var(--bord);border-bottom-left-radius:4px}
+#tb .m.me{align-self:flex-end;background:rgba(52,245,197,.14);border:1px solid rgba(52,245,197,.3);border-bottom-right-radius:4px}
+#tb .m a{color:var(--menthe)}
+#tb .sug{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px}
+#tb .sug button{font:inherit;font-size:12px;color:var(--texte-2);background:transparent;border:1px solid var(--bord-fort);border-radius:999px;padding:5px 10px;cursor:pointer}
+#tb .sug button:hover{color:var(--menthe);border-color:var(--menthe)}
+#tb form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--bord)}
+#tb input{flex:1;font:inherit;font-size:14px;color:var(--texte);background:#060a10;border:1px solid var(--bord-fort);border-radius:12px;padding:10px 12px}
+#tb input:focus{outline:none;border-color:var(--menthe)}
+#tb form button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:0 14px;background:var(--menthe);color:#04120d;cursor:pointer}
+#tb .typing{display:inline-flex;gap:4px}#tb .typing i{width:6px;height:6px;border-radius:50%;background:var(--texte-3);animation:tbd 1s infinite}
+#tb .typing i:nth-child(2){animation-delay:.15s}#tb .typing i:nth-child(3){animation-delay:.3s}
+@keyframes tbd{50%{transform:translateY(-4px);background:var(--menthe)}}
+@media(max-width:720px){.phase{grid-template-columns:1fr;gap:6px}.phase::before{display:none}.pn{position:static;text-align:left;font-size:48px}.pn small{display:inline;margin-left:10px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="bubble-ic" aria-hidden="true">💬</div>
+  <h1>Un assistant <span>pour TRUvector</span></h1>
+  <p>Comment ajouter un chatbot au site, <b>gratuitement</b>, sans service tiers qui s'invite dans ta page, sans clé exposée, et piloté depuis le cockpit. La démo ci-dessous (bulle 💬) montre le mode local ; <b>l’assistant complet est en service sur tout le site</b> depuis la v9 — voir manuel, section 21.</p>
+  <div class="meta"><span>✓ Livrée en entier (v9 · v9.1)</span><span>6 phases</span><span>0 € de fonctionnement</span><span>≈ 2 à 3 semaines en solo</span><span>même hébergeur : Cloudflare</span></div>
+</header>
+
+<main>
+<section class="wrap">
+  <h2 class="h2">Ce qu'il doit faire (et ne pas faire)</h2>
+  <p class="lead">Un assistant d'orientation, pas un oracle. Il connaît le site, répond court, donne toujours le lien vers la bonne page.</p>
+  <div class="grid3">
+    <div class="box"><h3>✓ Orienter</h3><p>« Quel logiciel protège un script Python ? » → IronLock, avec le lien vers sa fiche et les articles liés.</p></div>
+    <div class="box"><h3>✓ Recommander</h3><p>« Une nouvelle courte et sombre ? » → deux e-books du catalogue, avec la clé de lecture et la date limite.</p></div>
+    <div class="box"><h3>✓ Dépanner</h3><p>« Le lecteur ne s'ouvre pas » → les causes connues, tirées de la FAQ que tu rédiges dans le cockpit.</p></div>
+    <div class="box"><h3>✗ Inventer</h3><p>Il ne répond que depuis le contenu du site. Sans source, il le dit et propose la recherche Ctrl+K ou le contact.</p></div>
+    <div class="box"><h3>✗ Retenir</h3><p>Aucune conversation n'est conservée. Rien à déclarer de nouveau au titre du RGPD, hormis une ligne dans la page Confidentialité.</p></div>
+    <div class="box"><h3>✗ Coûter</h3><p>Sur le compte Cloudflare gratuit, le quota dépassé fait échouer la requête : aucune facture n'est possible. L'assistant retombe alors en mode local.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">L'architecture retenue</h2>
+  <p class="lead">Tout reste chez Cloudflare, déjà ton hébergeur : pas de nouveau compte, pas de clé API dans le navigateur, et ta politique de sécurité (CSP) n'a pas à s'ouvrir à un domaine extérieur puisque l'appel se fait vers ton propre site.</p>
+  <div class="flow" role="img" aria-label="Schéma : navigateur, fonction Cloudflare, Workers AI, contenu du site">
+    <div class="n"><b>💬</b>Widget sur le site<small>chat.js · 6 Ko</small></div><div class="ar">→</div>
+    <div class="n"><b>⚙️</b>/api/chat<small>Pages Function (même domaine)</small></div><div class="ar">→</div>
+    <div class="n"><b>🧠</b>Workers AI<small>modèle ouvert 8B · gratuit</small></div><div class="ar">⇄</div>
+    <div class="n"><b>📚</b>Contenu du site<small>config.json + articles</small></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Les phases</h2>
+  <p class="lead">Chaque phase se livre seule. Tu peux t'arrêter après la 1 (zéro IA) ou après la 3 (IA protégée) : le site reste cohérent.</p>
+
+  <div class="phase" style="--c:var(--menthe)"><div class="pn">1<small>1–2 jours</small></div><div>
+    <h3>Assistant local, sans IA</h3>
+    <p>La bulle et la fenêtre de discussion, et des réponses tirées de ta FAQ et du catalogue, par recherche de mots-clés (le moteur de la palette Ctrl+K). Tout se passe dans le navigateur : instantané, hors ligne, aucun risque. C'est la démo de cette page.</p>
+    <div class="tags"><span class="tag free">0 € · 0 compte</span><span class="tag">Risque <b>nul</b></span><span class="tag">Livrable <b>immédiat</b></span></div>
+    <ul class="l">
+      <li>Nouveau <code>assets/js/fx/chat.js</code>, chargé au premier clic sur la bulle (le budget de poids reste tenu).</li>
+      <li><code>config.json</code> gagne une clé <code>chatbot</code> : nom, avatar, message d'accueil, questions suggérées, FAQ.</li>
+      <li>Réponses courtes, avec des liens vers les fiches, articles, e-books et modules correspondants.</li>
+      <li>Accessible : navigation au clavier, <code>Échap</code> pour fermer, annonces pour les lecteurs d'écran.</li>
+    </ul>
+  </div></div>
+
+  <div class="phase" style="--c:var(--aurore-g)"><div class="pn">2<small>2–3 jours</small></div><div>
+    <h3>L'IA gratuite : Cloudflare Workers AI</h3>
+    <p>Une fonction <code>/api/chat</code> dans le dépôt, déployée automatiquement par Cloudflare Pages. Elle ajoute au message du visiteur les extraits pertinents du site, puis interroge un modèle ouvert hébergé par Cloudflare. La réponse arrive en continu, mot à mot.</p>
+    <div class="tags"><span class="tag free">10 000 « neurones » / jour gratuits</span><span class="tag">Clé <b>jamais dans le navigateur</b></span><span class="tag">CSP <b>inchangée</b></span></div>
+    <div class="code"><span class="c">// functions/api/chat.js — esquisse (Pages Function)</span>
+export async function onRequestPost({ request, env }) {
+  const { message } = await request.json();
+  const contexte = await chercherDansLeSite(message, env);   <span class="c">// phase 4 : vraie recherche sémantique</span>
+  const flux = await env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+    stream: true, max_tokens: 350,
+    messages: [
+      { role: 'system', content: PERSONA + '\nRéponds uniquement avec ces sources :\n' + contexte },
+      { role: 'user', content: message.slice(0, 600) }
+    ]
+  });
+  return new Response(flux, { headers: { 'content-type': 'text/event-stream' } });
+}</div>
+    <div class="warn"><b>Ce que « gratuit » couvre réellement :</b> le quota quotidien est commun à tous les modèles et remis à zéro chaque nuit (UTC). Un modèle 8B consomme quelques centaines de neurones pour une réponse de longueur moyenne : compte donc quelques dizaines de conversations par jour, davantage si les réponses sont courtes. Au-delà, sur le compte gratuit, la requête échoue sans facturation, et le widget bascule tout seul sur les réponses locales de la phase 1. Le modèle exact sera choisi dans le catalogue Workers AI au moment de l'implémentation, car Cloudflare en retire et en ajoute régulièrement.</div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--ambre)"><div class="pn">3<small>1–2 jours</small></div><div>
+    <h3>Garde-fous</h3>
+    <p>Indispensable avant d'ouvrir l'IA au public : un robot pourrait vider le quota en quelques minutes, ou tenter de détourner l'assistant.</p>
+    <div class="tags"><span class="tag free">Turnstile gratuit</span><span class="tag">KV gratuit</span></div>
+    <ul class="l">
+      <li><b>Cloudflare Turnstile</b> (anti-robot invisible, gratuit), vérifié côté serveur avant chaque conversation.</li>
+      <li><b>Limites :</b> par visiteur (par exemple 15 messages par heure, compteur en KV), 600 caractères par message, 6 échanges par conversation.</li>
+      <li><b>Consigne système verrouillée :</b> l'assistant répond uniquement sur TRUvector, cite ses sources, refuse les instructions cachées dans les messages et ne produit jamais de lien hors de ton domaine.</li>
+      <li><b>Aucun journal des conversations.</b> Une phrase est ajoutée dans la page Confidentialité.</li>
+      <li><b>Interrupteur d'urgence :</b> dans le cockpit, « IA désactivée » ramène instantanément au mode local.</li>
+    </ul>
+  </div></div>
+
+  <div class="phase" style="--c:var(--aurore-v-soft)"><div class="pn">4<small>3–5 jours</small></div><div>
+    <h3>Il connaît vraiment le site (RAG)</h3>
+    <p>Au lieu de mots-clés, une recherche par le sens. Les 60 articles, les 7 fiches, les résumés d'e-books et la FAQ sont découpés en passages, et chaque passage est converti en vecteur (embeddings BGE sur Workers AI). Le tout est rangé dans Vectorize. Chaque réponse se fonde alors sur les trois ou quatre meilleurs passages et affiche « Sources : … » avec des liens.</p>
+    <div class="tags"><span class="tag free">Vectorize : offre gratuite</span><span class="tag">Réindexation <b>à chaque publication</b></span></div>
+    <ul class="l">
+      <li>Script <code>tools/index-chatbot.mjs</code> : il relit le site, découpe, vectorise et envoie les passages. Il se lance depuis le cockpit ou à chaque déploiement.</li>
+      <li>La réponse cite ses sources : « d'après l'article <i>Fingerprint hardware : 8 sources</i> ».</li>
+      <li>Si la ressemblance est trop faible, l'assistant répond « je ne sais pas » au lieu d'inventer.</li>
+    </ul>
+  </div></div>
+
+  <div class="phase" style="--c:var(--rose)"><div class="pn">5<small>1–2 jours</small></div><div>
+    <h3>Piloté depuis le cockpit</h3>
+    <p>Une nouvelle rubrique « 🤖 Assistant », dans la logique de la v8 : tout se règle sans toucher au code.</p>
+    <ul class="l">
+      <li>Activer ou désactiver, mode local ou IA, pages où la bulle apparaît.</li>
+      <li>Nom, avatar, message d'accueil, ton (chaleureux, technique, bref), questions suggérées.</li>
+      <li>FAQ éditable (question, variantes, réponse, lien), qui sert aussi de réponse de secours.</li>
+      <li>Quotas : messages par heure, longueur maximale.</li>
+      <li>Optionnel, anonyme et agrégé : les questions restées sans réponse, pour enrichir la FAQ.</li>
+    </ul>
+  </div></div>
+
+  <div class="phase" style="--c:var(--menthe-soft)"><div class="pn">6<small>en continu</small></div><div>
+    <h3>Bonus</h3>
+    <ul class="l">
+      <li><b>Dans Ctrl+K :</b> une ligne « Demander à l'assistant : … » quand la recherche ne trouve rien.</li>
+      <li><b>Libraire :</b> « une nouvelle de moins de 15 minutes, ambiance cyberpunk » donne une sélection d'e-books avec lien direct vers le lecteur.</li>
+      <li><b>Bilingue FR / EN,</b> la langue suivant celle du visiteur.</li>
+      <li><b>Question vocale</b> (reconnaissance de la parole du navigateur, gratuite), avec l'IA seulement en option.</li>
+    </ul>
+  </div></div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Les alternatives, comparées honnêtement</h2>
+  <p class="lead">Toutes ont une offre gratuite. La différence se joue sur la sécurité, la vie privée et le risque de facture.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Option</th><th>Coût</th><th>Clé protégée</th><th>Données des visiteurs</th><th>Effort</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr class="best"><td>Cloudflare Workers AI</td><td class="ok">Quota quotidien gratuit, pas de facture possible sur le compte gratuit</td><td class="ok">Oui (côté serveur)</td><td class="ok">Restent chez ton hébergeur</td><td class="ok">Faible : même dépôt, même déploiement</td><td class="ok">Recommandé</td></tr>
+      <tr><td>Assistant local (phase 1 seule)</td><td class="ok">0 €</td><td class="ok">Aucune clé</td><td class="ok">Rien ne sort du navigateur</td><td class="ok">Très faible</td><td class="ok">Parfait pour démarrer</td></tr>
+      <tr><td>API gratuites d'autres fournisseurs (Gemini, Groq, OpenRouter…)</td><td class="mid">Gratuit dans des quotas qui changent souvent</td><td class="mid">Oui, via la même fonction</td><td class="mid">Envoyées à un tiers ; selon ses conditions, les offres gratuites peuvent servir à améliorer ses modèles</td><td class="mid">Faible</td><td class="mid">Plan B possible</td></tr>
+      <tr><td>IA dans le navigateur (WebLLM)</td><td class="ok">0 €, aucun serveur</td><td class="ok">Aucune clé</td><td class="ok">Tout reste local</td><td class="no">Élevé : téléchargement d'un modèle de plusieurs centaines de Mo à quelques Go, carte graphique récente (WebGPU), CSP à ouvrir</td><td class="no">Trop lourd pour des visiteurs</td></tr>
+      <tr><td>Widget clé en main (Crisp, Tidio…)</td><td class="mid">Gratuit limité, IA souvent payante</td><td class="mid">Gérée par le tiers</td><td class="no">Hébergées chez le tiers ; script externe, cookies, bandeau de consentement</td><td class="ok">Très faible</td><td class="no">Contraire à la philosophie du site</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Ordre conseillé</h2>
+  <div class="grid3">
+    <div class="box"><h3>Semaine 1</h3><p>Phase 1 (assistant local) et rubrique Assistant du cockpit (phase 5, partie FAQ). Tu as déjà un assistant utile, sans aucun risque.</p></div>
+    <div class="box"><h3>Semaine 2</h3><p>Phases 2 et 3 ensemble : l'IA n'est ouverte au public qu'avec ses garde-fous.</p></div>
+    <div class="box"><h3>Semaine 3</h3><p>Phase 4 (vraie connaissance du site), puis les bonus selon tes envies.</p></div>
+  </div>
+</section>
+</main>
+
+<footer>$ truvector roadmap --chatbot --gratuit · TRUvector.dev · septembre 2026</footer>
+
+<!-- ============ DÉMO PHASE 1 : assistant local, sans IA ============ -->
+<button id="tb-fab" type="button" aria-label="Ouvrir l'assistant" aria-expanded="false" aria-controls="tb"><span aria-hidden="true">💬</span><span class="dot" aria-hidden="true"></span></button>
+<div id="tb" role="dialog" aria-label="Assistant TRUvector">
+  <div class="hd"><div class="av" aria-hidden="true">✦</div><div><b>TRU, l'assistant</b><small>● mode local (démo phase 1)</small></div><button type="button" id="tb-x" aria-label="Fermer">✕</button></div>
+  <div class="msgs" id="tb-msgs" aria-live="polite"></div>
+  <div class="sug" id="tb-sug"></div>
+  <form id="tb-f" autocomplete="off"><input id="tb-in" type="text" maxlength="300" placeholder="Pose ta question…" aria-label="Ta question"><button type="submit">Envoyer</button></form>
+</div>
+<script>
+(function(){
+  var FAQ=[
+    {q:['cle','clé','mot de passe','passphrase','ebook','livre','nouvelle','lecteur','lire'],a:'Les e-books s’ouvrent avec la clé publique <b>truvector</b>. Elle est déjà pré-remplie quand tu cliques sur « Lire » dans le <a href="ebooks/">catalogue</a>.'},
+    {q:['date','jusqu','expire','limite','combien de temps'],a:'Les nouvelles sont en édition limitée : elles restent lisibles jusqu’au <b>21 octobre 2026</b>. <a href="ebooks/">Voir le catalogue</a>.'},
+    {q:['musique','ecouter','écouter','fond','son'],a:'Sur la page <a href="musique/">Musique</a>, coche « Écouter en naviguant » : la musique continue pendant toute ta visite, avec un mini-lecteur en bas de l’écran.'},
+    {q:['protéger','proteger','python','reverse','licence','licensing'],a:'Pour protéger un logiciel Python, regarde <a href="logiciels/fiche.html?p=ironlock">IronLock</a> : fingerprint matériel, AES-256-GCM, licences signées. Article conseillé : <a href="articles/posts/proteger-python-reverse-engineering.html">Protéger un script Python contre le reverse engineering</a>.'},
+    {q:['soutenir','don','aider','kofi','sponsor'],a:'Merci ! Toutes les façons d’aider sont sur la page <a href="dons/">Soutenir</a>.'},
+    {q:['recherche','chercher','trouver'],a:'Appuie sur <b>Ctrl + K</b> n’importe où sur le site : la recherche couvre articles, pistes, e-books, modules et logiciels.'},
+    {q:['effets','aurore','lent','ralenti','animations'],a:'Tu peux alléger ou couper les effets : <b>Ctrl + K</b> puis « Effets : légers » ou « Effets : désactivés ».'},
+    {q:['bonjour','salut','hello','coucou'],a:'Salut ! Je peux t’orienter vers un logiciel, un article, une nouvelle ou un module. Qu’est-ce qui t’amène ?'}
+  ];
+  var SUG=['Comment lire un e-book ?','Protéger un script Python','Écouter de la musique en fond','Un jeu à essayer ?'];
+  var cat=null;
+  function norm(s){ return String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/-/g,''); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  fetch('config.json').then(function(r){ return r.ok?r.json():null; }).then(function(c){ cat=c&&c.catalog; }).catch(function(){});
+  var box=document.getElementById('tb'), fab=document.getElementById('tb-fab'), msgs=document.getElementById('tb-msgs'), inp=document.getElementById('tb-in'), started=false;
+  function add(html,who){ var d=document.createElement('div'); d.className='m '+who; d.innerHTML=html; msgs.appendChild(d); msgs.scrollTop=msgs.scrollHeight; return d; }
+  function open(){ box.classList.add('on'); fab.setAttribute('aria-expanded','true'); if(!started){ started=true; add('Bonjour ✦ Je suis TRU, l’assistant du site. Dans cette démo je réponds <b>sans IA</b>, à partir de la FAQ et du catalogue. Essaie une suggestion ci-dessous !','bot');
+      var s=document.getElementById('tb-sug'); SUG.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.textContent=t; b.onclick=function(){ ask(t); }; s.appendChild(b); }); } setTimeout(function(){ inp.focus(); },50); }
+  function close(){ box.classList.remove('on'); fab.setAttribute('aria-expanded','false'); fab.focus(); }
+  fab.onclick=function(){ box.classList.contains('on')?close():open(); };
+  document.getElementById('tb-x').onclick=close;
+  addEventListener('keydown',function(e){ if(e.key==='Escape'&&box.classList.contains('on')) close(); });
+  function search(q){ if(!cat) return []; var t=norm(q).split(/\W+/).filter(function(w){ return w.length>3; }); if(!t.length) return [];
+    var out=[]; function scan(list,kind,url,label){ (list||[]).forEach(function(x){ if(x.visible===false) return; var h=norm((x.title||'')+' '+(x.desc||x.excerpt||x.blurb||'')+' '+(x.tags||[]).join(' ')+' '+(x.badge||x.genre||'')), s=0;
+        t.forEach(function(w){ if(h.indexOf(w)>=0) s+=(norm(x.title).indexOf(w)>=0?3:1); }); if(s) out.push({s:s,k:kind,t:x.title,u:url(x)}); }); }
+    scan(cat.articles,'📝 article',function(x){ return 'articles/'+x.url; }); scan(cat.logiciels,'💾 logiciel',function(x){ return 'logiciels/fiche.html?p='+x.slug; });
+    scan(cat.modules,'🧩 module',function(x){ return 'modules/'+x.url; }); scan(cat.ebooks,'📖 e-book',function(){ return 'ebooks/'; });
+    return out.sort(function(a,b){ return b.s-a.s; }).slice(0,3); }
+  function answer(q){ var n=norm(q), best=null, bs=0;
+    FAQ.forEach(function(f){ var s=0; f.q.forEach(function(k){ if(n.indexOf(norm(k))>=0) s+=k.length; }); if(s>bs){ bs=s; best=f; } });
+    var hits=search(q), html='';
+    if(best) html+=best.a;
+    if(/jeu|jouer|essayer/.test(n)&&!hits.length) html+=(html?'<br><br>':'')+'Côté jeux : <a href="modules/apps/neon-serpent.html">Neon Serpent</a>, <a href="modules/apps/tru-2048.html">TRU 2048</a>, <a href="modules/apps/photon-break.html">Photon Break</a>. Tous sur la page <a href="modules/">Modules</a>.';
+    if(hits.length) html+=(html?'<br><br>À lire aussi :':'Voici ce que j’ai trouvé :')+'<br>'+hits.map(function(h){ return '• '+h.k+' — <a href="'+esc(h.u)+'">'+esc(h.t)+'</a>'; }).join('<br>');
+    if(!html) html='Je n’ai pas trouvé de réponse sûre. Essaie la recherche <b>Ctrl + K</b>, ou reformule avec un mot-clé (logiciel, e-book, musique…). <i>Avec l’IA de la phase 2, cette question serait traitée à partir du contenu complet du site.</i>';
+    return html; }
+  function ask(q){ q=q.trim(); if(!q) return; add(esc(q),'me'); inp.value='';
+    var t=add('<span class="typing"><i></i><i></i><i></i></span>','bot'); setTimeout(function(){ t.innerHTML=answer(q); msgs.scrollTop=msgs.scrollHeight; },450); }
+  document.getElementById('tb-f').onsubmit=function(e){ e.preventDefault(); ask(inp.value); };
+})();
+</script>
+</body>
+</html>

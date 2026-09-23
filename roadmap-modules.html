@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roadmap boîte à outils — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--nuit:#060a10;--verre:rgba(14,23,32,.78);--bord:rgba(126,240,205,.14);--bord-fort:rgba(126,240,205,.34);
+  --menthe:#34f5c5;--menthe-soft:#8ff3d9;--aurore-v:#b14aed;--aurore-v-soft:#c98bf5;--aurore-g:#59e39a;--ambre:#f4c56b;--rose:#ff7ab6;--bleu:#7cc8ff;
+  --texte:#e8f2ee;--texte-2:#a3b8b4;--texte-3:#6f8582;--sans:'Space Grotesk',system-ui,sans-serif;--mono:'JetBrains Mono',ui-monospace,monospace}
+*{box-sizing:border-box}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:radial-gradient(1100px 600px at 10% -10%,rgba(124,200,255,.14),transparent 60%),radial-gradient(1000px 600px at 95% 0%,rgba(52,245,197,.12),transparent 60%),var(--nuit);color:var(--texte);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--menthe)}:focus-visible{outline:2px solid var(--menthe);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+code{font-family:var(--mono);font-size:.88em;color:var(--menthe-soft);background:rgba(52,245,197,.08);border:1px solid var(--bord);border-radius:5px;padding:1px 5px}
+header{padding:78px 0 36px;text-align:center}
+.ic{width:84px;height:84px;margin:0 auto;border-radius:26px;display:grid;place-items:center;font-size:40px;background:linear-gradient(145deg,rgba(124,200,255,.22),rgba(52,245,197,.2));border:1px solid var(--bord-fort);box-shadow:0 0 40px rgba(124,200,255,.2)}
+h1{font-size:clamp(38px,7.5vw,80px);line-height:.98;letter-spacing:-.04em;margin:24px 0 0}
+h1 span{background:linear-gradient(92deg,var(--bleu),var(--menthe),var(--aurore-v-soft));-webkit-background-clip:text;background-clip:text;color:transparent}
+header p{max-width:64ch;margin:20px auto 0;color:var(--texte-2);font-size:17.5px}
+.meta{margin-top:24px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+.meta span{border:1px solid var(--bord-fort);border-radius:999px;padding:6px 13px}
+section{padding:50px 0}
+.h2{font-size:clamp(26px,4.2vw,42px);letter-spacing:-.03em;line-height:1.08;margin:0 0 12px}
+.lead{color:var(--texte-2);max-width:68ch;font-size:16.5px;margin:0 0 26px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:14px}
+.box{background:var(--verre);border:1px solid var(--bord);border-radius:16px;padding:18px}
+.box h3{margin:0 0 6px;font-size:17px}.box p{margin:0;color:var(--texte-2);font-size:14.5px}
+.phase{display:grid;grid-template-columns:110px 1fr;gap:26px;padding:0 0 48px;position:relative}
+.phase::before{content:"";position:absolute;left:54px;top:86px;bottom:0;width:1px;background:linear-gradient(var(--bord-fort),transparent)}
+.phase:last-child::before{display:none}
+.pn{font-family:var(--mono);font-size:62px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:1.4px var(--c,var(--menthe));text-align:center;position:sticky;top:20px;align-self:start}
+.pn small{display:block;-webkit-text-stroke:0;color:var(--c,var(--menthe));font-size:11px;margin-top:8px;font-weight:500}
+.phase h3{font-size:clamp(22px,3.2vw,30px);margin:2px 0 6px;letter-spacing:-.02em}
+.phase>div>p{margin:0 0 14px;color:var(--texte-2);max-width:68ch}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.tag{font-family:var(--mono);font-size:11.5px;padding:4px 10px;border-radius:8px;border:1px solid var(--bord);color:var(--texte-2)}.tag b{color:var(--texte)}
+.tag.free{border-color:rgba(89,227,154,.5);color:var(--aurore-g)}
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.mod{position:relative;background:var(--verre);border:1px solid var(--bord);border-radius:16px;padding:16px 16px 14px}
+.mod .n{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:11px;color:var(--texte-3)}
+.mod h4{margin:0 0 4px;font-size:16px;padding-right:30px}
+.mod p{margin:0 0 8px;color:var(--texte-2);font-size:14px}
+.mod ul{margin:0 0 8px;padding-left:18px;font-size:13.5px;color:var(--texte-2)}.mod li{margin:0 0 3px}
+.mod .how{font-family:var(--mono);font-size:11px;color:var(--texte-3)}
+.mod .loc{display:inline-block;font-family:var(--mono);font-size:10.5px;border-radius:6px;padding:1px 7px;margin-right:6px;border:1px solid}
+.loc.l{color:var(--aurore-g);border-color:rgba(89,227,154,.45)}.loc.w{color:var(--bleu);border-color:rgba(124,200,255,.45)}
+.mod.star{border-color:rgba(124,200,255,.5);background:linear-gradient(160deg,rgba(124,200,255,.1),rgba(14,23,32,.82) 55%)}
+ul.l{margin:0;padding-left:20px}ul.l li{margin:0 0 7px}ul.l li::marker{color:var(--menthe)}
+.demo{margin-top:16px;border:1px solid var(--bord-fort);border-radius:18px;background:#05080d;padding:20px}
+.demo-lbl{font-family:var(--mono);font-size:11.5px;color:var(--menthe-soft);margin:0 0 12px;display:flex;gap:8px;align-items:center}
+.demo-lbl::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--menthe);box-shadow:0 0 10px var(--menthe)}
+.demo input{width:100%;font-family:var(--mono);font-size:15px;color:var(--texte);background:#0b121a;border:1px solid var(--bord-fort);border-radius:12px;padding:11px 14px}
+.demo input:focus{outline:none;border-color:var(--menthe)}
+.res{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-top:12px}
+.res div{border:1px solid var(--bord);border-radius:10px;padding:9px 11px;font-size:13.5px}
+.res div b{display:block;font-family:var(--mono);font-size:10.5px;color:var(--texte-3);font-weight:500;margin-bottom:2px}
+.ok{color:var(--aurore-g)}.ko{color:#ff9b9b}.wa{color:var(--ambre)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--bord);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;color:var(--texte-3);font-weight:500}
+.warn{border-left:3px solid var(--ambre);background:rgba(244,197,107,.06);padding:12px 16px;border-radius:0 12px 12px 0;color:var(--texte-2);font-size:14.5px;margin:16px 0 0}
+.warn b{color:var(--texte)}
+.code{font-family:var(--mono);font-size:12.5px;background:#05080d;border:1px solid var(--bord);border-radius:12px;padding:14px 16px;overflow-x:auto;white-space:pre;color:var(--menthe-soft);margin:12px 0 0}
+.code .c{color:var(--texte-3)}
+footer{padding:30px 0 70px;text-align:center;color:var(--texte-3);font-family:var(--mono);font-size:12.5px}
+@media(max-width:720px){.phase{grid-template-columns:1fr;gap:6px}.phase::before{display:none}.pn{position:static;text-align:left;font-size:48px}.pn small{display:inline;margin-left:10px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <div class="ic" aria-hidden="true">🧰</div>
+  <h1>La boîte à outils <span>réseau · e-mail · comptes</span></h1>
+  <p>16 nouveaux modules interactifs pour analyser une IP, un domaine, une adresse ou des en-têtes d’e-mail, et vérifier la sécurité de tes propres comptes. Tous gratuits, sans service tiers dans la page : ce qui peut se faire dans le navigateur s’y fait, le reste passe par le Worker du site. <b>Les 16 modules sont en service depuis la v10</b> (page Modules, Ctrl+K, manuel section 22).</p>
+  <div class="meta"><span>✓ Livrée en entier (v10)</span><span>16 modules</span><span>6 phases</span><span>≈ 3 semaines en solo</span><span>0 € · 0 clé API</span></div>
+</header>
+
+<main>
+<section class="wrap">
+  <h2 class="h2">Les principes</h2>
+  <div class="grid">
+    <div class="box"><h3>🏠 Local d’abord</h3><p>Calculs, analyses de texte, mots de passe, jetons : tout reste dans le navigateur. Les données collées ne quittent jamais la page.</p></div>
+    <div class="box"><h3>🛰️ Le Worker pour le réseau</h3><p>Ce qui exige Internet (ton IP publique, DNS, en-têtes d’un site, certificats) passe par <code>/api/tools/*</code> du site. Il n’y a donc aucun domaine tiers à autoriser : la CSP reste stricte, et le vieux brouillon <code>ip-analyzer.html</code>, bloqué pour cette raison, est remplacé.</p></div>
+    <div class="box"><h3>🔒 Tes données, pas celles des autres</h3><p>Les outils « comptes » servent à auditer <b>ses propres</b> accès. Pas de recherche de personnes, pas de sondage de boîtes mail, pas de scan de machines tierces (voir « Hors périmètre »).</p></div>
+    <div class="box"><h3>🧾 Rien n’est enregistré</h3><p>Aucun journal des requêtes des outils, des limites anonymisées comme pour l’assistant, et des résultats exportables par le visiteur lui-même (Markdown, JSON).</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Les phases</h2>
+  <p class="lead">Chaque phase se livre seule, et chaque module apparaît automatiquement dans le cockpit, la page Modules, Ctrl+K et la mémoire de l’assistant.</p>
+
+  <div class="phase" style="--c:var(--menthe)"><div class="pn">0<small>2–3 jours</small></div><div>
+    <h3>Le socle commun</h3>
+    <p>Avant les outils : une base partagée, pour que les 16 modules se ressemblent et restent légers.</p>
+    <div class="tags"><span class="tag free">0 €</span><span class="tag">Sécurité <b>priorité n°1</b></span></div>
+    <ul class="l">
+      <li><b>Kit</b> <code>modules/apps/_kit/</code> : en-tête, champs, résultats en cartes, bouton « Copier », export Markdown/JSON, historique local facultatif, états d’erreur. Chaque outil ne contient plus que sa logique.</li>
+      <li><b>Routes Worker</b> <code>/api/tools/whoami · dns · rdap · headers · cert · pwned · speed</code>, dans le même <code>worker/index.js</code>.</li>
+      <li><b>Garde-fous serveur :</b> limites par visiteur (réutilise CHAT_KV), cache de 1 h pour DNS, RDAP et certificats, réponses plafonnées en taille et en durée.</li>
+      <li><b>Anti-SSRF</b> pour les outils qui visitent une adresse donnée par le visiteur : http/https et ports 80/443 uniquement, résolution DNS vérifiée, plages privées refusées (10/8, 172.16/12, 192.168/16, 127/8, 169.254/16, ::1, fc00::/7…), aucune redirection vers une adresse interne, délai de 8 s et 1 Mo au maximum.</li>
+    </ul>
+    <div class="code"><span class="c">// esquisse — une route du Worker</span>
+if (p === '/api/tools/whoami') {
+  const cf = request.cf || {};
+  return J({ ip: request.headers.get('cf-connecting-ip'), asn: cf.asn, fai: cf.asOrganization,
+             pays: cf.country, ville: cf.city, http: cf.httpProtocol, tls: cf.tlsVersion, pop: cf.colo });
+}</div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--bleu)"><div class="pn">1<small>4–5 jours</small></div><div>
+    <h3>🌐 Réseau — 6 modules</h3>
+    <div class="tags"><span class="tag free">Workers : offre gratuite</span><span class="tag">Catégorie <b>Réseau</b></span></div>
+    <div class="mods">
+      <div class="mod star"><span class="n">01</span><h4>IP Analyzer 2.0 — WAN &amp; local</h4><p>Ce que le site voit de toi, et l’analyse de n’importe quelle IP.</p>
+        <ul><li>WAN : IPv4/IPv6, FAI et ASN, pays et ville approximative, HTTP/2 ou 3, version TLS, datacenter Cloudflare le plus proche.</li><li>Local : type de connexion et débit estimé. Il explique honnêtement pourquoi l’IP locale (192.168…) n’est plus visible : les navigateurs la masquent par respect de la vie privée.</li><li>IP quelconque : propriétaire (RDAP), reverse DNS, type (privée, CGNAT, bogon, multicast…), liens vers les annuaires de réputation.</li></ul>
+        <span class="loc w">Worker</span><span class="loc l">local</span><span class="how">request.cf · RDAP · DNS PTR</span></div>
+      <div class="mod"><span class="n">02</span><h4>Calculateur de sous-réseaux</h4><p>IPv4 et IPv6 : masque, plage, broadcast, nombre d’hôtes, découpage VLSM, vérification « cette IP est-elle dans ce réseau ? ».</p><span class="loc l">local</span><span class="how">démo jouable ci-dessous</span></div>
+      <div class="mod"><span class="n">03</span><h4>DNS Explorer</h4><p>A, AAAA, MX, TXT, NS, CNAME, CAA, SOA d’un domaine, drapeau DNSSEC, et SPF/DMARC/BIMI lisibles « en français ».</p><span class="loc w">Worker</span><span class="how">DNS-over-HTTPS Cloudflare, cache 1 h</span></div>
+      <div class="mod"><span class="n">04</span><h4>Audit d’en-têtes de sécurité</h4><p>Note de A à F d’un site : CSP, HSTS, X-Frame-Options, Referrer-Policy, Permissions-Policy, drapeaux des cookies, avec l’explication et le correctif de chaque point.</p><span class="loc w">Worker</span><span class="how">requête HEAD/GET protégée anti-SSRF</span></div>
+      <div class="mod"><span class="n">05</span><h4>Inspecteur de certificats</h4><p>Émetteur, dates, domaines couverts, compte à rebours d’expiration, historique des certificats émis (Certificate Transparency).</p><span class="loc w">Worker</span><span class="how">journaux CT publics, cache 1 h</span></div>
+      <div class="mod"><span class="n">06</span><h4>Test de débit &amp; latence</h4><p>Ping, gigue, débit descendant et montant jusqu’au datacenter Cloudflare le plus proche, avec un graphique en direct.</p><span class="loc w">Worker</span><span class="how">flux d’octets générés, sans stockage</span></div>
+    </div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--ambre)"><div class="pn">2<small>2–3 jours</small></div><div>
+    <h3>📧 E-mail — 2 modules</h3>
+    <div class="tags"><span class="tag free">0 €</span><span class="tag">Catégorie <b>E-mail</b></span></div>
+    <div class="mods">
+      <div class="mod star"><span class="n">07</span><h4>Analyseur d’adresse e-mail</h4><p>Tout ce qu’on peut savoir d’une adresse sans écrire à son propriétaire.</p>
+        <ul><li>Syntaxe (RFC 5322), partie locale et domaine, alias « +tag », points ignorés chez Gmail.</li><li>Fautes de frappe du domaine (gmial.com → gmail.com), fournisseur connu, domaine jetable.</li><li>Le domaine peut-il recevoir du courrier (MX) ? Est-il protégé contre l’usurpation (SPF, DMARC) ? Avec l’assistant de création de ces enregistrements pour tes propres domaines.</li></ul>
+        <span class="loc l">local</span><span class="loc w">Worker (DNS)</span><span class="how">démo jouable ci-dessous</span></div>
+      <div class="mod star"><span class="n">08</span><h4>Analyseur d’en-têtes d’e-mail</h4><p>Colle les en-têtes bruts d’un message suspect.</p>
+        <ul><li>Trajet serveur par serveur, avec les délais entre chaque étape.</li><li>Verdicts SPF, DKIM et DMARC (Authentication-Results).</li><li>Alertes d’hameçonnage : Reply-To différent, nom affiché trompeur, domaine sosie, date incohérente.</li></ul>
+        <span class="loc l">100 % local</span><span class="how">rien n’est envoyé</span></div>
+    </div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--rose)"><div class="pn">3<small>3–4 jours</small></div><div>
+    <h3>🔐 Comptes &amp; sécurité — 5 modules</h3>
+    <p>« Informations de comptes » version saine : auditer tes propres comptes et ce que ton appareil révèle, sans jamais fouiller ceux des autres.</p>
+    <div class="tags"><span class="tag free">0 €</span><span class="tag">Catégorie <b>Comptes</b></span></div>
+    <div class="mods">
+      <div class="mod star"><span class="n">09</span><h4>Auditeur de mot de passe</h4><p>Entropie, motifs faibles (clavier, dates, substitutions), temps de cassage estimé, et « a-t-il déjà fuité ? ».</p>
+        <ul><li>Vérification par <b>k-anonymat</b> (Pwned Passwords) : seuls les 5 premiers caractères de l’empreinte SHA-1 partent. Le mot de passe, lui, ne quitte jamais la page.</li></ul>
+        <span class="loc l">local</span><span class="loc w">Worker (5 caractères d’empreinte)</span></div>
+      <div class="mod"><span class="n">10</span><h4>Atelier 2FA (TOTP)</h4><p>Lit un QR code <code>otpauth://</code> ou une clé, affiche les codes à 6 chiffres (RFC 6238) et vérifie qu’une appli d’authentification est bien synchronisée. Rien n’est stocké.</p><span class="loc l">100 % local</span></div>
+      <div class="mod"><span class="n">11</span><h4>Inspecteur de jetons JWT</h4><p>Décode l’en-tête et le contenu, montre l’expiration en clair, alerte sur les algorithmes faibles (<code>none</code>, clés trop courtes) et vérifie localement une signature HS256.</p><span class="loc l">100 % local</span></div>
+      <div class="mod star"><span class="n">12</span><h4>Ce que ton navigateur révèle</h4><p>Ton « compte invisible » : navigateur, système, langue, fuseau, écran, carte graphique, empreinte canvas, fuite WebRTC, cookies tiers, Do-Not-Track/GPC, avec une estimation d’unicité et des conseils pour réduire ton empreinte.</p><span class="loc l">100 % local</span></div>
+      <div class="mod"><span class="n">13</span><h4>Registre des fuites de services</h4><p>« Le service que j’utilise a-t-il subi une fuite ? » : date, nombre de comptes, types de données exposées, et que faire. Il s’appuie sur la liste publique de Have I Been Pwned, gratuite et sans clé, qui ne demande <b>aucune</b> adresse e-mail.</p><span class="loc w">Worker</span><span class="how">liste publique, cache 24 h</span></div>
+    </div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--aurore-v-soft)"><div class="pn">4<small>2 jours</small></div><div>
+    <h3>🛠️ Utilitaires du quotidien — 3 modules</h3>
+    <div class="tags"><span class="tag free">0 €</span><span class="tag">Catégorie <b>Outil</b></span></div>
+    <div class="mods">
+      <div class="mod"><span class="n">14</span><h4>Horodatages &amp; fuseaux</h4><p>Unix (secondes et millisecondes), ISO 8601, RFC 2822, conversion entre fuseaux, calcul de durées, horloge mondiale.</p><span class="loc l">100 % local</span></div>
+      <div class="mod"><span class="n">15</span><h4>Générateur de QR codes</h4><p>URL, Wi-Fi (connexion en un scan), vCard, e-mail, SMS, texte. Couleurs aux teintes du site, export SVG et PNG, taux de correction réglable.</p><span class="loc l">100 % local</span></div>
+      <div class="mod"><span class="n">16</span><h4>Contraste &amp; accessibilité</h4><p>Ratio WCAG AA/AAA de deux couleurs, aperçu du texte, simulation des daltonismes, correction automatique de la couleur la plus proche qui passe.</p><span class="loc l">100 % local</span></div>
+    </div>
+  </div></div>
+
+  <div class="phase" style="--c:var(--aurore-g)"><div class="pn">5<small>1–2 jours</small></div><div>
+    <h3>Intégration au site</h3>
+    <ul class="l">
+      <li><b>Cockpit :</b> les 16 modules sont ajoutés au catalogue, avec les nouvelles catégories Réseau, E-mail et Comptes. Chacun peut être masqué, et les outils serveur ont un interrupteur pour être coupés d’un clic.</li>
+      <li><b>Page Modules :</b> une section « Boîte à outils » séparée des jeux, avec les filtres existants, les favoris ♥ et les aperçus animés.</li>
+      <li><b>Assistant TRU :</b> nouvelles entrées de FAQ, et index reconstruit (« quelle est mon IP ? » renvoie vers l’outil).</li>
+      <li><b>Ctrl+K :</b> commandes directes, comme <code>ip</code>, <code>dns exemple.fr</code> ou <code>mail nom@domaine.fr</code>, qui ouvrent l’outil déjà rempli.</li>
+      <li><b>Diagnostic du cockpit :</b> il vérifie que chaque route <code>/api/tools/*</code> répond.</li>
+    </ul>
+  </div></div>
+
+  <div class="phase" style="--c:var(--menthe-soft)"><div class="pn">6<small>en continu</small></div><div>
+    <h3>Bonus</h3>
+    <ul class="l">
+      <li><b>Rapport complet d’un domaine :</b> DNS, e-mail, en-têtes et certificat en un clic, exportable en Markdown, pratique pour un audit rapide.</li>
+      <li><b>Widget « Ton IP » sur l’accueil,</b> activable dans le cockpit.</li>
+      <li><b>Outils locaux disponibles hors ligne</b> grâce au site installable.</li>
+      <li><b>Lien de partage</b> d’un résultat, les paramètres étant dans l’adresse et jamais stockés sur un serveur.</li>
+    </ul>
+  </div></div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Démos jouables</h2>
+  <p class="lead">Deux aperçus 100 % locaux de ce que donneront les modules 02 et 07 (sans la partie réseau).</p>
+  <div class="demo"><p class="demo-lbl">Module 07 · Analyseur d’adresse e-mail (partie locale)</p>
+    <input id="em" type="text" value="Jean.Dupont+factures@gmial.com" aria-label="Adresse e-mail à analyser" spellcheck="false">
+    <div class="res" id="emr" aria-live="polite"></div></div>
+  <div class="demo"><p class="demo-lbl">Module 02 · Calculateur de sous-réseaux IPv4</p>
+    <input id="cidr" type="text" value="192.168.10.37/26" aria-label="Adresse IPv4 et préfixe" spellcheck="false">
+    <div class="res" id="cr" aria-live="polite"></div></div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Hors périmètre, volontairement</h2>
+  <p class="lead">Des outils souvent demandés, écartés pour des raisons légales, éthiques ou de fiabilité.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Idée</th><th>Pourquoi non</th><th>À la place</th></tr></thead>
+    <tbody>
+      <tr><td>Retrouver les comptes d’une personne à partir d’un pseudo ou d’un e-mail</td><td>Recherche de personnes : risque de harcèlement, données de tiers (RGPD)</td><td>Module 12 (ce que <i>ton</i> navigateur révèle) et module 13 (fuites des <i>services</i>)</td></tr>
+      <tr><td>« Cette adresse e-mail existe-t-elle ? » par sondage SMTP</td><td>Peu fiable (serveurs qui acceptent tout), assimilable à du spam, fait inscrire l’IP du site sur des listes noires</td><td>Module 07 : syntaxe, MX, SPF/DMARC, fautes de frappe</td></tr>
+      <tr><td>Scanner les ports d’une machine quelconque</td><td>Sonder un système qui n’est pas le sien peut être assimilé à une tentative d’intrusion</td><td>Module 04 (audit d’un site) et module 01 (analyse de ta propre connexion)</td></tr>
+      <tr><td>Recherche des fuites d’une adresse e-mail</td><td>L’API Have I Been Pwned pour les adresses est payante et exige une clé</td><td>Module 13 (liste publique des fuites) et le site officiel haveibeenpwned.com pour vérifier sa propre adresse</td></tr>
+      <tr><td>Géolocalisation « précise » d’une IP</td><td>Imprécise (souvent la ville du FAI), donc trompeuse</td><td>Pays, ville approximative et FAI, avec la mention de cette limite</td></tr>
+    </tbody>
+  </table></div>
+  <div class="warn"><b>Offre gratuite Cloudflare Workers :</b> un quota de requêtes quotidien largement suffisant pour ces outils à l’échelle du site. Comme pour l’assistant, un dépassement sur le compte gratuit fait échouer la requête sans facturation, et les outils 100 % locaux (9 sur 16) continuent de fonctionner quoi qu’il arrive.</div>
+</section>
+
+<section class="wrap">
+  <h2 class="h2">Ordre conseillé</h2>
+  <div class="grid">
+    <div class="box"><h3>Semaine 1</h3><p>Socle (phase 0), puis IP Analyzer 2.0, sous-réseaux et DNS Explorer : les trois outils réseau les plus demandés.</p></div>
+    <div class="box"><h3>Semaine 2</h3><p>Les deux outils e-mail, l’auditeur de mot de passe, le navigateur qui révèle, les en-têtes de sécurité.</p></div>
+    <div class="box"><h3>Semaine 3</h3><p>Le reste (certificats, débit, 2FA, JWT, fuites, utilitaires), l’intégration et les bonus.</p></div>
+  </div>
+</section>
+</main>
+<footer>$ truvector roadmap --modules --reseau --email --comptes · TRUvector.dev · septembre 2026</footer>
+
+<script>
+/* ---------- démo 07 : analyse locale d'une adresse e-mail ---------- */
+(function(){
+  var KNOWN={'gmail.com':'Google','googlemail.com':'Google','outlook.com':'Microsoft','hotmail.com':'Microsoft','hotmail.fr':'Microsoft','live.fr':'Microsoft','yahoo.com':'Yahoo','yahoo.fr':'Yahoo','orange.fr':'Orange','wanadoo.fr':'Orange','free.fr':'Free','sfr.fr':'SFR','laposte.net':'La Poste','icloud.com':'Apple','proton.me':'Proton','protonmail.com':'Proton','gmx.fr':'GMX','bbox.fr':'Bouygues'};
+  var DISPOSABLE=['yopmail.com','yopmail.fr','mailinator.com','guerrillamail.com','10minutemail.com','temp-mail.org','trashmail.com','jetable.org','getnada.com','sharklasers.com','dispostable.com','maildrop.cc'];
+  function lev(a,b){ var m=[],i,j; for(i=0;i<=b.length;i++) m[i]=[i]; for(j=0;j<=a.length;j++) m[0][j]=j;
+    for(i=1;i<=b.length;i++) for(j=1;j<=a.length;j++) m[i][j]=Math.min(m[i-1][j-1]+(b[i-1]===a[j-1]?0:1),m[i][j-1]+1,m[i-1][j]+1); return m[b.length][a.length]; }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function run(){ var v=document.getElementById('em').value.trim(), out=[], m=v.match(/^([^@\s]+)@([^@\s]+)$/);
+    function card(t,h){ out.push('<div><b>'+t+'</b>'+h+'</div>'); }
+    if(!m){ card('Syntaxe','<span class="ko">✗ il faut exactement un « @ », sans espace</span>'); document.getElementById('emr').innerHTML=out.join(''); return; }
+    var local=m[1], dom=m[2].toLowerCase(), okLocal=/^[A-Za-z0-9!#$%&'*+/=?^_`{|}~.-]+$/.test(local)&&!/^\.|\.$|\.\./.test(local)&&local.length<=64, okDom=/^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/.test(dom);
+    card('Syntaxe',okLocal&&okDom?'<span class="ok">✓ valide</span>':'<span class="ko">✗ '+(okLocal?'domaine invalide':'partie locale invalide')+'</span>');
+    card('Partie locale',esc(local)+(local.indexOf('+')>0?' <span class="wa">· alias « +'+esc(local.split('+')[1])+' »</span>':''));
+    var canon=local.split('+')[0]; if(/^(gmail|googlemail)\.com$/.test(dom)) canon=canon.replace(/\./g,'');
+    card('Boîte réelle',esc(canon.toLowerCase()+'@'+dom));
+    var best=null; Object.keys(KNOWN).forEach(function(k){ var d=lev(dom,k); if(d>0&&d<=2&&(!best||d<best[1])) best=[k,d]; });
+    card('Domaine',esc(dom)+(best?'<br><span class="wa">⚠ faute de frappe ? → '+esc(best[0])+'</span>':''));
+    card('Fournisseur',KNOWN[dom]?'<span class="ok">'+KNOWN[dom]+'</span>':(best?KNOWN[best[0]]+' (si corrigé)':'domaine personnel ou pro'));
+    card('Jetable',DISPOSABLE.indexOf(dom)>=0?'<span class="ko">✗ adresse temporaire</span>':'<span class="ok">✓ non listé</span>');
+    card('MX · SPF · DMARC','<span style="color:var(--texte-3)">vérifiés par le Worker dans le vrai module</span>');
+    document.getElementById('emr').innerHTML=out.join(''); }
+  document.getElementById('em').addEventListener('input',run); run();
+})();
+/* ---------- démo 02 : sous-réseau IPv4 ---------- */
+(function(){
+  function toInt(ip){ return ip.split('.').reduce(function(a,o){ return (a*256)+(+o); },0)>>>0; }
+  function toIp(n){ return [n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.'); }
+  function kind(n){ var a=n>>>24,b=(n>>>16)&255;
+    if(a===10||(a===172&&b>=16&&b<=31)||(a===192&&b===168)) return 'privée (RFC 1918)'; if(a===100&&b>=64&&b<=127) return 'CGNAT (RFC 6598)';
+    if(a===127) return 'boucle locale'; if(a===169&&b===254) return 'lien local (APIPA)'; if(a>=224&&a<=239) return 'multicast'; if(a>=240) return 'réservée'; return 'publique'; }
+  function run(){ var v=document.getElementById('cidr').value.trim(), out=[], m=v.match(/^(\d{1,3}(?:\.\d{1,3}){3})(?:\/(\d{1,2}))?$/);
+    function card(t,h){ out.push('<div><b>'+t+'</b>'+h+'</div>'); }
+    if(!m||m[1].split('.').some(function(o){ return +o>255; })||(m[2]&&+m[2]>32)){ document.getElementById('cr').innerHTML='<div><b>Entrée</b><span class="ko">✗ format attendu : 192.168.1.10/24</span></div>'; return; }
+    var ip=toInt(m[1]), p=m[2]==null?24:+m[2], mask=p===0?0:(0xFFFFFFFF<<(32-p))>>>0, net=(ip&mask)>>>0, bc=(net|(~mask>>>0))>>>0;
+    var hosts=p>=31?(p===32?1:2):Math.pow(2,32-p)-2;
+    card('Réseau',toIp(net)+'/'+p); card('Masque',toIp(mask)+' <span style="color:var(--texte-3)">· wildcard '+toIp((~mask)>>>0)+'</span>');
+    card('Première adresse',p>=31?toIp(net):toIp(net+1)); card('Dernière adresse',p>=31?toIp(bc):toIp(bc-1));
+    card('Broadcast',p>=31?'—':toIp(bc)); card('Hôtes utilisables',hosts.toLocaleString('fr-FR'));
+    card('Type',kind(ip)); card('Binaire (masque)','<span style="font-family:var(--mono);font-size:11px">'+('0'.repeat(32)+mask.toString(2)).slice(-32).replace(/(.{8})(?!$)/g,'$1.')+'</span>');
+    document.getElementById('cr').innerHTML=out.join(''); }
+  document.getElementById('cidr').addEventListener('input',run); run();
+})();
+</script>
+</body>
+</html>

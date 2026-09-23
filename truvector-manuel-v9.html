@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manuel du site — TRUvector.dev v6</title>
-<meta name="description" content="Manuel complet du site TRUvector.dev v6 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
+<title>Manuel du site — TRUvector.dev v9.1</title>
+<meta name="description" content="Manuel complet du site TRUvector.dev v9.1 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -111,14 +111,14 @@
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <span><span class="tru">TRU</span>vector<span class="dev">.dev</span></span>
   </span>
-  <span class="badge">MANUEL v6</span>
+  <span class="badge">MANUEL v9.1</span>
 </div></nav>
 
 <header class="top">
   <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
   <div class="wrap in">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <h1>Manuel du site — TRUvector.dev v6</h1>
+    <h1>Manuel du site — TRUvector.dev v9.1</h1>
     <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
     <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
   </div>
@@ -196,6 +196,10 @@
       <li><a href="#s14">E-books protégés</a></li>
       <li><a href="#s15">Filtres &amp; recherche</a></li>
       <li><a href="#s16">Cache &amp; versions</a></li>
+      <li><a href="#s18">Effets visuels (FX)</a></li>
+      <li><a href="#s19">Cockpit : le point central</a></li>
+      <li><a href="#s20">config.json : référence</a></li>
+      <li><a href="#s21">Assistant (chatbot)</a></li>
       <li><a href="#s17">Journal des versions</a></li>
     </ol>
   </nav>
@@ -203,7 +207,7 @@
   <!-- 1 -->
   <section id="s1">
     <h2 class="s"><span class="n">01</span> Vue d'ensemble</h2>
-    <p class="lead">TRUvector.dev v6 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
+    <p class="lead">TRUvector.dev v9.1 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
     <p>Il réunit une page d'accueil, neuf sections (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir) et un pôle légal, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Les médias lourds (musique, images, e-books) sont servis par un second dépôt via jsDelivr. Ses objectifs&nbsp;:</p>
     <ul>
       <li>présenter la marque (le <strong>compte à rebours</strong> a atteint l'ouverture le 21/09/2026 : le site est ouvert)&nbsp;;</li>
@@ -258,7 +262,7 @@
     </ul>
 
     <h3>Roadmaps (bonus)</h3>
-    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
+    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-modules.html</code> — la <strong>roadmap de la boîte à outils</strong> (16 modules réseau, e-mail, comptes et utilitaires ; démos jouables).<br><code>roadmap-chatbot.html</code> — la <strong>roadmap de l’assistant</strong> (chatbot gratuit via Cloudflare Workers AI, avec démo jouable du mode local).<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
   </section>
 
   <!-- 3 -->
@@ -292,7 +296,14 @@
 │   ├── js/gate.js             <span class="c"># (legacy v4) portail à code</span>
 │   ├── js/unlock.js           <span class="p"># v5 : déverrouillage chiffré (passphrase / fichier-clé)</span>
 │   ├── js/player.js           <span class="p"># mini-lecteur global — musique sur toutes les pages (sauf page Musique)</span>
-│   ├── js/filters.js          <span class="p"># v6 : recherche + catégories + tri sur les listes</span>
+│   ├── js/render.js           <span class="p"># v8 : construit les pages depuis config.json (window.TVReady)</span>
+│   ├── js/config.js           <span class="p"># lit config.json + l'aperçu local du cockpit</span>
+│   ├── js/filters.js          <span class="p"># recherche + catégories (multi) + tri sur les listes</span>
+│   ├── js/fx.js               <span class="p"># noyau des effets (MINIFIÉ — ne pas éditer)</span>
+│   ├── js/fx/*.js             <span class="p"># modules à la demande : music, article, gallery, modules, logiciels, palette, matrix</span>
+│   ├── js/src/                <span class="p"># ★ SOURCES LISIBLES des effets (c'est ici qu'on modifie)</span>
+│   ├── css/fx.css             <span class="p"># v7 : styles des effets + transitions de pages</span>
+│   ├── img/icon-*.png         <span class="c"># icônes de l'appli installable (192, 512, maskable)</span>
 │   ├── js/tru-reader.js       <span class="p"># visionneuse e-books (PDF, EPUB, CBZ, HTML, .trubook)</span>
 │   ├── js/tru-crypto.js       <span class="p"># chiffrement .trubook (AES-256-GCM + PBKDF2)</span>
 │   ├── js/assets.js           <span class="p"># TRU_ASSET_BASE : adresse du CDN des médias</span>
@@ -303,7 +314,16 @@
 ├── config.json                <span class="p"># ★ source de vérité : paramètres, droits, galerie</span>
 ├── favicon.svg                <span class="c"># triskèle néon</span>
 ├── roadmap.html               <span class="c"># feuille de route (bonus)</span>
-├── roadmap-effets.html        <span class="c"># v6 : roadmap visuelle avec démos</span>
+├── roadmap-effets.html        <span class="c"># roadmap visuelle (livrée en v7)</span>
+├── 404.html                   <span class="p"># v7 : page perdue + mini-jeu Neon Serpent</span>
+├── logiciels/fiche.html       <span class="p"># v7.1 : fiche détaillée, 1 modèle pour les 7 logiciels (?p=ironlock…)</span>
+├── worker/index.js            <span class="p"># v9 : API de l'assistant (/api/chat) + page 404</span>
+├── chatbot-index.json         <span class="p"># v9 : mémoire de l'assistant (passages du site)</span>
+├── tools/index-chatbot.mjs    <span class="p"># v9 : reconstruit chatbot-index.json (aussi faisable depuis le cockpit)</span>
+├── .assetsignore              <span class="c"># fichiers à ne pas publier (worker, tools, wrangler.toml)</span>
+├── tools/build-fx.sh          <span class="p"># v7.1 : minifie assets/js/src → assets/js (Node.js)</span>
+├── sw.js                      <span class="p"># v7 : service worker (hors ligne, réseau d'abord)</span>
+├── manifest.webmanifest       <span class="p"># v7 : site installable (PWA)</span>
 ├── _headers                   <span class="c"># sécurité + cache (Cloudflare Pages)</span>
 ├── _redirects                 <span class="c"># redirections optionnelles</span>
 ├── wrangler.toml              <span class="p"># déploiement Cloudflare statique (sans build)</span>
@@ -348,7 +368,7 @@
     <p>Place <strong>le contenu du dossier <code>truvector.dev/</code> à la racine</strong> d'un nouveau dépôt.</p>
     <div class="block"><div class="lbl">terminal</div><pre>git init
 git add .
-git commit -m "TRUvector.dev v6"
+git commit -m "TRUvector.dev v9.1"
 git branch -M main
 git remote add origin https://github.com/clode666/truvector-dev.git
 git push -u origin main</pre></div>
@@ -496,6 +516,18 @@ git push</pre></div>
         <tr><td>E-book : « pas encore en ligne »</td><td>Le <code>.trubook</code> n'existe pas dans <code>truvector-assets/ebooks/</code> (404). Pousse-le ; la carte passe automatiquement de « Bientôt en ligne » à « Lire ».</td></tr>
         <tr><td>E-book : « Clé incorrecte »</td><td>La passphrase publique est <code>truvector</code> (pré-remplie via <code>&amp;k=truvector</code> dans le lien). Si tu as chiffré avec une autre, mets-la dans le lien.</td></tr>
         <tr><td>E-book : « Accès expiré »</td><td>La date d'échéance est <strong>inscrite dans le fichier chiffré</strong> (<code>policy.expires</code>). La changer sur la page ne suffit pas : re-chiffre le livre avec <code>ebooks/proteger.html</code>.</td></tr>
+        <tr><td>L’assistant répond « mode local » alors que le mode IA est choisi</td><td>Repli automatique (quota du jour, limite horaire, modèle indisponible, Worker non déployé). Cockpit → 🤖 Assistant → « 🩺 Tester le serveur ». Le repli dure 10 minutes par visiteur.</td></tr>
+        <tr><td>L’assistant ne connaît pas mon nouvel article</td><td>Reconstruis et publie l’index (cockpit → 🤖 Assistant), puis resynchronise Vectorize si utilisé.</td></tr>
+        <tr><td>« Vérification anti-robot échouée »</td><td>La clé de site Turnstile (cockpit) et le secret <code>TURNSTILE_SECRET</code> doivent venir du même widget, déclaré pour truvector.dev.</td></tr>
+        <tr><td>Un cercle suit le curseur</td><td>C’est le halo du curseur (effet voulu). Pour le retirer : cockpit → Apparence &amp; effets → décocher « Halo du curseur ».</td></tr>
+        <tr><td>Je ne vois pas mes modifications du cockpit sur le site</td><td>Soit tu n’as pas publié (seul l’aperçu local les montre), soit le redéploiement Cloudflare n’est pas fini (1–2 min), soit ton navigateur garde l’ancien config.json : Ctrl+F5.</td></tr>
+        <tr><td>Une pastille orange « Aperçu admin » s’affiche</td><td>Un aperçu local est actif dans ce navigateur. Clique « Quitter l’aperçu » pour revoir la version publiée.</td></tr>
+        <tr><td>Publication : erreur 401 / 403 / 409</td><td>401 : jeton invalide ou expiré. 403/404 : jeton sans « Contents : Read and write » sur ce dépôt. 409 : config.json a changé en ligne — recharge le cockpit, puis republie.</td></tr>
+        <tr><td>Un élément a disparu du site</td><td>Vérifie qu’il n’est pas « masqué » (étiquette orange dans le cockpit).</td></tr>
+        <tr><td>J'ai modifié <code>assets/js/fx.js</code> et c'est cassé / illisible</td><td>Ce fichier est généré. Modifie la source <code>assets/js/src/fx.js</code> puis lance <code>bash tools/build-fx.sh</code>.</td></tr>
+        <tr><td>Pas d'aurore ni de cartes 3D</td><td>Mode « léger » choisi automatiquement (appareil modeste, économiseur de données, mouvement réduit). Forçable : Ctrl+K → « Effets : complets ».</td></tr>
+        <tr><td>Page Musique : plus de son après la v7</td><td>Le visualiseur passe l'audio en CORS (<code>crossorigin="anonymous"</code>). jsDelivr l'autorise ; un autre hébergeur de MP3 devra envoyer <code>Access-Control-Allow-Origin</code>. Contournement : Ctrl+K → « Effets : désactivés ».</td></tr>
+        <tr><td>Une ancienne page s'affiche hors ligne</td><td>Normal : copie du service worker. En ligne, la version fraîche est toujours servie.</td></tr>
         <tr><td>Le mini-lecteur affiche « Musique indisponible »</td><td>3 pistes d'affilée introuvables : vérifie les noms dans <code>config.catalog.musique</code> et leur présence dans <code>truvector-assets/musique/</code>.</td></tr>
         <tr><td>Texte d'un bouton invisible (même couleur que le fond)</td><td>Une règle de contenu (<code>.article a</code>…) écrase <code>.btn</code>. Déjà verrouillé dans <code>tokens.css</code> v6 pour <code>a.btn</code>, <code>.btn-ghost</code>, <code>.btn-outline</code>.</td></tr>
       </tbody>
@@ -524,6 +556,11 @@ git push</pre></div>
         <tr><td>Ajouter un morceau de musique</td><td>MP3 dans <code>truvector-assets/musique/</code> + <code>config.catalog.musique</code> + ligne dans <code>musique/index.html</code></td></tr>
         <tr><td>Publier un e-book</td><td>Chiffrer via <code>ebooks/proteger.html</code> → pousser le <code>.trubook</code> dans <code>truvector-assets/ebooks/</code> → carte dans <code>ebooks/index.html</code></td></tr>
         <tr><td>Changer la date limite des e-books</td><td>Re-chiffrer les .trubook + <code>GLOBAL_UNTIL</code> et <code>data-until</code> dans <code>ebooks/index.html</code> + carte E-books de <code>index.html</code> + <code>manifest.json</code></td></tr>
+        <tr><td>Régler / couper les effets</td><td>Ctrl+K → « Effets : complets / légers / désactivés / automatique » (par appareil)</td></tr>
+        <tr><td>Ajouter l'effet 3D à un type de carte</td><td><code>assets/js/src/fx.js</code> → constante <code>CARDS</code>, puis build</td></tr>
+        <tr><td>Modifier un effet</td><td>éditer <code>assets/js/src/…</code> → <code>bash tools/build-fx.sh</code> → +1 sur <code>fx.js?v=</code> dans les pages</td></tr>
+        <tr><td>Fiche d'un logiciel</td><td><code>logiciels/fiche.html</code> → objet <code>TV_PRODUCTS</code> (texte, points clés, commandes du terminal, mots-clés des articles liés)</td></tr>
+        <tr><td>Nouveautés dans la palette</td><td>ajouter <code>"date": "2026-09-23"</code> aux entrées de <code>config.catalog.articles</code> / <code>modules</code> ; sans date : les derniers de la liste</td></tr>
         <tr><td>Filtres d'une liste</td><td><code>assets/js/filters.js</code> (automatique, voir <a href="#s15">15</a>)</td></tr>
         <tr><td>Modifier un JS / CSS partagé</td><td>+1 sur son <code>?v=</code> dans toutes les pages</td></tr>
         <tr><td>Musique sur tout le site</td><td>page Musique → cocher <strong>« Écouter en navigant »</strong></td></tr>
@@ -558,6 +595,7 @@ git push</pre></div>
   <!-- 13 -->
   <section id="s13">
     <h2 class="s"><span class="n">13</span> Panneau d'administration</h2>
+    <div class="note warn"><b>Mis à jour en v8.</b> Le cockpit a été entièrement refait et n’utilise plus l’outil <code>_v5-build</code> (absent du dépôt). La référence à jour est la section <a href="#s19">19</a> ; ce qui suit est conservé pour mémoire.</div>
     <p class="lead">Accessible sur <code>/admin</code>, il édite <code>config.json</code> sans toucher au code : paramètres, accès, droits, galerie, licence.</p>
     <h3>Ce qu'on y règle</h3>
     <ul>
@@ -630,15 +668,227 @@ git push</pre></div>
       </tbody>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
-    <div class="block"><div class="lbl">versions en vigueur (v6)</div><pre>tokens.css?v=8   assets.js?v=2   nav.js?v=5   player.js?v=3
-tru-reader.js?v=3   filters.js?v=4</pre></div>
+    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=6   assets.js?v=2   nav.js?v=5
+player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
+(les modules assets/js/fx/*.js suivent automatiquement le ?v= de fx.js)</pre></div>
+    <div class="note"><b>Service worker.</b> <code>sw.js</code> garde une copie hors ligne des pages, en « réseau d'abord » : en ligne, le visiteur reçoit toujours la version fraîche. Si tu modifies <code>sw.js</code>, change sa constante <code>V</code> (<code>tv-v6-1</code> → <code>tv-v6-2</code>) pour purger les anciennes copies.</div>
     <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
     <div class="block"><div class="lbl">bash</div><pre>grep -rl "player.js?v=3" --include=*.html . | xargs sed -i 's/player\.js?v=3/player.js?v=6/g'</pre></div>
+  </section>
+
+  <!-- 18 -->
+  <section id="s18">
+    <h2 class="s"><span class="n">18</span> Effets visuels (FX)</h2>
+    <p class="lead">La roadmap visuelle est intégrée <strong>en totalité</strong> : <code>assets/css/fx.css</code> (après <code>tokens.css</code>) et <code>assets/js/fx.js</code> (en fin de page) sur toutes les pages. Aucune librairie externe, CSP inchangée.</p>
+    <h3>Architecture : un noyau + des modules à la demande</h3>
+    <p>Le <strong>noyau</strong> (<code>fx.js</code>) contient ce qui sert partout. Chaque page ne télécharge en plus que <strong>son</strong> module, détecté automatiquement&nbsp;:</p>
+    <div class="tw"><table>
+      <thead><tr><th>Fichier</th><th>Chargé quand…</th><th>Poids (minifié / transféré gzip)</th></tr></thead>
+      <tbody>
+        <tr><td><code>fx.js</code> (noyau)</td><td>toujours</td><td>13,7 Ko / 5,6 Ko</td></tr>
+        <tr><td><code>fx/music.js</code></td><td>page Musique</td><td>2,7 Ko / 1,3 Ko</td></tr>
+        <tr><td><code>fx/article.js</code></td><td>un article</td><td>3,4 Ko / 1,6 Ko</td></tr>
+        <tr><td><code>fx/gallery.js</code></td><td>galerie</td><td>4,2 Ko / 1,7 Ko</td></tr>
+        <tr><td><code>fx/modules.js</code></td><td>page Modules</td><td>1,5 Ko / 0,8 Ko</td></tr>
+        <tr><td><code>fx/logiciels.js</code></td><td>Logiciels, fiches</td><td>2,0 Ko / 1,1 Ko</td></tr>
+        <tr><td><code>fx/palette.js</code></td><td>premier Ctrl+K</td><td>7,0 Ko / 3,1 Ko</td></tr>
+        <tr><td><code>fx/matrix.js</code></td><td>code Konami</td><td>1,4 Ko / 0,9 Ko</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note ok"><b>Budget tenu.</b> Pire cas (galerie + palette ouverte) : 24,9 Ko minifiés, ~10 Ko réellement transférés — sous le plafond de 25 Ko fixé par la roadmap. Au chargement d'une page : 14 à 18 Ko.</div>
+    <h3>Modifier un effet (build)</h3>
+    <ol class="steps">
+      <li>Édite la source lisible dans <code>assets/js/src/</code> (<code>fx.js</code> ou <code>fx/&lt;module&gt;.js</code>).</li>
+      <li>Lance <code>bash tools/build-fx.sh</code> (Node.js requis ; télécharge <code>terser</code> au premier usage) : il minifie et affiche les poids.</li>
+      <li>Incrémente <code>fx.js?v=</code> dans les pages (les modules suivent automatiquement).</li>
+    </ol>
+    <div class="note ok"><b>Lisibilité mesurée.</b> Sur l'aurore à pleine intensité : texte secondaire des articles <strong>8,9:1</strong>, texte principal <strong>17,4:1</strong>, sous-titres de section <strong>5,2:1</strong> (minimum WCAG AA : 4,5:1). Assuré par le voile <code>--voile</code> sous le contenu et une ombre sous les titres.</div>
+    <h3>Trois niveaux, choisis automatiquement</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Niveau</th><th>Quand</th><th>Ce qui tourne</th></tr></thead>
+      <tbody>
+        <tr><td><code>full</code></td><td>appareil correct, mouvement autorisé</td><td>tout : aurore WebGL, cartes 3D, halo, boutons magnétiques, apparitions au scroll</td></tr>
+        <tr><td><code>lite</code></td><td>≤ 2 Go de RAM ou ≤ 2 cœurs, économiseur de données, « mouvement réduit »</td><td>transitions de pages, favoris, palette, terminal, visualiseur, outils d'article — sans aurore ni 3D</td></tr>
+        <tr><td><code>off</code></td><td>choix manuel</td><td>fonctions utiles seulement (palette, favoris, copier le code)</td></tr>
+      </tbody>
+    </table></div>
+    <p>Le niveau est posé sur <code>&lt;html data-fx="…"&gt;</code> ; le visiteur peut le forcer avec <strong>Ctrl+K</strong> (mémorisé sur son appareil, clé <code>tv_fx</code>).</p>
+    <h3>Ce que fait chaque phase</h3>
+    <ul>
+      <li><strong>1 · Fondations</strong> — transitions animées entre pages (View Transitions : Chrome, Edge, Safari récents ; ailleurs, changement de page classique), titres en dégradé d'aurore, détecteur de puissance.</li>
+      <li><strong>2 · Aurore</strong> — ciel WebGL plein écran qui suit la souris et s'assombrit au scroll, <strong>3 couches d'étoiles en parallaxe</strong> au scroll, étoiles filantes (15–30 s), triskèle qui se dessine une fois par session, <strong>guirlandes reliées en constellation</strong> autour du curseur (en-têtes de section).</li>
+      <li><strong>3 · Matière</strong> — cartes inclinables avec bordure-projecteur, boutons magnétiques et onde au clic, apparitions au scroll, halo curseur (souris uniquement).</li>
+      <li><strong>4 · Sections</strong> — Musique : <strong>anneau spectral autour du disque</strong> + barres, disque et aurore qui pulsent sur les basses, <strong>mini-égaliseur branché sur le vrai son</strong> dans le mini-lecteur. E-books : couvertures 3D, <strong>tourne de page</strong> dans la visionneuse. Logiciels : terminal + <strong>fiche détaillée par produit</strong> (<code>fiche.html?p=…</code>). Articles : barre de lecture, temps de lecture, « Copier », <strong>sommaire qui suit le scroll</strong>, <strong>« Tu aimeras aussi »</strong>. Modules : grille d'arcade, <strong>aperçu en direct au survol</strong>, <strong>records locaux</strong> (2048, Serpent, Photon Break, CipherLock). Galerie : <strong>l'image s'agrandit depuis sa vignette</strong>, navigation ←/→ et glisser, <strong>mosaïque qui se recompose</strong>, <strong>profondeur au gyroscope</strong> sur mobile.</li>
+      <li><strong>5 · Découverte</strong> — palette <strong>Ctrl+K</strong> (bouton ⌕ dans la barre) : sections, articles, pistes (lecture directe), e-books (via <code>manifest.json</code>), modules, actions. Favoris ♥ sur chaque carte, en tête de la palette, <strong>Nouveautés / Derniers ajouts</strong>, article au hasard. Filtres multi-catégories dont les exclus <strong>s'effacent en fondu</strong> pendant que les autres <strong>glissent</strong> à leur place.</li>
+      <li><strong>6 · Secrets</strong> — code Konami (↑↑↓↓←→←→BA) : « Matrix aurore » + arpège 8-bit ; couleurs de l'aurore selon l'heure ; sons d'interface optionnels ; page 404 jouable ; site installable.</li>
+    </ul>
+    <div class="note ok"><b>Robustesse.</b> Chaque module de <code>fx.js</code> est isolé : si l'un échoue sur un navigateur exotique, les autres continuent. Le site reste utilisable sans JavaScript.</div>
+  </section>
+
+  <!-- 19 -->
+  <section id="s19">
+    <h2 class="s"><span class="n">19</span> Cockpit : le point central</h2>
+    <p class="lead"><code>/admin</code> pilote <strong>tout le contenu et tous les réglages</strong> du site. Il lit et écrit <code>config.json</code> ; les pages se construisent à partir de ce fichier à chaque chargement (<code>assets/js/render.js</code>). Plus aucun outil de build n’est nécessaire pour le contenu.</p>
+    <h3>Le cycle en 3 gestes</h3>
+    <ol class="steps">
+      <li><strong>Modifier</strong> une rubrique. Chaque frappe est gardée en brouillon dans le navigateur : rien n’est perdu si l’onglet se ferme.</li>
+      <li><strong>👁 Aperçu sur le site</strong> (ou <code>Ctrl+S</code>) : le site s’ouvre avec tes modifications, <em>dans ce navigateur seulement</em>. Une pastille orange « Aperçu admin » le rappelle sur chaque page ; « Quitter l’aperçu » revient à la version publiée.</li>
+      <li><strong>🚀 Publier</strong> : <code>config.json</code> est envoyé sur GitHub, Cloudflare Pages redéploie (1–2 min). Sans jeton : <strong>⬇ Exporter</strong> puis committe le fichier à la racine.</li>
+    </ol>
+    <h3>Les rubriques</h3>
+    <div class="tw"><table>
+      <thead><tr><th>Rubrique</th><th>Ce qu’elle règle</th></tr></thead>
+      <tbody>
+        <tr><td>📊 Tableau de bord</td><td>compteurs, échéance des e-books, état de l’annonce et des effets</td></tr>
+        <tr><td>🩺 Diagnostic</td><td>doublons, champs manquants, éléments mis en avant introuvables, et <strong>présence réelle</strong> de chaque MP3, e-book, couverture, image, module et article (délai max 8 s par fichier)</td></tr>
+        <tr><td>🚀 Publication</td><td>dépôt, branche, fichier, jeton, message de commit</td></tr>
+        <tr><td>🏠 Accueil</td><td>accroche, texte, boutons, bandeau défilant, cartes des sections, <strong>9 blocs activables</strong> (chiffres, derniers articles, à écouter, e-books, logiciels phares, modules à essayer, esprit, créateur, appel final), éléments mis en avant</td></tr>
+        <tr><td>📣 Annonce</td><td>bandeau sous la navigation : texte, lien, accueil seul ou tout le site, date de fin</td></tr>
+        <tr><td>🧭 Navigation</td><td>libellé et visibilité de chaque onglet</td></tr>
+        <tr><td>💾 Logiciels &amp; fiches</td><td>carte + fiche complète : accroche, points clés, terminal de démo, mots-clés des articles liés, GitHub, boutons</td></tr>
+        <tr><td>🧩 Modules · 🎵 Musique · 📖 E-books · 📝 Articles · 🖼️ Galerie · 🏆 Concours · 💚 Soutenir</td><td>ajouter, modifier, réordonner, dupliquer, masquer, supprimer — avec recherche dans les longues listes</td></tr>
+        <tr><td>✨ Apparence &amp; effets</td><td>2 couleurs, niveau d’effets par défaut, 13 effets activables un par un, compte à rebours d’ouverture</td></tr>
+        <tr><td>🌐 Site · 🔐 Accès</td><td>identité, codes, utilisateurs Cloudflare Access</td></tr>
+        <tr><td>🧾 JSON brut</td><td>tout le fichier, pour les cas avancés (validé en direct)</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Publier directement sur GitHub</h3>
+    <ol class="steps">
+      <li>github.com → Settings → Developer settings → <strong>Fine-grained tokens</strong> → Generate.</li>
+      <li>Repository access : <strong>uniquement</strong> le dépôt du site. Permissions → Repository → <strong>Contents : Read and write</strong>. Mets une date d’expiration.</li>
+      <li>Colle le jeton dans 🚀 Publication. Il reste en mémoire (ou dans la session de l’onglet si tu coches la case), <strong>jamais</strong> dans config.json.</li>
+    </ol>
+    <div class="note warn"><b>Sécurité.</b> Le code du cockpit est lisible dans config.json : c’est un verrou léger. Le vrai rempart est le jeton GitHub, que personne d’autre n’a. Pour fermer <code>/admin</code> aux curieux : Cloudflare → Zero Trust → Access → application sur <code>truvector.dev/admin*</code> avec ton e-mail.</div>
+    <h3>Ce qui ne passe volontairement pas par le cockpit</h3>
+    <ul>
+      <li><strong>Le texte des articles</strong> (fichiers <code>articles/posts/*.html</code>) — le cockpit gère leur référencement : titre, résumé, tags, date, visibilité.</li>
+      <li><strong>Les pages légales</strong> — elles engagent juridiquement.</li>
+      <li><strong>Les fichiers eux-mêmes</strong> (MP3, .trubook, images, applis de modules) — à déposer dans leurs dépôts ; le diagnostic vérifie leur présence.</li>
+      <li><strong>La date de verrouillage des .trubook</strong> — inscrite dans chaque fichier chiffré ; le cockpit règle la date <em>affichée</em>.</li>
+    </ul>
+    <h3>Comment le site se construit</h3>
+    <p>Chaque page garde son contenu HTML actuel comme filet de secours (et pour le référencement). Au chargement, <code>render.js</code> lit la config (plus l’éventuel aperçu local) et remplace les listes et les textes. Les autres scripts (effets, filtres, lecteur) attendent la fin du rendu grâce à la promesse <code>window.TVReady</code>. Si config.json est inaccessible plus de 2,5 s, la page s’affiche telle quelle.</p>
+  </section>
+
+  <!-- 20 -->
+  <section id="s20">
+    <h2 class="s"><span class="n">20</span> config.json : référence</h2>
+    <div class="tw"><table>
+      <thead><tr><th>Clé</th><th>Contenu</th><th>Utilisée par</th></tr></thead>
+      <tbody>
+        <tr><td><code>site</code></td><td>nom, signature, auteur, GitHub, e-mail</td><td>cockpit</td></tr>
+        <tr><td><code>home</code></td><td>kicker, lede, cta1/cta2, marquee[], sectionsTitle/Sub, cards[], blocks{}, newsCount, featuredSoftware[], featuredModules[], why{}, maker{}, cta{}</td><td>accueil</td></tr>
+        <tr><td><code>announcement</code></td><td>visible, text, label, url, everywhere, until</td><td>toutes les pages</td></tr>
+        <tr><td><code>nav.tabs[]</code></td><td>path, label, visible</td><td>barre de navigation</td></tr>
+        <tr><td><code>theme</code></td><td>accent, violet</td><td>toutes les pages</td></tr>
+        <tr><td><code>fx</code></td><td>level + 13 interrupteurs (sky, stars, shooting, skyByHour, lights, cards3d, magnetic, halo, reveal, palette, konami, sounds, pwa)</td><td>fx.js</td></tr>
+        <tr><td><code>ebooks</code></td><td>until, passphrase, note</td><td>e-books, accueil, annonce</td></tr>
+        <tr><td><code>catalog.logiciels[]</code></td><td>slug, title, badge, desc, lead, features[], commands[[cmd,résultat]], keywords[], links[{label,url}], github, visible</td><td>liste, fiches, accueil, palette</td></tr>
+        <tr><td><code>catalog.modules[]</code></td><td>title, badge, desc, url, visible</td><td>modules, accueil, palette</td></tr>
+        <tr><td><code>catalog.musique[]</code></td><td>title, src, visible</td><td>page Musique, mini-lecteur, accueil</td></tr>
+        <tr><td><code>catalog.ebooks[]</code></td><td>slug, title, genre, blurb, until (optionnel), visible</td><td>e-books, accueil</td></tr>
+        <tr><td><code>catalog.articles[]</code></td><td>title, url, excerpt, tags[], date, visible</td><td>blog, accueil, palette, « Tu aimeras aussi », fiches</td></tr>
+        <tr><td><code>gallery[]</code></td><td>slug, title, format (wide/square), download, visible</td><td>galerie</td></tr>
+        <tr><td><code>concours[]</code> · <code>dons</code></td><td>title, desc, url, label, visible · intro + links[{label,url}]</td><td>pages dédiées</td></tr>
+        <tr><td><code>access</code> · <code>publish</code></td><td>codes, utilisateurs · owner, repo, branch, path</td><td>cockpit</td></tr>
+      </tbody>
+    </table></div>
+    <p>Dans les textes : <code>{articles}</code> <code>{modules}</code> <code>{pistes}</code> <code>{ebooks}</code> <code>{logiciels}</code> <code>{creations}</code> (nombre d’éléments visibles) et <code>{date}</code> (fin de l’édition e-books) sont remplacés automatiquement. Tout élément avec <code>"visible": false</code> disparaît du site sans être supprimé.</p>
+  </section>
+
+  <!-- 21 -->
+  <section id="s21">
+    <h2 class="s"><span class="n">21</span> Assistant (chatbot)</h2>
+    <p class="lead">La bulle 💬 « TRU » en bas à droite de chaque page. Elle oriente les visiteurs vers les logiciels, articles, e-books et modules, et répond à leurs questions pratiques. Elle se règle entièrement dans le cockpit, rubrique <strong>🤖 Assistant</strong>.</p>
+    <h3>Deux modes</h3>
+    <div class="tw"><table>
+      <thead><tr><th></th><th>Local (par défaut)</th><th>IA</th></tr></thead>
+      <tbody>
+        <tr><td>Fonctionnement</td><td>FAQ + index du site (<code>chatbot-index.json</code>, 472 passages), tout dans le navigateur</td><td>Worker du site → Workers AI, réponse en continu, citations [1] [2] cliquables</td></tr>
+        <tr><td>Coût</td><td>0 €, aucun compte</td><td>quota quotidien gratuit ; sur le compte Cloudflare gratuit, un dépassement <strong>échoue sans facture</strong></td></tr>
+        <tr><td>Si ça coince</td><td>—</td><td>quota, limite, modèle indisponible, réseau : <strong>repli automatique</strong> sur le mode local (10 min), avec un message clair</td></tr>
+      </tbody>
+    </table></div>
+    <h3>Ce qui est livré</h3>
+    <ul>
+      <li><strong>Bulle et fenêtre</strong> sur tout le site (sauf <code>/admin</code>), au-dessus du mini-lecteur quand il est là. Le module (10,9 Ko) ne se charge qu’au premier clic.</li>
+      <li><strong>Conversation conservée</strong> d’une page à l’autre dans l’onglet (↺ pour l’effacer), Échap pour fermer, navigation clavier, annonces pour lecteurs d’écran.</li>
+      <li><strong>Libraire :</strong> « une nouvelle cyberpunk », « une histoire de fantasy » → sélection d’e-books avec lien direct vers la visionneuse.</li>
+      <li><strong>Ctrl+K :</strong> une ligne « Demander à TRU : … » en fin de résultats.</li>
+      <li><strong>Voix :</strong> bouton 🎙 si le navigateur sait reconnaître la parole.</li>
+      <li><strong>Bilingue :</strong> un navigateur en anglais obtient l’interface, l’accueil, les suggestions et les réponses de FAQ en anglais (quand <code>greetingEn</code> et <code>aEn</code> sont remplis) ; l’IA répond dans la langue du visiteur.</li>
+      <li><strong>Garde-fous IA :</strong> consigne verrouillée (sources du site uniquement, pas de liens, résiste aux tentatives de détournement), liens écrits par le modèle supprimés à l’affichage, limites par visiteur (IP anonymisée), longueur des messages, nombre d’échanges, Turnstile anti-robot, aucune conversation enregistrée.</li>
+    </ul>
+    <h3>Architecture</h3>
+    <p>Ton site tourne sur <strong>Cloudflare Workers + Static Assets</strong> (et non Pages). Les fichiers restent servis tels quels ; le petit Worker <code>worker/index.js</code> n’est appelé que pour ce qui n’est pas un fichier : <code>/api/chat</code> et les pages introuvables (il sert alors <code>404.html</code>). Le fichier <code>.assetsignore</code> empêche de publier <code>worker/</code>, <code>tools/</code> et <code>wrangler.toml</code> comme pages.</p>
+    <h3>Mettre l’IA en service (une fois, ~15 min)</h3>
+    <ol class="steps">
+      <li><strong>Déploie</strong> cette version : <code>wrangler.toml</code> contient déjà <code>main</code> et la liaison <code>[ai]</code>. Cockpit → 🤖 Assistant → « 🩺 Tester le serveur » doit afficher « Liaison AI active ».</li>
+      <li><strong>Anti-robot :</strong> tableau de bord Cloudflare → Turnstile → <em>Add widget</em> (domaine truvector.dev, mode <em>Managed</em>). Copie la <em>Site Key</em> dans le cockpit ; mets la <em>Secret Key</em> dans le secret <code>TURNSTILE_SECRET</code> (Workers → truvector-site → Settings → Variables and Secrets).</li>
+      <li><strong>Limites fiables</strong> (conseillé) : <code>npx wrangler kv namespace create CHAT_KV</code>, colle l’id dans <code>wrangler.toml</code> (bloc déjà prêt, à décommenter).</li>
+      <li><strong>Secrets</strong> <code>CHAT_ADMIN_TOKEN</code> (texte long aléatoire, pour les outils admin) et <code>RL_SALT</code> (texte aléatoire).</li>
+      <li>Cockpit → Mode « IA » → Publier. Reteste le serveur.</li>
+      <li>Facultatif, <strong>recherche par le sens</strong> : <code>npx wrangler vectorize create truvector-chat --dimensions=1024 --metric=cosine</code>, décommente le bloc <code>[[vectorize]]</code>, déploie, puis cockpit → « 🔎 Synchroniser la recherche sémantique ». Sans Vectorize, la recherche par mots-clés prend le relais.</li>
+    </ol>
+    <div class="note warn"><b>Modèle.</b> Le catalogue Workers AI évolue (des modèles sont retirés régulièrement). Le modèle se choisit dans le cockpit ; s’il n’existe plus, le Worker essaie automatiquement une liste de modèles de secours. Vérifie de temps en temps le catalogue officiel.</div>
+    <h3>Faire vivre l’assistant</h3>
+    <ul>
+      <li><strong>FAQ</strong> (cockpit) : question type, mots déclencheurs, réponse FR/EN, lien. Variables <code>{passphrase}</code> et <code>{date}</code>.</li>
+      <li><strong>Index</strong> : après un nouvel article ou une modification de la FAQ, cockpit → « 🧠 Reconstruire l’index » → « 🚀 Publier l’index » (ou <code>node tools/index-chatbot.mjs</code>). Si Vectorize et CHAT_KV sont liés, la recherche sémantique se <strong>resynchronise toute seule</strong> au premier message qui suit la publication.</li>
+      <li><strong>Durée des e-books</strong> : renseigne « Durée de lecture » dans cockpit → E-books pour que le libraire comprenne « une nouvelle de moins de 15 minutes ».</li>
+      <li><strong>Questions sans réponse</strong> (option, nécessite CHAT_KV) : anonymes, e-mails et numéros masqués, 30 jours ; à consulter dans le cockpit pour enrichir la FAQ.</li>
+    </ul>
+    <p>La page Confidentialité contient une section « Assistant du site » qui décrit ces traitements.</p>
   </section>
 
   <!-- 17 -->
   <section id="s17">
     <h2 class="s"><span class="n">17</span> Journal des versions</h2>
+    <h3>v9.1 — 23/09/2026 · roadmap chatbot bouclée + roadmap boîte à outils</h3>
+    <ul>
+      <li>Assistant : resynchronisation automatique de Vectorize après publication d’un nouvel index (anciens vecteurs nettoyés) ; libraire par durée de lecture (nouveau champ « Durée de lecture » des e-books).</li>
+      <li>Nouvelle <code>roadmap-modules.html</code> : 16 modules (IP WAN/local, sous-réseaux, DNS, en-têtes de sécurité, certificats, débit, adresse e-mail, en-têtes d’e-mail, mot de passe, 2FA, JWT, empreinte du navigateur, fuites de services, horodatages, QR codes, contraste), avec démos jouables et périmètre éthique.</li>
+      <li>Constat : <code>modules/apps/ip-analyzer.html</code> (ancien brouillon, non référencé) appelle des services externes bloqués par la CSP ; il sera remplacé par le module 01.</li>
+    </ul>
+    <h3>v9 — 23/09/2026 · l’assistant « TRU »</h3>
+    <ul>
+      <li>Roadmap chatbot livrée en entier : mode local (FAQ + index de 472 passages), mode IA Workers AI en flux continu avec citations, repli automatique, garde-fous (Turnstile, limites anonymisées, consigne verrouillée, filtrage des liens), recherche sémantique Vectorize, libraire, Ctrl+K, voix, bilingue, rubrique 🤖 Assistant du cockpit (FAQ, test du serveur, index, Vectorize, questions sans réponse).</li>
+      <li>Nouveaux fichiers : <code>worker/index.js</code>, <code>chatbot-index.json</code>, <code>tools/index-chatbot.mjs</code>, <code>assets/js/fx/chat.js</code>, <code>.assetsignore</code> ; <code>wrangler.toml</code> gagne <code>main</code> + <code>[ai]</code>.</li>
+      <li>Le Worker sert désormais la page <code>404.html</code> pour toute adresse introuvable.</li>
+      <li>CSP : Turnstile autorisé (<code>script-src</code> et <code>frame-src</code> challenges.cloudflare.com) ; <code>/api/*</code> jamais mis en cache.</li>
+      <li>Confidentialité : section « Assistant du site ».</li>
+    </ul>
+    <h3>v8.1 — 23/09/2026 · corrections d’affichage + roadmap chatbot</h3>
+    <ul>
+      <li>Accueil : « .dev » du grand logo n’hérite plus de l’ombre de lisibilité (qui l’assombrissait à travers son remplissage en dégradé).</li>
+      <li>Boutons fantômes (« Voir la galerie », « Protéger un e-book »…) : texte clair dans tous les états, <strong>liens visités compris</strong> — 211 boutons contrôlés sur tout le site.</li>
+      <li>Nouvelle <code>roadmap-chatbot.html</code> (6 phases, 0 €, démo du mode local), accessible par Ctrl+K.</li>
+      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=6</code>, <code>fx.js?v=7</code>.</li>
+    </ul>
+    <h3>v8 — 23/09/2026 · le cockpit devient le point central</h3>
+    <ul>
+      <li>Nouveau <code>render.js</code> : Accueil, Logiciels, fiches, Modules, Musique, E-books, Galerie, Concours, Soutenir, navigation, couleurs, annonce et effets se construisent depuis <code>config.json</code>.</li>
+      <li>Config rattrapée sur le site réel (elle avait pris du retard : 12 modules au lieu de 24, dons/concours/e-books absents) : tout le contenu y est désormais.</li>
+      <li>Cockpit réécrit : 18 rubriques, aperçu en direct, brouillon automatique, diagnostic des fichiers, publication GitHub en un clic.</li>
+      <li>Accueil enrichi : chiffres animés, derniers articles, « À écouter » (lecture en fond), e-books avec compte à rebours et couvertures 3D, logiciels phares, modules à essayer, annonce.</li>
+      <li>Textes à compteurs automatiques ({articles}, {ebooks}, {date}…), élément « visible » partout.</li>
+      <li>README réécrit ; CSP : <code>connect-src</code> autorise <code>api.github.com</code> (publication).</li>
+    </ul>
+    <h3>v7.1 — 23/09/2026 · roadmap intégrale</h3>
+    <ul>
+      <li>Éléments manquants livrés : constellation, étoiles en parallaxe, anneau spectral, mini-égaliseur réel, lightbox morphing + mosaïque + gyroscope, tourne de page, fiches logiciels, sommaire actif, « Tu aimeras aussi », aperçus live des modules, records, Nouveautés, filtres en fondu + glissement.</li>
+      <li>Design tokens v5 dans <code>tokens.css</code> (rayons, espacements, élévations, durées, courbes, surfaces, voile).</li>
+      <li>Architecture noyau + modules, sources lisibles dans <code>assets/js/src/</code>, <code>tools/build-fx.sh</code>, budget poids respecté.</li>
+      <li>Garde-fou lisibilité : voile sous le contenu, contraste mesuré ≥ 5,2:1.</li>
+      <li>Corrigé en test : collision de noms qui cassait l'aurore, palette qui attendait le CDN, fermeture de la galerie dépendante d'une minuterie, titres en dégradé assombris.</li>
+    </ul>
+    <h3>v7 — 23/09/2026 · la roadmap visuelle, codée</h3>
+    <ul>
+      <li><code>fx.js</code> / <code>fx.css</code> injectés sur 102 pages : les 6 phases de <code>roadmap-effets.html</code> (voir <a href="#s18">18</a>).</li>
+      <li>Palette Ctrl+K, favoris ♥, filtres multi-catégories (<code>filters.js</code> v2).</li>
+      <li><code>404.html</code> jouable, site installable (<code>manifest.webmanifest</code>, <code>sw.js</code>, icônes).</li>
+      <li><code>_headers</code> : règles pour <code>sw.js</code> et le manifeste.</li>
+    </ul>
     <h3>v6 — 23/09/2026</h3>
     <ul>
       <li><strong>E-books</strong> : CSP <code>connect-src</code> ouverte à jsDelivr ; fenêtre de clé qui passait derrière la zone de dépôt ; livres HTML/EPUB/texte qui restaient vides ; pagination par chapitre ; passphrase pré-remplie ; messages d'erreur clairs ; badge « Bientôt en ligne ».</li>
@@ -658,8 +908,8 @@ tru-reader.js?v=3   filters.js?v=4</pre></div>
 <footer>
   <div class="wrap">
     <div class="hr" style="margin-bottom:26px"></div>
-    <p class="fm">$ truvector docs --version 6 --host cloudflare</p>
-    <p>© 2026 TRUvector.dev · Manuel du site v6 · Where Code Meets Creativity 🌌</p>
+    <p class="fm">$ truvector docs --version 9.1 --host cloudflare</p>
+    <p>© 2026 TRUvector.dev · Manuel du site v9.1 · Where Code Meets Creativity 🌌</p>
   </div>
 </footer>
 

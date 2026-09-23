@@ -1,4 +1,4 @@
-# TRUvector.dev — v8
+# TRUvector.dev — v10
 
 Site statique **romantico·geek** de TRUvector : logiciels, e-books, musique, articles, modules interactifs et créations graphiques.
 Hébergé sur **Cloudflare Pages** depuis ce dépôt GitHub ; médias lourds servis par le dépôt `clode666/truvector-assets` via jsDelivr.
@@ -51,7 +51,7 @@ Le HTML des pages reste en place comme **filet de secours** : si `config.json` e
 
 ```
 /
-├── index.html · 404.html · manuel.html · roadmap-effets.html
+├── index.html · 404.html · manuel.html · roadmap-effets.html · roadmap-chatbot.html · roadmap-modules.html
 ├── config.json            ★ source unique du contenu et des réglages
 ├── admin/                 cockpit
 ├── galerie/ logiciels/ (+ fiche.html) ebooks/ (+ lecteur, proteger) musique/
@@ -64,7 +64,10 @@ Le HTML des pages reste en place comme **filet de secours** : si `config.json` e
 │   ├── js/fx.js + fx/     effets (MINIFIÉS — ne pas éditer)
 │   ├── js/src/            ★ sources lisibles des effets
 │   ├── js/player.js       mini-lecteur global · filters.js · tru-reader.js · nav.js
+├── worker/index.js       API : assistant, boîte à outils, page 404
+├── chatbot-index.json    mémoire de l'assistant
 ├── tools/build-fx.sh      minifie assets/js/src → assets/js (Node.js)
+├── tools/index-chatbot.mjs  reconstruit chatbot-index.json
 ├── sw.js · manifest.webmanifest   site installable / hors ligne
 └── _headers · _redirects  sécurité (CSP), cache, redirections Cloudflare
 ```
@@ -86,10 +89,29 @@ JS/CSS : cache 5 min + revalidation. Images et bibliothèques : 1 an.
 grep -rl "player.js?v=6" --include=*.html . | xargs sed -i 's/player\.js?v=6/player.js?v=7/g'
 ```
 
-Versions en vigueur : `tokens.css?v=7` `fx.css?v=3` `fx.js?v=3` `render.js?v=1` `config.js?v=2` `player.js?v=6` `filters.js?v=4` `tru-reader.js?v=3` `nav.js?v=5` `assets.js?v=2`.
+Versions en vigueur : `tokens.css?v=8` `fx.css?v=6` `fx.js?v=7` `render.js?v=2` `config.js?v=2` `player.js?v=6` `filters.js?v=4` `tru-reader.js?v=3` `nav.js?v=5` `assets.js?v=2`.
 Si tu modifies `sw.js`, change sa constante `V`.
 
-## 7. Dépannage express
+## 7. L'assistant « TRU » (chatbot)
+
+Bulle 💬 sur tout le site, réglée dans le cockpit (**🤖 Assistant**).
+- **Mode local** (défaut, 0 €) : FAQ + `chatbot-index.json` (472 passages du site), tout dans le navigateur.
+- **Mode IA** : `worker/index.js` → **Cloudflare Workers AI** (quota quotidien gratuit ; sur le compte gratuit, un dépassement échoue sans facture) → réponse en continu avec sources ; repli automatique en mode local.
+- Garde-fous : Turnstile, limites par visiteur (IP anonymisée), consigne verrouillée, aucune conversation enregistrée.
+- Mise en service de l'IA : manuel, section 21 (≈ 15 min : déployer, Turnstile, KV, secrets, passer le mode sur « IA »).
+- Après un nouvel article : cockpit → « 🧠 Reconstruire l'index » → « 🚀 Publier l'index » (ou `node tools/index-chatbot.mjs`).
+
+> Hébergement : **Cloudflare Workers + Static Assets**. Le Worker ne répond qu'à `/api/*` et aux pages introuvables ; `.assetsignore` empêche de publier `worker/`, `tools/`, `wrangler.toml`.
+
+## 8. Boîte à outils (16 modules)
+
+Réseau (IP Analyzer, sous-réseaux, DNS Explorer, audit d'en-têtes, certificats, débit), e-mail (adresse, en-têtes), comptes (mot de passe + fuites par k-anonymat, 2FA, JWT, empreinte du navigateur, registre des fuites), utilitaires (horodatages, QR codes, contraste).
+- Kit commun `modules/apps/_kit/` ; routes Worker `/api/tools/*` (cache, limites, anti-SSRF, aucun journal) ; aucun domaine tiers dans la CSP.
+- Cockpit → Modules : interrupteur « Outils serveur » + limite horaire. Accueil : « Widget Ton IP » (facultatif).
+- Ctrl+K : `ip`, `dns exemple.fr`, `mail nom@domaine.fr`, `cert …`, `entetes …`, `mdp`, `qr`, `date …`, `jwt`, `2fa`, `debit`, `subnet …`.
+- Détails : manuel, section 22.
+
+## 9. Dépannage express
 
 | Symptôme | Solution |
 |---|---|
@@ -98,6 +120,9 @@ Si tu modifies `sw.js`, change sa constante `V`.
 | Publication 401 / 403 / 409 | Jeton invalide / sans droit *Contents* / fichier changé en ligne (recharge puis republie). |
 | E-book « pas encore en ligne » | Le `.trubook` manque dans truvector-assets (voir Diagnostic). |
 | Pas d'aurore | Mode léger automatique → Ctrl+K « Effets : complets ». |
+| Assistant bloqué en « mode local » | Repli auto (quota/limite/Worker absent) → cockpit « 🩺 Tester le serveur ». |
+| Outil « serveur indisponible » | Worker non déployé ou outils coupés (cockpit → Modules). |
+| Un cercle suit le curseur | Halo voulu ; cockpit → Apparence & effets → « Halo du curseur ». |
 | `fx.js` cassé après édition | Il est généré : modifie `assets/js/src/` puis lance le build. |
 
 Tout le reste : **`manuel.html`**, sections 10 (dépannage), 16 (cache), 18 (effets), 19 (cockpit), 20 (référence config.json).

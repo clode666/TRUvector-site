@@ -467,6 +467,134 @@
     ],
     "modules": [
       {
+        "title": "IP Analyzer",
+        "badge": "Réseau",
+        "desc": "Ton IP publique (FAI, pays, protocole), ton réseau local et l’analyse de n’importe quelle IP : propriétaire, type, reverse DNS.",
+        "url": "apps/ip-analyzer.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Calculateur de sous-réseaux",
+        "badge": "Réseau",
+        "desc": "IPv4/IPv6 : masque, plage, broadcast, hôtes, découpage VLSM et test d’appartenance.",
+        "url": "apps/subnet.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "DNS Explorer",
+        "badge": "Réseau",
+        "desc": "Tous les enregistrements d’un domaine, SPF/DMARC/DNSSEC expliqués, et rapport complet du domaine.",
+        "url": "apps/dns-explorer.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Audit d’en-têtes",
+        "badge": "Réseau",
+        "desc": "La note de sécurité d’un site de A à F (CSP, HSTS, cookies…) avec les correctifs.",
+        "url": "apps/headers-audit.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Inspecteur de certificats",
+        "badge": "Réseau",
+        "desc": "Émetteur, expiration et historique des certificats TLS d’un domaine (Certificate Transparency).",
+        "url": "apps/cert-inspector.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Test de débit",
+        "badge": "Réseau",
+        "desc": "Latence, gigue, débit descendant et montant, graphique en direct.",
+        "url": "apps/speed-test.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Analyseur d’adresse e-mail",
+        "badge": "E-mail",
+        "desc": "Syntaxe, fautes de frappe, adresse jetable, MX, SPF et DMARC — et création de tes propres enregistrements.",
+        "url": "apps/email-analyzer.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Analyseur d’en-têtes d’e-mail",
+        "badge": "E-mail",
+        "desc": "Colle les en-têtes d’un message suspect : trajet, SPF/DKIM/DMARC et alertes d’hameçonnage.",
+        "url": "apps/email-headers.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Auditeur de mot de passe",
+        "badge": "Comptes",
+        "desc": "Solidité réelle, motifs faibles, temps de cassage et test de fuite par k-anonymat.",
+        "url": "apps/password-audit.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Atelier 2FA",
+        "badge": "Comptes",
+        "desc": "Codes TOTP depuis une clé ou un QR otpauth://, vérification de synchronisation, clés de test.",
+        "url": "apps/totp-lab.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Inspecteur JWT",
+        "badge": "Comptes",
+        "desc": "Décode un jeton, traduit les dates, signale les faiblesses et vérifie la signature.",
+        "url": "apps/jwt-inspector.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Ce que ton navigateur révèle",
+        "badge": "Comptes",
+        "desc": "Ton empreinte d’appareil, son unicité estimée et comment la réduire.",
+        "url": "apps/browser-reveal.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Registre des fuites",
+        "badge": "Comptes",
+        "desc": "Le service que tu utilises a-t-il fuité ? Date, ampleur, données exposées, que faire.",
+        "url": "apps/breaches.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Horodatages & fuseaux",
+        "badge": "Outil",
+        "desc": "Unix, ISO 8601, fuseaux horaires, durées et horloge mondiale.",
+        "url": "apps/timestamps.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Générateur de QR codes",
+        "badge": "Outil",
+        "desc": "Lien, Wi-Fi, contact, e-mail, SMS : couleurs, export SVG et PNG.",
+        "url": "apps/qr-generator.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
+        "title": "Contraste & accessibilité",
+        "badge": "Outil",
+        "desc": "Ratio WCAG AA/AAA, simulation des daltonismes, correction automatique.",
+        "url": "apps/contrast.html",
+        "visible": true,
+        "date": "2026-09-23"
+      },
+      {
         "title": "TRU Keyforge",
         "badge": "Sécurité",
         "desc": "Générateur de mots de passe, passphrases et clés 256 bits, avec indicateur de robustesse.",
@@ -1582,7 +1710,8 @@
       "modules": true,
       "why": true,
       "maker": true,
-      "cta": true
+      "cta": true,
+      "ip": false
     },
     "newsCount": 4,
     "featuredSoftware": [
@@ -1591,9 +1720,9 @@
       "AutomationSequence"
     ],
     "featuredModules": [
-      "TRU Keyforge",
-      "Aurora Weaver",
-      "Neon Serpent"
+      "IP Analyzer",
+      "Analyseur d’en-têtes d’e-mail",
+      "TRU Keyforge"
     ],
     "why": {
       "title": "L'esprit romantico·geek",
@@ -1714,7 +1843,8 @@
     "palette": true,
     "sounds": false,
     "pwa": true,
-    "skyByHour": true
+    "skyByHour": true,
+    "chatbot": true
   },
   "ebooks": {
     "until": "2026-10-21",
@@ -1726,5 +1856,316 @@
     "repo": "TRUvector-site",
     "branch": "main",
     "path": "config.json"
+  },
+  "chatbot": {
+    "enabled": true,
+    "mode": "local",
+    "name": "TRU",
+    "avatar": "✦",
+    "greeting": "Salut ✦ Je suis TRU, l’assistant du site. Je peux t’orienter vers un logiciel, un article, une nouvelle ou un module.",
+    "greetingEn": "Hi ✦ I'm TRU, the site assistant. I can point you to software, articles, short stories or interactive modules.",
+    "tone": "chaleureux",
+    "pages": "all",
+    "hidePaths": [
+      "admin/"
+    ],
+    "suggestions": [
+      "Quelle est mon adresse IP ?",
+      "Comment lire un e-book ?",
+      "Un e-mail suspect, que faire ?",
+      "Protéger un script Python",
+      "Une nouvelle cyberpunk ?"
+    ],
+    "suggestionsEn": [
+      "How do I read an e-book?",
+      "Protect a Python script",
+      "A cyberpunk story?",
+      "A game to try?"
+    ],
+    "model": "@cf/meta/llama-3.1-8b-instruct-fast",
+    "perHour": 15,
+    "maxChars": 600,
+    "maxTurns": 6,
+    "turnstileSiteKey": "",
+    "logUnanswered": false,
+    "voice": true,
+    "inPalette": true,
+    "faq": [
+      {
+        "q": "Tester ma connexion Internet",
+        "variants": [
+          "débit",
+          "vitesse",
+          "speed",
+          "connexion lente",
+          "ping",
+          "latence"
+        ],
+        "a": "Le Test de débit mesure latence, gigue, débit descendant et montant jusqu’au datacenter le plus proche.",
+        "aEn": "The speed test measures latency, jitter, download and upload to the nearest datacenter.",
+        "url": "modules/apps/speed-test.html",
+        "visible": true
+      },
+      {
+        "q": "Créer un QR code",
+        "variants": [
+          "qr",
+          "qr code",
+          "qrcode",
+          "wifi"
+        ],
+        "a": "Le Générateur de QR codes crée des QR pour un lien, un réseau Wi-Fi, un contact, un e-mail ou un SMS, en SVG ou PNG.",
+        "aEn": "The QR generator makes codes for a link, Wi-Fi, contact, e-mail or SMS, as SVG or PNG.",
+        "url": "modules/apps/qr-generator.html",
+        "visible": true
+      },
+      {
+        "q": "Analyser un domaine (DNS, SPF, DMARC)",
+        "variants": [
+          "dns",
+          "domaine",
+          "mx",
+          "spf",
+          "dmarc",
+          "dnssec",
+          "whois",
+          "certificat"
+        ],
+        "a": "DNS Explorer liste tous les enregistrements d’un domaine et explique SPF, DMARC et DNSSEC ; son bouton « Rapport complet » ajoute la sécurité web et les certificats.",
+        "aEn": "DNS Explorer lists all records of a domain and explains SPF, DMARC and DNSSEC; “Full report” adds web security and certificates.",
+        "url": "modules/apps/dns-explorer.html",
+        "visible": true
+      },
+      {
+        "q": "Mon mot de passe est-il solide ou a-t-il fuité ?",
+        "variants": [
+          "mot de passe",
+          "password",
+          "fuite",
+          "fuité",
+          "pwned",
+          "solide"
+        ],
+        "a": "L’Auditeur de mot de passe évalue sa solidité et vérifie s’il a fuité par k-anonymat : ton mot de passe ne quitte jamais la page.",
+        "aEn": "The password auditor rates its strength and checks leaks with k-anonymity: your password never leaves the page.",
+        "url": "modules/apps/password-audit.html",
+        "visible": true
+      },
+      {
+        "q": "Vérifier un e-mail suspect / hameçonnage",
+        "variants": [
+          "hameçonnage",
+          "phishing",
+          "arnaque",
+          "e-mail suspect",
+          "mail suspect",
+          "en-têtes",
+          "spam"
+        ],
+        "a": "Colle les en-têtes du message dans l’Analyseur d’en-têtes d’e-mail : trajet, SPF/DKIM/DMARC et signaux d’alerte. Ne clique sur aucun lien en attendant.",
+        "aEn": "Paste the message headers into the e-mail header analyser: route, SPF/DKIM/DMARC and warning signs. Do not click any link meanwhile.",
+        "url": "modules/apps/email-headers.html",
+        "visible": true
+      },
+      {
+        "q": "Quelle est mon adresse IP ?",
+        "variants": [
+          "ip",
+          "adresse ip",
+          "mon ip",
+          "ipv4",
+          "ipv6",
+          "fai",
+          "opérateur"
+        ],
+        "a": "L’outil IP Analyzer affiche ton IP publique, ton opérateur, ton pays et quelques détails de ta connexion, et analyse n’importe quelle autre IP.",
+        "aEn": "The IP Analyzer shows your public IP, ISP, country and connection details, and can analyse any other IP.",
+        "url": "modules/apps/ip-analyzer.html",
+        "visible": true
+      },
+      {
+        "q": "Comment lire un e-book ?",
+        "variants": [
+          "clé",
+          "mot de passe",
+          "passphrase",
+          "ebook",
+          "lire",
+          "lecteur",
+          "ouvrir"
+        ],
+        "a": "Clique sur « Lire » dans le catalogue : la clé publique {passphrase} est déjà pré-remplie. Les nouvelles restent lisibles jusqu’au {date}.",
+        "url": "ebooks/",
+        "visible": true,
+        "aEn": "Click “Read” in the catalogue: the public key {passphrase} is already filled in. The stories can be read until {date}. (They are written in French.)"
+      },
+      {
+        "q": "Jusqu’à quand les e-books sont-ils disponibles ?",
+        "variants": [
+          "date",
+          "jusqu",
+          "expire",
+          "limite",
+          "combien de temps",
+          "verrouill"
+        ],
+        "a": "C’est une édition limitée : lecture possible jusqu’au {date}. Ensuite l’accès se verrouille automatiquement.",
+        "url": "ebooks/",
+        "visible": true,
+        "aEn": "It is a limited edition: readable until {date}. After that, access locks automatically."
+      },
+      {
+        "q": "Écouter de la musique pendant la visite",
+        "variants": [
+          "musique",
+          "écouter",
+          "fond",
+          "son",
+          "playlist",
+          "lecteur audio"
+        ],
+        "a": "Sur la page Musique, coche « Écouter en naviguant » (ou lance une piste depuis l’accueil) : un mini-lecteur te suit sur tout le site.",
+        "url": "musique/",
+        "visible": true,
+        "aEn": "On the Music page, tick “Listen while browsing” (or start a track from the home page): a mini player follows you across the site."
+      },
+      {
+        "q": "Protéger un logiciel ou un script Python",
+        "variants": [
+          "protéger",
+          "python",
+          "reverse",
+          "licence",
+          "licensing",
+          "piratage",
+          "obfuscation"
+        ],
+        "a": "C’est le rôle d’IronLock : empreinte matérielle, chiffrement AES-256-GCM et licences signées. Sa fiche détaille tout, et plusieurs articles expliquent les techniques.",
+        "url": "logiciels/fiche.html?p=ironlock",
+        "visible": true,
+        "aEn": "That is IronLock’s job: hardware fingerprint, AES-256-GCM encryption and signed licences. Its page explains everything."
+      },
+      {
+        "q": "Soutenir le projet",
+        "variants": [
+          "soutenir",
+          "don",
+          "aider",
+          "ko-fi",
+          "sponsor",
+          "café"
+        ],
+        "a": "Merci ✦ Toutes les façons d’aider TRUvector sont réunies sur la page Soutenir.",
+        "url": "dons/",
+        "visible": true,
+        "aEn": "Thank you ✦ Every way to support TRUvector is on the Support page."
+      },
+      {
+        "q": "Chercher quelque chose sur le site",
+        "variants": [
+          "recherche",
+          "chercher",
+          "trouver",
+          "rechercher"
+        ],
+        "a": "Appuie sur Ctrl + K n’importe où : la recherche couvre articles, pistes, e-books, modules et logiciels.",
+        "url": "",
+        "visible": true,
+        "aEn": "Press Ctrl + K anywhere: the search covers articles, tracks, e-books, modules and software."
+      },
+      {
+        "q": "Le site est lent ou les animations me gênent",
+        "variants": [
+          "lent",
+          "ralenti",
+          "animations",
+          "effets",
+          "aurore",
+          "saccade",
+          "batterie"
+        ],
+        "a": "Ctrl + K puis « Effets : légers » ou « Effets : désactivés ». Le réglage reste mémorisé sur ton appareil.",
+        "url": "",
+        "visible": true,
+        "aEn": "Ctrl + K then “Effets : légers” (light) or “Effets : désactivés” (off). The setting is remembered on your device."
+      },
+      {
+        "q": "Télécharger les créations de la galerie",
+        "variants": [
+          "télécharger",
+          "image",
+          "fond d'écran",
+          "wallpaper",
+          "galerie",
+          "licence image"
+        ],
+        "a": "Chaque création de la galerie a un bouton « ↓ Image » en haute définition, pour un usage personnel avec mention de TRUvector.dev.",
+        "url": "galerie/",
+        "visible": true,
+        "aEn": "Every gallery artwork has a “↓ Image” button in high definition, for personal use with credit to TRUvector.dev."
+      },
+      {
+        "q": "Un jeu à essayer",
+        "variants": [
+          "jeu",
+          "jouer",
+          "jeux",
+          "game",
+          "s'amuser"
+        ],
+        "a": "Neon Serpent, TRU 2048 et Photon Break t’attendent dans les Modules — tes records sont gardés sur ton appareil.",
+        "url": "modules/",
+        "visible": true,
+        "aEn": "Neon Serpent, TRU 2048 and Photon Break are waiting in Modules — your high scores are kept on your device."
+      },
+      {
+        "q": "Installer le site comme une appli",
+        "variants": [
+          "installer",
+          "appli",
+          "application",
+          "hors ligne",
+          "offline",
+          "pwa"
+        ],
+        "a": "Dans Chrome ou Edge, l’icône « Installer » de la barre d’adresse ajoute TRUvector à ton écran d’accueil ; les pages déjà vues restent consultables hors ligne.",
+        "url": "",
+        "visible": true,
+        "aEn": "In Chrome or Edge, the “Install” icon in the address bar adds TRUvector to your home screen; pages you have seen stay available offline."
+      },
+      {
+        "q": "Contacter l’auteur",
+        "variants": [
+          "contact",
+          "contacter",
+          "auteur",
+          "email",
+          "écrire",
+          "github"
+        ],
+        "a": "Le plus simple est GitHub (clode666). Les mentions légales donnent les coordonnées officielles.",
+        "url": "mentions-legales/",
+        "visible": true,
+        "aEn": "The easiest way is GitHub (clode666). The legal notice gives the official contact details."
+      },
+      {
+        "q": "Bonjour",
+        "variants": [
+          "bonjour",
+          "salut",
+          "hello",
+          "coucou",
+          "hey"
+        ],
+        "a": "Salut ✦ Dis-moi ce que tu cherches : un logiciel, un article, une nouvelle, de la musique ou un module ?",
+        "url": "",
+        "visible": true,
+        "aEn": "Hi ✦ Tell me what you are looking for: software, an article, a story, music or a module?"
+      }
+    ]
+  },
+  "tools": {
+    "enabled": true,
+    "perHour": 150
   }
 }

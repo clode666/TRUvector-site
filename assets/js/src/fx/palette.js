@@ -4,7 +4,7 @@
   /* ---------- PHASE 5 · palette de commande Ctrl+K ---------- */
 
     var SECTIONS=[['🏠','Accueil',''],['🖼️','Galerie','galerie/'],['💾','Logiciels','logiciels/'],['📚','E-books','ebooks/'],['🎵','Musique','musique/'],
-      ['📝','Articles','articles/'],['🧩','Modules','modules/'],['🏆','Concours','concours/'],['💚','Soutenir','dons/'],['🗺️','Roadmap visuelle','roadmap-effets.html'],['📘','Manuel du site','manuel.html']];
+      ['📝','Articles','articles/'],['🧩','Modules','modules/'],['🏆','Concours','concours/'],['💚','Soutenir','dons/'],['🗺️','Roadmap visuelle','roadmap-effets.html'],['💬','Roadmap chatbot','roadmap-chatbot.html'],['🧰','Roadmap boîte à outils','roadmap-modules.html'],['📘','Manuel du site','manuel.html']];
     var items=null, recent=[], loading=null, books=[];
     function abs(u,base){ if(!u) return ROOT+base; if(/^(https?:)?\/\//.test(u)||u.charAt(0)==='/') return u; return ROOT+base+u; }
     function build(){ if(loading) return loading;
@@ -45,6 +45,15 @@
       var q=norm(inp.value.trim()), all=(items||[]).concat(books,actions()), fav=favs().map(function(f){ return {g:'♥ Favoris',ic:'♥',t:f.t,u:f.u,k:f.s||''}; });
       if(!q) cur=fav.slice(0,6).concat(recent, all.filter(function(i){ return i.g==='Sections'||i.g==='Actions'; }));
       else cur=fav.concat(all).map(function(i){ return [i,score(i,q)]; }).filter(function(p){ return p[1]>0; }).sort(function(a,b){ return b[1]-a[1]; }).slice(0,40).map(function(p){ return p[0]; });
+      /* commandes directes : ip · dns exemple.fr · mail a@b.fr · cert · entetes · mdp · qr texte · date · jwt · 2fa */
+      var CMD=[[/^ip(?:\s+(\S+))?$/i,'🌐','IP Analyzer','ip-analyzer.html','ip'],[/^dns\s+(\S+)$/i,'📇','DNS Explorer','dns-explorer.html','d'],[/^(?:mail|email|e-mail)\s+(\S+@\S+)$/i,'✉️','Analyseur d’adresse e-mail','email-analyzer.html','em'],
+        [/^(?:cert|ssl|tls)\s+(\S+)$/i,'🔏','Inspecteur de certificats','cert-inspector.html','domain'],[/^(?:entetes|en-têtes|headers|audit)\s+(\S+)$/i,'🛡️','Audit d’en-têtes','headers-audit.html','url'],[/^(?:mdp|password|motdepasse)$/i,'🔑','Auditeur de mot de passe','password-audit.html',''],
+        [/^qr(?:\s+(.+))?$/i,'▦','Générateur de QR codes','qr-generator.html',''],[/^(?:date|ts|timestamp)(?:\s+(.+))?$/i,'🕒','Horodatages & fuseaux','timestamps.html','ts'],[/^jwt$/i,'🪪','Inspecteur JWT','jwt-inspector.html',''],[/^(?:2fa|totp|otp)$/i,'🔐','Atelier 2FA','totp-lab.html',''],[/^(?:debit|débit|speed|vitesse)$/i,'⚡','Test de débit','speed-test.html',''],[/^(?:subnet|cidr|reseau|réseau)(?:\s+(\S+))?$/i,'🧮','Calculateur de sous-réseaux','subnet.html','cidr']];
+      var raw=inp.value.trim();
+      CMD.forEach(function(c){ var m=raw.match(c[0]); if(!m) return; var arg=m[1]||'';
+        cur.unshift({g:'Commande',ic:c[1],t:c[2]+(arg?' → '+arg:''),k:'outil',u:ROOT+'modules/apps/'+c[3]+(arg&&c[4]?'#'+c[4]+'='+encodeURIComponent(arg):'')}); });
+      var CB=(window.TVCONFIG||{}).chatbot||{};
+      if(q.length>3&&TVFX.chatOn&&CB.inPalette!==false) cur.push({g:'Assistant',ic:CB.avatar||'✦',t:(cur.length?'Demander à ':'Rien trouvé ? Demander à ')+(CB.name||'TRU')+' : « '+inp.value.trim()+' »',k:'assistant',act:'ask',q:inp.value.trim()});
       if(sel>=cur.length) sel=0;
       if(!cur.length){ listEl.innerHTML='<div class="empty">Aucun résultat pour « '+esc(inp.value)+' ».</div>'; return; }
       var html='', lastG='';
@@ -61,6 +70,7 @@
       if(it.act==='fx'){ ls('tv_fx',it.v==='auto'?null:it.v); location.reload(); return; }
       if(it.act==='sfx'){ var on=ls('tv_sfx')==='1'; ls('tv_sfx',on?'0':'1'); if(!on) blip(660,.08); toast(on?'Sons coupés':'Sons activés'); return; }
       if(it.act==='matrix'){ matrix(); return; }
+      if(it.act==='ask'){ if(TVFX.openChat) TVFX.openChat(it.q); return; }
       if(it.u) location.href=it.u; }
     var opener=null;
     function open(){ opener=document.activeElement; pal.classList.add('on'); inp.value=''; sel=0; render(); build().then(render); setTimeout(function(){ inp.focus(); },20); blip(520,.06); }

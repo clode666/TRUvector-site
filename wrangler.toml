@@ -1,10 +1,34 @@
-# TRUvector.dev — déploiement statique sur Cloudflare (Workers Assets).
-# La présence de ce fichier empêche l'auto-détection erronée (Hugo) :
-# aucun build n'est lancé, les fichiers sont servis tels quels.
+# TRUvector.dev — Cloudflare Workers + Static Assets.
+# Le site est servi tel quel (aucun build). Le Worker (worker/index.js) n'est
+# appelé que pour les adresses qui ne sont pas des fichiers : /api/* (assistant)
+# et les pages introuvables (404.html).
 name = "truvector-site"
+main = "worker/index.js"
 compatibility_date = "2026-09-17"
 
-# Sert tout le dossier comme site statique. Les fichiers _headers et _redirects
-# à la racine sont pris en compte automatiquement.
 [assets]
 directory = "./"
+binding = "ASSETS"
+
+# ---- Assistant : IA gratuite (quota quotidien ; sur le compte gratuit, pas de facture possible)
+[ai]
+binding = "AI"
+
+# ---- Facultatif : limites par visiteur + questions sans réponse.
+# 1) npx wrangler kv namespace create CHAT_KV   2) colle l'id ci-dessous et décommente.
+# [[kv_namespaces]]
+# binding = "CHAT_KV"
+# id = "COLLE_ICI_L_ID"
+
+# ---- Facultatif : recherche sémantique (phase 4).
+# 1) npx wrangler vectorize create truvector-chat --dimensions=1024 --metric=cosine
+# 2) décommente, déploie, puis cockpit → Assistant → « Synchroniser la recherche sémantique ».
+# [[vectorize]]
+# binding = "VECTORIZE"
+# index_name = "truvector-chat"
+
+# Secrets (tableau de bord → Workers → truvector-site → Settings → Variables and Secrets,
+# ou : npx wrangler secret put NOM) :
+#   TURNSTILE_SECRET   clé secrète Turnstile (anti-robot)
+#   CHAT_ADMIN_TOKEN   jeton pour les actions admin de l'assistant (réindexation, statistiques)
+#   RL_SALT            texte aléatoire pour anonymiser les compteurs de limites

@@ -134,11 +134,11 @@ a:hover{text-decoration:underline}
 .btn-ghost:hover{border-color:var(--menthe);color:var(--menthe);box-shadow:0 0 18px rgba(52,245,197,.15)}
 /* Les règles de contenu du type « .article a { color: menthe } » écrasaient la couleur
    des boutons (texte menthe sur fond menthe = illisible). On verrouille ici. */
-a.btn,a.btn:hover,a.btn:visited,.btn-primary{color:#04120d;text-decoration:none}
-.article a.btn,.prose a.btn,main a.btn{color:#04120d}
-a.btn-ghost,a.btn-outline,.btn-outline,
-.article a.btn-ghost,.article a.btn-outline,main a.btn-ghost,main a.btn-outline{background:transparent;color:var(--menthe-soft);border:1px solid var(--bord-fort);box-shadow:none}
-a.btn-ghost:hover,a.btn-outline:hover,.article a.btn-ghost:hover,.article a.btn-outline:hover{border-color:var(--menthe);color:var(--menthe)}
+/* Boutons pleins : texte sombre, même visités ou dans un article (sinon menthe sur menthe). */
+a.btn:not(.btn-ghost):not(.btn-outline),a.btn:not(.btn-ghost):not(.btn-outline):hover,a.btn:not(.btn-ghost):not(.btn-outline):visited,.btn-primary{color:#04120d;text-decoration:none}
+/* Boutons fantômes : texte clair dans TOUS les états (visité compris) — spécificité supérieure aux règles ci-dessus. */
+.btn.btn-ghost,.btn.btn-outline,a.btn.btn-ghost:link,a.btn.btn-ghost:visited,a.btn.btn-outline:link,a.btn.btn-outline:visited{background:transparent;color:var(--menthe-soft);border:1px solid var(--bord-fort);box-shadow:none;text-decoration:none}
+.btn.btn-ghost:hover,.btn.btn-outline:hover,a.btn.btn-ghost:visited:hover,a.btn.btn-outline:visited:hover{border-color:var(--menthe);color:var(--menthe)}
 
 /* ---------- cartes / verre ---------- */
 .card{background:var(--panneau-2);border:1px solid var(--bord);border-radius:var(--r);padding:18px;backdrop-filter:blur(8px)}

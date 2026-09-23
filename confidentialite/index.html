@@ -9,13 +9,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
-<link rel="stylesheet" href="../assets/css/fx.css?v=3">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=8">
+<link rel="stylesheet" href="../assets/css/fx.css?v=6">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#070b11">
   <script src="../assets/js/assets.js?v=2"></script>
 <script src="../assets/js/config.js?v=2"></script>
-<script src="../assets/js/render.js?v=1"></script>
+<script src="../assets/js/render.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -100,7 +100,11 @@
     <p>Le site n'est pas destiné à recueillir des données de mineurs de moins de 15 ans. Le cas échéant, le consentement d'un titulaire de l'autorité parentale est requis.</p>
   </section>
 
-  <section>
+  <section id="assistant"><h2>Assistant du site (chat)</h2>
+<p>L’assistant « TRU » répond aux questions sur le contenu du site. En <b>mode local</b>, tout se passe dans ton navigateur : rien n’est transmis. En <b>mode IA</b>, ta question et les derniers échanges de la conversation sont envoyés au serveur du site (Cloudflare) pour générer la réponse avec un modèle hébergé par Cloudflare (Workers AI) ; <b>aucune conversation n’est enregistrée</b>.</p>
+<p>Pour limiter les abus, un compteur de messages par heure est tenu à partir d’une empreinte anonymisée de ton adresse IP (jamais stockée en clair, effacée au bout d’une heure), et une vérification anti-robot Cloudflare Turnstile peut s’appliquer. Si l’option est activée par l’éditeur, les questions restées <b>sans réponse</b> peuvent être conservées de façon anonyme (texte tronqué, adresses e-mail et numéros masqués, sans IP) pendant 30 jours au plus, afin d’améliorer la FAQ.</p>
+<p>La conversation en cours est gardée dans ton navigateur jusqu’à la fermeture de l’onglet (bouton ↺ pour l’effacer). La saisie vocale, si tu l’utilises, repose sur la reconnaissance vocale de ton navigateur, qui peut transmettre l’audio au service de son éditeur (par exemple Google pour Chrome).</p></section>
+<section>
     <h2>8. Cookies</h2>
     <p>L'usage des cookies (strictement nécessaires uniquement) est détaillé dans la <a href="../cookies/">politique de cookies</a>.</p>
   </section>
@@ -121,6 +125,6 @@
 </footer>
 <script src="../assets/js/player.js?v=6"></script>
 <script src="../assets/js/nav.js?v=5"></script>
-<script src="../assets/js/fx.js?v=3"></script>
+<script src="../assets/js/fx.js?v=7"></script>
 </body>
 </html>

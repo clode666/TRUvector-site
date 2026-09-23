@@ -291,3 +291,56 @@ html.fx-gl .section-hero h1,html.fx-gl .art-hero h1,html.fx-gl .fi-hero h1{text-
 .tvh-covers a:hover{transform:rotateY(0) translateY(-10px) scale(1.06);z-index:20}
 .sec-card .date{font-family:var(--mono);font-size:11px;color:var(--texte-3)}
 @media (prefers-reduced-motion:reduce){.tvh-listen-card.on .tvh-disc{animation:none}.tvh-covers a{transition:none}}
+
+/* v8.1 : le logo de l'accueil est en dégradé à remplissage transparent → pas d'ombre texte héritée (sinon « .dev » s'assombrit) */
+html.fx-gl .hero-inner .wordmark .dev,html.fx-gl .hero-inner .wordmark .vec{text-shadow:none}
+html.fx-gl .hero-inner .wordmark{filter:drop-shadow(0 2px 16px rgba(7,11,17,.85))}
+
+/* ============================================================
+   v9 — Assistant (chat)
+   ============================================================ */
+#tvfx-chatfab{position:fixed;right:18px;bottom:18px;z-index:65;width:56px;height:56px;border-radius:18px;border:1px solid var(--bord-fort);cursor:pointer;color:#fff;font-size:24px;
+  background:linear-gradient(145deg,#12382f,#2a1640);box-shadow:var(--elev-2),0 0 24px rgba(52,245,197,.22);transition:transform var(--dur-2) var(--ease-out),bottom var(--dur-3) var(--ease-out)}
+#tvfx-chatfab:hover{transform:translateY(-3px) scale(1.04)}
+#tvfx-chatfab .d{position:absolute;top:8px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--menthe);box-shadow:0 0 10px var(--menthe)}
+#tvfx-chatfab.open .i{display:inline-block;transform:scale(.85)}
+html.has-mini #tvfx-chatfab{bottom:88px}
+#tvfx-chat{position:fixed;right:18px;bottom:86px;z-index:66;width:min(390px,calc(100vw - 24px));height:min(560px,calc(100vh - 120px));display:none;flex-direction:column;
+  background:var(--surface-solide);border:1px solid var(--bord-fort);border-radius:var(--r-xl);box-shadow:var(--elev-3),0 0 40px rgba(52,245,197,.1);overflow:hidden}
+html.has-mini #tvfx-chat{bottom:156px;height:min(520px,calc(100vh - 190px))}
+#tvfx-chat.on{display:flex;animation:tvfx-risebox .25s var(--ease-spring)}
+#tvfx-chat .hd{display:flex;gap:10px;align-items:center;padding:12px 12px 12px 14px;border-bottom:1px solid var(--bord);background:linear-gradient(90deg,rgba(52,245,197,.08),rgba(177,74,237,.08))}
+#tvfx-chat .av{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:rgba(52,245,197,.12);font-size:17px;color:var(--menthe)}
+#tvfx-chat .id{flex:1;min-width:0}#tvfx-chat .id b{display:block;font-size:14.5px}
+#tvfx-chat .md{font-family:var(--mono);font-size:10.5px;color:var(--texte-3)}#tvfx-chat .md.ai{color:var(--aurore-g)}
+#tvfx-chat .hd button{background:none;border:0;color:var(--texte-2);font-size:16px;cursor:pointer;width:32px;height:32px;border-radius:9px}
+#tvfx-chat .hd button:hover{color:var(--menthe);background:rgba(52,245,197,.08)}
+#tvfx-chat .msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;overscroll-behavior:contain}
+#tvfx-chat .m{max-width:88%;padding:9px 12px;border-radius:14px;font-size:14px;line-height:1.55;word-wrap:break-word}
+#tvfx-chat .m.bot{background:rgba(255,255,255,.045);border:1px solid var(--bord);border-bottom-left-radius:4px}
+#tvfx-chat .m.me{align-self:flex-end;background:rgba(52,245,197,.14);border:1px solid rgba(52,245,197,.3);border-bottom-right-radius:4px}
+#tvfx-chat .m a{color:var(--menthe)}#tvfx-chat .m small{color:var(--texte-2)}#tvfx-chat .m .g{font-family:var(--mono);font-size:10.5px;color:var(--aurore-v-soft)}
+#tvfx-chat .m .note{font-family:var(--mono);font-size:11px;color:var(--ambre)}
+#tvfx-chat a.cite{display:inline-grid;place-items:center;min-width:17px;height:17px;border-radius:5px;font-family:var(--mono);font-size:10.5px;text-decoration:none;background:rgba(52,245,197,.15);margin:0 1px;vertical-align:2px}
+#tvfx-chat .src{margin-top:8px;padding-top:8px;border-top:1px dashed var(--bord);font-size:12px;display:flex;flex-wrap:wrap;gap:4px 10px}
+#tvfx-chat .src span{font-family:var(--mono);font-size:10.5px;color:var(--texte-3)}
+#tvfx-chat .cur{display:inline-block;width:7px;height:14px;background:var(--menthe);vertical-align:-2px;margin-left:2px;animation:tvfx-blink 1s steps(1) infinite}
+#tvfx-chat .sug{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px}
+#tvfx-chat .sug button{font:inherit;font-size:12px;color:var(--texte-2);background:transparent;border:1px solid var(--bord-fort);border-radius:999px;padding:5px 10px;cursor:pointer}
+#tvfx-chat .sug button:hover{color:var(--menthe);border-color:var(--menthe)}
+#tvfx-chat .ts:empty{display:none}#tvfx-chat .ts{padding:0 10px}
+#tvfx-chat form{display:flex;gap:6px;padding:10px;border-top:1px solid var(--bord)}
+#tvfx-chat input{flex:1;min-width:0;font:inherit;font-size:14px;color:var(--texte);background:var(--nuit);border:1px solid var(--bord-fort);border-radius:12px;padding:10px 12px}
+#tvfx-chat input:focus{outline:none;border-color:var(--menthe);box-shadow:0 0 0 3px rgba(52,245,197,.12)}
+#tvfx-chat .mic{width:40px;border:1px solid var(--bord-fort);border-radius:12px;background:transparent;color:var(--texte-2);cursor:pointer;font-size:16px}
+#tvfx-chat .mic.on{background:rgba(255,122,182,.18);border-color:var(--rose);color:var(--rose);animation:tvfx-blink 1.2s steps(1) infinite}
+#tvfx-chat .go{font:inherit;font-weight:600;border:0;border-radius:12px;padding:0 14px;background:var(--menthe);color:#04120d;cursor:pointer}
+#tvfx-chat .typing{display:inline-flex;gap:4px}#tvfx-chat .typing i{width:6px;height:6px;border-radius:50%;background:var(--texte-3);animation:tvfx-typing 1s infinite}
+#tvfx-chat .typing i:nth-child(2){animation-delay:.15s}#tvfx-chat .typing i:nth-child(3){animation-delay:.3s}
+@keyframes tvfx-typing{50%{transform:translateY(-4px);background:var(--menthe)}}
+@media(max-width:560px){#tvfx-chat{right:8px;left:8px;width:auto;bottom:80px;height:calc(100vh - 110px)}}
+@media print{#tvfx-chatfab,#tvfx-chat{display:none!important}}
+
+/* v10 — widget « Ton IP » de l'accueil */
+.tvh-ipc{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 20px;border:1px solid var(--bord-fort);border-radius:var(--r-lg);background:var(--surface-2)}
+.tvh-ipi{font-size:28px}.tvh-ipc>div{flex:1;min-width:200px}.tvh-ipv{font-family:var(--mono);font-size:20px;color:var(--menthe)}.tvh-ipd{color:var(--texte-2);font-size:14px}

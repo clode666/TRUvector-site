@@ -232,6 +232,24 @@
     var b=document.createElement('button'); b.type='button'; b.className='tvfx-kbtn'; b.setAttribute('aria-label','Recherche globale (Ctrl+K)');
     b.innerHTML='<span aria-hidden="true">⌕</span><kbd>Ctrl K</kbd>'; b.onclick=openPal; row.appendChild(b); });
 
+  /* ---------- ASSISTANT : bulle ; module chargé au 1er clic ---------- */
+  var CB=CFG.chatbot||{};
+  function openChat(q){ if(TVFX.chat) return TVFX.chat.toggle(q); TVFX._chatQ=q; if(TVFX._cl) return; TVFX._cl=1;
+    var s=document.createElement('script'); s.src=ROOT+'assets/js/fx/chat.js?v='+VER; s.onload=function(){ if(TVFX.chat) TVFX.chat.open(TVFX._chatQ); }; document.body.appendChild(s); }
+  TVFX.openChat=openChat; TVFX.chatOn=false;
+  safe('chatfab',function(){
+    if(CB.enabled===false||!on('chatbot')) return;
+    var rel=location.pathname.slice(new URL(ROOT).pathname.length);
+    if((CB.hidePaths||[]).some(function(h){ return h&&rel.indexOf(h)===0; })) return;
+    if(Array.isArray(CB.pages)&&CB.pages.length&&!CB.pages.some(function(pg){ return (pg===''||pg==='accueil')?rel===''||rel==='index.html':rel.indexOf(pg)===0; })) return;
+    TVFX.chatOn=true;
+    var b=document.createElement('button'); b.type='button'; b.id='tvfx-chatfab'; b.setAttribute('aria-label','Ouvrir l\u2019assistant '+(CB.name||'TRU')); b.setAttribute('aria-expanded','false');
+    b.innerHTML='<span class="i" aria-hidden="true">💬</span><span class="d" aria-hidden="true"></span>'; b.onclick=function(){ openChat(); }; document.body.appendChild(b);
+    /* la bulle se décale au-dessus du mini-lecteur quand il est là */
+    function stack(){ document.documentElement.classList.toggle('has-mini',!!document.querySelector('.mini-player')); }
+    stack(); if(window.MutationObserver) new MutationObserver(stack).observe(document.body,{childList:true});
+  });
+
   /* précharge le catalogue quand le navigateur est inactif : palette instantanée */
   (window.requestIdleCallback||function(f){ setTimeout(f,1500); })(function(){ config(); });
 

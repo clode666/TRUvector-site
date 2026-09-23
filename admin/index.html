@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=7">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=8">
 <script src="../assets/js/assets.js?v=2"></script>
 <script src="../assets/js/config.js?v=2"></script>
 <style>
@@ -148,6 +148,9 @@ function ensure(c){
   c.catalog=c.catalog||{}; ['logiciels','modules','musique','ebooks','articles'].forEach(function(k){ c.catalog[k]=c.catalog[k]||[]; });
   c.gallery=c.gallery||[]; c.concours=c.concours||[]; c.dons=c.dons||{intro:'',links:[]}; c.dons.links=c.dons.links||[];
   c.access=c.access||{}; c.access.sections=c.access.sections||{}; c.access.users=c.access.users||[];
+  c.chatbot=Object.assign({enabled:true,mode:'local',name:'TRU',avatar:'✦',greeting:'',greetingEn:'',tone:'chaleureux',pages:[],hidePaths:['admin/'],suggestions:[],suggestionsEn:[],model:'@cf/meta/llama-3.1-8b-instruct-fast',perHour:15,maxChars:600,maxTurns:6,turnstileSiteKey:'',logUnanswered:false,voice:true,inPalette:true,faq:[]},c.chatbot||{});
+  if(!Array.isArray(c.chatbot.pages)) c.chatbot.pages=[];
+  c.tools=Object.assign({enabled:true,perHour:150},c.tools||{});
   c.publish=Object.assign({owner:'clode666',repo:'TRUvector-site',branch:'main',path:'config.json'},c.publish||{});
   return c;
 }
@@ -220,7 +223,7 @@ function coll(parent,arr,o){ o=o||{};
 var TABS=[
  ['','Pilotage'],['dash','📊 Tableau de bord'],['diag','🩺 Diagnostic'],['publish','🚀 Publication'],
  ['','Pages'],['home','🏠 Accueil'],['annonce','📣 Annonce'],['nav','🧭 Navigation'],
- ['','Contenus'],['logiciels','💾 Logiciels & fiches'],['modules','🧩 Modules'],['musique','🎵 Musique'],['ebooks','📖 E-books'],['articles','📝 Articles'],['galerie','🖼️ Galerie'],['concours','🏆 Concours'],['dons','💚 Soutenir'],
+ ['','Contenus'],['logiciels','💾 Logiciels & fiches'],['modules','🧩 Modules'],['musique','🎵 Musique'],['ebooks','📖 E-books'],['articles','📝 Articles'],['galerie','🖼️ Galerie'],['concours','🏆 Concours'],['dons','💚 Soutenir'],['assistant','🤖 Assistant'],
  ['','Réglages'],['look','✨ Apparence & effets'],['site','🌐 Site & identité'],['access','🔐 Accès & sécurité'],['json','🧾 JSON brut']];
 function tabs(){ var nav=$('tabs'); nav.innerHTML='';
   TABS.forEach(function(t){ if(!t[0]){ nav.appendChild(el('div','grp',esc(t[1]))); return; }
@@ -249,7 +252,7 @@ var R={
   row(c,[F(H.cta1,'label','text','Bouton 1 — texte'),F(H.cta1,'url','text','Bouton 1 — lien',{mono:true}),F(H.cta2,'label','text','Bouton 2 — texte'),F(H.cta2,'url','text','Bouton 2 — lien',{mono:true})]);
   row(c,[F(H,'marquee','lines','Bandeau défilant (un mot par ligne)',{wide:true,rows:4})]); p.appendChild(c);
   var b=card('Blocs affichés'); var tg=el('div','toggles');
-  [['stats','Chiffres clés animés'],['news','Derniers articles'],['listen','« À écouter » (lecture en fond)'],['ebooks','E-books : compte à rebours + couvertures'],['software','Logiciels phares'],['modules','Modules à essayer'],['why','« L’esprit » (arguments)'],['maker','Le créateur'],['cta','Appel final']]
+  [['ip','Widget « Ton IP » (appelle le serveur à chaque visite)'],['stats','Chiffres clés animés'],['news','Derniers articles'],['listen','« À écouter » (lecture en fond)'],['ebooks','E-books : compte à rebours + couvertures'],['software','Logiciels phares'],['modules','Modules à essayer'],['why','« L’esprit » (arguments)'],['maker','Le créateur'],['cta','Appel final']]
     .forEach(function(x){ tg.appendChild(F(H.blocks,x[0],'checkbox',x[1])); }); b.appendChild(tg);
   row(b,[F(H,'newsCount','number','Nombre de derniers articles')]);
   b.appendChild(F(H,'featuredSoftware','multi','Logiciels mis en avant',{options:S.catalog.logiciels.map(function(x){ return x.title; })}));
@@ -279,7 +282,9 @@ var R={
  modules:function(p){ head(p,'Modules','Les applis autonomes rangées dans modules/apps/. '+siteLink('modules/','Voir la page ↗'));
   var c=card(); coll(c,S.catalog.modules,{badge:'badge',add:'+ Ajouter un module',make:function(){ return {title:'Nouveau module',badge:'Outil',desc:'',url:'apps/nouveau.html',visible:true}; },fields:function(it,bd,up){
     row(bd,[F(it,'title','text','Nom',{onchange:up}),F(it,'badge','text','Catégorie'),F(it,'url','text','Fichier (apps/xxx.html)',{mono:true}),F(it,'visible','checkbox','Visible'),F(it,'desc','textarea','Description',{wide:true})]); }});
-  c.appendChild(el('p','note','Ajouter un module ici ne crée pas l’appli : dépose d’abord son fichier HTML dans <code>modules/apps/</code>. Le diagnostic vérifie qu’il existe.')); p.appendChild(c); },
+  c.appendChild(el('p','note','Ajouter un module ici ne crée pas l’appli : dépose d’abord son fichier HTML dans <code>modules/apps/</code>. Le diagnostic vérifie qu’il existe.')); p.appendChild(c);
+  var t=card('Outils serveur de la boîte à outils','IP Analyzer, DNS, en-têtes, certificats, fuites, test de débit passent par le Worker du site (/api/tools/*). Les outils 100 % locaux fonctionnent même si tu coupes ceci.');
+  row(t,[F(S.tools,'enabled','checkbox','Outils serveur activés'),F(S.tools,'perHour','number','Requêtes max par heure et par visiteur')]); p.appendChild(t); },
  musique:function(p){ head(p,'Musique','Liste de lecture de la page Musique et du mini-lecteur global. Les MP3 vivent dans le dépôt truvector-assets, dossier musique/. '+siteLink('musique/','Voir la page ↗'));
   var c=card(); coll(c,S.catalog.musique,{add:'+ Ajouter une piste',make:function(){ return {title:'Nouvelle piste',src:'nouvelle-piste.mp3',visible:true}; },fields:function(it,bd,up){
     row(bd,[F(it,'title','text','Titre',{onchange:up}),F(it,'src','text','Fichier MP3',{mono:true,hint:'Écouter : <a target="_blank" rel="noopener" href="'+esc(CDN)+'/musique/'+esc(it.src)+'">'+esc(it.src)+' ↗</a>'}),F(it,'visible','checkbox','Visible')]); }}); p.appendChild(c); },
@@ -287,7 +292,7 @@ var R={
   var c=card('Édition limitée'); row(c,[F(E,'until','date','Disponible jusqu’au'),F(E,'passphrase','text','Clé de lecture publique',{mono:true}),F(E,'note','textarea','Texte d’information ({date} = la date ci-contre)',{wide:true})]);
   c.appendChild(el('p','note warn','La date réelle de verrouillage est inscrite <b>dans chaque fichier .trubook</b> (chiffré). Ici tu changes l’affichage ; pour prolonger vraiment, re-chiffre les livres avec <a href="../ebooks/proteger.html" target="_blank">ebooks/proteger.html</a>.')); p.appendChild(c);
   var l=card('Catalogue'); coll(l,S.catalog.ebooks,{badge:'genre',add:'+ Ajouter un e-book',make:function(){ return {slug:'nouveau-livre',title:'Nouveau livre',genre:'',blurb:'',visible:true}; },fields:function(it,bd,up){
-    row(bd,[F(it,'title','text','Titre',{onchange:up}),F(it,'slug','text','Identifiant (nom des fichiers)',{mono:true,hint:'Attendus : ebooks/'+esc(it.slug)+'.trubook et ebooks/covers/'+esc(it.slug)+'.svg'}),F(it,'genre','text','Genre'),F(it,'until','date','Date propre (optionnel)'),F(it,'visible','checkbox','Visible'),F(it,'blurb','textarea','Résumé',{wide:true})]); }}); p.appendChild(l); },
+    row(bd,[F(it,'title','text','Titre',{onchange:up}),F(it,'slug','text','Identifiant (nom des fichiers)',{mono:true,hint:'Attendus : ebooks/'+esc(it.slug)+'.trubook et ebooks/covers/'+esc(it.slug)+'.svg'}),F(it,'genre','text','Genre'),F(it,'until','date','Date propre (optionnel)'),F(it,'minutes','number','Durée de lecture (minutes, pour le libraire)'),F(it,'visible','checkbox','Visible'),F(it,'blurb','textarea','Résumé',{wide:true})]); }}); p.appendChild(l); },
  articles:function(p){ head(p,'Articles','Index du blog, recherche, palette Ctrl+K et « Tu aimeras aussi ». Le contenu d’un article est un fichier dans articles/posts/. '+siteLink('articles/','Voir le blog ↗'));
   var c=card(); coll(c,S.catalog.articles,{add:'+ Référencer un article',make:function(){ return {title:'Nouvel article',url:'posts/nouvel-article.html',excerpt:'',tags:[],date:new Date().toISOString().slice(0,10),visible:true}; },fields:function(it,bd,up){
     row(bd,[F(it,'title','text','Titre',{wide:true,onchange:up}),F(it,'url','text','Fichier',{mono:true}),F(it,'date','date','Date (alimente les « Nouveautés »)'),F(it,'tags','tags','Tags'),F(it,'visible','checkbox','Visible'),F(it,'excerpt','textarea','Résumé',{wide:true})]); }}); p.appendChild(c); },
@@ -327,6 +332,39 @@ var R={
   var go=el('button','btn','🚀 Publier maintenant'); go.type='button'; var out=el('div','diag'); out.style.marginTop='12px'; out.textContent='Prêt.';
   go.onclick=function(){ publish(tk.v,msg.v,out,tk.rem); }; t.appendChild(go); t.appendChild(out); p.appendChild(t);
   var e=card('Sans jeton'); e.appendChild(el('p',null,'Clique <b>⬇ Exporter</b>, remplace <code>config.json</code> à la racine du dépôt, puis committe.')); p.appendChild(e); },
+ assistant:function(p){ var A=S.chatbot; head(p,'Assistant','La bulle 💬 « '+esc(A.name||'TRU')+' » en bas à droite du site. Mode local : FAQ + index du site, tout dans le navigateur, zéro coût. Mode IA : Workers AI (gratuit, quota quotidien) via le Worker du site, avec repli automatique sur le mode local.');
+  var g=card('Réglages'); row(g,[F(A,'enabled','checkbox','Assistant activé'),F(A,'mode','select','Mode',{options:[['local','Local (sans IA, 0 €)'],['ai','IA (Workers AI) + repli local']]}),F(A,'name','text','Nom'),F(A,'avatar','text','Avatar (emoji ou symbole)')]);
+  row(g,[F(A,'tone','select','Ton de l’IA',{options:[['chaleureux','Chaleureux'],['technique','Technique'],['bref','Très bref']]}),F(A,'voice','checkbox','Saisie vocale (navigateur)'),F(A,'inPalette','checkbox','Proposé dans Ctrl+K'),F(A,'logUnanswered','checkbox','Garder les questions sans réponse (anonymes, 30 j, nécessite CHAT_KV)',{def:false})]);
+  row(g,[F(A,'greeting','textarea','Message d’accueil (FR)',{wide:true}),F(A,'greetingEn','textarea','Message d’accueil (EN — vide = pas d’anglais)',{wide:true})]);
+  row(g,[F(A,'suggestions','lines','Questions suggérées FR (une par ligne)',{rows:4}),F(A,'suggestionsEn','lines','Questions suggérées EN',{rows:4})]);
+  g.appendChild(F(A,'pages','multi','Pages où la bulle apparaît (rien coché = partout)',{options:['accueil'].concat(S.nav.tabs.map(function(t){ return t.path; }).filter(Boolean))}));
+  row(g,[F(A,'hidePaths','tags','Masquée sur (chemins, séparés par des virgules)')]); p.appendChild(g);
+  var l=card('Mode IA : modèle et garde-fous'); row(l,[F(A,'model','text','Modèle Workers AI',{mono:true,hint:'Catalogue : <a target="_blank" rel="noopener" href="https://developers.cloudflare.com/workers-ai/models/">developers.cloudflare.com/workers-ai/models</a>. S’il disparaît, le Worker essaie automatiquement des modèles de secours.'}),F(A,'turnstileSiteKey','text','Clé de site Turnstile (publique)',{mono:true,hint:'La clé secrète va dans le secret TURNSTILE_SECRET du Worker, jamais ici.'})]);
+  row(l,[F(A,'perHour','number','Messages max par heure et par visiteur'),F(A,'maxChars','number','Caractères max par message'),F(A,'maxTurns','number','Échanges max envoyés à l’IA')]); p.appendChild(l);
+  var f=card('FAQ','Réponses sûres, utilisées en priorité en mode local et comme secours en mode IA. Dans une réponse : {passphrase} et {date} = clé et date des e-books.');
+  coll(f,A.faq,{add:'+ Ajouter une question',make:function(){ return {q:'Nouvelle question',variants:[],a:'',url:'',visible:true}; },fields:function(it,bd,up){
+    row(bd,[F(it,'q','text','Question type',{wide:true,onchange:function(){ it.title=undefined; up(); }}),F(it,'variants','tags','Mots déclencheurs (virgules)',{wide:true}),F(it,'a','textarea','Réponse',{wide:true}),F(it,'aEn','textarea','Réponse en anglais (facultatif)',{wide:true}),F(it,'url','text','Lien proposé',{mono:true}),F(it,'visible','checkbox','Active')]); }});
+  p.appendChild(f);
+  var o=card('Outils'); var out=el('div','diag'); out.innerHTML='<span class="dim">Prêt.</span>';
+  var bar=el('div','row'); function btn(label,fn,ghost){ var b=el('button','btn sm'+(ghost?' btn-ghost':''),label); b.type='button'; b.onclick=fn; bar.appendChild(b); return b; }
+  var at={v:''}; o.appendChild(el('p','note','L’index (chatbot-index.json) est la « mémoire » de l’assistant : articles découpés en passages, fiches, modules, e-books, FAQ. Reconstruis-le après chaque nouvel article ou modification de la FAQ.'));
+  btn('🩺 Tester le serveur',function(){ out.innerHTML='<span class="dim">Interrogation de /api/chat…</span>'; fetch('../api/chat',{cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }).then(function(j){
+      function li(ok,t){ return '<div class="'+(ok?'ok':'warn')+'">'+(ok?'✓ ':'⚠ ')+t+'</div>'; }
+      out.innerHTML=li(true,'Worker joignable (mode configuré : '+esc(j.mode)+')')+li(j.ai,'Liaison AI '+(j.ai?'active':'absente — ajoute [ai] binding dans wrangler.toml'))+li(j.index>0,'Index : '+j.index+' passages')+li(j.turnstile,'Turnstile '+(j.turnstile?'vérifié côté serveur':'non configuré (facultatif, recommandé en mode IA)'))+li(j.kv,'CHAT_KV '+(j.kv?'lié (limites fiables)':'absent (limites en mémoire seulement)'))+li(j.vectorize,'Vectorize '+(j.vectorize?'lié':'absent (recherche par mots-clés)'))+li(j.admin,'CHAT_ADMIN_TOKEN '+(j.admin?'défini':'absent'));
+    }).catch(function(e){ out.innerHTML='<span class="warn">⚠ /api/chat injoignable ('+esc(e.message)+'). Normal avant le premier déploiement du Worker : le mode local fonctionne sans lui.</span>'; }); });
+  var built=null;
+  btn('🧠 Reconstruire l’index',function(){ out.innerHTML='<span class="dim">Lecture des articles…</span>'; buildIndex(S,out).then(function(j){ built=j; out.innerHTML='<span class="ok">✓ Index prêt : '+j.chunks.length+' passages ('+Math.round(JSON.stringify(j).length/1024)+' Ko).</span> Télécharge-le ou publie-le.'; }).catch(function(e){ out.innerHTML='<span class="err">✗ '+esc(e.message)+'</span>'; }); });
+  btn('⬇ Télécharger l’index',function(){ if(!built) return toast('Reconstruis d’abord l’index',true); var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(built)],{type:'application/json'})); a.download='chatbot-index.json'; document.body.appendChild(a); a.click(); a.remove(); },true);
+  btn('🚀 Publier l’index',function(){ if(!built) return toast('Reconstruis d’abord l’index',true); var tk=''; try{ tk=sessionStorage.getItem('tv_gh')||''; }catch(e){} publish(tk,'Cockpit : index de l’assistant',out,true,'chatbot-index.json',JSON.stringify(built)); });
+  o.appendChild(bar); o.appendChild(el('div',null,'&nbsp;'));
+  row(o,[F(at,'v','password','Jeton admin de l’assistant (secret CHAT_ADMIN_TOKEN)',{mono:true,hint:'Utilisé seulement pour les deux actions ci-dessous ; jamais enregistré.'})]);
+  var bar2=el('div','row'); bar=bar2;
+  function adm(method,path){ return fetch('../api/chat/'+path,{method:method,headers:{authorization:'Bearer '+at.v}}).then(function(r){ return r.json().then(function(j){ if(!r.ok) throw new Error(j.error||('HTTP '+r.status)); return j; }); }); }
+  btn('🔎 Synchroniser la recherche sémantique',function(){ out.innerHTML='<span class="dim">Vectorisation (1 à 2 minutes)…</span>'; adm('POST','reindex').then(function(j){ out.innerHTML='<span class="ok">✓ '+j.vecteurs+' passages vectorisés dans Vectorize.</span>'; }).catch(function(e){ out.innerHTML='<span class="err">✗ '+esc(e.message)+'</span>'; }); },true);
+  btn('❓ Questions sans réponse',function(){ adm('GET','unanswered').then(function(j){ out.innerHTML=(j.items||[]).length?j.items.map(function(x){ return '<div>'+x.n+'× « '+esc(x.q)+' » <span class="dim">'+esc(x.last)+'</span></div>'; }).join(''):'<span class="dim">Aucune ('+esc(j.note||'rien de collecté')+').</span>'; }).catch(function(e){ out.innerHTML='<span class="err">✗ '+esc(e.message)+'</span>'; }); },true);
+  btn('🗑 Vider',function(){ if(confirm('Effacer toutes les questions collectées ?')) adm('DELETE','unanswered').then(function(j){ out.innerHTML='<span class="ok">✓ '+j.supprimées+' supprimée(s).</span>'; }).catch(function(e){ out.innerHTML='<span class="err">✗ '+esc(e.message)+'</span>'; }); },true);
+  o.appendChild(bar2); o.appendChild(el('div',null,'&nbsp;')); o.appendChild(out); p.appendChild(o);
+  var c=card('Mise en service du mode IA (une fois)'); c.appendChild(el('ol',null,'<li>Le fichier <code>wrangler.toml</code> du dépôt contient déjà la liaison <code>[ai]</code> : il suffit de déployer.</li><li><b>Anti-robot</b> : Cloudflare → Turnstile → Add widget (domaine truvector.dev, mode « Managed ») → copie la <i>Site Key</i> ci-dessus et mets la <i>Secret Key</i> dans le secret <code>TURNSTILE_SECRET</code> du Worker.</li><li><b>Limites fiables</b> (conseillé) : <code>npx wrangler kv namespace create CHAT_KV</code>, colle l’id dans wrangler.toml.</li><li>Secret <code>CHAT_ADMIN_TOKEN</code> (texte long aléatoire) pour les outils ci-dessus.</li><li>Passe le <b>Mode</b> sur « IA », publie, puis « 🩺 Tester le serveur ».</li><li>Facultatif : Vectorize pour la recherche par le sens (voir manuel, section 21).</li>')); p.appendChild(c); },
  diag:function(p){ head(p,'Diagnostic','Vérifie la cohérence de la config et la présence réelle de chaque fichier : MP3, e-books, couvertures, images, modules, articles.');
   var c=card(); var go=el('button','btn','▶ Lancer le diagnostic'); go.type='button'; var out=el('div','diag'); out.innerHTML='<span class="dim">Pas encore lancé.</span>';
   go.onclick=function(){ diagnose(out,go); }; c.appendChild(go); c.appendChild(el('div',null,'&nbsp;')); c.appendChild(out); p.appendChild(c); }
@@ -344,6 +382,8 @@ function diagnose(out,btn){ btn.disabled=true; out.innerHTML=''; var nOk=0,nW=0,
   if(S.ebooks.until&&new Date(S.ebooks.until+'T23:59:59')<new Date()) log('warn','L’édition limitée des e-books est terminée ('+esc(S.ebooks.until)+').');
   if(S.announcement.visible&&!S.announcement.text) log('warn','Annonce visible mais sans texte.');
   C.logiciels.forEach(function(x){ if(!(x.features||[]).length) log('warn','Fiche « '+esc(x.title)+' » sans points clés.'); });
+  log('dim','— outils serveur —');
+  checks.push(['Route /api/tools/whoami','../api/tools/whoami']);
   log('dim','— vérification des fichiers en ligne —');
   C.musique.forEach(function(t){ checks.push(['Piste « '+t.title+' »',CDN+'/musique/'+t.src]); });
   C.ebooks.forEach(function(b){ checks.push(['E-book « '+b.title+' »',CDN+'/ebooks/'+b.slug+'.trubook']); checks.push(['Couverture « '+b.title+' »',CDN+'/ebooks/covers/'+b.slug+'.svg']); });
@@ -360,20 +400,38 @@ function diagnose(out,btn){ btn.disabled=true; out.innerHTML=''; var nOk=0,nW=0,
   if(!checks.length) end(); else next();
 }
 
+/* ---------- index de l'assistant (identique à tools/index-chatbot.mjs) ---------- */
+function buildIndex(cfg,out){ var C=cfg.catalog, V=function(a){ return (a||[]).filter(function(x){ return x&&x.visible!==false; }); }, chunks=[];
+  function txt(h){ var d=new DOMParser().parseFromString('<div>'+h+'</div>','text/html'); d.querySelectorAll('script,style,pre').forEach(function(n){ n.remove(); }); return (d.body.textContent||'').replace(/\s+/g,' ').trim(); }
+  function push(t,u,k,x){ x=String(x||'').replace(/\s+/g,' ').trim(); if(x.length<40) return; while(x.length>900){ var cut=x.lastIndexOf('. ',850); if(cut<400) cut=850; chunks.push({t:t,u:u,k:k,x:x.slice(0,cut+1).trim()}); x=x.slice(cut+1).trim(); } chunks.push({t:t,u:u,k:k,x:x}); }
+  var arts=V(C.articles), i=0;
+  function one(){ if(i>=arts.length) return Promise.resolve(); var a=arts[i++]; if(out) out.innerHTML='<span class="dim">Article '+i+' / '+arts.length+'…</span>';
+    return fetch('../articles/'+a.url,{cache:'no-cache'}).then(function(r){ return r.ok?r.text():''; }).then(function(h){ push(a.title,'articles/'+a.url,'article',a.title+'. '+(a.excerpt||'')+' Tags : '+(a.tags||[]).join(', '));
+      var m=h.match(/<main[\s\S]*?<\/main>/i), body=m?m[0]:h; body.split(/<h2[^>]*>/i).slice(1).forEach(function(sec){ var parts=sec.split(/<\/h2>/i); push(a.title+' — '+txt(parts[0]),'articles/'+a.url,'article',txt(parts.slice(1).join(' '))); }); }).catch(function(){}).then(one); }
+  return one().then(function(){ var eb=cfg.ebooks||{};
+    V(C.logiciels).forEach(function(p){ push(p.title,'logiciels/fiche.html?p='+p.slug,'logiciel',p.title+' ('+p.badge+'). '+(p.lead||p.desc)+'. Points clés : '+(p.features||[]).join(' ; ')+'.'); });
+    V(C.modules).forEach(function(m){ push(m.title,'modules/'+m.url,'module','Module interactif '+m.title+' ('+m.badge+') : '+m.desc); });
+    V(C.ebooks).forEach(function(b){ push(b.title,'ebooks/','e-book','E-book « '+b.title+' », genre '+b.genre+' : '+b.blurb+' Lisible avec la clé '+(eb.passphrase||'truvector')+" jusqu'au "+(b.until||eb.until)+'.'); });
+    V((cfg.chatbot||{}).faq).forEach(function(f){ push(f.q,f.url||'','faq',f.q+' '+(f.variants||[]).join(' ')+' — '+f.a); });
+    var norm=function(s){ return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/-/g,''); }, df={};
+    chunks.forEach(function(c){ var seen={}; norm(c.t+' '+c.x).split(/[^a-z0-9]+/).forEach(function(w){ if(w.length>2&&!seen[w]){ seen[w]=1; df[w]=(df[w]||0)+1; } }); });
+    Object.keys(df).forEach(function(w){ if(df[w]<2) delete df[w]; });
+    return {v:1,built:new Date().toISOString(),chunks:chunks,df:df}; }); }
+
 /* ---------- publication GitHub ---------- */
 function b64(str){ return btoa(unescape(encodeURIComponent(str))); }
-function publish(token,message,out,remember){ var P=S.publish; if(!token){ out.innerHTML='<span class="err">✗ Jeton manquant.</span>'; return; }
+function publish(token,message,out,remember,altPath,altBody){ var P=S.publish; if(!token){ out.innerHTML='<span class="err">✗ Jeton manquant : renseigne-le dans 🚀 Publication (case « garder pour la session »).</span>'; return; }
   try{ if(remember) sessionStorage.setItem('tv_gh',token); else sessionStorage.removeItem('tv_gh'); }catch(e){}
-  var url='https://api.github.com/repos/'+encodeURIComponent(P.owner)+'/'+encodeURIComponent(P.repo)+'/contents/'+P.path.split('/').map(encodeURIComponent).join('/');
+  var path=altPath||P.path; var url='https://api.github.com/repos/'+encodeURIComponent(P.owner)+'/'+encodeURIComponent(P.repo)+'/contents/'+path.split('/').map(encodeURIComponent).join('/');
   var H={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
   out.innerHTML='<span class="dim">Lecture de la version en ligne…</span>';
-  var body=JSON.stringify(clean(S),null,2)+'\n';
+  var body=altBody!=null?altBody:JSON.stringify(clean(S),null,2)+'\n';
   fetch(url+'?ref='+encodeURIComponent(P.branch),{headers:H,cache:'no-store'}).then(function(r){
     if(r.status===404) return null; if(r.status===401) throw new Error('Jeton refusé (401) : vérifie-le ou recrée-le.'); if(!r.ok) throw new Error('Lecture impossible ('+r.status+').'); return r.json(); })
   .then(function(cur){ out.innerHTML='<span class="dim">Envoi…</span>';
     return fetch(url,{method:'PUT',headers:H,body:JSON.stringify({message:message||'Cockpit : mise à jour de config.json',content:b64(body),branch:P.branch,sha:cur&&cur.sha})}); })
   .then(function(r){ if(r.status===409) throw new Error('Conflit : le fichier a changé en ligne entre-temps. Recharge le cockpit puis republie.'); if(r.status===403||r.status===404) throw new Error('Accès refusé ('+r.status+') : le jeton doit avoir « Contents : Read and write » sur ce dépôt.'); if(!r.ok) throw new Error('Échec de l’envoi ('+r.status+').'); return r.json(); })
-  .then(function(j){ dirty=false; status(); try{ localStorage.removeItem('tv_admin_draft'); }catch(e){} BASE=clone(S);
+  .then(function(j){ if(altPath){ out.innerHTML='<span class="ok">✓ '+esc(altPath)+' publié.</span> Commit <a target="_blank" rel="noopener" href="'+esc(j.commit&&j.commit.html_url)+'">'+esc((j.commit&&j.commit.sha||'').slice(0,7))+' ↗</a>'; toast('Publié ✓'); return; } dirty=false; status(); try{ localStorage.removeItem('tv_admin_draft'); }catch(e){} BASE=clone(S);
     out.innerHTML='<span class="ok">✓ Publié.</span> Commit <a target="_blank" rel="noopener" href="'+esc(j.commit&&j.commit.html_url)+'">'+esc((j.commit&&j.commit.sha||'').slice(0,7))+' ↗</a> — Cloudflare redéploie (1–2 min).'; toast('Publié sur GitHub ✓'); })
   .catch(function(e){ out.innerHTML='<span class="err">✗ '+esc(e.message||'Réseau indisponible')+'</span>'; toast('Publication impossible',true); });
 }

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manuel du site — TRUvector.dev v8</title>
-<meta name="description" content="Manuel complet du site TRUvector.dev v8 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
+<title>Manuel du site — TRUvector.dev v8.1</title>
+<meta name="description" content="Manuel complet du site TRUvector.dev v8.1 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -111,14 +111,14 @@
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <span><span class="tru">TRU</span>vector<span class="dev">.dev</span></span>
   </span>
-  <span class="badge">MANUEL v8</span>
+  <span class="badge">MANUEL v8.1</span>
 </div></nav>
 
 <header class="top">
   <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
   <div class="wrap in">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <h1>Manuel du site — TRUvector.dev v8</h1>
+    <h1>Manuel du site — TRUvector.dev v8.1</h1>
     <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
     <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
   </div>
@@ -206,7 +206,7 @@
   <!-- 1 -->
   <section id="s1">
     <h2 class="s"><span class="n">01</span> Vue d'ensemble</h2>
-    <p class="lead">TRUvector.dev v8 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
+    <p class="lead">TRUvector.dev v8.1 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
     <p>Il réunit une page d'accueil, neuf sections (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir) et un pôle légal, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Les médias lourds (musique, images, e-books) sont servis par un second dépôt via jsDelivr. Ses objectifs&nbsp;:</p>
     <ul>
       <li>présenter la marque (le <strong>compte à rebours</strong> a atteint l'ouverture le 21/09/2026 : le site est ouvert)&nbsp;;</li>
@@ -261,7 +261,7 @@
     </ul>
 
     <h3>Roadmaps (bonus)</h3>
-    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
+    <p><code>roadmap.html</code> — la feuille de route v4, autonome, aux mêmes couleurs.<br><code>roadmap-chatbot.html</code> — la <strong>roadmap de l’assistant</strong> (chatbot gratuit via Cloudflare Workers AI, avec démo jouable du mode local).<br><code>roadmap-effets.html</code> — la <strong>roadmap visuelle</strong> (6 phases d'effets : aurore WebGL, transitions, cartes 3D, visualiseur, palette Ctrl+K…) avec démos jouables.</p>
   </section>
 
   <!-- 3 -->
@@ -363,7 +363,7 @@
     <p>Place <strong>le contenu du dossier <code>truvector.dev/</code> à la racine</strong> d'un nouveau dépôt.</p>
     <div class="block"><div class="lbl">terminal</div><pre>git init
 git add .
-git commit -m "TRUvector.dev v8"
+git commit -m "TRUvector.dev v8.1"
 git branch -M main
 git remote add origin https://github.com/clode666/truvector-dev.git
 git push -u origin main</pre></div>
@@ -511,6 +511,7 @@ git push</pre></div>
         <tr><td>E-book : « pas encore en ligne »</td><td>Le <code>.trubook</code> n'existe pas dans <code>truvector-assets/ebooks/</code> (404). Pousse-le ; la carte passe automatiquement de « Bientôt en ligne » à « Lire ».</td></tr>
         <tr><td>E-book : « Clé incorrecte »</td><td>La passphrase publique est <code>truvector</code> (pré-remplie via <code>&amp;k=truvector</code> dans le lien). Si tu as chiffré avec une autre, mets-la dans le lien.</td></tr>
         <tr><td>E-book : « Accès expiré »</td><td>La date d'échéance est <strong>inscrite dans le fichier chiffré</strong> (<code>policy.expires</code>). La changer sur la page ne suffit pas : re-chiffre le livre avec <code>ebooks/proteger.html</code>.</td></tr>
+        <tr><td>Un cercle suit le curseur</td><td>C’est le halo du curseur (effet voulu). Pour le retirer : cockpit → Apparence &amp; effets → décocher « Halo du curseur ».</td></tr>
         <tr><td>Je ne vois pas mes modifications du cockpit sur le site</td><td>Soit tu n’as pas publié (seul l’aperçu local les montre), soit le redéploiement Cloudflare n’est pas fini (1–2 min), soit ton navigateur garde l’ancien config.json : Ctrl+F5.</td></tr>
         <tr><td>Une pastille orange « Aperçu admin » s’affiche</td><td>Un aperçu local est actif dans ce navigateur. Clique « Quitter l’aperçu » pour revoir la version publiée.</td></tr>
         <tr><td>Publication : erreur 401 / 403 / 409</td><td>401 : jeton invalide ou expiré. 403/404 : jeton sans « Contents : Read and write » sur ce dépôt. 409 : config.json a changé en ligne — recharge le cockpit, puis republie.</td></tr>
@@ -650,7 +651,7 @@ git push</pre></div>
   <!-- 16 -->
   <section id="s16">
     <h2 class="s"><span class="n">16</span> Cache &amp; versions (<code>?v=</code>)</h2>
-    <p class="lead">Les pages chargent les fichiers partagés avec un numéro de version (<code>tokens.css?v=7</code>, <code>player.js?v=3</code>…). Changer ce numéro force tous les navigateurs à reprendre le nouveau fichier.</p>
+    <p class="lead">Les pages chargent les fichiers partagés avec un numéro de version (<code>tokens.css?v=8</code>, <code>player.js?v=3</code>…). Changer ce numéro force tous les navigateurs à reprendre le nouveau fichier.</p>
     <div class="tw"><table>
       <thead><tr><th>Fichiers</th><th>Cache (dans <code>_headers</code>)</th></tr></thead>
       <tbody>
@@ -659,8 +660,8 @@ git push</pre></div>
       </tbody>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
-    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=7   fx.css?v=3   assets.js?v=2   nav.js?v=5
-player.js?v=6    fx.js?v=3    tru-reader.js?v=3   filters.js?v=4
+    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=6   assets.js?v=2   nav.js?v=5
+player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
 (les modules assets/js/fx/*.js suivent automatiquement le ?v= de fx.js)</pre></div>
     <div class="note"><b>Service worker.</b> <code>sw.js</code> garde une copie hors ligne des pages, en « réseau d'abord » : en ligne, le visiteur reçoit toujours la version fraîche. Si tu modifies <code>sw.js</code>, change sa constante <code>V</code> (<code>tv-v6-1</code> → <code>tv-v6-2</code>) pour purger les anciennes copies.</div>
     <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
@@ -790,6 +791,13 @@ player.js?v=6    fx.js?v=3    tru-reader.js?v=3   filters.js?v=4
   <!-- 17 -->
   <section id="s17">
     <h2 class="s"><span class="n">17</span> Journal des versions</h2>
+    <h3>v8.1 — 23/09/2026 · corrections d’affichage + roadmap chatbot</h3>
+    <ul>
+      <li>Accueil : « .dev » du grand logo n’hérite plus de l’ombre de lisibilité (qui l’assombrissait à travers son remplissage en dégradé).</li>
+      <li>Boutons fantômes (« Voir la galerie », « Protéger un e-book »…) : texte clair dans tous les états, <strong>liens visités compris</strong> — 211 boutons contrôlés sur tout le site.</li>
+      <li>Nouvelle <code>roadmap-chatbot.html</code> (6 phases, 0 €, démo du mode local), accessible par Ctrl+K.</li>
+      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=6</code>, <code>fx.js?v=7</code>.</li>
+    </ul>
     <h3>v8 — 23/09/2026 · le cockpit devient le point central</h3>
     <ul>
       <li>Nouveau <code>render.js</code> : Accueil, Logiciels, fiches, Modules, Musique, E-books, Galerie, Concours, Soutenir, navigation, couleurs, annonce et effets se construisent depuis <code>config.json</code>.</li>
@@ -833,8 +841,8 @@ player.js?v=6    fx.js?v=3    tru-reader.js?v=3   filters.js?v=4
 <footer>
   <div class="wrap">
     <div class="hr" style="margin-bottom:26px"></div>
-    <p class="fm">$ truvector docs --version 8 --host cloudflare</p>
-    <p>© 2026 TRUvector.dev · Manuel du site v8 · Where Code Meets Creativity 🌌</p>
+    <p class="fm">$ truvector docs --version 8.1 --host cloudflare</p>
+    <p>© 2026 TRUvector.dev · Manuel du site v8.1 · Where Code Meets Creativity 🌌</p>
   </div>
 </footer>
 
