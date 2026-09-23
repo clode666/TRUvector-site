@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
-  <script src="../assets/js/assets.js?v=1"></script>
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
+  <script src="../assets/js/assets.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -60,8 +60,20 @@ lightbox();music();})();
   audio.addEventListener('play', persist);
   audio.addEventListener('pause', persist);
   window.addEventListener('pagehide', persist);
+
+  /* Retour sur la page Musique : reprendre la piste et la position du mini-lecteur. */
+  if(cb.checked){
+    var ri=parseInt(ss('tv_music_i')||'0',10), rt=parseFloat(ss('tv_music_t')||'0')||0, wasOn=ss('tv_music_playing')==='1';
+    var items=box.querySelectorAll('#tvlist li');
+    if(items[ri] && (ri>0 || rt>0)){
+      audio.addEventListener('loadedmetadata', function once(){ audio.removeEventListener('loadedmetadata', once); try{ if(rt>0 && rt<audio.duration) audio.currentTime=rt; }catch(e){} });
+      items[ri].click();
+      if(!wasOn) setTimeout(function(){ audio.pause(); }, 0);
+    }
+  }
 })();
 </script>
-<script src="../assets/js/nav.js?v=4"></script>
+<script src="../assets/js/nav.js?v=5"></script>
+<script src="../assets/js/filters.js?v=1"></script>
 </body>
 </html>

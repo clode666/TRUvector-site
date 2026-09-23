@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
 <style>
 .tool{max-width:820px;margin:0 auto;padding:8px 22px 64px}
 .tool-hero{text-align:center;padding:40px 0 8px}
@@ -41,7 +41,7 @@ input[type=text],input[type=password],input[type=email],input[type=number],input
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:600px){.grid2{grid-template-columns:1fr}}
 </style>
-<script src="../assets/js/assets.js?v=1"></script>
+<script src="../assets/js/assets.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -118,7 +118,7 @@ input[type=text],input[type=password],input[type=email],input[type=number],input
 <div class="toast" id="toast"></div>
 
 <script src="../assets/js/tru-crypto.js?v=1"></script>
-<script src="../assets/js/nav.js?v=4"></script>
+<script src="../assets/js/nav.js?v=5"></script>
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
@@ -170,5 +170,6 @@ input[type=text],input[type=password],input[type=email],input[type=number],input
   $('preview').onclick=function(){ if(!bookJSON){toast('Génère d\u2019abord');return;} try{ sessionStorage.setItem('tru_preview',bookJSON); window.open('lecteur.html?preview=1','_blank'); }catch(e){ toast('Prévisualisation indisponible'); } };
 })();
 </script>
+<script src="../assets/js/player.js?v=3"></script>
 </body>
 </html>

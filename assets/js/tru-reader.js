@@ -35,6 +35,7 @@
 
   /* ---------- portail (passphrase / fichier-clé) ---------- */
   function showGate(meta){
+    hideDrop();                      /* sinon la zone de dépôt (même z-index, plus bas dans le DOM) recouvre le champ */
     gate.classList.remove('hidden');
     if(meta){ $('tr-gate-title').textContent=meta.title||'E-book protégé'; if(meta.author) $('tr-gate-sub').textContent='par '+meta.author; }
     var pass=$('tr-pass'), fileInp=$('tr-file'), drop=$('tr-keydrop'), err=$('tr-err'), go=$('tr-go');
@@ -47,7 +48,9 @@
     function attempt(){ err.textContent='Déchiffrement…';
       TRUcrypto.open(book,{passphrase:pass.value,keyfileBytes:keyBytes}).then(function(obj){ err.textContent=''; gate.classList.add('hidden'); onDecrypted(obj); })
       .catch(function(){ err.textContent='Clé incorrecte — réessaie.'; if(pass.select)pass.select(); }); }
-    go.onclick=attempt; pass.onkeydown=function(e){ if(e.key==='Enter') attempt(); }; pass.focus();
+    go.onclick=attempt; pass.onkeydown=function(e){ if(e.key==='Enter') attempt(); };
+    var qk=new URLSearchParams(location.search).get('k'); if(qk && !pass.value) pass.value=qk;   /* passphrase publique pré-remplie */
+    setTimeout(function(){ try{ pass.focus({preventScroll:true}); }catch(e){ pass.focus(); } },30);
   }
 
   /* ---------- chargement de la source ---------- */
@@ -58,10 +61,23 @@
     else { onDecrypted({ format:detect(bytes,name), name:name, policy:{}, buyer:{}, bytes:bytes }); } /* mode aperçu local */
   }
   function loadFromURL(url){
-    fetch(url,{cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); })
-      .then(function(ab){ loadFromBytes(new Uint8Array(ab), url.split('/').pop().split('?')[0]); })
-      .catch(function(){ toast('Impossible de charger le fichier.'); showDrop(); });
+    var name=url.split('/').pop().split('?')[0];
+    setDropMsg('Chargement de '+decodeURIComponent(name)+'…');
+    showDrop();
+    fetch(url,{cache:'no-cache'}).then(function(r){
+        if(r.status===404){ var e=new Error('404'); e.code=404; throw e; }
+        if(!r.ok){ var e2=new Error('http'); e2.code=r.status; throw e2; }
+        return r.arrayBuffer(); })
+      .then(function(ab){ setDropMsg(''); loadFromBytes(new Uint8Array(ab), name); })
+      .catch(function(e){
+        var m;
+        if(e && e.code===404) m='Cet e-book n\u2019est pas encore en ligne ('+decodeURIComponent(name)+'). Reviens un peu plus tard.';
+        else if(e && e.code) m='Le serveur a répondu '+e.code+'. Réessaie dans un instant.';
+        else m='Téléchargement bloqué (réseau ou politique de sécurité du site). Recharge la page ; si ça persiste, préviens l\u2019auteur.';
+        setDropMsg(m,true); toast('Impossible de charger le fichier.'); showDrop();
+      });
   }
+  function setDropMsg(m,isErr){ var el=$('tr-drop-msg'); if(!el) return; el.textContent=m||''; el.classList.toggle('err',!!isErr); el.style.display=m?'block':'none'; }
   function showDrop(){ var d=$('tr-drop'); if(d) d.classList.remove('hidden'); }
   function hideDrop(){ var d=$('tr-drop'); if(d) d.classList.add('hidden'); }
 
@@ -144,15 +160,27 @@
     return d.innerHTML; }
   function paginateText(raw){ var per=1700,out=[],i=0; raw=raw.replace(/\r\n/g,'\n');
     while(i<raw.length){ var end=Math.min(raw.length,i+per); if(end<raw.length){ var nl=raw.lastIndexOf('\n',end),sp=raw.lastIndexOf(' ',end),cut=Math.max(nl,sp); if(cut>i+500)end=cut; } out.push(raw.slice(i,end)); i=end; } return out.length?out:['']; }
-  function loadText(bytes,fmt){ var s=new TextDecoder().decode(bytes);
-    if(fmt==='html'){ flowSections=[sanitize(s)]; }
+  /* Découpe un HTML en pages : une page par <h2> (chapitre), la page de titre en premier. */
+  function splitChapters(html){
+    var d=document.createElement('div'); d.innerHTML=html;
+    d.querySelectorAll('title').forEach(function(n){ n.remove(); });
+    var out=[], cur=document.createElement('div');
+    Array.prototype.slice.call(d.childNodes).forEach(function(n){
+      if(n.nodeType===1 && n.tagName==='H2' && cur.textContent.trim()){ out.push(cur.innerHTML); cur=document.createElement('div'); }
+      cur.appendChild(n);
+    });
+    if(cur.textContent.trim()) out.push(cur.innerHTML);
+    return out.length?out:[html];
+  }
+  function loadText(bytes,fmt){ var s=new TextDecoder().decode(bytes); mode='flow'; pdfDoc=null; imgBlobs=null;
+    if(fmt==='html'){ flowSections=splitChapters(sanitize(s)); }
     else { var chunks=paginateText(s); flowSections=chunks.map(function(c){ return fmt==='md'?mdToHtml(c):'<pre class="tr-pre">'+escapeHtml(c)+'</pre>'; }); }
     setPageCount(flowSections.length); gotoPage(0);
   }
 
   /* ---------- EPUB ---------- */
   function resolvePath(base,rel){ if(/^(https?:|data:|blob:)/i.test(rel))return rel; var parts=(base+rel).split('/'),st=[]; parts.forEach(function(p){ if(p==='..')st.pop(); else if(p!=='.'&&p!=='')st.push(p); }); return st.join('/'); }
-  function loadEPUB(bytes){ var u; try{u=fflate.unzipSync(bytes);}catch(e){ return toast('EPUB illisible'); }
+  function loadEPUB(bytes){ var u; mode='flow'; pdfDoc=null; imgBlobs=null; try{u=fflate.unzipSync(bytes);}catch(e){ return toast('EPUB illisible'); }
     var cont=u['META-INF/container.xml']; if(!cont) return toast('EPUB invalide');
     var cdoc=new DOMParser().parseFromString(fflate.strFromU8(cont),'application/xml');
     var rf=cdoc.querySelector('rootfile'); if(!rf) return toast('EPUB invalide');

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roadmap visuelle — TRUvector.dev</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --nuit:#060a10; --nuit-2:#0a1119;
+  --verre:rgba(14,23,32,.72);
+  --bord:rgba(126,240,205,.14); --bord-fort:rgba(126,240,205,.34);
+  --menthe:#34f5c5; --menthe-soft:#8ff3d9;
+  --aurore-v:#b14aed; --aurore-v-soft:#c98bf5; --aurore-g:#59e39a; --ambre:#f4c56b; --rose:#ff7ab6;
+  --texte:#e8f2ee; --texte-2:#a3b8b4; --texte-3:#6f8582;
+  --sans:'Space Grotesk',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0;background:var(--nuit);color:var(--texte);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--menthe)}
+:focus-visible{outline:2px solid var(--menthe);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+code{font-family:var(--mono);font-size:.88em;color:var(--menthe-soft);background:rgba(52,245,197,.08);border:1px solid var(--bord);border-radius:5px;padding:1px 5px}
+
+/* ---------- HERO : aurore WebGL + triskèle qui se dessine ---------- */
+.hero{position:relative;min-height:min(92vh,820px);display:grid;place-items:center;overflow:hidden;isolation:isolate}
+#aurora{position:absolute;inset:0;width:100%;height:100%;z-index:-2}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(transparent,var(--nuit));z-index:-1}
+.hero-in{text-align:center;padding:60px 22px}
+.tris{width:min(170px,34vw);height:auto;overflow:visible;filter:drop-shadow(0 0 14px rgba(52,245,197,.7)) drop-shadow(0 0 42px rgba(52,245,197,.35))}
+.tris path{fill:none;stroke:var(--menthe);stroke-width:7;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;animation:draw 2.4s cubic-bezier(.6,.05,.2,1) forwards}
+.tris path:nth-child(2){animation-delay:.35s}.tris path:nth-child(3){animation-delay:.7s}
+.tris circle{fill:var(--menthe);opacity:0;animation:pop .5s 2.4s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes pop{from{opacity:0;transform:scale(0);transform-origin:100px 100px}to{opacity:1;transform:scale(1);transform-origin:100px 100px}}
+.hero h1{font-size:clamp(40px,8.5vw,104px);line-height:.95;letter-spacing:-.04em;margin:26px 0 0;font-weight:700}
+.hero h1 .l2{display:block;background:linear-gradient(92deg,var(--menthe) 0%,var(--aurore-g) 30%,var(--aurore-v-soft) 65%,var(--rose) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% 100%;animation:shift 9s ease-in-out infinite alternate}
+@keyframes shift{to{background-position:100% 0}}
+.hero p{max-width:58ch;margin:22px auto 0;color:var(--texte-2);font-size:clamp(15.5px,2vw,18px)}
+.hero .meta{margin-top:28px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;font-family:var(--mono);font-size:12.5px;color:var(--texte-2)}
+.hero .meta span{border:1px solid var(--bord-fort);border-radius:999px;padding:6px 13px;background:rgba(6,10,16,.5);backdrop-filter:blur(6px)}
+
+/* ---------- sections ---------- */
+section{padding:74px 0}
+.h2{font-size:clamp(28px,4.6vw,46px);letter-spacing:-.03em;line-height:1.05;margin:0 0 14px;font-weight:700}
+.lead{color:var(--texte-2);max-width:62ch;font-size:16.5px;margin:0 0 34px}
+.principes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--bord);border:1px solid var(--bord);border-radius:20px;overflow:hidden}
+.principes div{background:var(--nuit-2);padding:22px}
+.principes h3{margin:0 0 6px;font-size:17px}
+.principes p{margin:0;color:var(--texte-2);font-size:14.5px}
+
+/* ---------- timeline ---------- */
+.phase{display:grid;grid-template-columns:120px 1fr;gap:28px;position:relative;padding:0 0 64px}
+.phase::before{content:"";position:absolute;left:59px;top:92px;bottom:0;width:1px;background:linear-gradient(var(--bord-fort),transparent)}
+.phase:last-child::before{display:none}
+.pnum{font-family:var(--mono);font-size:68px;font-weight:700;line-height:1;color:transparent;-webkit-text-stroke:1.4px var(--c,var(--menthe));text-align:center;position:sticky;top:24px;align-self:start}
+.pnum small{display:block;-webkit-text-stroke:0;color:var(--c,var(--menthe));font-size:11.5px;letter-spacing:.08em;margin-top:8px;font-weight:500}
+.phead h3{font-size:clamp(23px,3.4vw,32px);margin:4px 0 6px;letter-spacing:-.02em}
+.phead p{margin:0 0 18px;color:var(--texte-2);max-width:64ch}
+.tags{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px}
+.tag{font-family:var(--mono);font-size:11.5px;padding:4px 10px;border-radius:8px;border:1px solid var(--bord);color:var(--texte-2)}
+.tag b{color:var(--texte);font-weight:600}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.it{position:relative;background:var(--verre);border:1px solid var(--bord);border-radius:16px;padding:18px 18px 16px;overflow:hidden}
+.it h4{margin:0 0 6px;font-size:16px;display:flex;gap:9px;align-items:baseline}
+.it h4 i{font-style:normal;font-family:var(--mono);font-size:10.5px;color:var(--c,var(--menthe));border:1px solid currentColor;border-radius:6px;padding:0 6px;white-space:nowrap}
+.it p{margin:0;color:var(--texte-2);font-size:14.2px}
+.it .how{margin-top:10px;font-family:var(--mono);font-size:11.5px;color:var(--texte-3)}
+.it.wow{border-color:rgba(201,139,245,.45);background:linear-gradient(160deg,rgba(177,74,237,.12),rgba(14,23,32,.8) 55%)}
+
+/* ---------- démos ---------- */
+.demo{margin-top:18px;border:1px solid var(--bord-fort);border-radius:18px;background:#05080d;padding:22px;position:relative;overflow:hidden}
+.demo-lbl{font-family:var(--mono);font-size:11.5px;color:var(--menthe-soft);margin:0 0 14px;display:flex;gap:8px;align-items:center}
+.demo-lbl::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--menthe);box-shadow:0 0 10px var(--menthe);animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+
+/* spotlight + tilt */
+.cards3d{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;perspective:900px}
+.c3{--mx:50%;--my:50%;--rx:0deg;--ry:0deg;position:relative;border-radius:18px;padding:22px;min-height:170px;background:#0b131c;border:1px solid transparent;
+  background-image:linear-gradient(#0b131c,#0b131c),radial-gradient(260px circle at var(--mx) var(--my),var(--menthe),rgba(177,74,237,.6) 40%,var(--bord) 70%);
+  background-origin:border-box;background-clip:padding-box,border-box;transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .25s ease-out;transform-style:preserve-3d;cursor:default}
+.c3::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(220px circle at var(--mx) var(--my),rgba(255,255,255,.10),transparent 60%);pointer-events:none;opacity:0;transition:opacity .2s}
+.c3:hover::after{opacity:1}
+.c3 .b{font-family:var(--mono);font-size:10.5px;color:var(--aurore-v-soft);border:1px solid rgba(177,74,237,.4);border-radius:999px;padding:3px 9px;display:inline-block}
+.c3 h5{font-size:19px;margin:12px 0 4px;transform:translateZ(40px)}
+.c3 p{margin:0;color:var(--texte-2);font-size:13.5px;transform:translateZ(22px)}
+
+/* bouton magnétique */
+.magrow{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:center;padding:26px 0 6px}
+.mag{font-family:var(--mono);font-size:14px;font-weight:600;border:0;border-radius:14px;padding:15px 26px;color:#04120d;cursor:pointer;background:linear-gradient(180deg,var(--menthe),#1fd6ac);box-shadow:0 0 26px rgba(52,245,197,.35);transition:transform .18s ease-out,box-shadow .2s;position:relative;overflow:hidden}
+.mag:hover{box-shadow:0 0 44px rgba(52,245,197,.6)}
+.mag .rip{position:absolute;border-radius:50%;background:rgba(255,255,255,.55);transform:scale(0);animation:rip .6s ease-out forwards;pointer-events:none}
+@keyframes rip{to{transform:scale(4);opacity:0}}
+.mag.ghost{background:transparent;color:var(--menthe-soft);border:1px solid var(--bord-fort);box-shadow:none}
+
+/* visualiseur audio */
+.viz{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.disc{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--aurore-v),#0c1016 68%);border:1px solid var(--bord-fort);position:relative;flex:0 0 auto;box-shadow:0 0 calc(var(--lvl,0)*60px) rgba(177,74,237,.8)}
+.disc::after{content:"";position:absolute;inset:44%;background:var(--menthe);border-radius:50%}
+.disc.on{animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#bars{flex:1;min-width:220px;height:120px;display:block}
+.vizctl{font-family:var(--mono);font-size:12px;color:var(--texte-2)}
+
+/* palette de commande */
+.kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--bord-fort);border-radius:6px;padding:2px 7px;color:var(--texte)}
+.pal-open{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.pal{position:fixed;inset:0;z-index:100;background:rgba(3,6,10,.72);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding:12vh 18px 18px}
+.pal.on{display:flex;animation:fadein .18s ease-out}
+@keyframes fadein{from{opacity:0}}
+.pal-box{width:min(620px,100%);background:#0b121a;border:1px solid var(--bord-fort);border-radius:18px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 40px rgba(52,245,197,.12);overflow:hidden;animation:rise .22s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes rise{from{transform:translateY(14px) scale(.98)}}
+.pal-box input{width:100%;background:transparent;border:0;border-bottom:1px solid var(--bord);padding:18px 20px;color:var(--texte);font-family:var(--sans);font-size:17px}
+.pal-box input:focus{outline:none}
+.pal-list{max-height:48vh;overflow:auto;padding:8px}
+.pal-it{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:15px}
+.pal-it .k{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--texte-3)}
+.pal-it .ico{width:26px;text-align:center}
+.pal-it.sel{background:rgba(52,245,197,.10);color:var(--menthe)}
+.pal-foot{border-top:1px solid var(--bord);padding:9px 14px;font-family:var(--mono);font-size:11px;color:var(--texte-3);display:flex;gap:14px}
+
+/* livre 3D */
+.books{display:flex;gap:34px;justify-content:center;flex-wrap:wrap;padding:14px 0 6px;perspective:1100px}
+.book{width:130px;height:190px;position:relative;transform-style:preserve-3d;transform:rotateY(-28deg);transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.book:hover{transform:rotateY(-4deg) translateZ(20px)}
+.book .front,.book .spine{position:absolute;border-radius:3px 8px 8px 3px}
+.book .front{inset:0;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;font-weight:700;font-size:15px;line-height:1.15;box-shadow:inset 4px 0 8px rgba(0,0,0,.35);transform:translateZ(12px)}
+.book .front small{font-family:var(--mono);font-size:9.5px;font-weight:500;opacity:.8;margin-bottom:6px}
+.book .spine{left:0;top:0;width:24px;height:100%;transform:rotateY(-90deg) translateZ(0) translateX(-12px);transform-origin:left;filter:brightness(.6)}
+.book::after{content:"";position:absolute;left:10%;right:-10%;bottom:-24px;height:18px;background:radial-gradient(closest-side,rgba(0,0,0,.6),transparent);transform:rotateX(90deg)}
+
+/* filtres démo */
+.fdemo .chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 16px}
+.fdemo .chip{font-family:var(--mono);font-size:12px;color:var(--texte-2);background:transparent;border:1px solid var(--bord);border-radius:999px;padding:6px 12px;cursor:pointer}
+.fdemo .chip[aria-pressed="true"]{color:#04120d;background:var(--menthe);border-color:var(--menthe)}
+.fdemo .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.fdemo .g{border:1px solid var(--bord);border-radius:12px;padding:12px;font-size:13.5px;transition:opacity .3s,transform .3s,filter .3s}
+.fdemo .g small{display:block;font-family:var(--mono);font-size:10px;color:var(--texte-3)}
+.fdemo .g.out{opacity:.12;transform:scale(.94);filter:grayscale(1)}
+.fdemo input{width:100%;background:#0b121a;border:1px solid var(--bord-fort);border-radius:12px;padding:11px 14px;color:var(--texte);font-family:var(--sans);font-size:15px}
+
+/* tableau récap */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--bord);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;color:var(--texte-3);font-weight:500}
+td .dots{letter-spacing:2px;color:var(--menthe)}
+td .dots i{font-style:normal;color:var(--texte-3)}
+
+.garde{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.garde div{border-left:2px solid var(--ambre);padding:4px 0 4px 16px}
+.garde h4{margin:0 0 4px;font-size:15.5px}
+.garde p{margin:0;color:var(--texte-2);font-size:14px}
+
+footer{padding:40px 0 70px;text-align:center;color:var(--texte-3);font-family:var(--mono);font-size:12.5px}
+footer b{color:var(--menthe-soft);font-weight:500}
+
+@media (max-width:720px){
+  .phase{grid-template-columns:1fr;gap:6px}
+  .phase::before{display:none}
+  .pnum{position:static;text-align:left;font-size:52px}
+  .pnum small{display:inline;margin-left:10px}
+  section{padding:54px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .tris path{stroke-dashoffset:0}.tris circle{opacity:1}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <canvas id="aurora" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <svg class="tris" viewBox="0 0 200 200" aria-hidden="true">
+      <path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+      <path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+      <path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/>
+      <circle cx="100" cy="100" r="6"/>
+    </svg>
+    <h1>TRUvector<span class="l2">sous l'aurore</span></h1>
+    <p>La feuille de route visuelle du site : faire de chaque page une nuit polaire vivante, où la lumière répond à la souris, au scroll et à la musique. Le fond de cette page est déjà la phase 2 qui tourne en direct.</p>
+    <div class="meta"><span>6 phases</span><span>≈ 10 à 14 semaines en solo</span><span>0 dépendance externe</span></div>
+  </div>
+</header>
+
+<main>
+<!-- ================= PRINCIPES ================= -->
+<section class="wrap" id="principes">
+  <h2 class="h2">Quatre règles pour que le « waouh » dure</h2>
+  <p class="lead">Des effets à couper le souffle, oui — mais qui servent l'identité TRUvector (triskèle, aurore, néon menthe) et ne ralentissent jamais le site. Chaque effet de cette roadmap respecte ces quatre règles.</p>
+  <div class="principes">
+    <div><h3>La lumière réagit</h3><p>Rien ne bouge « pour bouger ». Les effets répondent à une action : souris, scroll, clic, musique.</p></div>
+    <div><h3>Un moment fort par page</h3><p>Chaque section a sa signature (aurore, livres 3D, visualiseur…). Le reste reste calme et lisible.</p></div>
+    <div><h3>Fait maison, compatible CSP</h3><p>Aucune librairie externe : WebGL, Canvas et CSS natifs. Ta politique de sécurité reste stricte.</p></div>
+    <div><h3>Dégradation élégante</h3><p>Mouvement réduit, mobile modeste, batterie faible : le site reste beau, simplement plus sage.</p></div>
+  </div>
+</section>
+
+<!-- ================= PHASES ================= -->
+<section class="wrap" id="phases">
+  <h2 class="h2">Les phases, dans l'ordre</h2>
+  <p class="lead">Chaque phase se livre seule et apporte un gain visible. Les démos sont réelles : survole, clique, essaie.</p>
+
+  <!-- PHASE 1 -->
+  <div class="phase" style="--c:var(--menthe)">
+    <div class="pnum">1<small>1–2 sem.</small></div>
+    <div>
+      <div class="phead"><h3>Fondations fluides</h3>
+      <p>Avant les paillettes : un socle qui rend tout le reste possible et fait déjà « app native ».</p></div>
+      <div class="tags"><span class="tag">Impact <b>élevé</b></span><span class="tag">Effort <b>faible</b></span><span class="tag">Risque <b>nul</b></span></div>
+      <div class="items">
+        <div class="it wow"><h4>Transitions entre pages <i>WAOUH</i></h4><p>Le triskèle et le titre « glissent » d'une page à l'autre au lieu de clignoter. API View Transitions native, sans framework, zéro JS.</p><div class="how">@view-transition { navigation: auto } + view-transition-name</div></div>
+        <div class="it"><h4>Design tokens v5</h4><p>Une seule source pour couleurs, rayons, ombres, courbes d'animation. Fin des variables orphelines (<code>--acc4</code> & co.).</p><div class="how">tokens.css · niveaux d'élévation · easing maison</div></div>
+        <div class="it"><h4>Détecteur de « puissance »</h4><p>Un petit script classe l'appareil (fort / moyen / sobre) et active les effets en conséquence. La base de toutes les phases suivantes.</p><div class="how">deviceMemory · hardwareConcurrency · reduced-motion · saveData</div></div>
+        <div class="it"><h4>Typo vivante</h4><p>Titres en dégradé d'aurore animé très lentement, chiffres en mono. Comme le titre de cette page.</p><div class="how">background-clip:text · 9 s alterné</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase" style="--c:var(--aurore-g)">
+    <div class="pnum">2<small>2 sem.</small></div>
+    <div>
+      <div class="phead"><h3>La signature : une aurore vivante</h3>
+      <p>Le moment qui fait dire « waouh » dès l'ouverture. Une vraie aurore boréale calculée par la carte graphique, qui ondule et se penche vers la souris.</p></div>
+      <div class="tags"><span class="tag">Impact <b>énorme</b></span><span class="tag">Effort <b>moyen</b></span><span class="tag">Démo <b>fond de cette page</b></span></div>
+      <div class="items">
+        <div class="it wow"><h4>Aurore WebGL <i>WAOUH</i></h4><p>Shader de rideaux lumineux (bruit fractal) vert → menthe → violet, qui suit la souris. Remplace les 3 blobs flous actuels. ~3 Ko.</p><div class="how">fragment shader · 30 fps plafonnés · pause hors écran</div></div>
+        <div class="it wow"><h4>Triskèle qui se dessine <i>WAOUH</i></h4><p>À la première visite, le logo se trace spirale par spirale puis s'allume. Une seule fois par session.</p><div class="how">stroke-dashoffset · sessionStorage</div></div>
+        <div class="it"><h4>Ciel étoilé en parallaxe</h4><p>Trois couches d'étoiles qui défilent à des vitesses différentes au scroll, avec étoiles filantes rares.</p><div class="how">canvas 2D · 3 couches · 1 filante / 20 s</div></div>
+        <div class="it"><h4>Guirlandes ambrées reliées</h4><p>Tes guirlandes actuelles deviennent une constellation : les points se relient quand la souris approche.</p><div class="how">canvas · distance &lt; 120 px</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase" style="--c:var(--aurore-v-soft)">
+    <div class="pnum">3<small>2 sem.</small></div>
+    <div>
+      <div class="phead"><h3>Matière et toucher</h3>
+      <p>Les cartes deviennent des objets physiques : elles s'inclinent, captent la lumière, les boutons attirent le curseur.</p></div>
+      <div class="tags"><span class="tag">Impact <b>élevé</b></span><span class="tag">Effort <b>faible</b></span><span class="tag">Partout <b>cartes + boutons</b></span></div>
+      <div class="demo"><p class="demo-lbl">Démo live — survole les cartes</p>
+        <div class="cards3d">
+          <div class="c3"><span class="b">Logiciel</span><h5>GrowVault</h5><p>Bordure qui suit ta souris, reflet spéculaire, inclinaison 3D.</p></div>
+          <div class="c3"><span class="b">Sécurité</span><h5>IronLock</h5><p>Le titre flotte au-dessus de la carte grâce à la profondeur.</p></div>
+          <div class="c3"><span class="b">Outil</span><h5>Universal Installer</h5><p>Tout en CSS, 20 lignes de JS pour la position.</p></div>
+        </div>
+        <div class="magrow">
+          <button class="mag" type="button">Bouton magnétique</button>
+          <button class="mag ghost" type="button">Clique pour l'onde</button>
+        </div>
+      </div>
+      <div class="items" style="margin-top:14px">
+        <div class="it"><h4>Apparitions au scroll</h4><p>Sections qui se révèlent en fondu quand elles entrent à l'écran — piloté par le scroll lui-même, sans JS.</p><div class="how">animation-timeline: view()</div></div>
+        <div class="it"><h4>Curseur halo</h4><p>Un halo menthe discret suit le pointeur et grossit sur les éléments cliquables. Désactivé au tactile.</p><div class="how">pointer:fine uniquement</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase" style="--c:var(--rose)">
+    <div class="pnum">4<small>3–4 sem.</small></div>
+    <div>
+      <div class="phead"><h3>Une signature par section</h3>
+      <p>Chaque onglet obtient son moment à lui. C'est la phase la plus longue, et la plus spectaculaire.</p></div>
+      <div class="tags"><span class="tag">Impact <b>énorme</b></span><span class="tag">Effort <b>élevé</b></span><span class="tag">Livrable <b>section par section</b></span></div>
+
+      <div class="demo"><p class="demo-lbl">Musique — visualiseur (démo simulée, la vraie version écoute le MP3)</p>
+        <div class="viz"><div class="disc" id="disc"></div><canvas id="bars" aria-hidden="true"></canvas>
+          <div class="vizctl"><button class="mag ghost" id="vizbtn" type="button">▶ Lancer</button></div></div>
+      </div>
+
+      <div class="demo"><p class="demo-lbl">E-books — couvertures en 3D, survole un livre</p>
+        <div class="books">
+          <div class="book"><div class="spine" style="background:#1d6b58"></div><div class="front" style="background:linear-gradient(160deg,#0f3b31,#34f5c5)"><small>SF · anticipation</small>Le Dernier Octet</div></div>
+          <div class="book"><div class="spine" style="background:#5a2479"></div><div class="front" style="background:linear-gradient(160deg,#2a0f3b,#b14aed)"><small>Techno-thriller</small>Le Contrat Fantôme</div></div>
+          <div class="book"><div class="spine" style="background:#7a5a1f"></div><div class="front" style="background:linear-gradient(160deg,#3b2a0f,#f4c56b);color:#1a1205"><small>Cyberpunk</small>root@nuit</div></div>
+        </div>
+      </div>
+
+      <div class="items" style="margin-top:14px">
+        <div class="it wow"><h4>Musique <i>WAOUH</i></h4><p>Spectre audio en anneau autour du disque, et l'aurore du fond qui pulse sur les basses. Le mini-lecteur global garde une mini-onde.</p><div class="how">Web Audio AnalyserNode · crossorigin="anonymous"</div></div>
+        <div class="it wow"><h4>Galerie <i>WAOUH</i></h4><p>Mosaïque qui se recompose, image qui s'agrandit « en vrai » depuis sa vignette jusqu'au plein écran, profondeur au gyroscope sur mobile.</p><div class="how">View Transitions · masonry CSS</div></div>
+        <div class="it"><h4>E-books</h4><p>Livres 3D, et dans la visionneuse une vraie tourne de page avec ombre portée.</p><div class="how">transform 3D · clip-path</div></div>
+        <div class="it"><h4>Logiciels</h4><p>Chaque carte ouvre une fiche avec un terminal qui « tape » une vraie commande du produit.</p><div class="how">typing effect · captures animées</div></div>
+        <div class="it"><h4>Articles</h4><p>Barre de lecture aurore, sommaire qui suit le scroll, bouton copier sur chaque bloc de code, temps de lecture.</p><div class="how">IntersectionObserver · Clipboard API</div></div>
+        <div class="it"><h4>Modules</h4><p>Un lanceur façon borne d'arcade : grille néon, aperçu animé au survol, score local pour les jeux.</p><div class="how">aperçus en boucle · localStorage</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase" style="--c:var(--ambre)" id="filtres">
+    <div class="pnum">5<small>2 sem.</small></div>
+    <div>
+      <div class="phead"><h3>Trouver sans chercher : filtres et palette</h3>
+      <p>Le contenu grossit vite (60 articles, 36 pistes, 24 modules, 21 e-books). La v1 des filtres est déjà livrée avec cette mise à jour ; voici la suite.</p></div>
+      <div class="tags"><span class="tag">V1 <b>livrée</b></span><span class="tag">Impact <b>très élevé</b></span><span class="tag">Effort <b>moyen</b></span></div>
+
+      <div class="demo"><p class="demo-lbl">Palette de commande globale — essaie <span class="kbd">Ctrl</span> + <span class="kbd">K</span></p>
+        <div class="pal-open"><button class="mag" id="palbtn" type="button">Ouvrir la palette</button><span class="vizctl">Chercher n'importe quoi, n'importe où : un article, une piste, un module…</span></div>
+      </div>
+
+      <div class="demo fdemo"><p class="demo-lbl">Filtres v2 — les éléments exclus s'effacent au lieu de disparaître</p>
+        <input id="fq" type="search" placeholder="Filtrer…" aria-label="Filtrer la démo">
+        <div class="chips" id="fchips"></div>
+        <div class="grid" id="fgrid"></div>
+      </div>
+
+      <div class="items" style="margin-top:14px">
+        <div class="it"><h4>V1 — livrée aujourd'hui</h4><p>Recherche sans accents, catégories cliquables, tri A→Z, état dans l'URL, touche <code>/</code>. Sur Logiciels, Modules, Articles, E-books, Musique.</p><div class="how">assets/js/filters.js</div></div>
+        <div class="it"><h4>Multi-critères</h4><p>Combiner plusieurs catégories (Python + Sécurité), avec des facettes : niveau, durée de lecture, date.</p><div class="how">tags dans config.json</div></div>
+        <div class="it wow"><h4>Palette Ctrl+K <i>WAOUH</i></h4><p>Recherche globale instantanée sur tout le site, navigation au clavier, actions (« lancer la musique », « ouvrir la galerie »).</p><div class="how">index JSON généré · recherche floue</div></div>
+        <div class="it"><h4>Découverte</h4><p>« Nouveautés », « Au hasard », favoris ♥ gardés sur l'appareil, et « Tu aimeras aussi » en bas des articles.</p><div class="how">localStorage · tags partagés</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase" style="--c:var(--menthe-soft)">
+    <div class="pnum">6<small>en continu</small></div>
+    <div>
+      <div class="phead"><h3>Secrets et finitions</h3>
+      <p>Ce qui fait qu'on revient et qu'on en parle.</p></div>
+      <div class="tags"><span class="tag">Impact <b>fidélisation</b></span><span class="tag">Effort <b>variable</b></span></div>
+      <div class="items">
+        <div class="it wow"><h4>Code Konami <i>WAOUH</i></h4><p>↑↑↓↓←→←→BA bascule tout le site en « Matrix aurore » : pluie de caractères menthe, sons 8-bit.</p><div class="how">réutilise le module matrix-aurore</div></div>
+        <div class="it"><h4>Ciel selon l'heure</h4><p>L'aurore change de palette selon l'heure réelle du visiteur : crépuscule rosé, nuit profonde, aube dorée.</p><div class="how">Date().getHours() · 4 palettes</div></div>
+        <div class="it"><h4>Page 404 jouable</h4><p>Un mini-jeu Neon Serpent pour « retrouver » la page perdue.</p><div class="how">module existant réutilisé</div></div>
+        <div class="it"><h4>Site installable</h4><p>Icône sur l'écran d'accueil, lecture des e-books et de la musique hors ligne.</p><div class="how">manifest + service worker</div></div>
+        <div class="it"><h4>Sons d'interface</h4><p>Micro-sons optionnels (clic, ouverture) désactivés par défaut, un bouton pour les activer.</p><div class="how">Web Audio · &lt; 4 Ko</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= RECAP ================= -->
+<section class="wrap" id="recap">
+  <h2 class="h2">Le récapitulatif</h2>
+  <p class="lead">Si tu ne dois en faire que trois : transitions entre pages (phase 1), aurore WebGL (phase 2), palette Ctrl+K (phase 5). À eux seuls, ils changent la perception du site.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Phase</th><th>Contenu clé</th><th>Effet waouh</th><th>Effort</th><th>Durée</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Fondations</td><td>View Transitions, tokens v5, détecteur de puissance</td><td><span class="dots">●●●<i>●●</i></span></td><td><span class="dots">●<i>●●●●</i></span></td><td>1–2 sem.</td></tr>
+      <tr><td>2 · Aurore</td><td>Shader WebGL, triskèle tracé, ciel parallaxe</td><td><span class="dots">●●●●●</span></td><td><span class="dots">●●●<i>●●</i></span></td><td>2 sem.</td></tr>
+      <tr><td>3 · Matière</td><td>Cartes 3D, boutons magnétiques, reveal au scroll</td><td><span class="dots">●●●●<i>●</i></span></td><td><span class="dots">●●<i>●●●</i></span></td><td>2 sem.</td></tr>
+      <tr><td>4 · Sections</td><td>Visualiseur, galerie morphing, livres 3D, arcade</td><td><span class="dots">●●●●●</span></td><td><span class="dots">●●●●<i>●</i></span></td><td>3–4 sem.</td></tr>
+      <tr><td>5 · Découverte</td><td>Filtres v2, palette Ctrl+K, favoris</td><td><span class="dots">●●●●<i>●</i></span></td><td><span class="dots">●●●<i>●●</i></span></td><td>2 sem.</td></tr>
+      <tr><td>6 · Secrets</td><td>Konami, ciel horaire, 404 jouable, PWA</td><td><span class="dots">●●●<i>●●</i></span></td><td><span class="dots">●●<i>●●●</i></span></td><td>continu</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ================= GARDE-FOUS ================= -->
+<section class="wrap" id="garde">
+  <h2 class="h2">Les garde-fous</h2>
+  <p class="lead">Un site qui éblouit mais rame, c'est raté. Ces seuils sont vérifiés à chaque phase.</p>
+  <div class="garde">
+    <div><h4>Performance</h4><p>Affichage principal &lt; 2,5 s, réponse aux clics &lt; 200 ms, JavaScript d'effets &lt; 25 Ko au total.</p></div>
+    <div><h4>Mouvement réduit</h4><p>Si le système le demande, toutes les animations se figent sur leur plus bel état final.</p></div>
+    <div><h4>Mobile et batterie</h4><p>Aurore à 30 fps, en pause quand l'onglet est caché ; version statique si l'appareil est modeste.</p></div>
+    <div><h4>Sécurité</h4><p>Aucun script externe ajouté : ta CSP stricte reste intacte, rien n'est chargé hors de ton domaine et de jsDelivr.</p></div>
+    <div><h4>Lisibilité</h4><p>Contraste texte ≥ 4,5 : 1 partout, même sur l'aurore (voile sombre sous le texte).</p></div>
+  </div>
+</section>
+</main>
+
+<footer><b>$ truvector roadmap --visuel --voir-grand</b><br>TRUvector.dev · feuille de route des effets · septembre 2026</footer>
+
+<!-- palette -->
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Palette de commande">
+  <div class="pal-box">
+    <input id="palq" type="text" placeholder="Rechercher sur TRUvector…" aria-label="Rechercher" autocomplete="off">
+    <div class="pal-list" id="pall"></div>
+    <div class="pal-foot"><span>↑↓ naviguer</span><span>↵ ouvrir</span><span>Échap fermer</span></div>
+  </div>
+</div>
+
+<script>
+/* ============ Aurore WebGL (démo de la phase 2) ============ */
+(function(){
+  var cv=document.getElementById('aurora'), gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'low-power'});
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!gl){ cv.style.background='radial-gradient(900px 500px at 30% 20%,rgba(89,227,154,.35),transparent 60%),radial-gradient(900px 500px at 75% 15%,rgba(177,74,237,.35),transparent 60%),#060a10'; return; }
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=[
+  'precision mediump float;uniform vec2 r;uniform float t;uniform vec2 m;',
+  'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+  'float n(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}',
+  'float fbm(vec2 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n(p);p*=2.02;a*=.5;}return v;}',
+  'void main(){vec2 uv=gl_FragCoord.xy/r;vec2 q=uv;q.x*=r.x/r.y;',
+  ' float lean=(m.x-.5)*.35;',
+  ' vec3 col=vec3(.024,.039,.063);',
+  ' for(int k=0;k<3;k++){float fk=float(k);',
+  '  float x=q.x*1.3+fk*1.7+lean*(1.+fk*.4);',
+  '  float wave=fbm(vec2(x*1.2,t*.06+fk))*.55+.35+fk*.07+(m.y-.5)*.08;',
+  '  float d=uv.y-wave;',
+  '  float curtain=exp(-abs(d)*(9.-fk*2.))*smoothstep(-.35,.05,d);',
+  '  float rays=.55+.45*fbm(vec2(x*9.,t*.18+fk*3.));',
+  '  vec3 c=k==0?vec3(.35,.89,.6):(k==1?vec3(.2,.96,.77):vec3(.69,.29,.93));',
+  '  col+=c*curtain*rays*(.55-fk*.1);}',
+  ' float st=step(.9975,h(floor(gl_FragCoord.xy*.5)))*(.5+.5*sin(t*2.+h(floor(gl_FragCoord.xy))*40.));',
+  ' col+=vec3(st)*.8*smoothstep(.3,.9,uv.y);',
+  ' gl_FragColor=vec4(col,1.);}'].join('\n');
+  function sh(tp,src){var s=gl.createShader(tp);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+  var ur=gl.getUniformLocation(pr,'r'),ut=gl.getUniformLocation(pr,'t'),um=gl.getUniformLocation(pr,'m');
+  var mx=.5,my=.5,tx=.5,ty=.5,visible=true,last=0,t0=performance.now();
+  function size(){var d=Math.min(devicePixelRatio||1,1.5)*.6;cv.width=cv.clientWidth*d;cv.height=cv.clientHeight*d;gl.viewport(0,0,cv.width,cv.height);}
+  size();addEventListener('resize',size);
+  addEventListener('pointermove',function(e){tx=e.clientX/innerWidth;ty=1-e.clientY/innerHeight;},{passive:true});
+  new IntersectionObserver(function(en){visible=en[0].isIntersecting;}).observe(cv);
+  function frame(now){requestAnimationFrame(frame);if(!visible||document.hidden)return;if(now-last<33)return;last=now;
+    mx+=(tx-mx)*.05;my+=(ty-my)*.05;gl.uniform2f(ur,cv.width,cv.height);gl.uniform1f(ut,reduce?20:(now-t0)/1000);gl.uniform2f(um,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);}
+  requestAnimationFrame(frame);
+})();
+
+/* ============ Cartes 3D + spotlight ============ */
+document.querySelectorAll('.c3').forEach(function(c){
+  c.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+    c.style.setProperty('--mx',(x*100)+'%');c.style.setProperty('--my',(y*100)+'%');
+    c.style.setProperty('--rx',((.5-y)*12)+'deg');c.style.setProperty('--ry',((x-.5)*14)+'deg');});
+  c.addEventListener('pointerleave',function(){c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg');});
+});
+
+/* ============ Boutons magnétiques + onde ============ */
+document.querySelectorAll('.magrow .mag').forEach(function(b){
+  b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.transform='translate('+((e.clientX-r.left-r.width/2)*.25)+'px,'+((e.clientY-r.top-r.height/2)*.35)+'px)';});
+  b.addEventListener('pointerleave',function(){b.style.transform='';});
+  b.addEventListener('click',function(e){var r=b.getBoundingClientRect(),s=document.createElement('span'),d=Math.max(r.width,r.height);
+    s.className='rip';s.style.cssText='width:'+d+'px;height:'+d+'px;left:'+(e.clientX-r.left-d/2)+'px;top:'+(e.clientY-r.top-d/2)+'px';b.appendChild(s);setTimeout(function(){s.remove();},650);});
+});
+
+/* ============ Visualiseur (simulé) ============ */
+(function(){
+  var cv=document.getElementById('bars'),ctx=cv.getContext('2d'),btn=document.getElementById('vizbtn'),disc=document.getElementById('disc'),on=false,t=0;
+  function size(){cv.width=cv.clientWidth*2;cv.height=cv.clientHeight*2;}size();addEventListener('resize',size);
+  function draw(){ if(!on) return; requestAnimationFrame(draw); t+=.045; var n=48,w=cv.width/n; ctx.clearRect(0,0,cv.width,cv.height); var bass=0;
+    for(var i=0;i<n;i++){ var f=i/n, v=Math.abs(Math.sin(t*1.7+i*.35)*Math.cos(t*.9-i*.12))*(1-f*.55)+(Math.sin(t*6)>.6&&i<8?.35:0);
+      v=Math.min(1,v); if(i<6) bass+=v/6; var h=v*cv.height*.92;
+      var g=ctx.createLinearGradient(0,cv.height,0,cv.height-h); g.addColorStop(0,'#34f5c5'); g.addColorStop(1,f>.5?'#c98bf5':'#59e39a');
+      ctx.fillStyle=g; ctx.fillRect(i*w+2,cv.height-h,w-4,h); }
+    disc.style.setProperty('--lvl',bass.toFixed(2)); }
+  btn.onclick=function(){ on=!on; btn.textContent=on?'❚❚ Pause':'▶ Lancer'; disc.classList.toggle('on',on); if(on) draw(); else disc.style.setProperty('--lvl',0); };
+})();
+
+/* ============ Palette de commande ============ */
+(function(){
+  var DATA=[['🏠','Accueil','Section'],['🖼️','Galerie','Section'],['💾','Logiciels','Section'],['📚','E-books','Section'],['🎵','Musique','Section'],['📝','Articles','Section'],['🕹️','Modules','Section'],
+    ['🔐','Protéger un script Python contre le reverse engineering','Article'],['🧬','Fingerprint hardware : 8 sources','Article'],['⚖️','AES-256-GCM vs ChaCha20','Article'],['🛡️','IronLock vs PyArmor vs Themida','Article'],
+    ['🎧','Rétrowave Néon','Piste'],['🎧','Jazz de Minuit','Piste'],['🎧','Triskèle au clair de lune','Piste'],
+    ['📖','Le Contrat Fantôme','E-book'],['📖','root@nuit','E-book'],['🐍','Neon Serpent','Module'],['🌌','Hyperspace','Module'],['🔑','KeyForge','Module'],
+    ['▶️','Lancer la musique','Action'],['🎲','Un article au hasard','Action']];
+  var pal=document.getElementById('pal'),q=document.getElementById('palq'),list=document.getElementById('pall'),sel=0,cur=[];
+  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+  function render(){var t=norm(q.value.trim());cur=DATA.filter(function(d){return !t||norm(d[1]+' '+d[2]).indexOf(t)>=0;});if(sel>=cur.length)sel=0;
+    list.innerHTML=cur.length?cur.map(function(d,i){return '<div class="pal-it'+(i===sel?' sel':'')+'" data-i="'+i+'"><span class="ico">'+d[0]+'</span>'+d[1]+'<span class="k">'+d[2]+'</span></div>';}).join(''):'<div class="pal-it">Aucun résultat</div>';}
+  function open(){pal.classList.add('on');q.value='';sel=0;render();setTimeout(function(){q.focus();},20);}
+  function close(){pal.classList.remove('on');}
+  document.getElementById('palbtn').onclick=open;
+  q.addEventListener('input',function(){sel=0;render();});
+  list.addEventListener('click',function(e){var it=e.target.closest('.pal-it');if(it)close();});
+  pal.addEventListener('click',function(e){if(e.target===pal)close();});
+  addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();pal.classList.contains('on')?close():open();return;}
+    if(!pal.classList.contains('on'))return;
+    if(e.key==='Escape')close();
+    if(e.key==='ArrowDown'){e.preventDefault();sel=(sel+1)%Math.max(cur.length,1);render();}
+    if(e.key==='ArrowUp'){e.preventDefault();sel=(sel-1+cur.length)%Math.max(cur.length,1);render();}
+    if(e.key==='Enter')close();
+  });
+})();
+
+/* ============ Filtres v2 (démo) ============ */
+(function(){
+  var ITEMS=[['GrowVault','Logiciel'],['IronLock','Sécurité'],['ATLAS','Logiciel'],['Universal Installer','Outil'],['KeyForge','Sécurité'],['Neon Serpent','Jeu'],['Hyperspace','Jeu'],['JSON Forge','Outil'],['Regex Lab','Outil'],['CipherLock','Sécurité'],['Tru 2048','Jeu'],['Markdown Live','Outil']];
+  var grid=document.getElementById('fgrid'),chips=document.getElementById('fchips'),q=document.getElementById('fq'),active={};
+  grid.innerHTML=ITEMS.map(function(it){return '<div class="g" data-c="'+it[1]+'"><small>'+it[1]+'</small>'+it[0]+'</div>';}).join('');
+  ['Logiciel','Sécurité','Outil','Jeu'].forEach(function(c){var b=document.createElement('button');b.className='chip';b.type='button';b.textContent=c;b.setAttribute('aria-pressed','false');
+    b.onclick=function(){active[c]=!active[c];b.setAttribute('aria-pressed',active[c]?'true':'false');apply();};chips.appendChild(b);});
+  function apply(){var t=q.value.toLowerCase().trim(),any=Object.keys(active).some(function(k){return active[k];});
+    grid.querySelectorAll('.g').forEach(function(g){var ok=(!any||active[g.dataset.c])&&(!t||g.textContent.toLowerCase().indexOf(t)>=0);g.classList.toggle('out',!ok);});}
+  q.addEventListener('input',apply);
+})();
+</script>
+</body>
+</html>

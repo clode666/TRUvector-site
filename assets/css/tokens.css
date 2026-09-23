@@ -26,6 +26,20 @@
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --r:18px;
   --maxw:1040px;
+
+  /* --- alias hérités (anciens articles / modules) : sans eux, couleurs perdues --- */
+  --bg3:var(--panneau-2);
+  --borderg:var(--bord-fort);
+  --disp:var(--sans);
+  --textb:var(--texte);
+  --textd:#7d948f;          /* commentaires de code */
+  --acc:var(--menthe);
+  --acc2:#7cc8ff;           /* clés / propriétés */
+  --acc3:#ff8b8b;           /* erreurs / anti-patterns */
+  --acc4:var(--ambre);      /* chaînes */
+  --acc5:var(--aurore-v-soft); /* mots-clés */
+  --acc6:var(--aurore-g);   /* fonctions */
+  --acc7:var(--menthe-soft);
 }
 :root:not([data-theme="light"]), :root[data-theme="dark"]{ color-scheme: dark; }
 
@@ -97,6 +111,13 @@ a:hover{text-decoration:underline}
 .btn:disabled,.btn[aria-disabled="true"]{opacity:.4;cursor:not-allowed;box-shadow:none;filter:grayscale(.3)}
 .btn-ghost{background:transparent;color:var(--menthe-soft);border:1px solid var(--bord-fort);box-shadow:none}
 .btn-ghost:hover{border-color:var(--menthe);color:var(--menthe);box-shadow:0 0 18px rgba(52,245,197,.15)}
+/* Les règles de contenu du type « .article a { color: menthe } » écrasaient la couleur
+   des boutons (texte menthe sur fond menthe = illisible). On verrouille ici. */
+a.btn,a.btn:hover,a.btn:visited,.btn-primary{color:#04120d;text-decoration:none}
+.article a.btn,.prose a.btn,main a.btn{color:#04120d}
+a.btn-ghost,a.btn-outline,.btn-outline,
+.article a.btn-ghost,.article a.btn-outline,main a.btn-ghost,main a.btn-outline{background:transparent;color:var(--menthe-soft);border:1px solid var(--bord-fort);box-shadow:none}
+a.btn-ghost:hover,a.btn-outline:hover,.article a.btn-ghost:hover,.article a.btn-outline:hover{border-color:var(--menthe);color:var(--menthe)}
 
 /* ---------- cartes / verre ---------- */
 .card{background:var(--panneau-2);border:1px solid var(--bord);border-radius:var(--r);padding:18px;backdrop-filter:blur(8px)}
@@ -216,6 +237,33 @@ footer.site-foot a{color:var(--texte-2)} footer.site-foot a:hover{color:var(--me
 .mini-player .mp-b{background:transparent;border:0;color:var(--texte-2);font-size:14px;cursor:pointer;width:28px;height:28px;border-radius:8px;flex:0 0 auto}
 .mini-player .mp-b:hover{color:var(--menthe);background:rgba(52,245,197,.08)}
 .mini-player .mp-pp{color:var(--menthe)}
+.mini-player a.mp-b{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+
+/* ---------- lisibilité des cartes (contraste renforcé) ---------- */
+.sec-card{background:linear-gradient(180deg,rgba(18,29,40,.92),rgba(10,16,23,.94))}
+.sec-card p{color:#b3c6c2}
+.sec-card h3{color:var(--texte)}
+
+/* ---------- filtres de sections (assets/js/filters.js) ---------- */
+.tvf{display:flex;flex-direction:column;gap:12px;margin:6px 0 18px;position:relative;z-index:3}
+.tvf-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tvf-search{flex:1 1 260px;position:relative}
+.tvf-search input{width:100%;font-family:var(--sans);font-size:15px;color:var(--texte);background:rgba(10,16,23,.85);border:1px solid var(--bord-fort);border-radius:12px;padding:11px 14px 11px 40px}
+.tvf-search input:focus{outline:none;border-color:var(--menthe);box-shadow:0 0 0 3px rgba(52,245,197,.14)}
+.tvf-search::before{content:"";position:absolute;left:14px;top:50%;width:14px;height:14px;margin-top:-8px;border:2px solid var(--texte-3);border-radius:50%}
+.tvf-search::after{content:"";position:absolute;left:26px;top:50%;width:7px;height:2px;margin-top:6px;background:var(--texte-3);transform:rotate(45deg)}
+.tvf-search kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--texte-3);border:1px solid var(--bord);border-radius:6px;padding:1px 6px}
+.tvf-sort{font-family:var(--mono);font-size:12.5px;color:var(--texte);background:rgba(10,16,23,.85);border:1px solid var(--bord-fort);border-radius:12px;padding:10px 12px}
+.tvf-count{font-family:var(--mono);font-size:12px;color:var(--texte-3);white-space:nowrap}
+.tvf-chips{display:flex;gap:8px;flex-wrap:wrap}
+.tvf-chip{font-family:var(--mono);font-size:12px;color:var(--texte-2);background:transparent;border:1px solid var(--bord);border-radius:999px;padding:6px 12px;cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.tvf-chip:hover{color:var(--menthe);border-color:var(--bord-fort)}
+.tvf-chip[aria-pressed="true"]{color:#04120d;background:var(--menthe);border-color:var(--menthe)}
+.tvf-chip .n{opacity:.6;margin-left:6px}
+.tvf-hide{display:none!important}
+.tvf-empty{text-align:center;color:var(--texte-2);border:1px dashed var(--bord-fort);border-radius:var(--r);padding:30px 18px;margin:0 0 24px}
+.tvf-empty button{margin-top:10px}
+mark.tvf-hl{background:rgba(52,245,197,.22);color:inherit;border-radius:3px;padding:0 1px}
 
 /* ---------- menu déroulant "Sections" (nav) ---------- */
 .has-menu{position:relative;display:inline-block}

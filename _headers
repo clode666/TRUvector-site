@@ -3,10 +3,22 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(self), camera=()
-  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; img-src 'self' data: blob: https://cdn.jsdelivr.net; media-src 'self' data: blob: https://cdn.jsdelivr.net; connect-src 'self' https://cloudflareinsights.com https://api.mymemory.translated.net; base-uri 'self'; frame-ancestors 'self'
+  Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; img-src 'self' data: blob: https://cdn.jsdelivr.net; media-src 'self' data: blob: https://cdn.jsdelivr.net; connect-src 'self' https://cdn.jsdelivr.net https://cloudflareinsights.com https://api.mymemory.translated.net; worker-src 'self' blob:; base-uri 'self'; frame-ancestors 'self'
 
-/assets/*
+# Binaires lourds et figés : cache long.
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/vendor/*
   Cache-Control: public, max-age=31536000, immutable
 
 /galerie/assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+# JS / CSS du site : ils changent souvent. Revalidation obligatoire,
+# sinon une ancienne version reste bloquée un an dans le navigateur.
+/assets/js/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/assets/css/*
+  Cache-Control: public, max-age=300, must-revalidate

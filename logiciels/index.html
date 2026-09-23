@@ -9,8 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
-  <script src="../assets/js/assets.js?v=1"></script>
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
+  <script src="../assets/js/assets.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -32,7 +32,8 @@ function lightbox(){var figs=content.querySelectorAll('.art .art-view');if(!figs
 function music(){var pl=content.querySelector('#tvpl');if(!pl)return;var srcs=[];try{srcs=JSON.parse(content.querySelector('#tvsrcs').textContent);}catch(e){srcs=[];}if(!srcs.length)return;var audio=content.querySelector('#tvaudio'),pp=content.querySelector('#tvpp'),tt=content.querySelector('#tvtt'),items=content.querySelectorAll('#tvlist li'),i=0;function mark(){for(var k=0;k<items.length;k++)items[k].classList.toggle('active',k===i);}function title(k){return items[k]?(items[k].getAttribute('data-title')||items[k].textContent):'';}function load(idx,play){i=((idx%srcs.length)+srcs.length)%srcs.length;audio.src=srcs[i];tt.textContent=title(i);mark();if(play){var q=audio.play();if(q&&q.catch)q.catch(function(){});}}function sp(on){pl.classList.toggle('playing',on);pp.textContent=on?'⏸':'▶';}audio.addEventListener('play',function(){sp(true);});audio.addEventListener('pause',function(){sp(false);});audio.addEventListener('ended',function(){load(i+1,true);});pp.addEventListener('click',function(){if(audio.paused)load(i,true);else audio.pause();});content.querySelector('#tvprev').addEventListener('click',function(){load(i-1,true);});content.querySelector('#tvnext').addEventListener('click',function(){load(i+1,true);});for(var k=0;k<items.length;k++){(function(k){items[k].style.cursor='pointer';items[k].addEventListener('click',function(){load(k,true);});})(k);}load(0,false);}
 lightbox();music();})();
 </script>
-<script src="../assets/js/nav.js?v=4"></script>
-<script src="../assets/js/player.js?v=2"></script>
+<script src="../assets/js/nav.js?v=5"></script>
+<script src="../assets/js/player.js?v=3"></script>
+<script src="../assets/js/filters.js?v=1"></script>
 </body>
 </html>

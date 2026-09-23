@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
 <style>
 .reader-wrap{max-width:1100px;margin:0 auto;padding:10px 16px 42px}
 .back{display:inline-flex;gap:6px;font-family:var(--mono);font-size:13px;color:var(--texte-2)}
@@ -31,13 +31,28 @@
 .tr-flow .lk{color:var(--menthe)}
 .tr-flow ul{padding-left:20px}.tr-flow li::marker{color:var(--menthe)}
 .tr-flow code{font-family:var(--mono);background:rgba(52,245,197,.08);border:1px solid var(--bord);border-radius:5px;padding:1px 5px;font-size:.9em;color:var(--menthe-soft)}
+.tr-flow .title-page{text-align:center;padding:30px 0 22px;border-bottom:1px solid var(--bord);margin-bottom:26px}
+.tr-flow .title-page h1{font-size:clamp(28px,5vw,40px);margin:6px 0;color:var(--texte)}
+.tr-flow .kick,.tr-flow .form,.tr-flow h2 .num{font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--aurore-v-soft)}
+.tr-flow .byline{font-family:var(--mono);font-size:12px;color:var(--texte-3)}
+.tr-flow h2 .num{display:block;margin-bottom:4px}
+.tr-flow .term{font-family:var(--mono);background:#060a0f;border:1px solid var(--bord);color:var(--menthe-soft);padding:10px 12px;border-radius:8px;white-space:pre-wrap;font-size:13.5px;line-height:1.5}
+.tr-flow .sep{text-align:center;color:var(--aurore-v-soft);letter-spacing:.4em;margin:22px 0}
+.tr-flow{font-family:Georgia,'Times New Roman',serif;font-size:17.5px}
+.tr-flow h1,.tr-flow h2,.tr-flow h3{font-family:var(--sans)}
 .tr-pre{white-space:pre-wrap;word-break:break-word;font-family:var(--mono);font-size:13.5px;color:var(--texte);margin:0}
 .tr-wm{position:absolute;inset:0;pointer-events:none;z-index:6;display:none}
 .tr-hide .tr-view{filter:blur(24px)}
 .tr-hide::after{content:"— contenu masqué —";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--texte-3);z-index:7}
 .tr-progress{height:5px;background:var(--panneau);border-radius:999px;overflow:hidden;margin-top:10px}
 .tr-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--aurore-v),var(--menthe));transition:width .2s}
-.tr-gate,.tr-lock,.tr-drop{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,8,13,.93);backdrop-filter:blur(6px);text-align:center}
+.tr-gate,.tr-lock,.tr-drop{position:absolute;inset:0;z-index:20;display:flex;align-items:safe center;justify-content:center;padding:24px;background:rgba(5,8,13,.93);backdrop-filter:blur(6px);text-align:center;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tr-gate{z-index:24}.tr-lock{z-index:26}
+.tr-gate .tr-card,.tr-lock .tr-card,.tr-drop .tr-card{margin:auto 0;position:relative;z-index:1}
+.tr-card input[type=password]{position:relative;z-index:2;pointer-events:auto}
+.tr-drop-msg{display:none;font-family:var(--mono);font-size:12.5px;color:var(--menthe-soft);margin:0 0 12px;line-height:1.5}
+.tr-drop-msg.err{color:#ffb1a1;border:1px solid rgba(255,139,139,.35);background:rgba(255,139,139,.07);border-radius:10px;padding:10px 12px}
+@media (max-width:640px){.tr-stage{height:auto;min-height:78vh}.tr-toolbar{gap:6px}.tr-toolbar button{padding:7px 10px}.tr-toolbar #tr-pageinfo{min-width:70px}}
 .tr-gate.hidden,.tr-lock.hidden,.tr-drop.hidden{display:none}
 .tr-card{max-width:430px;width:100%}
 .tr-card .lk{width:64px;height:64px;margin:0 auto 14px;filter:drop-shadow(0 0 9px rgba(52,245,197,.7))}
@@ -54,7 +69,7 @@
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media print{body{display:none!important}}
 </style>
-<script src="../assets/js/assets.js?v=1"></script>
+<script src="../assets/js/assets.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -98,7 +113,7 @@
 
     <div class="tr-drop hidden" id="tr-drop"><div class="tr-card">
       <svg class="lk" viewBox="0 0 120 120" aria-hidden="true"><rect x="24" y="30" width="72" height="60" rx="8" fill="none" stroke="#34f5c5" stroke-width="7"/><path d="M60 46 v28 M48 62 l12 12 12-12" fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <h2>Ouvre un e-book</h2><p>Glisse ici un <code>.trubook</code>, un PDF, EPUB, CBZ, image ou texte — ou clique pour choisir.</p>
+      <h2>Ouvre un e-book</h2><div class="tr-drop-msg" id="tr-drop-msg" role="status"></div><p>Glisse ici un <code>.trubook</code>, un PDF, EPUB, CBZ, image ou texte — ou clique pour choisir.</p>
       <label class="drop" style="display:block">Choisir un fichier<input id="tr-drop-file" type="file" accept=".trubook,.pdf,.epub,.cbz,.zip,.png,.jpg,.jpeg,.gif,.webp,.txt,.md,.markdown,.html,.htm,application/json" hidden></label>
       <small>Un <code>.trubook</code> demandera sa clé. Un fichier normal s'ouvre en mode aperçu.</small>
     </div></div>
@@ -112,7 +127,8 @@
 <script src="../assets/vendor/pdfjs/pdf.min.js"></script>
 <script src="../assets/vendor/fflate.min.js"></script>
 <script src="../assets/js/tru-crypto.js?v=1"></script>
-<script src="../assets/js/tru-reader.js?v=1"></script>
-<script src="../assets/js/nav.js?v=4"></script>
+<script src="../assets/js/tru-reader.js?v=2"></script>
+<script src="../assets/js/nav.js?v=5"></script>
+<script src="../assets/js/player.js?v=3"></script>
 </body>
 </html>

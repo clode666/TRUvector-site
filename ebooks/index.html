@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/tokens.css?v=5">
+<link rel="stylesheet" href="../assets/css/tokens.css?v=6">
 <style>
 .cta-row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin:6px 0 30px}
 .cta-row .btn{min-width:220px;justify-content:center}
@@ -32,8 +32,12 @@
 .eb-read{padding:9px 18px;font-size:13px}
 .eb-until{font-family:var(--mono);font-size:11px;color:var(--texte-3);text-align:right;line-height:1.3}
 .eb-until.soon{color:var(--ambre)}
+.eb-card.eb-soon .eb-cover img{filter:grayscale(.85) brightness(.55)}
+.eb-card.eb-soon .eb-read{pointer-events:none;opacity:.45;filter:grayscale(.4)}
+.eb-card .eb-soon-tag{display:none;font-family:var(--mono);font-size:11px;color:var(--ambre)}
+.eb-card.eb-soon .eb-soon-tag{display:inline}
 </style>
-<script src="../assets/js/assets.js?v=1"></script>
+<script src="../assets/js/assets.js?v=2"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -50,12 +54,12 @@
     <a class="btn btn-ghost" href="proteger.html">🔒 Protéger un e-book</a>
   </div>
 
-  <p class="eb-note"><span class="ic">⏳</span><span>Édition à durée limitée — ces nouvelles restent disponibles jusqu’au <strong id="eb-globaldate"></strong>. Passé cette date, l’accès se verrouille automatiquement.</span></p>
+  <p class="eb-note"><span class="ic">⏳</span><span>Édition à durée limitée — ces nouvelles restent disponibles jusqu’au <strong id="eb-globaldate"></strong>. Passé cette date, l’accès se verrouille automatiquement. Clé de lecture : <code>truvector</code> — elle est déjà pré-remplie quand tu cliques sur « Lire ».</span></p>
 
   <p class="sec-h">Catalogue <small>21 nouvelles</small></p>
   <div class="eb-grid">
       <article class="eb-card" data-slug="le-dernier-octet">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-octet.trubook" aria-label="Lire : Le Dernier Octet">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-octet.trubook&amp;k=truvector" aria-label="Lire : Le Dernier Octet">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-dernier-octet.svg" alt="Couverture de Le Dernier Octet" loading="lazy" width="320" height="480">
           <span class="eb-badge">SF · anticipation</span>
         </a>
@@ -63,13 +67,13 @@
           <h3>Le Dernier Octet</h3>
           <p>Un archiviste doit choisir quels souvenirs de l’humanité sauver avant l’effacement d’un monde.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-octet.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-octet.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="signal-perdu">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/signal-perdu.trubook" aria-label="Lire : Signal Perdu">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/signal-perdu.trubook&amp;k=truvector" aria-label="Lire : Signal Perdu">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/signal-perdu.svg" alt="Couverture de Signal Perdu" loading="lazy" width="320" height="480">
           <span class="eb-badge">SF · anticipation</span>
         </a>
@@ -77,13 +81,13 @@
           <h3>Signal Perdu</h3>
           <p>Une sonde revient deux siècles trop tard, porteuse d’un message que plus personne ne sait lire.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/signal-perdu.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/signal-perdu.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="root-at-nuit">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/root-at-nuit.trubook" aria-label="Lire : root@nuit">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/root-at-nuit.trubook&amp;k=truvector" aria-label="Lire : root@nuit">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/root-at-nuit.svg" alt="Couverture de root@nuit" loading="lazy" width="320" height="480">
           <span class="eb-badge">Cyberpunk</span>
         </a>
@@ -91,13 +95,13 @@
           <h3>root@nuit</h3>
           <p>Une hackeuse découvre que son propre cerveau tourne sous licence — et qu’elle est en retard de paiement.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/root-at-nuit.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/root-at-nuit.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="le-contrat-fantome">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-contrat-fantome.trubook" aria-label="Lire : Le Contrat Fantôme">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-contrat-fantome.trubook&amp;k=truvector" aria-label="Lire : Le Contrat Fantôme">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-contrat-fantome.svg" alt="Couverture de Le Contrat Fantôme" loading="lazy" width="320" height="480">
           <span class="eb-badge">Techno-thriller</span>
         </a>
@@ -105,13 +109,13 @@
           <h3>Le Contrat Fantôme</h3>
           <p>Un dev freelance accepte une mission trop bien payée, pour un client qui n’existe pas.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-contrat-fantome.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-contrat-fantome.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="chambre-404">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/chambre-404.trubook" aria-label="Lire : Chambre 404">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/chambre-404.trubook&amp;k=truvector" aria-label="Lire : Chambre 404">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/chambre-404.svg" alt="Couverture de Chambre 404" loading="lazy" width="320" height="480">
           <span class="eb-badge">Polar · noir</span>
         </a>
@@ -119,13 +123,13 @@
           <h3>Chambre 404</h3>
           <p>Une disparition dans un hôtel dont une chambre ne figure sur aucun plan.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/chambre-404.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/chambre-404.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="encre-noire">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/encre-noire.trubook" aria-label="Lire : Encre Noire">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/encre-noire.trubook&amp;k=truvector" aria-label="Lire : Encre Noire">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/encre-noire.svg" alt="Couverture de Encre Noire" loading="lazy" width="320" height="480">
           <span class="eb-badge">Polar · noir</span>
         </a>
@@ -133,13 +137,13 @@
           <h3>Encre Noire</h3>
           <p>Un tatoueur reconnaît, sur la peau d’un client, le dessin d’un crime jamais résolu.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/encre-noire.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/encre-noire.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="ce-qui-pousse-la-nuit">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/ce-qui-pousse-la-nuit.trubook" aria-label="Lire : Ce qui pousse la nuit">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/ce-qui-pousse-la-nuit.trubook&amp;k=truvector" aria-label="Lire : Ce qui pousse la nuit">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/ce-qui-pousse-la-nuit.svg" alt="Couverture de Ce qui pousse la nuit" loading="lazy" width="320" height="480">
           <span class="eb-badge">Fantastique</span>
         </a>
@@ -147,13 +151,13 @@
           <h3>Ce qui pousse la nuit</h3>
           <p>Une plante offerte se met à réclamer bien plus que de l’eau.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/ce-qui-pousse-la-nuit.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/ce-qui-pousse-la-nuit.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="le-treizieme-etage">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-treizieme-etage.trubook" aria-label="Lire : Le Treizième Étage">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-treizieme-etage.trubook&amp;k=truvector" aria-label="Lire : Le Treizième Étage">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-treizieme-etage.svg" alt="Couverture de Le Treizième Étage" loading="lazy" width="320" height="480">
           <span class="eb-badge">Horreur</span>
         </a>
@@ -161,13 +165,13 @@
           <h3>Le Treizième Étage</h3>
           <p>L’ascenseur s’arrête à un étage que l’immeuble ne possède pas.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-treizieme-etage.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-treizieme-etage.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="la-forge-des-noms">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-forge-des-noms.trubook" aria-label="Lire : La Forge des Noms">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-forge-des-noms.trubook&amp;k=truvector" aria-label="Lire : La Forge des Noms">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/la-forge-des-noms.svg" alt="Couverture de La Forge des Noms" loading="lazy" width="320" height="480">
           <span class="eb-badge">Fantasy</span>
         </a>
@@ -175,13 +179,13 @@
           <h3>La Forge des Noms</h3>
           <p>Dans un royaume où nommer une chose la crée, un forgeron oublie son propre nom.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-forge-des-noms.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-forge-des-noms.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="le-cartographe-aveugle">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-cartographe-aveugle.trubook" aria-label="Lire : Le Cartographe Aveugle">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-cartographe-aveugle.trubook&amp;k=truvector" aria-label="Lire : Le Cartographe Aveugle">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-cartographe-aveugle.svg" alt="Couverture de Le Cartographe Aveugle" loading="lazy" width="320" height="480">
           <span class="eb-badge">Fantasy</span>
         </a>
@@ -189,13 +193,13 @@
           <h3>Le Cartographe Aveugle</h3>
           <p>Il dessine des cartes de pays qu’il n’a jamais vus — et qui finissent par exister.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-cartographe-aveugle.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-cartographe-aveugle.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="l-horloger-et-le-temps">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/l-horloger-et-le-temps.trubook" aria-label="Lire : L’Horloger et le Temps">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/l-horloger-et-le-temps.trubook&amp;k=truvector" aria-label="Lire : L’Horloger et le Temps">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/l-horloger-et-le-temps.svg" alt="Couverture de L’Horloger et le Temps" loading="lazy" width="320" height="480">
           <span class="eb-badge">Conte philosophique</span>
         </a>
@@ -203,13 +207,13 @@
           <h3>L’Horloger et le Temps</h3>
           <p>Celui qui répare les montres du village n’a jamais eu le temps de vivre.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/l-horloger-et-le-temps.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/l-horloger-et-le-temps.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="la-fille-qui-comptait-les-etoiles">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-fille-qui-comptait-les-etoiles.trubook" aria-label="Lire : La Fille qui Comptait les Étoiles">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-fille-qui-comptait-les-etoiles.trubook&amp;k=truvector" aria-label="Lire : La Fille qui Comptait les Étoiles">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/la-fille-qui-comptait-les-etoiles.svg" alt="Couverture de La Fille qui Comptait les Étoiles" loading="lazy" width="320" height="480">
           <span class="eb-badge">Conte poétique</span>
         </a>
@@ -217,13 +221,13 @@
           <h3>La Fille qui Comptait les Étoiles</h3>
           <p>Sur ce qu’on cesse de voir, un à un, en grandissant.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-fille-qui-comptait-les-etoiles.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/la-fille-qui-comptait-les-etoiles.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="cafe-table-3">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/cafe-table-3.trubook" aria-label="Lire : Café, table 3">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/cafe-table-3.trubook&amp;k=truvector" aria-label="Lire : Café, table 3">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/cafe-table-3.svg" alt="Couverture de Café, table 3" loading="lazy" width="320" height="480">
           <span class="eb-badge">Tranche de vie</span>
         </a>
@@ -231,13 +235,13 @@
           <h3>Café, table 3</h3>
           <p>Deux inconnus, le même café chaque matin, sans un mot — jusqu’au jour où l’un manque.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/cafe-table-3.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/cafe-table-3.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="vingt-minutes-de-retard">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/vingt-minutes-de-retard.trubook" aria-label="Lire : Vingt Minutes de Retard">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/vingt-minutes-de-retard.trubook&amp;k=truvector" aria-label="Lire : Vingt Minutes de Retard">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/vingt-minutes-de-retard.svg" alt="Couverture de Vingt Minutes de Retard" loading="lazy" width="320" height="480">
           <span class="eb-badge">Réalisme</span>
         </a>
@@ -245,13 +249,13 @@
           <h3>Vingt Minutes de Retard</h3>
           <p>Comment un train raté redessine une vie entière.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/vingt-minutes-de-retard.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/vingt-minutes-de-retard.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="correspondances">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/correspondances.trubook" aria-label="Lire : Correspondances">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/correspondances.trubook&amp;k=truvector" aria-label="Lire : Correspondances">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/correspondances.svg" alt="Couverture de Correspondances" loading="lazy" width="320" height="480">
           <span class="eb-badge">Romance épistolaire</span>
         </a>
@@ -259,13 +263,13 @@
           <h3>Correspondances</h3>
           <p>Deux personnes s’écrivent par erreur sur une vieille adresse — et n’arrêtent plus.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/correspondances.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/correspondances.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="reunion-obligatoire">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/reunion-obligatoire.trubook" aria-label="Lire : Réunion Obligatoire">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/reunion-obligatoire.trubook&amp;k=truvector" aria-label="Lire : Réunion Obligatoire">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/reunion-obligatoire.svg" alt="Couverture de Réunion Obligatoire" loading="lazy" width="320" height="480">
           <span class="eb-badge">Satire</span>
         </a>
@@ -273,13 +277,13 @@
           <h3>Réunion Obligatoire</h3>
           <p>La chronique d’une réunion qui ne finit jamais.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/reunion-obligatoire.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/reunion-obligatoire.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="mise-a-jour-requise">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/mise-a-jour-requise.trubook" aria-label="Lire : Mise à Jour Requise">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/mise-a-jour-requise.trubook&amp;k=truvector" aria-label="Lire : Mise à Jour Requise">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/mise-a-jour-requise.svg" alt="Couverture de Mise à Jour Requise" loading="lazy" width="320" height="480">
           <span class="eb-badge">Humour</span>
         </a>
@@ -287,13 +291,13 @@
           <h3>Mise à Jour Requise</h3>
           <p>Un homme dont la vie refuse de fonctionner tant qu’il n’a pas installé la v2.0.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/mise-a-jour-requise.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/mise-a-jour-requise.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="lettre-de-1914">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/lettre-de-1914.trubook" aria-label="Lire : Lettre de 1914">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/lettre-de-1914.trubook&amp;k=truvector" aria-label="Lire : Lettre de 1914">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/lettre-de-1914.svg" alt="Couverture de Lettre de 1914" loading="lazy" width="320" height="480">
           <span class="eb-badge">Historique</span>
         </a>
@@ -301,13 +305,13 @@
           <h3>Lettre de 1914</h3>
           <p>Une lettre du front qui arrive à destination cent ans trop tard.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/lettre-de-1914.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/lettre-de-1914.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="si-ada-avait-continue">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/si-ada-avait-continue.trubook" aria-label="Lire : Si Ada Avait Continué">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/si-ada-avait-continue.trubook&amp;k=truvector" aria-label="Lire : Si Ada Avait Continué">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/si-ada-avait-continue.svg" alt="Couverture de Si Ada Avait Continué" loading="lazy" width="320" height="480">
           <span class="eb-badge">Uchronie</span>
         </a>
@@ -315,13 +319,13 @@
           <h3>Si Ada Avait Continué</h3>
           <p>Et si Ada Lovelace avait achevé sa machine à penser ?</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/si-ada-avait-continue.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/si-ada-avait-continue.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="le-dernier-wagon">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-wagon.trubook" aria-label="Lire : Le Dernier Wagon">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-wagon.trubook&amp;k=truvector" aria-label="Lire : Le Dernier Wagon">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-dernier-wagon.svg" alt="Couverture de Le Dernier Wagon" loading="lazy" width="320" height="480">
           <span class="eb-badge">Huis clos</span>
         </a>
@@ -329,13 +333,13 @@
           <h3>Le Dernier Wagon</h3>
           <p>Un train qui ne s’arrête plus, des passagers qui ne se souviennent pas d’être montés.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-wagon.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-dernier-wagon.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
       </article>
       <article class="eb-card" data-slug="le-jardin-sous-la-cendre">
-        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-jardin-sous-la-cendre.trubook" aria-label="Lire : Le Jardin sous la Cendre">
+        <a class="eb-cover" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-jardin-sous-la-cendre.trubook&amp;k=truvector" aria-label="Lire : Le Jardin sous la Cendre">
           <img src="https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/covers/le-jardin-sous-la-cendre.svg" alt="Couverture de Le Jardin sous la Cendre" loading="lazy" width="320" height="480">
           <span class="eb-badge">Post-apo lumineux</span>
         </a>
@@ -343,7 +347,7 @@
           <h3>Le Jardin sous la Cendre</h3>
           <p>Après la fin du monde, une communauté fait éclore la première fleur.</p>
           <div class="eb-foot">
-            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-jardin-sous-la-cendre.trubook">Lire</a>
+            <a class="btn eb-read" href="lecteur.html?src=https://cdn.jsdelivr.net/gh/clode666/truvector-assets@main/ebooks/le-jardin-sous-la-cendre.trubook&amp;k=truvector">Lire</a>
             <span class="eb-until" data-until="2026-11-30"></span>
           </div>
         </div>
@@ -356,7 +360,7 @@
   <p>© 2026 TRUvector.dev — Tristan Ruard</p>
   <p class="foot-legal"><a href="../mentions-legales/">Mentions légales</a> · <a href="../cgv/">CGV</a> · <a href="../confidentialite/">Confidentialité</a> · <a href="../cookies/">Cookies</a> · <a href="../securite/">Sécurité</a></p>
 </div></footer>
-<script src="../assets/js/nav.js?v=4"></script>
+<script src="../assets/js/nav.js?v=5"></script>
 <script>
 /* Disponibilité limitée : verrouille les cartes expirées et affiche l'échéance. */
 (function(){
@@ -374,5 +378,26 @@
   });
 })();
 </script>
+<script>
+/* Disponibilité réelle : vérifie que chaque .trubook existe sur le CDN.
+   Les nouvelles pas encore publiées passent en « Bientôt » au lieu d'ouvrir un lecteur vide. */
+(function(){
+  var cards=document.querySelectorAll('.eb-card'); if(!cards.length||!window.fetch) return;
+  cards.forEach(function(card){
+    var a=card.querySelector('.eb-read'); if(!a) return;
+    var m=/[?&]src=([^&]+)/.exec(a.getAttribute('href')||''); if(!m) return;
+    var url=decodeURIComponent(m[1]);
+    fetch(url,{method:'HEAD',cache:'no-cache'}).then(function(r){
+      if(r.status===404){
+        card.classList.add('eb-soon');
+        var foot=card.querySelector('.eb-foot');
+        if(foot && !foot.querySelector('.eb-soon-tag')){ var t=document.createElement('span'); t.className='eb-soon-tag'; t.textContent='Bientôt en ligne'; foot.appendChild(t); }
+      }
+    }).catch(function(){});
+  });
+})();
+</script>
+<script src="../assets/js/player.js?v=3"></script>
+<script src="../assets/js/filters.js?v=1"></script>
 </body>
 </html>
