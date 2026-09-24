@@ -10,14 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
-<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
-<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=7">
+<link rel="stylesheet" href="_kit/kit.css?v=2">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#070b11">
 
 <script src="../../assets/js/assets.js?v=2"></script>
 <script src="../../assets/js/config.js?v=2"></script>
-<script src="../../assets/js/render.js?v=2"></script>
+<script src="../../assets/js/render.js?v=3"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -42,12 +42,13 @@
 </main>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="_kit/kit.js?v=1"></script>
+<script src="_kit/kit.js?v=2"></script>
 <script>
 (function(){ 'use strict'; var $=K.$, esc=K.esc;
 
 var last=null;
-function run(){ var u=($('url').value||$('url').placeholder).trim(); K.loading($('out'),'Visite de '+u);
+var remember=K.recent('url','headers',function(){ run(); });
+function run(){ var u=($('url').value||$('url').placeholder).trim(); remember(u); K.loading($('out'),'Visite de '+u);
   K.api('headers',{url:u}).then(function(d){ last=d;
     var col={A:'#59e39a',B:'#8ff3d9',C:'#f4c56b',D:'#f4a36b',E:'#ff8b8b',F:'#ff6b6b'}[d.grade];
     var head='<div class="ksec" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><span class="grade" style="color:'+col+';border-color:'+col+'">'+d.grade+'</span><div><b style="font-size:17px">'+esc(d.url)+'</b><br><span class="dim">HTTP '+d.status+' · score '+d.score+'/100 · '+(d.https?'<span class="ok">HTTPS</span>':'<span class="ko">sans HTTPS</span>')+'</span>'+

@@ -10,14 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css?v=8">
-<link rel="stylesheet" href="../../assets/css/fx.css?v=6">
-<link rel="stylesheet" href="_kit/kit.css?v=1">
+<link rel="stylesheet" href="../../assets/css/fx.css?v=7">
+<link rel="stylesheet" href="_kit/kit.css?v=2">
 <link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#070b11">
 
 <script src="../../assets/js/assets.js?v=2"></script>
 <script src="../../assets/js/config.js?v=2"></script>
-<script src="../../assets/js/render.js?v=2"></script>
+<script src="../../assets/js/render.js?v=3"></script>
 </head>
 <body>
 <nav class="site-nav"><div class="wrap row">
@@ -41,7 +41,7 @@
 </main>
 <div class="toast" id="toast" role="status"></div>
 
-<script src="_kit/kit.js?v=1"></script>
+<script src="_kit/kit.js?v=2"></script>
 <script>
 (function(){ 'use strict'; var $=K.$, esc=K.esc;
 
@@ -49,21 +49,27 @@ var TYPES=['A','AAAA','MX','NS','TXT','CAA','SOA','CNAME'], last={};
 function explainSPF(t){ var parts=t.split(/\s+/).slice(1), inc=parts.filter(function(p){ return /^[+~?-]?(include|a|mx|ptr|exists|redirect)/.test(p); }).length, all=(parts.filter(function(p){ return /all$/.test(p); })[0]||'');
   var pol={'-all':['<span class="ok">strict (-all)</span> : tout autre serveur est rejeté'],'~all':['<span class="wa">souple (~all)</span> : les autres serveurs sont marqués suspects'],'?all':['<span class="ko">neutre (?all)</span> : aucune protection'],'+all':['<span class="ko">+all : n’importe qui peut envoyer au nom du domaine</span>']}[all]||['<span class="wa">pas de règle « all »</span>'];
   return pol[0]+'<br><span class="dim">'+inc+' mécanisme(s) nécessitant une requête DNS (limite : 10)</span>'+(inc>10?' <span class="ko">— dépassement !</span>':''); }
+function explainBIMI(t,dm){ var l=(t.match(/l=([^;\s]+)/i)||[])[1]||'', a=(t.match(/a=([^;\s]+)/i)||[])[1]||'', pol=(dm.match(/p=(\w+)/i)||[])[1];
+  return '<span class="ok">✓ présent</span>'+(l?'<br><span class="dim">logo : '+esc(l)+'</span>':'')+(a?'<br><span class="ok">certificat de marque (VMC) : présent</span>':'<br><span class="wa">sans certificat de marque (VMC), Gmail n’affichera pas le logo</span>')+(pol!=='quarantine'&&pol!=='reject'?'<br><span class="ko">BIMI exige un DMARC en quarantine ou reject</span>':''); }
 function explainDMARC(t){ var m={}; t.replace(/^v=DMARC1;?/i,'').split(';').forEach(function(kv){ var x=kv.trim().split('='); if(x[0]) m[x[0].toLowerCase()]=x[1]; });
   var p={reject:'<span class="ok">reject</span> : les faux messages sont refusés',quarantine:'<span class="wa">quarantine</span> : les faux messages vont en spam',none:'<span class="ko">none</span> : simple observation, aucune protection'}[m.p]||'<span class="ko">politique manquante</span>';
   return p+(m.rua?'<br><span class="dim">rapports envoyés à '+esc(m.rua)+'</span>':'')+(m.pct&&m.pct!=='100'?'<br><span class="wa">appliqué à '+esc(m.pct)+' % des messages</span>':''); }
-function explore(){ var d=K.domain($('d').value||$('d').placeholder); if(!d){ K.error($('out'),'Nom de domaine invalide.'); return Promise.reject(); }
+var remember=K.recent('d','dns',function(){ explore().catch(function(){}); });
+function explore(){ var d=K.domain($('d').value||$('d').placeholder); if(!d){ K.error($('out'),'Nom de domaine invalide.'); return Promise.reject(); } remember(d);
   $('d').value=d; $('extra').innerHTML=''; K.loading($('out'),'Résolution DNS de '+d); $('sum').innerHTML='';
   var reqs=TYPES.map(function(t){ return K.api('dns',{name:d,type:t}).catch(function(e){ return {type:t,answers:[],err:e.message}; }); });
   reqs.push(K.api('dns',{name:'_dmarc.'+d,type:'TXT'}).catch(function(){ return {answers:[]}; }));
+  reqs.push(K.api('dns',{name:'default._bimi.'+d,type:'TXT'}).catch(function(){ return {answers:[]}; }));
   return Promise.all(reqs).then(function(res){ last={domaine:d,dns:{}};
+    var bimi=((res[TYPES.length+1].answers||[]).map(function(a){ return String(a.data).replace(/"/g,''); }).filter(function(x){ return /^v=BIMI1/i.test(x); })[0])||'';
     var rows=[], dnssec=res.some(function(r){ return r.dnssec; }), txt=[], dmarc=((res[TYPES.length].answers||[]).map(function(a){ return a.data.replace(/"/g,''); }).filter(function(x){ return /^v=DMARC1/i.test(x); })[0])||'';
     TYPES.forEach(function(t,i){ var r=res[i]; last.dns[t]=r.answers||[]; (r.answers||[]).forEach(function(a){ var v=String(a.data).replace(/^"|"$/g,'').replace(/" "/g,''); if(t==='TXT') txt.push(v);
       rows.push(['<b>'+t+'</b>',esc(v),a.ttl+' s']); }); if(r.err) rows.push(['<b>'+t+'</b>','<span class="wa">'+esc(r.err)+'</span>','']); });
     var spf=txt.filter(function(x){ return /^v=spf1/i.test(x); }), mx=last.dns.MX||[];
     K.cards($('sum'),[['Domaine',esc(d),'wide'],['Adresses IP',(last.dns.A||[]).length+' IPv4 · '+(last.dns.AAAA||[]).length+' IPv6'],['DNSSEC',dnssec?'<span class="ok">✓ signé et validé</span>':'<span class="wa">non signé</span>'],
       ['Reçoit du courrier (MX)',mx.length?'<span class="ok">✓ '+mx.length+' serveur(s)</span>':'<span class="ko">✗ aucun MX</span>'],['CAA (autorités de certification)',(last.dns.CAA||[]).length?'<span class="ok">✓ restreint</span>':'<span class="dim">non restreint</span>'],
-      ['SPF',spf.length>1?'<span class="ko">✗ plusieurs SPF (invalide)</span>':spf.length?explainSPF(spf[0]):'<span class="ko">✗ absent : usurpation facile</span>','wide'],['DMARC',dmarc?explainDMARC(dmarc):'<span class="ko">✗ absent</span>','wide']]);
+      ['SPF',spf.length>1?'<span class="ko">✗ plusieurs SPF (invalide)</span>':spf.length?explainSPF(spf[0]):'<span class="ko">✗ absent : usurpation facile</span>','wide'],['DMARC',dmarc?explainDMARC(dmarc):'<span class="ko">✗ absent</span>','wide'],['BIMI (logo dans les messageries)',bimi?explainBIMI(bimi,dmarc):'<span class="dim">absent — facultatif : affiche ton logo à côté de tes e-mails dans Gmail, Yahoo, Apple Mail…</span>','wide']]);
+    last.bimi=bimi;
     last.spf=spf; last.dmarc=dmarc; last.dnssec=dnssec;
     $('out').innerHTML='<div class="ksec"><h2>📇 Enregistrements</h2>'+(rows.length?K.table(['Type','Valeur','TTL'],rows):'<p class="ko">Aucun enregistrement : le domaine existe-t-il ?</p>')+'</div>'; }); }
 function report(){ explore().then(function(){ var d=last.domaine; $('extra').innerHTML='<div class="kload">Audit des en-têtes et des certificats</div>';

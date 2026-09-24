@@ -46,6 +46,18 @@
     b.onclick=function(e){ var a=e.target.getAttribute('data-a'); if(!a) return; if(a==='md') K.download(title.replace(/\W+/g,'-').toLowerCase()+'.md',K.toMd(title,getEl()),'text/markdown');
       if(a==='json') K.download(title.replace(/\W+/g,'-').toLowerCase()+'.json',JSON.stringify(getJson(),null,2),'application/json'); if(a==='share'&&K.share) K.share(); };
     host.appendChild(b); return b; };
+  /* historique local FACULTATIF (désactivé par défaut) : dernières recherches, sur cet appareil uniquement */
+  K.recent=function(inputId,key,onPick){ var inp=K.$(inputId); if(!inp) return function(){}; var LS='tvk:'+key, ON='tvk:on:'+key;
+    function get(){ try{ return JSON.parse(localStorage.getItem(LS)||'[]'); }catch(e){ return []; } }
+    function on(){ try{ return localStorage.getItem(ON)==='1'; }catch(e){ return false; } }
+    var box=document.createElement('div'); box.className='krecent'; var host=inp.closest('.ctl')||inp.parentNode; host.appendChild(box);
+    function draw(){ var L=get(), o=on();
+      box.innerHTML='<label class="krem"><input type="checkbox"'+(o?' checked':'')+'> Mémoriser mes recherches sur cet appareil</label>'+(o&&L.length?'<div class="chips">'+L.map(function(v){ return '<button type="button" data-v="'+K.esc(v)+'">↺ '+K.esc(v.length>34?v.slice(0,32)+'…':v)+'</button>'; }).join('')+'<button type="button" data-clear="1" class="dim">✕ effacer</button></div>':'');
+      box.querySelector('input').onchange=function(){ try{ if(this.checked) localStorage.setItem(ON,'1'); else { localStorage.removeItem(ON); localStorage.removeItem(LS); } }catch(e){} draw(); };
+      box.querySelectorAll('[data-v]').forEach(function(b){ b.onclick=function(){ inp.value=b.getAttribute('data-v'); onPick&&onPick(); }; });
+      var c=box.querySelector('[data-clear]'); if(c) c.onclick=function(){ try{ localStorage.removeItem(LS); }catch(e){} draw(); }; }
+    draw();
+    return function remember(v){ v=String(v||'').trim(); if(!v||!on()) return; var L=get().filter(function(x){ return x!==v; }); L.unshift(v); try{ localStorage.setItem(LS,JSON.stringify(L.slice(0,8))); }catch(e){} draw(); }; };
   /* utilitaires réseau partagés */
   K.ipv4=function(s){ var m=String(s).trim().match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/); if(!m) return null; var a=m.slice(1).map(Number); return a.every(function(x){ return x<=255; })?a:null; };
   K.isIPv6=function(s){ return /^[0-9a-f:]+$/i.test(s)&&s.indexOf(':')>=0&&(s.match(/::/g)||[]).length<=1; };
