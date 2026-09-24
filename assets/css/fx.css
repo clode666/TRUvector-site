@@ -344,3 +344,8 @@ html.has-mini #tvfx-chat{bottom:156px;height:min(520px,calc(100vh - 190px))}
 /* v10 — widget « Ton IP » de l'accueil */
 .tvh-ipc{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 20px;border:1px solid var(--bord-fort);border-radius:var(--r-lg);background:var(--surface-2)}
 .tvh-ipi{font-size:28px}.tvh-ipc>div{flex:1;min-width:200px}.tvh-ipv{font-family:var(--mono);font-size:20px;color:var(--menthe)}.tvh-ipd{color:var(--texte-2);font-size:14px}
+
+/* v10.1 — sections de la page Modules */
+.tv-grp{grid-column:1/-1;display:flex;gap:12px;align-items:center;margin:14px 0 2px;padding:12px 16px;border-radius:var(--r-md);border:1px solid var(--bord);background:linear-gradient(90deg,rgba(52,245,197,.07),transparent)}
+.tv-grp:first-child{margin-top:0}.tv-grp .i{font-size:24px}.tv-grp b{font-size:18px}.tv-grp small{font-family:var(--mono);font-size:11px;color:var(--texte-3)}.tv-grp .s{font-size:13.5px;color:var(--texte-2)}
+.tvf-active .tv-grp{display:none}

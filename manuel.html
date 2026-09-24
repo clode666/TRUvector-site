@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manuel du site — TRUvector.dev v10</title>
-<meta name="description" content="Manuel complet du site TRUvector.dev v10 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
+<title>Manuel du site — TRUvector.dev v10.1</title>
+<meta name="description" content="Manuel complet du site TRUvector.dev v10.1 : contenu, installation, déploiement, authentification, maintenance et dépannage.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -111,14 +111,14 @@
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
     <span><span class="tru">TRU</span>vector<span class="dev">.dev</span></span>
   </span>
-  <span class="badge">MANUEL v10</span>
+  <span class="badge">MANUEL v10.1</span>
 </div></nav>
 
 <header class="top">
   <div class="aur" aria-hidden="true"><span class="x1"></span><span class="x2"></span></div>
   <div class="wrap in">
     <svg class="triskele" viewBox="0 0 200 200" aria-hidden="true"><g fill="none" stroke="#34f5c5" stroke-width="7" stroke-linecap="round"><path d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(120 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/><path transform="rotate(240 100 100)" d="M100,100 C96,80 108,60 132,60 C156,60 168,82 156,103 C148,118 130,120 120,109 C114,102 116,91 125,89"/></g><circle cx="100" cy="100" r="5" fill="#34f5c5"/></svg>
-    <h1>Manuel du site — TRUvector.dev v10</h1>
+    <h1>Manuel du site — TRUvector.dev v10.1</h1>
     <p class="sub">Contenu · installation · déploiement · authentification · maintenance · dépannage.</p>
     <p class="meta">Site statique · romantico·geek · hébergé sur Cloudflare Pages</p>
   </div>
@@ -208,7 +208,7 @@
   <!-- 1 -->
   <section id="s1">
     <h2 class="s"><span class="n">01</span> Vue d'ensemble</h2>
-    <p class="lead">TRUvector.dev v10 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
+    <p class="lead">TRUvector.dev v10.1 est un <strong>site statique</strong> (HTML / CSS / JS, sans build ni serveur) au design <strong>romantico·geek</strong> : triskèle néon, aurores boréales, guirlandes ambrées sur fond nuit.</p>
     <p>Il réunit une page d'accueil, neuf sections (Galerie, Logiciels, E-books, Musique, Articles, Modules, Concours, Soutenir) et un pôle légal, et se déploie sur <strong>Cloudflare Pages</strong> à partir d'un dépôt GitHub. Les médias lourds (musique, images, e-books) sont servis par un second dépôt via jsDelivr. Ses objectifs&nbsp;:</p>
     <ul>
       <li>présenter la marque (le <strong>compte à rebours</strong> a atteint l'ouverture le 21/09/2026 : le site est ouvert)&nbsp;;</li>
@@ -370,7 +370,7 @@
     <p>Place <strong>le contenu du dossier <code>truvector.dev/</code> à la racine</strong> d'un nouveau dépôt.</p>
     <div class="block"><div class="lbl">terminal</div><pre>git init
 git add .
-git commit -m "TRUvector.dev v10"
+git commit -m "TRUvector.dev v10.1"
 git branch -M main
 git remote add origin https://github.com/clode666/truvector-dev.git
 git push -u origin main</pre></div>
@@ -673,8 +673,8 @@ git push</pre></div>
       </tbody>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
-    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=6   assets.js?v=2   nav.js?v=5
-player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
+    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=7   assets.js?v=2   nav.js?v=5
+player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=5
 (les modules assets/js/fx/*.js suivent automatiquement le ?v= de fx.js)</pre></div>
     <div class="note"><b>Service worker.</b> <code>sw.js</code> garde une copie hors ligne des pages, en « réseau d'abord » : en ligne, le visiteur reçoit toujours la version fraîche. Si tu modifies <code>sw.js</code>, change sa constante <code>V</code> (<code>tv-v6-1</code> → <code>tv-v6-2</code>) pour purger les anciennes copies.</div>
     <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
@@ -853,9 +853,9 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
     <div class="tw"><table>
       <thead><tr><th>#</th><th>Module (fichier)</th><th>Fonctionnement</th></tr></thead>
       <tbody>
-        <tr><td>01</td><td>IP Analyzer (<code>ip-analyzer.html</code>)</td><td>Worker : IP publique, FAI/ASN, localisation approx., HTTP/TLS, RDAP, reverse DNS · local : connexion, IP locale WebRTC</td></tr>
+        <tr><td>01</td><td>IP Analyzer (<code>ip-analyzer.html</code>)</td><td>Worker : IP publique (IPv4 <em>ou</em> IPv6 selon celle que ta connexion utilise), FAI/ASN, localisation approx., HTTP/TLS, RDAP, reverse DNS · local : connexion, IP locale WebRTC</td></tr>
         <tr><td>02</td><td>Calculateur de sous-réseaux (<code>subnet.html</code>)</td><td>local : IPv4/IPv6, VLSM, test d’appartenance</td></tr>
-        <tr><td>03</td><td>DNS Explorer (<code>dns-explorer.html</code>)</td><td>Worker : 8 types d’enregistrements, SPF/DMARC/DNSSEC expliqués, « Rapport complet »</td></tr>
+        <tr><td>03</td><td>DNS Explorer (<code>dns-explorer.html</code>)</td><td>Worker : 8 types d’enregistrements, SPF/DMARC/BIMI/DNSSEC expliqués, « Rapport complet »</td></tr>
         <tr><td>04</td><td>Audit d’en-têtes (<code>headers-audit.html</code>)</td><td>Worker (anti-SSRF) : note A–F, correctifs</td></tr>
         <tr><td>05</td><td>Inspecteur de certificats (<code>cert-inspector.html</code>)</td><td>Worker : Certificate Transparency (crt.sh)</td></tr>
         <tr><td>06</td><td>Test de débit (<code>speed-test.html</code>)</td><td>Worker : ping, gigue, descendant, montant</td></tr>
@@ -883,6 +883,9 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
       <li><strong>Cockpit → Modules</strong> : les 16 outils sont au catalogue (catégories Réseau, E-mail, Comptes, Outil), plus une carte « Outils serveur » (interrupteur général et limite horaire). <strong>Accueil</strong> : bloc « Widget Ton IP » (désactivé par défaut car il interroge le serveur à chaque visite).</li>
       <li><strong>Ctrl+K</strong> : commandes directes <code>ip</code>, <code>ip 1.1.1.1</code>, <code>dns exemple.fr</code>, <code>mail nom@domaine.fr</code>, <code>cert exemple.fr</code>, <code>entetes exemple.fr</code>, <code>mdp</code>, <code>qr</code>, <code>date 1790160000</code>, <code>jwt</code>, <code>2fa</code>, <code>debit</code>, <code>subnet 10.0.0.0/8</code>.</li>
       <li><strong>Assistant TRU</strong> : 6 nouvelles entrées de FAQ et index reconstruit (494 passages).</li>
+      <li><strong>Page Modules en deux sections</strong> : « 🧰 Boîte à outils » puis « 🎮 Loisirs &amp; création », déduites de la catégorie (ou du champ facultatif <code>group</code> : <code>outils</code> / <code>loisirs</code>). Les intertitres s’effacent pendant un filtre, une recherche ou un tri.</li>
+      <li><strong>Historique facultatif</strong> (DNS, IP, en-têtes, certificats, e-mail, sous-réseaux) : case « Mémoriser mes recherches sur cet appareil », <strong>désactivée par défaut</strong> ; 8 dernières recherches, effacées en décochant.</li>
+      <li><strong>Hors ligne</strong> : les 9 outils 100 % locaux, le kit et le noyau du site sont pré-enregistrés par le service worker dès la première visite.</li>
       <li><strong>Diagnostic du cockpit</strong> : vérifie aussi la route <code>/api/tools/whoami</code>.</li>
     </ul>
     <div class="note warn"><b>Périmètre éthique.</b> Pas de recherche de comptes d’une personne, pas de sondage SMTP, pas de scan de ports de tiers (voir <code>roadmap-modules.html</code>, « Hors périmètre »). Les outils « comptes » servent à auditer <em>ses propres</em> accès.</div>
@@ -892,13 +895,19 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
   <!-- 17 -->
   <section id="s17">
     <h2 class="s"><span class="n">17</span> Journal des versions</h2>
+    <h3>v10.1 — 23/09/2026 · roadmap boîte à outils bouclée</h3>
+    <ul>
+      <li>Ajouts manquants : historique local facultatif (kit), BIMI dans DNS Explorer, page Modules en deux sections (Boîte à outils / Loisirs &amp; création), outils locaux disponibles hors ligne.</li>
+      <li>Corrigé : l’horloge mondiale (horodatages) revenait à l’heure actuelle au bout de 30 s ; le service worker abandonnait tout le pré-enregistrement si un seul fichier manquait.</li>
+      <li>Versions : <code>render.js?v=3</code>, <code>fx.css?v=7</code>, <code>filters.js?v=5</code>, <code>kit ?v=2</code>, service worker <code>tv-v10-2</code>.</li>
+    </ul>
     <h3>v10 — 23/09/2026 · la boîte à outils</h3>
     <ul>
       <li>Roadmap « boîte à outils » livrée en entier : 16 modules (voir section <a href="#s22">22</a>), kit commun, 8 routes Worker avec cache, limites et anti-SSRF, export Markdown/JSON et liens de partage.</li>
       <li>Intégration : catalogue (40 modules, outils en tête), cockpit (interrupteur outils serveur, widget « Ton IP »), commandes Ctrl+K, FAQ et index de l’assistant, diagnostic.</li>
       <li>L’ancien brouillon <code>ip-analyzer.html</code> (bloqué par la CSP) est remplacé par le module 01.</li>
       <li>Bibliothèque ajoutée : <code>assets/vendor/qrcode/</code> (qrcode-generator 1.4.4, MIT, licence incluse).</li>
-      <li>Versions : <code>fx.js?v=7</code>, <code>fx.css?v=6</code>, <code>render.js?v=2</code>.</li>
+      <li>Versions : <code>fx.js?v=7</code>, <code>fx.css?v=7</code>, <code>render.js?v=3</code>.</li>
     </ul>
     <h3>v9.1 — 23/09/2026 · roadmap chatbot bouclée + roadmap boîte à outils</h3>
     <ul>
@@ -919,7 +928,7 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
       <li>Accueil : « .dev » du grand logo n’hérite plus de l’ombre de lisibilité (qui l’assombrissait à travers son remplissage en dégradé).</li>
       <li>Boutons fantômes (« Voir la galerie », « Protéger un e-book »…) : texte clair dans tous les états, <strong>liens visités compris</strong> — 211 boutons contrôlés sur tout le site.</li>
       <li>Nouvelle <code>roadmap-chatbot.html</code> (6 phases, 0 €, démo du mode local), accessible par Ctrl+K.</li>
-      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=6</code>, <code>fx.js?v=7</code>.</li>
+      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=7</code>, <code>fx.js?v=7</code>.</li>
     </ul>
     <h3>v8 — 23/09/2026 · le cockpit devient le point central</h3>
     <ul>
@@ -964,8 +973,8 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
 <footer>
   <div class="wrap">
     <div class="hr" style="margin-bottom:26px"></div>
-    <p class="fm">$ truvector docs --version 10 --host cloudflare</p>
-    <p>© 2026 TRUvector.dev · Manuel du site v10 · Where Code Meets Creativity 🌌</p>
+    <p class="fm">$ truvector docs --version 10.1 --host cloudflare</p>
+    <p>© 2026 TRUvector.dev · Manuel du site v10.1 · Where Code Meets Creativity 🌌</p>
   </div>
 </footer>
 

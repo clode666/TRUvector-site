@@ -1,4 +1,4 @@
-# TRUvector.dev — v10
+# TRUvector.dev — v10.1
 
 Site statique **romantico·geek** de TRUvector : logiciels, e-books, musique, articles, modules interactifs et créations graphiques.
 Hébergé sur **Cloudflare Pages** depuis ce dépôt GitHub ; médias lourds servis par le dépôt `clode666/truvector-assets` via jsDelivr.
@@ -89,7 +89,7 @@ JS/CSS : cache 5 min + revalidation. Images et bibliothèques : 1 an.
 grep -rl "player.js?v=6" --include=*.html . | xargs sed -i 's/player\.js?v=6/player.js?v=7/g'
 ```
 
-Versions en vigueur : `tokens.css?v=8` `fx.css?v=6` `fx.js?v=7` `render.js?v=2` `config.js?v=2` `player.js?v=6` `filters.js?v=4` `tru-reader.js?v=3` `nav.js?v=5` `assets.js?v=2`.
+Versions en vigueur : `tokens.css?v=8` `fx.css?v=7` `fx.js?v=7` `render.js?v=3` `config.js?v=2` `player.js?v=6` `filters.js?v=5` `tru-reader.js?v=3` `nav.js?v=5` `assets.js?v=2`.
 Si tu modifies `sw.js`, change sa constante `V`.
 
 ## 7. L'assistant « TRU » (chatbot)
@@ -109,6 +109,7 @@ Réseau (IP Analyzer, sous-réseaux, DNS Explorer, audit d'en-têtes, certificat
 - Kit commun `modules/apps/_kit/` ; routes Worker `/api/tools/*` (cache, limites, anti-SSRF, aucun journal) ; aucun domaine tiers dans la CSP.
 - Cockpit → Modules : interrupteur « Outils serveur » + limite horaire. Accueil : « Widget Ton IP » (facultatif).
 - Ctrl+K : `ip`, `dns exemple.fr`, `mail nom@domaine.fr`, `cert …`, `entetes …`, `mdp`, `qr`, `date …`, `jwt`, `2fa`, `debit`, `subnet …`.
+- Page Modules en deux sections (🧰 Boîte à outils / 🎮 Loisirs & création) ; historique des recherches facultatif (désactivé par défaut) ; outils locaux disponibles hors ligne.
 - Détails : manuel, section 22.
 
 ## 9. Dépannage express

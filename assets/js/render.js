@@ -141,7 +141,14 @@
     function grids(){ var grid=$('#tv-content .sec-grid'); if(!grid) return; var p=location.pathname;
       function card(badge,t,d,href,label,blank){ return '<div class="sec-card">'+(badge?'<span class="badge">'+esc(badge)+'</span>':'')+'<h3>'+esc(t)+'</h3><p>'+esc(d)+'</p><a class="go" href="'+esc(href)+'"'+(blank?' target="_blank" rel="noopener"':'')+'>'+esc(label)+'</a></div>'; }
       if(/\/logiciels\/(index\.html)?$/.test(p)&&vis(C.logiciels).length) grid.innerHTML=vis(C.logiciels).map(function(x){ return card(x.badge,x.title,x.desc,'fiche.html?p='+x.slug,'Voir la fiche →'); }).join('');
-      else if(/\/modules\/(index\.html)?$/.test(p)&&vis(C.modules).length) grid.innerHTML=vis(C.modules).map(function(x){ return card(x.badge,x.title,x.desc,x.url,'Ouvrir ↗',true); }).join('');
+      else if(/\/modules\/(index\.html)?$/.test(p)&&vis(C.modules).length){
+        /* deux sections : boîte à outils puis loisirs & création (champ « group » facultatif, sinon déduit de la catégorie) */
+        var TOOLS=/^(réseau|reseau|e-mail|email|comptes|outil|sécurité|securite|dev)$/i;
+        function grp(x){ return x.group||(TOOLS.test(x.badge||'')?'outils':'loisirs'); }
+        var L=vis(C.modules), T=L.filter(function(x){ return grp(x)==='outils'; }), O=L.filter(function(x){ return grp(x)!=='outils'; });
+        function head(ic,t,sub,n){ return '<div class="tv-grp" role="heading" aria-level="2"><span class="i" aria-hidden="true">'+ic+'</span><span><b>'+esc(t)+'</b> <small>'+n+'</small><br><span class="s">'+esc(sub)+'</span></span></div>'; }
+        grid.innerHTML=(T.length?head('🧰','Boîte à outils','Réseau, e-mail, comptes et utilitaires du quotidien',T.length):'')+T.map(function(x){ return card(x.badge,x.title,x.desc,x.url,'Ouvrir ↗',true); }).join('')+
+          (O.length?head('🎮','Loisirs & création','Jeux, créations, démos et expériences',O.length):'')+O.map(function(x){ return card(x.badge,x.title,x.desc,x.url,'Ouvrir ↗',true); }).join(''); }
       else if(/\/concours\/(index\.html)?$/.test(p)&&cfg.concours){ var L=vis(cfg.concours);
         grid.innerHTML=L.length?L.map(function(x){ return card(x.badge||'',x.title,x.desc,x.url||'#',x.label||'Participer ↗',ext(x.url)); }).join(''):'<div class="empty" style="grid-column:1/-1"><span class="ic">🏆</span>Aucun concours en cours — reviens bientôt.</div>'; } }
 

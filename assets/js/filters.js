@@ -91,6 +91,7 @@
       if(!original) original=list.slice();
       var arr = sort==='default' ? original.filter(function(n){ return list.indexOf(n)>=0; })
               : list.slice().sort(function(a,b){ var r=title(a).localeCompare(title(b),'fr',{sensitivity:'base'}); return sort==='za'?-r:r; });
+      if(sort==='default'&&grid.querySelector('.tv-grp')) return;   /* ordre d'origine : on ne déplace rien, les intertitres restent à leur place */
       arr.forEach(function(n){ grid.appendChild(n); });
     }
 
@@ -108,6 +109,7 @@
         if(!ok&&was&&before.size){ leaving.push(n); } else n.classList.toggle('tvf-hide',!ok);
         if(ok) shown++;
       });
+      grid.classList.toggle('tvf-active',!!(nq||F.length||sort!=='default'));
       applySort(list);
       /* les exclus s'effacent en fondu, les restants glissent vers leur nouvelle place (FLIP) */
       var pend=leaving.length; leaving.forEach(function(n){ var r=before.get(n); if(!r){ n.classList.add('tvf-hide'); if(--pend===0) flip(); return; }

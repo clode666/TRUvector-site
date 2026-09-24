@@ -660,8 +660,8 @@ git push</pre></div>
       </tbody>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
-    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=6   assets.js?v=2   nav.js?v=5
-player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
+    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=7   assets.js?v=2   nav.js?v=5
+player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=5
 (les modules assets/js/fx/*.js suivent automatiquement le ?v= de fx.js)</pre></div>
     <div class="note"><b>Service worker.</b> <code>sw.js</code> garde une copie hors ligne des pages, en « réseau d'abord » : en ligne, le visiteur reçoit toujours la version fraîche. Si tu modifies <code>sw.js</code>, change sa constante <code>V</code> (<code>tv-v6-1</code> → <code>tv-v6-2</code>) pour purger les anciennes copies.</div>
     <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
@@ -796,7 +796,7 @@ player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=4
       <li>Accueil : « .dev » du grand logo n’hérite plus de l’ombre de lisibilité (qui l’assombrissait à travers son remplissage en dégradé).</li>
       <li>Boutons fantômes (« Voir la galerie », « Protéger un e-book »…) : texte clair dans tous les états, <strong>liens visités compris</strong> — 211 boutons contrôlés sur tout le site.</li>
       <li>Nouvelle <code>roadmap-chatbot.html</code> (6 phases, 0 €, démo du mode local), accessible par Ctrl+K.</li>
-      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=6</code>, <code>fx.js?v=7</code>.</li>
+      <li>Versions : <code>tokens.css?v=8</code>, <code>fx.css?v=7</code>, <code>fx.js?v=7</code>.</li>
     </ul>
     <h3>v8 — 23/09/2026 · le cockpit devient le point central</h3>
     <ul>

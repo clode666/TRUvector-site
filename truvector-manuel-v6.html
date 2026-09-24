@@ -631,7 +631,7 @@ git push</pre></div>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
     <div class="block"><div class="lbl">versions en vigueur (v6)</div><pre>tokens.css?v=8   assets.js?v=2   nav.js?v=5   player.js?v=3
-tru-reader.js?v=3   filters.js?v=4</pre></div>
+tru-reader.js?v=3   filters.js?v=5</pre></div>
     <p>Commande pratique pour tout incrémenter d'un coup (exemple pour <code>player.js</code> de v3 à v4)&nbsp;:</p>
     <div class="block"><div class="lbl">bash</div><pre>grep -rl "player.js?v=3" --include=*.html . | xargs sed -i 's/player\.js?v=3/player.js?v=6/g'</pre></div>
   </section>
