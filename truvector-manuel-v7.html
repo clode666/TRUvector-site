@@ -650,7 +650,7 @@ git push</pre></div>
       </tbody>
     </table></div>
     <div class="note warn"><b>Leçon de la v5.</b> Tout <code>/assets/*</code> était en cache <code>immutable</code> d'un an : un <code>player.js</code> corrigé sans changer son <code>?v=</code> restait bloqué dans les navigateurs (mini-lecteur muet hors page Musique). Règle : <strong>fichier JS/CSS modifié → +1 sur son <code>?v=</code> dans toutes les pages</strong>.</div>
-    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=7   assets.js?v=2   nav.js?v=5
+    <div class="block"><div class="lbl">versions en vigueur (v7.1)</div><pre>tokens.css?v=8   fx.css?v=8   assets.js?v=2   nav.js?v=5
 player.js?v=6    fx.js?v=7    tru-reader.js?v=3   filters.js?v=5
 (les modules assets/js/fx/*.js suivent automatiquement le ?v= de fx.js)</pre></div>
     <div class="note"><b>Service worker.</b> <code>sw.js</code> garde une copie hors ligne des pages, en « réseau d'abord » : en ligne, le visiteur reçoit toujours la version fraîche. Si tu modifies <code>sw.js</code>, change sa constante <code>V</code> (<code>tv-v6-1</code> → <code>tv-v6-2</code>) pour purger les anciennes copies.</div>

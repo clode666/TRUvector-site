@@ -63,6 +63,111 @@
       "visible": true,
       "download": true,
       "slug": "portrait-matriciel"
+    },
+    {
+      "title": "Le gardien",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-gardien"
+    },
+    {
+      "title": "Le bâtisseur",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-batisseur"
+    },
+    {
+      "title": "Recommencer",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "recommencer"
+    },
+    {
+      "title": "Les deux étoiles",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "les-deux-etoiles"
+    },
+    {
+      "title": "La chasse au trésor",
+      "format": "tall",
+      "visible": true,
+      "download": true,
+      "slug": "la-chasse-au-tresor"
+    },
+    {
+      "title": "Le jardin des tomates",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-jardin-des-tomates"
+    },
+    {
+      "title": "La petite fée",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "la-petite-fee"
+    },
+    {
+      "title": "Le petit explorateur",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-petit-explorateur"
+    },
+    {
+      "title": "La rencontre",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "la-rencontre"
+    },
+    {
+      "title": "Aurore Boréalis",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "aurore-borealis"
+    },
+    {
+      "title": "Le premier rendez-vous",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-premier-rendez-vous"
+    },
+    {
+      "title": "Les bulles de savon",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "les-bulles-de-savon"
+    },
+    {
+      "title": "Deux familles, un chemin",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "deux-familles-un-chemin"
+    },
+    {
+      "title": "La cabane",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "la-cabane"
+    },
+    {
+      "title": "Le chemin à venir",
+      "format": "wide",
+      "visible": true,
+      "download": true,
+      "slug": "le-chemin-a-venir"
     }
   ],
   "catalog": {

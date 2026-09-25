@@ -42,7 +42,7 @@ Le HTML des pages reste en place comme **filet de secours** : si `config.json` e
 | Pages légales | `mentions-legales/`, `cgv/`, `confidentialite/`, `cookies/`, `securite/` |
 | MP3 | `truvector-assets/musique/` |
 | E-books chiffrés + couvertures | `truvector-assets/ebooks/<slug>.trubook`, `ebooks/covers/<slug>.svg` — chiffrement : `ebooks/proteger.html` |
-| Images de la galerie | `truvector-assets/galerie/<slug>.webp` + `.png` |
+| Images de la galerie | `truvector-assets/galerie/<slug>.webp` + `.png` — formats : `wide` (large), `square` (carré), `tall` (portrait) |
 | Applis des modules | `modules/apps/<nom>.html` |
 
 ⚠ La **date de verrouillage des e-books** est inscrite *dans* chaque `.trubook`. Le cockpit règle la date affichée ; pour prolonger réellement, re-chiffre les livres.
